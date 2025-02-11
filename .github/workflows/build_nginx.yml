@@ -57,7 +57,7 @@ jobs:
         if: env.BUILD_DOCKER_IMAGE == 'true'
         uses: docker/build-push-action@v6.11.0
         with:
-          context: "{{defaultContext}}:ldnmp/nginx"
+          context: "{{defaultContext}}:nginx"
           file: Dockerfile
           push: false
           tags: |
