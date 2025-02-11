@@ -7,6 +7,8 @@ jobs:
   build:
     runs-on: ubuntu-22.04
     name: "build nginx image"
+    env:
+      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
 
     steps:
       - name: Check out repository
@@ -31,7 +33,7 @@ jobs:
           chmod +x nginx/build.sh
           bash nginx/build.sh
 
-      - name: Get current version
+      - name: Check and get version
         run: |
           CURRENT_VERSION=$(docker run --rm honeok/nginx:alpine nginx -V 2>&1 | grep 'nginx version:' | awk -F'/' '{print $2}')
           if [[ -z $CURRENT_VERSION ]]; then
@@ -52,7 +54,7 @@ jobs:
             echo "BUILD_IMAGE=false" >> $GITHUB_ENV
           fi
 
-      - name: Build and Push Docker Image
+      - name: Build and push nginx image
         if: env.BUILD_IMAGE == 'true'
         uses: docker/build-push-action@v6.11.0
         with:
@@ -60,8 +62,8 @@ jobs:
           file: Dockerfile
           push: false
           tags: |
-            "honeok/nginx:${{ env.LATEST_VERSION }}-alpine${{ env.ALPINE_TAG }}"
-            "honeok/nginx:alpine"
+            "${{ env.DOCKER_USERNAME }}/nginx:${{ env.LATEST_VERSION }}-alpine${{ env.ALPINE_TAG }}"
+            "${{ env.DOCKER_USERNAME }}/nginx:alpine"
           platforms: linux/386,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64/v8,linux/ppc64le,linux/riscv64,linux/s390x
           build-args: |
             NGINX_VERSION=${{ env.LATEST_VERSION }}
