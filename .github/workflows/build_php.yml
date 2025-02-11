@@ -7,6 +7,8 @@ jobs:
   build:
     runs-on: ubuntu-22.04
     name: "build php image"
+    env:
+      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
 
     steps:
       - name: Check out repository
@@ -60,6 +62,6 @@ jobs:
           file: Dockerfile
           push: false
           tags: |
-            "honeok/php:${{ env.LATEST_VERSION }}-fpm-alpine${{ env.ALPINE_TAG }}"
-            "honeok/php:fpm-alpine"
+            "${{ env.DOCKER_USERNAME }}/php:${{ env.LATEST_VERSION }}-fpm-alpine${{ env.ALPINE_TAG }}"
+            "${{ env.DOCKER_USERNAME }}/php:fpm-alpine"
           platforms: linux/386,linux/amd64,linux/arm/v7,linux/arm64
