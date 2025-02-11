@@ -1,4 +1,4 @@
-name: Build and publish PHP
+name: build and publish php
 
 on:
   workflow_dispatch:
