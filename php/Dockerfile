@@ -20,8 +20,10 @@ RUN set -ex \
         && apk update && apk upgrade \
         && apk add --no-cache --virtual .build-deps \
             autoconf \
-            build-base \
+            gcc \
+            g++ \
             git \
+            make \
             pkgconfig \
         && apk add --no-cache \
             imagemagick \
