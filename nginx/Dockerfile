@@ -23,7 +23,7 @@ FROM alpine:latest AS builder
 ARG NGINX_VERSION
 ARG ZSTD_VERSION
 
-ARG NGX_J="2"
+ARG NGX_J="4"
 
 RUN set -ex \
     && apk update && apk upgrade \
@@ -44,7 +44,6 @@ RUN set -ex \
         lua-dev \
         openssl-dev \
         pcre-dev \
-        pcre2-dev \
         pkgconfig \
         yajl-dev \
         zlib-dev \
