@@ -5,7 +5,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     name: "build php image"
 
     steps:
@@ -62,4 +62,4 @@ jobs:
           tags: |
             "honeok/php:${{ env.LATEST_VERSION }}-fpm-alpine${{ env.ALPINE_TAG }}"
             "honeok/php:fpm-alpine"
-          platforms: linux/386,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64/v8,linux/ppc64le,linux/riscv64
+          platforms: linux/386,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64/v8,linux/ppc64le,linux/riscv64,linux/s390x
