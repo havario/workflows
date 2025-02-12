@@ -26,10 +26,10 @@ case "$(uname -m)" in
     'x86_64')
         architecture='x86_64'
     ;;
-    'aarch64' | 'arm64')
+    'aarch64')
         architecture='aarch64'
     ;;
-    'armv7' | 'armv6')
+    'armv7' | 'armv6' | 'arm')
         architecture='arm'
     ;;
     *)
