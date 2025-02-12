@@ -5,14 +5,14 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     name: "build php image"
     env:
       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
 
     strategy:
       matrix:
-        platform: [linux/386, linux/amd64, linux/arm/v6, linux/arm/v7, linux/arm64/v8]
+        platform: [linux/386, linux/amd64, linux/arm/v6, linux/arm/v7, linux/arm64/v8, linux/ppc64le]
       max-parallel: 3
 
     steps:
