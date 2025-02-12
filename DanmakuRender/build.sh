@@ -22,6 +22,7 @@ set \
 biliupR_version=$(curl -fsL "https://api.github.com/repos/biliup/biliup-rs/releases/latest" | awk -F '["v]' '/tag_name/{print $5}')
 readonly biliupR_version
 
+echo "---> Arch is: "uname -m
 case "$(uname -m)" in
     'x86_64')
         architecture='x86_64'
