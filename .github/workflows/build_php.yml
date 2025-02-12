@@ -10,6 +10,11 @@ jobs:
     env:
       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
 
+    strategy:
+      matrix:
+        platform: [linux/386, linux/amd64, linux/arm/v6, linux/arm/v7, linux/arm64/v8]
+      max-parallel: 3
+
     steps:
       - name: Check out repository
         uses: actions/checkout@v4.2.2
@@ -65,4 +70,4 @@ jobs:
           tags: |
             "${{ env.DOCKER_USERNAME }}/php:${{ env.LATEST_VERSION }}-fpm-alpine${{ env.ALPINE_TAG }}"
             "${{ env.DOCKER_USERNAME }}/php:fpm-alpine"
-          platforms: linux/386,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64/v8
+          platforms: ${{ matrix.platform }}
