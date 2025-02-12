@@ -28,6 +28,14 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
+      - name: Get danmaku branch
+        run: |
+          REMOTE_BRANCH=$(curl -s https://api.github.com/repos/SmallPeaches/DanmakuRender | jq -r '.default_branch')
+          if [[ -z $REMOTE_BRANCH ]]; then
+              echo "ERROR: Remote branch acquisition failed!" && exit 1
+          fi
+          echo "REMOTE_BRANCH=${REMOTE_BRANCH}" >> $GITHUB_ENV
+
       - name: Build and push danmaku image
         uses: docker/build-push-action@v6.11.0
         with:
@@ -35,6 +43,6 @@ jobs:
           file: Dockerfile
           push: false
           tags: |
-            "${{ env.DOCKER_USERNAME }}/danmakurender:v5"
+            "${{ env.DOCKER_USERNAME }}/danmakurender:${{ env.REMOTE_BRANCH }}"
             "${{ env.DOCKER_USERNAME }}/danmakurender:latest"
           platforms: linux/amd64,linux/arm64/v8
