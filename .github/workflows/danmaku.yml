@@ -45,4 +45,4 @@ jobs:
           tags: |
             "${{ env.DOCKER_USERNAME }}/danmakurender:${{ env.REMOTE_BRANCH }}"
             "${{ env.DOCKER_USERNAME }}/danmakurender:latest"
-          platforms: linux/amd64, linux/arm/v7, linux/arm64/v8
+          platforms: linux/amd64, linux/arm64/v8
