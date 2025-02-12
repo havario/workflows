@@ -12,7 +12,7 @@ jobs:
 
     strategy:
       matrix:
-        platform: [linux/386, linux/amd64, linux/arm/v6, linux/arm/v7, linux/arm64/v8, linux/ppc64le]
+        platform: [linux/386, linux/amd64, linux/arm/v7, linux/arm64/v8, linux/ppc64le]
       max-parallel: 3
 
     steps:
