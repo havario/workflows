@@ -39,6 +39,6 @@ RUN set -ex \
             git \
         && apt-get clean \
         && cp -rf configs/* configs_temp/ \
-        && rm -rf /var/lib/apt/lists/* /tmp/*
+        && rm -rf /var/lib/apt/lists/* /var/log/* /tmp/*
 
 ENTRYPOINT [ "/docker-entrypoint.sh" ]
