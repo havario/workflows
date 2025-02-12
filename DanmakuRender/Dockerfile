@@ -25,9 +25,11 @@ COPY . .
 RUN set -ex \
         && apk update && apk upgrade \
         && apk add --no-cache --virtual .build-deps \
+            build-base \
             cargo \
             curl \
             git \
+            python3-dev \
             rust \
         && apk add --no-cache \
             ffmpeg \
