@@ -61,7 +61,7 @@ jobs:
         with:
           context: "{{defaultContext}}:php"
           file: Dockerfile
-          push: false
+          push: true
           tags: |
             "${{ env.DOCKER_USERNAME }}/php:${{ env.LATEST_VERSION }}-fpm-alpine${{ env.ALPINE_TAG }}"
             "${{ env.DOCKER_USERNAME }}/php:fpm-alpine"
