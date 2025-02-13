@@ -58,7 +58,7 @@ touch "$SINGBOX_LOGFILE" 1>/dev/null
 cd "$SINGBOX_BINDIR" ||  { echo "ERROR: Failed to enter the sing-box bin directory!" ; exit 1;}
 
 # Extract and install Sing-Box
-if ! curl -kL -O "https://github.com/SagerNet/sing-box/releases/download/v${LATEST_VERSION}/sing-box-${LATEST_VERSION}-linux-${ARCH}.tar.gz" ; then
+if ! curl -fskL -O "https://github.com/SagerNet/sing-box/releases/download/v${LATEST_VERSION}/sing-box-${LATEST_VERSION}-linux-${ARCH}.tar.gz" ; then
     echo "ERROR: Download sing-Box failed, please check the network!" && exit 1
 fi
 tar zxf "sing-box-${LATEST_VERSION}-linux-${ARCH}.tar.gz" --strip-components=1 || { echo "ERROR: tar Sing-box package failed!"; exit 1; }
