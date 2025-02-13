@@ -58,6 +58,7 @@ jobs:
 
   sendmessage:
     runs-on: ubuntu-latest
+    name: "Send success message"
     needs: build
 
     steps:
