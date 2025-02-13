@@ -15,8 +15,7 @@
 
 set \
     -o errexit \
-    -o nounset \
-    -o xtrace
+    -o nounset
 
 # Run default path
 SINGBOX_WORKDIR="/etc/sing-box"
