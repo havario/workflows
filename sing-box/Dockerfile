@@ -1,4 +1,4 @@
-# Description: Dockerfile to build Sing-box image on Alpine Linux
+# Description: Dockerfile to build a lightweight Sing-box image on Alpine Linux.
 #
 # Copyright (C) 2025 honeok <honeok@duck.com>
 #
@@ -33,6 +33,8 @@ RUN set -ex \
         && echo "Asia/Shanghai" > /etc/timezone \
         && rm -f Dockerfile docker-entrypoint.sh build.sh \
         && apk del .build-deps \
-        && rm -rf /var/cache/apk/* /tmp/*
+        && rm -rf /var/cache/apk/* /tmp/* \
+        && ln -sf /dev/stdout /var/log/sing-box/access.log \
+        && ln -sf /dev/stderr /var/log/sing-box/access.log
 
 ENTRYPOINT [ "/docker-entrypoint.sh" ]
