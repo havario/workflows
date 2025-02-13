@@ -1,4 +1,20 @@
 #!/bin/sh
+#
+# # Copyright (C) 2025 honeok <honeok@duck.com>
+#
+# Acknowledgments and References:
+# https://github.com/233boy/sing-box
+# https://github.com/fscarmen/sing-box
+# https://github.com/RayWangQvQ/sing-box-installer/blob/main/DIY.md
+#
+# This program is free software: you can redistribute it and/or modify it under
+# the terms of the GNU General Public License, version 3 or later.
+#
+# This program is distributed WITHOUT ANY WARRANTY; without even the implied
+# warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+# General Public License for more details.
+#
+# See the LICENSE file or <https://www.gnu.org/licenses/> for full license terms.
 
 set \
     -o errexit \
@@ -12,6 +28,7 @@ SINGBOX_CONFDIR="$SINGBOX_WORKDIR/conf"
 SINGBOX_LOGDIR="/var/log/sing-box"
 SINGBOX_LOGFILE="$SINGBOX_LOGDIR/access.log"
 
+SERVERS="aws.amazon.com www.ebay.com icloud.cdn-apple.com addons.mozilla.org"
 GENERATE_UUID=$(cat /proc/sys/kernel/random/uuid)
 PRIVATE_KEY=$(head -c 32 /dev/urandom | base64 | tr '+/' '-_' | tr -d '=')
 PUBLIC_KEY=$(head -c 32 /dev/urandom | base64 | tr '+/' '-_' | tr -d '=')
@@ -22,7 +39,7 @@ if [ ! -f "$SINGBOX_WORKDIR/config.json" ]; then
     cat > "$SINGBOX_WORKDIR/config.json" <<EOF
 {
   "log": {
-    "output": "/var/log/sing-box/access.log",
+    "output": "${SINGBOX_LOGFILE}",
     "level": "info",
     "timestamp": true
   },
@@ -46,14 +63,15 @@ EOF
 fi
 
 if [ -d "$SINGBOX_CONFDIR" ] && [ -z "$(ls -A "$SINGBOX_CONFDIR" 2>/dev/null)" ]; then
-    cat > "$SINGBOX_CONFDIR/VLESS-REALITY-8080.json" <<EOF
+    TLS_SERVER=$(echo "$SERVERS" | tr " " "\n" | shuf -n 1)
+    cat > "$SINGBOX_CONFDIR/VLESS-REALITY-30000.json" <<EOF
 {
   "inbounds": [
     {
-      "tag": "VLESS-REALITY-8080.json",
+      "tag": "VLESS-REALITY-30000.json",
       "type": "vless",
       "listen": "::",
-      "listen_port": 8080,
+      "listen_port": 30000,
       "users": [
         {
           "flow": "xtls-rprx-vision",
@@ -62,11 +80,11 @@ if [ -d "$SINGBOX_CONFDIR" ] && [ -z "$(ls -A "$SINGBOX_CONFDIR" 2>/dev/null)" ]
       ],
       "tls": {
         "enabled": true,
-        "server_name": "music.apple.com",
+        "server_name": "${TLS_SERVER}",
         "reality": {
           "enabled": true,
           "handshake": {
-            "server": "music.apple.com",
+            "server": "${TLS_SERVER}",
             "server_port": 443
           },
           "private_key": "${PRIVATE_KEY}",
@@ -89,11 +107,13 @@ if [ -d "$SINGBOX_CONFDIR" ] && [ -z "$(ls -A "$SINGBOX_CONFDIR" 2>/dev/null)" ]
 }
 EOF
 
-{
-    echo "---------------- URL -----------------"
-    echo "vless://${GENERATE_UUID}@${IPADDRESS}:8080?encryption=none&security=reality&flow=xtls-rprx-vision&type=tcp&sni=music.apple.com&pbk=${PUBLIC_KEY}&fp=chrome#reality-${PUBLIC_KEY}"
-    echo "---------------- END -----------------"
-} >> "$SINGBOX_LOGFILE"
+    {
+        echo "#################### URL ####################"
+        echo ""
+        echo "vless://${GENERATE_UUID}@${IPADDRESS}:30000?encryption=none&security=reality&flow=xtls-rprx-vision&type=tcp&sni=music.apple.com&pbk=${PUBLIC_KEY}&fp=chrome#reality-${PUBLIC_KEY}"
+        echo ""
+        echo "#################### END ####################"
+    } >> "$SINGBOX_LOGFILE"
 fi
 
 if [ "$#" -eq 0 ]; then
