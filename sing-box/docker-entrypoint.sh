@@ -2,7 +2,7 @@
 #
 # Copyright (C) 2025 honeok <honeok@duck.com>
 #
-# Acknowledgments and References:
+# References:
 # https://github.com/233boy/sing-box
 # https://github.com/fscarmen/sing-box
 # https://github.com/RayWangQvQ/sing-box-installer/blob/main/DIY.md
