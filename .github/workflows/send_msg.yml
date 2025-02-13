@@ -1,4 +1,4 @@
-name: build and send message
+name: Build and send message
 
 on:
     workflow_dispatch:
