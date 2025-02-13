@@ -28,7 +28,6 @@ LATEST_VERSION=$(curl -fskL "https://api.github.com/repos/SagerNet/sing-box/rele
 readonly LATEST_VERSION
 [ -z "$LATEST_VERSION" ] && { echo "ERROR: Unable to obtain Sing-box version!"; exit 1; }
 
-echo "当前架构: $(uname -m)"
 # Determine system arch based
 case "$(uname -m)" in
     'x86' | 'i686' | 'i386')
