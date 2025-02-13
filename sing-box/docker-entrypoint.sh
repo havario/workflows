@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# # Copyright (C) 2025 honeok <honeok@duck.com>
+# Copyright (C) 2025 honeok <honeok@duck.com>
 #
 # Acknowledgments and References:
 # https://github.com/233boy/sing-box
