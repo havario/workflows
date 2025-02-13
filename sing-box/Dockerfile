@@ -35,7 +35,6 @@ RUN set -ex \
         && rm -f Dockerfile build.sh \
         && apk del .build-deps \
         && rm -rf /var/cache/apk/* /tmp/* \
-        && ln -sf /dev/stdout /var/log/sing-box/access.log \
-        && ln -sf /dev/stderr /var/log/sing-box/access.log
+        && ln -sf /dev/stdout /var/log/sing-box/access.log
 
 ENTRYPOINT [ "/docker-entrypoint.sh" ]

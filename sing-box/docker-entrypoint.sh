@@ -97,7 +97,7 @@ EOF
 fi
 
 if [ "$#" -eq 0 ]; then
-    exec "$SINGBOX_CMD" run -c "$SINGBOX_WORKDIR/config.json" -C "$SINGBOX_CONFDIR" 2>/dev/null
+    exec "$SINGBOX_CMD" run -c "$SINGBOX_WORKDIR/config.json" -C "$SINGBOX_CONFDIR"
 else
     exec "$@"
 fi
