@@ -27,10 +27,12 @@ RUN set -ex \
             tar \
             tzdata \
         && apk add --no-cache ca-certificates \
+        && install -m 755 docker-entrypoint.sh /docker-entrypoint.sh \
         && chmod +x build.sh && ./build.sh \
         && cp -f /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
         && echo "Asia/Shanghai" > /etc/timezone \
+        && rm -f Dockerfile docker-entrypoint.sh build.sh \
         && apk del .build-deps \
         && rm -rf /var/cache/apk/* /tmp/*
 
-ENTRYPOINT [ "/usr/local/bin/sing-box" ]
+ENTRYPOINT [ "/docker-entrypoint.sh" ]
