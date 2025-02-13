@@ -23,15 +23,16 @@ COPY . .
 RUN set -ex \
         && apk update && apk upgrade \
         && apk add --no-cache --virtual .build-deps \
-            curl \
             tar \
             tzdata \
-        && apk add --no-cache ca-certificates \
-        && install -m 755 docker-entrypoint.sh /docker-entrypoint.sh \
+        && apk add --no-cache \
+            ca-certificates \
+            curl \
+        && chmod +x docker-entrypoint.sh \
         && chmod +x build.sh && ./build.sh \
         && cp -f /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
         && echo "Asia/Shanghai" > /etc/timezone \
-        && rm -f Dockerfile docker-entrypoint.sh build.sh \
+        && rm -f Dockerfile build.sh \
         && apk del .build-deps \
         && rm -rf /var/cache/apk/* /tmp/* \
         && ln -sf /dev/stdout /var/log/sing-box/access.log \
