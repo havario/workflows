@@ -30,27 +30,27 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: 'Fetch Versions and Determine Build'
-        run: |
-          NGX_CVER=$(curl -Lsk "https://hub.docker.com/v2/repositories/honeok/nginx/tags" | jq -r '.results[].name' | grep -v '^alpine$' | sort -Vr | head -n1 | cut -d'-' -f1)
-          NGX_LVER=$(curl -Lsk https://api.github.com/repos/nginx/nginx/releases/latest | jq -r '.tag_name | sub("release-"; "")')
-          NGX_TAG=$(docker run --rm nginx:alpine sh -c 'cat /etc/alpine-release | cut -d "." -f 1-2')
-          BUILD_OPTION=$(docker run --rm nginx:alpine nginx -V 2>&1 | sed -n 's/^configure arguments: //p')
-          if [ -z "$NGX_CVER" ] || [ -z "$NGX_LVER" ] || [ -z "$NGX_TAG" ] || [ -z "$BUILD_OPTION" ]; then
-            echo 'Error: Required parameters cannot be empty.' && exit 1
-          fi
-          echo "NGX_CVER=${NGX_CVER}" >> $GITHUB_ENV
-          echo "NGX_LVER=${NGX_LVER}" >> $GITHUB_ENV
-          echo "NGX_TAG=${NGX_TAG}" >> $GITHUB_ENV
-          echo "BUILD_OPTION=${BUILD_OPTION}" >> $GITHUB_ENV
-          if [[ "$(echo -e "${{ env.NGX_LVER }}\n${{ env.NGX_CVER }}" | sort -V | head -n1)" != "${{ env.NGX_LVER }}" ]]; then
-            echo "BUILD_IMAGE=true" >> $GITHUB_ENV
-          else
-            echo "BUILD_IMAGE=false" >> $GITHUB_ENV
-          fi
+      # - name: 'Fetch Versions and Determine Build'
+      #   run: |
+      #     NGX_CVER=$(curl -Lsk "https://hub.docker.com/v2/repositories/honeok/nginx/tags" | jq -r '.results[].name' | grep -v '^alpine$' | sort -Vr | head -n1 | cut -d'-' -f1)
+      #     NGX_LVER=$(curl -Lsk https://api.github.com/repos/nginx/nginx/releases/latest | jq -r '.tag_name | sub("release-"; "")')
+      #     NGX_TAG=$(docker run --rm nginx:alpine sh -c 'cat /etc/alpine-release | cut -d "." -f 1-2')
+      #     BUILD_OPTION=$(docker run --rm nginx:alpine nginx -V 2>&1 | sed -n 's/^configure arguments: //p')
+      #     if [ -z "$NGX_CVER" ] || [ -z "$NGX_LVER" ] || [ -z "$NGX_TAG" ] || [ -z "$BUILD_OPTION" ]; then
+      #       echo 'Error: Required parameters cannot be empty.' && exit 1
+      #     fi
+      #     echo "NGX_CVER=${NGX_CVER}" >> $GITHUB_ENV
+      #     echo "NGX_LVER=${NGX_LVER}" >> $GITHUB_ENV
+      #     echo "NGX_TAG=${NGX_TAG}" >> $GITHUB_ENV
+      #     echo "BUILD_OPTION=${BUILD_OPTION}" >> $GITHUB_ENV
+      #     if [[ "$(echo -e "${{ env.NGX_LVER }}\n${{ env.NGX_CVER }}" | sort -V | head -n1)" != "${{ env.NGX_LVER }}" ]]; then
+      #       echo "BUILD_IMAGE=true" >> $GITHUB_ENV
+      #     else
+      #       echo "BUILD_IMAGE=false" >> $GITHUB_ENV
+      #     fi
 
       - name: 'build and publish custom nginx'
-        if: env.BUILD_IMAGE == 'true'
+        # if: env.BUILD_IMAGE == 'true'
         uses: docker/build-push-action@v6.11.0
         with:
           context: "{{defaultContext}}:nginx"
