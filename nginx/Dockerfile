@@ -29,7 +29,7 @@ RUN set -ex \
         && cd nginx-${NGX_LVER} \
         && sed -i 's/#define NGINX_VER\s*\"nginx\/\"/#define NGINX_VER \"honeok\/\"/' src/core/nginx.h \
         && sed -i 's/static u_char ngx_http_server_string\[\] = \"Server: nginx\"/static u_char ngx_http_server_string\[\] = \"Server: honeok\"/' src/http/ngx_http_header_filter_module.c \
-        && ./configure ${BUILD_OPTION} \
+        && eval "./configure ${BUILD_OPTION}" \
         && make -j$(nproc) \
         && make install \
         && apk del .build-deps \
