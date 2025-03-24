@@ -57,8 +57,8 @@ jobs:
           file: Dockerfile
           push: true
           tags: |
-            "${{ env.DOCKER_USERNAME }}/${{ env.DOCKER_USERNAME }}:${{ env.NGX_LVER }}-alpine${{ env.NGX_TAG }}"
-            "${{ env.DOCKER_USERNAME }}/${{ env.DOCKER_USERNAME }}:alpine"
+            "${{ env.DOCKER_USERNAME }}/nginx:${{ env.NGX_LVER }}-alpine${{ env.NGX_TAG }}"
+            "${{ env.DOCKER_USERNAME }}/nginx:alpine"
           platforms: linux/386, linux/amd64, linux/arm/v6, linux/arm/v7, linux/arm64/v8, linux/ppc64le, linux/riscv64, linux/s390x
           build-args: |
             NGX_LVER=${{ env.NGX_LVER }}
