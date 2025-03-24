@@ -27,8 +27,9 @@ RUN set -ex \
         && curl -fskL "https://nginx.org/download/nginx-${NGX_LVER}.tar.gz" -o nginx-${NGX_LVER}.tar.gz \
         && tar -zxf nginx-${NGX_LVER}.tar.gz \
         && cd nginx-${NGX_LVER} \
-        && sed -i 's/#define NGINX_VER\s*\"nginx\/\"/#define NGINX_VER \"honeok\/\"/' src/core/nginx.h \
+        && sed -i 's/\(#define\s\+NGINX_VER\s\+\)"nginx\/"\(\s\+NGINX_VERSION\)/\1"honeok\/"\2/' src/core/nginx.h \
         && sed -i 's/static u_char ngx_http_server_string\[\] = \"Server: nginx\"/static u_char ngx_http_server_string\[\] = \"Server: honeok\"/' src/http/ngx_http_header_filter_module.c \
+        && sed -i 's/<center>nginx<\/center>/<center>honeok<\/center>/' src/http/ngx_http_special_response.c \
         && eval "./configure ${BUILD_OPTION}" \
         && make -j$(nproc) \
         && make install \
