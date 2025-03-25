@@ -48,7 +48,7 @@ jobs:
         #   fi
 
       - name: 'build and publish php'
-        if: env.BUILD_IMAGE == 'true'
+        #if: env.BUILD_IMAGE == 'true'
         uses: docker/build-push-action@v6.11.0
         with:
           context: "{{ defaultContext }}:ldnmp/php"
