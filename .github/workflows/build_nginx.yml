@@ -1,4 +1,4 @@
-name: 'build and publish custom nginx'
+name: 'build and publish nginx'
 
 on:
   schedule:
@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    name: 'build and publish custom nginx'
+    name: 'build and publish nginx'
     runs-on: ubuntu-latest
     env:
       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
@@ -34,7 +34,7 @@ jobs:
         run: |
           NGX_CVER=$(curl -Lsk "https://hub.docker.com/v2/repositories/honeok/nginx/tags" | jq -r '.results[].name' | grep -v '^alpine$' | sort -Vr | head -n1 | cut -d'-' -f1)
           NGX_LVER=$(curl -Lsk "https://api.github.com/repos/nginx/nginx/releases/latest" | jq -r '.tag_name | sub("release-"; "")')
-          ZSTD_LVER=$(curl -Lsks "https://api.github.com/repos/facebook/zstd/releases/latest" | jq -r '.tag_name | sub("^v"; "")')
+          ZSTD_LVER=$(curl -Lsk "https://api.github.com/repos/facebook/zstd/releases/latest" | jq -r '.tag_name | sub("^v"; "")')
           NGX_TAG=$(docker run --rm nginx:alpine sh -c 'cat /etc/alpine-release | cut -d "." -f 1-2')
           if [ -z "$NGX_CVER" ] || [ -z "$NGX_LVER" ] || [ -z "$ZSTD_LVER" ] || [ -z "$NGX_TAG" ]; then
             echo 'Error: Required parameters cannot be empty.' && exit 1
@@ -49,11 +49,11 @@ jobs:
           #   echo "BUILD_IMAGE=false" >> $GITHUB_ENV
           # fi
 
-      - name: 'build and publish custom nginx'
+      - name: 'build and publish nginx'
         # if: env.BUILD_IMAGE == 'true'
         uses: docker/build-push-action@v6.11.0
         with:
-          context: "{{defaultContext}}:nginx"
+          context: "{{ defaultContext }}:nginx"
           file: Dockerfile
           push: true
           tags: |
