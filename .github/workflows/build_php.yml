@@ -41,14 +41,14 @@ jobs:
           echo "PHP_CVER=${PHP_CVER}" >> $GITHUB_ENV
           echo "PHP_LVER=${PHP_LVER}" >> $GITHUB_ENV
           echo "PHP_TAG=${PHP_TAG}" >> $GITHUB_ENV
-        #   if [[ "$(echo -e "${{ env.PHP_LVER }}\n${{ env.PHP_CVER }}" | sort -V | head -n1)" != "${{ env.PHP_LVER }}" ]]; then
-        #     echo "BUILD_IMAGE=true" >> $GITHUB_ENV
-        #   else
-        #     echo "BUILD_IMAGE=false" >> $GITHUB_ENV
-        #   fi
+          if [[ "$(echo -e "${{ env.PHP_LVER }}\n${{ env.PHP_CVER }}" | sort -V | head -n1)" != "${{ env.PHP_LVER }}" ]]; then
+            echo "BUILD_IMAGE=true" >> $GITHUB_ENV
+          else
+            echo "BUILD_IMAGE=false" >> $GITHUB_ENV
+          fi
 
       - name: 'build and publish php'
-        #if: env.BUILD_IMAGE == 'true'
+        if: env.BUILD_IMAGE == 'true'
         uses: docker/build-push-action@v6.11.0
         with:
           context: "{{ defaultContext }}:ldnmp/php"
