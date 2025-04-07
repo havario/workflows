@@ -20,7 +20,7 @@ jobs:
 
       - name: 'Contrast Sing-box version'
         run: |
-          LATEST_VERSION=$(curl -Lsk "https://api.github.com/repos/SagerNet/sing-box/releases/latest" | awk -F '["v]' '/tag_name/{print $5}')
+          LATEST_VERSION=$(curl -Lsk "https://api.github.com/repos/SagerNet/sing-box/releases/latest" | jq -r '.tag_name' | sed 's/^v//')
           CURRENT_VERSION=$(curl -Lsk "https://hub.docker.com/v2/repositories/honeok/sing-box/tags" | jq -r '.results[].name' | grep -v '^latest$' | sort -V -r | head -n 1)
 
           if [ -z "$LATEST_VERSION" ] && [ -z "$CURRENT_VERSION" ]; then
