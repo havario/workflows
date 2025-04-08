@@ -6,5 +6,3 @@
 </p>
 
 debug workflows.
-
-<img src="https://cdn.skyimg.de/up/2025/4/8/zsca53.webp" alt="Nginx" width="80%">
