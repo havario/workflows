@@ -58,7 +58,7 @@ jobs:
         with:
           context: "{{ defaultContext }}:ldnmp/nginx"
           file: Dockerfile
-          push: true
+          push: false
           tags: |
             "${{ env.DOCKER_USERNAME }}/nginx:${{ env.NGX_LVER }}-alpine${{ env.NGX_TAG }}"
             "${{ env.DOCKER_USERNAME }}/nginx:alpine"
