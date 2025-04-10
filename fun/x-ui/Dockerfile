@@ -28,6 +28,8 @@ RUN set -ex \
 
 FROM --platform=$BUILDPLATFORM alpine:latest
 
+WORKDIR /usr/local/bin
+
 # https://docs.docker.com/build/building/multi-platform/
 ARG TARGETARCH
 
@@ -52,4 +54,4 @@ VOLUME [ "/etc/x-ui" ]
 # default time of the container
 ENV TZ=Asia/Shanghai
 
-ENTRYPOINT [ "/usr/local/bin/x-ui", "run" ]
+ENTRYPOINT [ "x-ui"]
