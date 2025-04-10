@@ -22,7 +22,8 @@ COPY build.sh .
 
 RUN set -ex \
         && apk update \
-        && apk add --no-cache curl \
+        && apk add --no-cache \
+            curl \
         && chmod +x build.sh && ./build.sh
 
 FROM --platform=$BUILDPLATFORM alpine:latest
