@@ -21,7 +21,6 @@ LATEST_VERSION=$(curl -fsSL "https://api.github.com/repos/FranzKafkaYu/x-ui/rele
 readonly LATEST_VERSION
 [ -z "$LATEST_VERSION" ] && { printf "Error: Unable to obtain x-ui version!\n" >/dev/stderr; exit 1; }
 
-shopt -s nocasematch
 # map system architecture to framework variable
 case "$(uname -m)" in
     's390x')
