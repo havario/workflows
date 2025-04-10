@@ -33,7 +33,7 @@ WORKDIR /usr/local/x-ui
 # https://docs.docker.com/build/building/multi-platform/
 ARG TARGETARCH
 
-COPY --from=builder /tmp/x-ui /usr/local/x-ui/xui
+COPY --from=builder /tmp/x-ui /usr/local/x-ui/x-ui
 # copy the core program Xray-core
 # https://github.com/teddysun/across/blob/master/docker/xray/Dockerfile
 # Use an external image as a stage https://docs.docker.com/build/building/multi-stage/
