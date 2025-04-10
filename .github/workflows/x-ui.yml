@@ -24,7 +24,7 @@ jobs:
           LATEST_VERSION=$(curl -fsSL "https://api.github.com/repos/XTLS/Xray-core/releases" | \
             jq -r 'map(select(.prerelease == true)) | sort_by(.created_at) | last | .tag_name' | \
             sed 's/^v//') && \
-          CURRENT_VERSION=$(bash -c 'set -o pipefail; curl -fsSL "https://hub.docker.com/v2/repositories/honeok/x-ui/tags" 2>/dev/null | \
+          CURRENT_VERSION=$(bash -c 'set -o pipefail; curl -fsSL "https://hub.docker.com/v2/repositories/pakho611/x-ui/tags" 2>/dev/null | \
             jq -r ".results // [] | .[].name" | \
             grep -v "^latest$" | \
             sort -Vr | \
