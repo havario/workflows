@@ -32,7 +32,7 @@ FROM --platform=$BUILDPLATFORM alpine:latest
 WORKDIR /usr/local/bin
 
 # Receive the latest Xray version parameter
-ARG XRAY_VERSION
+ARG LATEST_VERSION
 
 # https://docs.docker.com/build/building/multi-platform/
 ARG TARGETARCH
