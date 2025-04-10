@@ -43,7 +43,7 @@ COPY --from=builder /tmp/x-ui /usr/local/bin/xray-ui
 # copy the core program Xray-core
 # https://github.com/teddysun/across/blob/master/docker/xray/Dockerfile
 # Use an external image as a stage https://docs.docker.com/build/building/multi-stage/
-COPY --from=teddysun/xray:${XRAY_VERSION} /usr/bin/xray /usr/local/bin/bin/xray-linux-${TARGETARCH}
+COPY --from=teddysun/xray:${LATEST_VERSION} /usr/bin/xray /usr/local/bin/bin/xray-linux-${TARGETARCH}
 
 RUN set -ex \
         && apk update && apk upgrade \
