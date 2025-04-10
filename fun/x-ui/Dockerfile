@@ -28,14 +28,14 @@ RUN set -ex \
 
 FROM --platform=$BUILDPLATFORM alpine:latest
 
-# The contextual runtime relationship of x-ui
-WORKDIR /usr/local/bin
-
 # Receive the latest Xray version parameter
 ARG LATEST_VERSION
 
 # https://docs.docker.com/build/building/multi-platform/
 ARG TARGETARCH
+
+# The contextual runtime relationship of x-ui
+WORKDIR /usr/local/bin
 
 # Due to the need to use a management script, rename the x-ui process.
 COPY --from=builder /tmp/x-ui /usr/local/bin/xray-ui
