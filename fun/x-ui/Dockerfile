@@ -31,11 +31,11 @@ FROM --platform=$BUILDPLATFORM alpine:latest
 # https://docs.docker.com/build/building/multi-platform/
 ARG TARGETARCH
 
-COPY --from=builder /tmp/x-ui /usr/local/bin/x-ui/x-ui
+COPY --from=builder /tmp/x-ui /usr/local/bin/x-ui
 # copy the core program Xray-core
 # https://github.com/teddysun/across/blob/master/docker/xray/Dockerfile
 # Use an external image as a stage https://docs.docker.com/build/building/multi-stage/ 
-COPY --from=teddysun/xray /usr/bin/xray /usr/local/bin/x-ui/bin/xray-linux-${TARGETARCH}
+COPY --from=teddysun/xray /usr/bin/xray /usr/local/bin/bin/xray-linux-${TARGETARCH}
 
 RUN set -ex \
         && apk update && apk upgrade \
@@ -43,8 +43,8 @@ RUN set -ex \
             ca-certificates \
             curl \
             tzdata \
-        && curl -fsSL -o /usr/local/bin/x-ui/bin/geosite.dat "https://github.com/v2fly/domain-list-community/releases/latest/download/dlc.dat" \
-        && curl -fsSL -o /usr/local/bin/x-ui/bin/geoip.dat "https://github.com/v2fly/geoip/releases/latest/download/geoip.dat" \
+        && curl -fsSL -o /usr/local/bin/bin/geosite.dat "https://github.com/v2fly/domain-list-community/releases/latest/download/dlc.dat" \
+        && curl -fsSL -o /usr/local/bin/bin/geoip.dat "https://github.com/v2fly/geoip/releases/latest/download/geoip.dat" \
         && rm -rf /var/cache/apk/* /tmp/*
 
 VOLUME [ "/etc/x-ui" ]
