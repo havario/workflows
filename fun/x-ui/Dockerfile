@@ -28,16 +28,16 @@ RUN set -ex \
 
 FROM --platform=$BUILDPLATFORM alpine:latest
 
-WORKDIR /usr/local/bin
+WORKDIR /usr/local/x-ui
 
 # https://docs.docker.com/build/building/multi-platform/
 ARG TARGETARCH
 
-COPY --from=builder /tmp/x-ui /usr/local/bin/xray-ui
+COPY --from=builder /tmp/x-ui /usr/local/x-ui/xui
 # copy the core program Xray-core
 # https://github.com/teddysun/across/blob/master/docker/xray/Dockerfile
 # Use an external image as a stage https://docs.docker.com/build/building/multi-stage/
-COPY --from=teddysun/xray /usr/bin/xray /usr/local/bin/bin/xray-linux-${TARGETARCH}
+COPY --from=teddysun/xray /usr/bin/xray /usr/local/x-ui/bin/xray-linux-${TARGETARCH}
 
 RUN set -ex \
         && apk update && apk upgrade \
@@ -45,8 +45,8 @@ RUN set -ex \
             ca-certificates \
             curl \
             tzdata \
-        && curl -fsSL -o /usr/local/bin/bin/geosite.dat "https://github.com/v2fly/domain-list-community/releases/latest/download/dlc.dat" \
-        && curl -fsSL -o /usr/local/bin/bin/geoip.dat "https://github.com/v2fly/geoip/releases/latest/download/geoip.dat" \
+        && curl -fsSL -o /usr/local/x-ui/bin/geosite.dat "https://github.com/v2fly/domain-list-community/releases/latest/download/dlc.dat" \
+        && curl -fsSL -o /usr/local/x-ui/bin/geoip.dat "https://github.com/v2fly/geoip/releases/latest/download/geoip.dat" \
         && rm -rf /var/cache/apk/* /tmp/*
 
 VOLUME [ "/etc/x-ui" ]
@@ -54,4 +54,4 @@ VOLUME [ "/etc/x-ui" ]
 # default time of the container
 ENV TZ=Asia/Shanghai
 
-ENTRYPOINT [ "xray-ui"]
+ENTRYPOINT [ "x-ui"]
