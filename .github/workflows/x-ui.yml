@@ -68,4 +68,3 @@ jobs:
             "${{ env.DOCKER_USERNAME }}/x-ui:xray-${{ env.LATEST_VERSION }}"
             "${{ env.DOCKER_USERNAME }}/x-ui:latest"
           platforms: linux/amd64, linux/arm/v6, linux/arm64/v8
-          build-args: LATEST_VERSION=${{ env.LATEST_VERSION }}
