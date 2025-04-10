@@ -55,4 +55,6 @@ VOLUME [ "/etc/x-ui" ]
 # default time of the container
 ENV TZ=Asia/Shanghai
 
-ENTRYPOINT [ "x-ui", "run" ]
+ENTRYPOINT [ "x-ui" ]
+
+CMD [ "run" ]
