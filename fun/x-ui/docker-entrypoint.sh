@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 #
 # Description: entrypoint script to perform parameter checks and start the x-ui service.
 #
@@ -72,7 +72,7 @@ if [ ! -f "/etc/x-ui/x-ui.db" ]; then
 fi
 
 if [ "$#" -eq 0 ]; then
-    exec sh -c "xray-ui"
+    exec bash -c "xray-ui"
 else
     exec "$@"
 fi
