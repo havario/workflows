@@ -58,6 +58,7 @@ VOLUME [ "/etc/x-ui" ]
 # default time of the container
 ENV TZ=Asia/Shanghai
 
+# Judge iptables chain failed,error Info exec: "bash": executable file not found in $PATH
 ENV PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:$PATH
 
 ENTRYPOINT [ "/docker-entrypoint.sh" ]
