@@ -99,6 +99,7 @@ check_config() {
 show_menu() {
     printf "\n"
     _green ' x-ui 面板管理脚本'
+    printf "\n"
     echo " $(_green '0.') 退出脚本"
     separator
     echo " $(_green '1.') 重置用户名密码"
