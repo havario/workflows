@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 #
 # Description: entrypoint script to perform parameter checks and start the x-ui service.
 #
@@ -29,7 +29,7 @@ gen_port() {
     }
 
     while :; do
-        is_count=$((is_count + 1))
+        ((is_count++))
         if [ "$is_count" -ge 5 ]; then
             printf "Error: no free port found after 5 attempts.\n" >&2 && exit 1
         fi
