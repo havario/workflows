@@ -63,7 +63,7 @@ if [ ! -f "/etc/x-ui/x-ui.db" ]; then
 fi
 
 if [ "$#" -eq 0 ]; then
-    exec sh -c "xray-ui run"
+    exec xray-ui run
 else
     exec "$@"
 fi
