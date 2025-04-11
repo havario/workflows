@@ -52,11 +52,11 @@ esac
 cd /tmp || { printf 'Error: permission denied or directory does not exist\n' >/dev/stderr; exit 1; }
 
 # Extract x-ui
-if ! curl -L -O "https://github.com/FranzKafkaYu/x-ui/releases/download/${XUI_VERSION}/x-ui-linux-${XUI_FRAMEWORK}.tar.gz"; then
+if ! curl -fsSL -O "https://github.com/FranzKafkaYu/x-ui/releases/download/${XUI_VERSION}/x-ui-linux-${XUI_FRAMEWORK}.tar.gz"; then
     printf 'Error: download x-ui failed, please check the network!\n' >/dev/stderr; exit 1
 fi
 # Extract xray
-if ! curl -L -O "https://github.com/XTLS/Xray-core/releases/download/v${XRAY_VERSION}/Xray-linux-${XRAY_FRAMEWORK}.zip"; then
+if ! curl -fsSL -O "https://github.com/XTLS/Xray-core/releases/download/v${XRAY_VERSION}/Xray-linux-${XRAY_FRAMEWORK}.zip"; then
     printf 'Error: download xray failed, please check the network!\n' >/dev/stderr; exit 1
 fi
 
