@@ -32,6 +32,24 @@ _suc_msg() { printf "\033[42m\033[1mSuccess$white %s\n" "$*"; }
 separator() { printf "%-19s\n" "-" | sed 's/\s/-/g'; }
 reading() { read -rep "$(_yellow "$1")" "$2"; }
 
+show_status() {
+    if pgrep -x "xray-ui" >/dev/null 2>&1; then
+        echo "面板状态: $(_green 'Running')"
+        echo "Panel Status: $(_green 'Running')"
+    else
+        echo "面板状态: $(_red 'Not Running')"
+        echo "Panel Status: $(_red 'Not Running')"
+    fi
+    printf "\n"
+    if [ "$(ps -ef | grep "xray-linux" | grep -v "grep" | wc -l >/dev/null 2>&1)" -eq 1 ]
+        echo "Xray 状态: $(_green 'Running')"
+        echo "Xray Status: $(_green 'Running')"
+    else
+        echo "Xray 状态: $(_red 'Not Running')"
+        echo "Xray Status: $(_red 'Not Running')"
+    fi
+}
+
 show_menu() {
     printf "\n"
     _green ' x-ui 面板管理脚本'
@@ -42,6 +60,9 @@ show_menu() {
     echo " $(_green '3.') 设置面板端口"
     echo " $(_green '4.') 查看当前面板信息"
     separator
+    printf "\n"
+    show_status
+    printf "\n"
 }
 
 show_menu
