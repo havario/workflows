@@ -16,6 +16,9 @@ workdir="/usr/local/bin"
 usernameTemp=$(head -c 6 /dev/urandom | base64)
 passwdTemp=$(head -c 6 /dev/urandom | base64)
 
+# https://www.graalvm.org/latest/reference-manual/ruby/UTF8Locale
+export LANG=en_US.UTF-8
+
 gen_port() {
     is_count=0
     is_used_port=''
@@ -41,21 +44,22 @@ cd "$workdir" || { printf "Error: Failed to enter the x-ui work directory!\n"; e
 if [ ! -f "/etc/x-ui/x-ui.db" ]; then
     if [ -z "$USER_NAME" ] || [ -z "$USER_PASSWORD" ]; then
         xray-ui setting -username "$usernameTemp" -password "$passwdTemp"
+        printf "面板登录用户名: %s\n" "$usernameTemp" >/dev/stdout
+        printf "面板登录用户密码: %s\n" "$passwdTemp" >/dev/stdout
     fi
     if [ -z "$PANEL_PORT" ]; then
         gen_port
         xray-ui setting -port "$web_port"
+        printf "面板登录端口: %s\n" "$web_port" >/dev/stdout
     fi
-    printf "检测到您属于全新安装, 出于安全考虑已自动为您生成随机用户与端口\n" >/dev/stdout
-    printf "面板登录用户名: %s\n" "$usernameTemp" >/dev/stdout
-    printf "面板登录用户密码: %s\n" "$passwdTemp" >/dev/stdout
-    printf "面板登录端口: %s\n" "$web_port" >/dev/stdout
-else
-    if [ -n "$USER_NAME" ] || [ -n "$USER_PASSWORD" ]; then
+    if [ -n "$USER_NAME" ] && [ -n "$USER_PASSWORD" ]; then
         xray-ui setting -username "$USER_NAME" -password "$USER_PASSWORD"
+        printf "面板登录用户名: %s\n" "$USER_NAME" >/dev/stdout
+        printf "面板登录用户密码: %s\n" "$USER_PASSWORD" >/dev/stdout
     fi
     if [ -n "$PANEL_PORT" ]; then
         xray-ui setting -port "$PANEL_PORT"
+        printf "面板登录端口: %s\n" "$PANEL_PORT" >/dev/stdout
     fi
 fi
 
