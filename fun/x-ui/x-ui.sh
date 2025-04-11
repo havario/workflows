@@ -37,6 +37,12 @@ WORKDIR="/usr/local/bin"
 
 cd "$WORKDIR" || { _red 'Error: Failed to enter the x-ui work directory!\n'; exit 1; }
 
+clear_screen() {
+    if [ -t 1 ]; then
+        tput clear 2>/dev/null || echo -e "\033[2J\033[H" || clear
+    fi
+}
+
 show_status() {
     if pgrep -x "xray-ui" >/dev/null 2>&1; then
         echo "面板状态: $(_green 'Running')"
@@ -97,6 +103,7 @@ check_config() {
 }
 
 show_menu() {
+    clear_screen
     printf "\n"
     _green ' x-ui 面板管理脚本'
     printf "\n"
