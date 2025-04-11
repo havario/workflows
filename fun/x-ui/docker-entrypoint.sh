@@ -29,7 +29,7 @@ export LANG=en_US.UTF-8
 
 cd "$WORKDIR" || { printf "Error: Failed to enter the x-ui work directory!\n"; exit 1; }
 
-gen_port() {
+generatePort() {
     local IS_USED_PORT=""
     local IS_COUNT TEMP_PORT
 
@@ -59,7 +59,7 @@ if [ ! -f "/etc/x-ui/x-ui.db" ]; then
         printf "Panel login user password: %s\n" "$PASSWDTEMP" >/dev/stdout
     fi
     if [ -z "$PANEL_PORT" ]; then
-        gen_port
+        generatePort
         xray-ui setting -port "$WEB_PORT" >/dev/null 2>&1
         printf "面板登录端口: %s\n" "$WEB_PORT" >/dev/stdout
         printf "Panel login port: %s\n" "$WEB_PORT" >/dev/stdout
