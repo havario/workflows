@@ -43,28 +43,28 @@ cd "$workdir" || { printf "Error: Failed to enter the x-ui work directory!\n"; e
 
 if [ ! -f "/etc/x-ui/x-ui.db" ]; then
     if [ -z "$USER_NAME" ] || [ -z "$USER_PASSWORD" ]; then
-        xray-ui setting -username "$usernameTemp" -password "$passwdTemp"
+        xray-ui setting -username "$usernameTemp" -password "$passwdTemp" >/dev/null 2>&1
         printf "面板登录用户名: %s\n" "$usernameTemp" >/dev/stdout
         printf "面板登录用户密码: %s\n" "$passwdTemp" >/dev/stdout
     fi
     if [ -z "$PANEL_PORT" ]; then
         gen_port
-        xray-ui setting -port "$web_port"
+        xray-ui setting -port "$web_port" >/dev/null 2>&1
         printf "面板登录端口: %s\n" "$web_port" >/dev/stdout
     fi
     if [ -n "$USER_NAME" ] && [ -n "$USER_PASSWORD" ]; then
-        xray-ui setting -username "$USER_NAME" -password "$USER_PASSWORD"
+        xray-ui setting -username "$USER_NAME" -password "$USER_PASSWORD" >/dev/null 2>&1
         printf "面板登录用户名: %s\n" "$USER_NAME" >/dev/stdout
         printf "面板登录用户密码: %s\n" "$USER_PASSWORD" >/dev/stdout
     fi
     if [ -n "$PANEL_PORT" ]; then
-        xray-ui setting -port "$PANEL_PORT"
+        xray-ui setting -port "$PANEL_PORT" >/dev/null 2>&1
         printf "面板登录端口: %s\n" "$PANEL_PORT" >/dev/stdout
     fi
 fi
 
 if [ "$#" -eq 0 ]; then
-    exec xray-ui run
+    exec sh -c "xray-ui run"
 else
     exec "$@"
 fi
