@@ -64,7 +64,7 @@ checkConfig() {
     # For security reasons, it is necessary to mandatorily change the port and account password after installation or update.
     if [ ! -f "/etc/x-ui/x-ui.db" ]; then
         printf "\n"
-        printf "                  %s\n" "login info"
+        printf "                  \033[42m\033[1m%s\033[0m\n" "login info"
         separator
         if [ -z "$USER_NAME" ] || [ -z "$USER_PASSWORD" ]; then
             USERNAME_TEMP=$(head -c 6 /dev/urandom | base64)
