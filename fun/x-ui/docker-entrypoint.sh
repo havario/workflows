@@ -32,7 +32,7 @@ gen_port() {
             printf "Error: no free port found after 5 attempts.\n" >&2 && exit 1
         fi
         temp_port=$(shuf -i 10000-65535 -n 1)
-        [ ! "$(is_test "$temp_port")" ] && { panel_port="$temp_port"; break; }
+        [ ! "$(is_test "$temp_port")" ] && { web_port="$temp_port"; break; }
     done
 }
 
@@ -41,12 +41,15 @@ cd "$workdir" || { printf "Error: Failed to enter the x-ui work directory!\n"; e
 if [ ! -f "/etc/x-ui/x-ui.db" ]; then
     if [ -z "$USER_NAME" ] || [ -z "$USER_PASSWORD" ]; then
         xray-ui setting -username "$usernameTemp" -password "$passwdTemp"
-        printf ""
     fi
     if [ -z "$PANEL_PORT" ]; then
         gen_port
-        xray-ui setting -port "$panel_port"
+        xray-ui setting -port "$web_port"
     fi
+    printf "检测到您属于全新安装, 出于安全考虑已自动为您生成随机用户与端口\n" >/dev/stdout
+    printf "面板登录用户名: %s\n" "$usernameTemp" >/dev/stdout
+    printf "面板登录用户密码: %s\n" "$passwdTemp" >/dev/stdout
+    printf "面板登录端口: %s\n" "$web_port" >/dev/stdout
 else
     if [ -n "$USER_NAME" ] || [ -n "$USER_PASSWORD" ]; then
         xray-ui setting -username "$USER_NAME" -password "$USER_PASSWORD"
