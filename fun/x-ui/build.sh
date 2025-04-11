@@ -64,5 +64,5 @@ fi
 tar -zxf "x-ui-linux-$XUI_FRAMEWORK.tar.gz"
 chmod +x x-ui/x-ui
 # Unzip xray and add execute permissions
-unzip -q "Xray-linux-$XRAY_FRAMEWORK.zip" -d ./Xray
-chmod +x Xray/xray
+unzip -q "Xray-linux-$XRAY_FRAMEWORK.zip" -d ./xray
+chmod +x xray/xray
