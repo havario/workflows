@@ -22,6 +22,8 @@ WORKDIR="/usr/local/bin"
 # https://www.graalvm.org/latest/reference-manual/ruby/UTF8Locale
 export LANG=en_US.UTF-8
 
+separator() { printf "%-50s\n" "-" | sed 's/\s/-/g'; }
+
 cd "$WORKDIR" || { printf "Error: Failed to enter the x-ui work directory!\n"; exit 1; }
 
 generatePort() {
@@ -62,6 +64,8 @@ checkConfig() {
     # For security reasons, it is necessary to mandatorily change the port and account password after installation or update.
     if [ ! -f "/etc/x-ui/x-ui.db" ]; then
         printf "\n"
+        printf "                  %s\n" "login info"
+        separator
         if [ -z "$USER_NAME" ] || [ -z "$USER_PASSWORD" ]; then
             USERNAME_TEMP=$(head -c 6 /dev/urandom | base64)
             PASSWD_TEMP=$(head -c 6 /dev/urandom | base64)
@@ -91,6 +95,7 @@ checkConfig() {
             [[ "$IP" == *:* ]] && printf "[%s]:%s " "$IP" "$IS_PANEL_PORT" || printf "%s:%s " "$IP" "$IS_PANEL_PORT"
         done
         printf "\n"
+        separator
         printf "\n"
     fi
 }
