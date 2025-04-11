@@ -87,11 +87,11 @@ set_port() {
 }
 
 check_config() {
-    local config_row
+    local CONFIG_ROW
     printf "\n"
     separator
-    xray-ui setting -show true | while IFS= read -r config_row; do
-        _green "$config_row"
+    xray-ui setting -show true | while IFS= read -r CONFIG_ROW; do
+        _green "$CONFIG_ROW"
     done
     separator
 }
