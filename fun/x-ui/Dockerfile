@@ -22,8 +22,6 @@ COPY build.sh .
 
 RUN set -ex \
         && apk update \
-        && apk add --no-cache \
-            curl \
         && chmod +x build.sh && ./build.sh
 
 FROM --platform=$BUILDPLATFORM alpine:latest
@@ -35,12 +33,10 @@ ARG TARGETARCH
 WORKDIR /usr/local/bin
 
 # Due to the need to use a management script, rename the x-ui process.
-COPY --from=builder /tmp/x-ui /usr/local/bin/xray-ui
+COPY --from=builder /tmp/x-ui/x-ui /usr/local/bin/xray-ui
 
 # copy the core program Xray-core
-# https://github.com/teddysun/across/blob/master/docker/xray/Dockerfile
-# Use an external image as a stage https://docs.docker.com/build/building/multi-stage/
-COPY --from=teddysun/xray /usr/bin/xray /usr/local/bin/bin/xray-linux-${TARGETARCH}
+COPY --from=builder /tmp/Xray/xray /usr/local/bin/bin/xray-linux-${TARGETARCH}
 
 RUN set -ex \
         && apk update && apk upgrade \
