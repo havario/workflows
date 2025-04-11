@@ -49,6 +49,7 @@ gen_port() {
 
 cd "$workdir" || { printf "Error: Failed to enter the x-ui work directory!\n"; exit 1; }
 
+# For security reasons, it is necessary to mandatorily change the port and account password after installation or update.
 if [ ! -f "/etc/x-ui/x-ui.db" ]; then
     if [ -z "$USER_NAME" ] || [ -z "$USER_PASSWORD" ]; then
         xray-ui setting -username "$usernameTemp" -password "$passwdTemp" >/dev/null 2>&1
@@ -75,8 +76,6 @@ if [ ! -f "/etc/x-ui/x-ui.db" ]; then
         printf "面板登录端口: %s\n" "$PANEL_PORT" >/dev/stdout
         printf "Panel login port: %s\n" "$PANEL_PORT" >/dev/stdout
     fi
-    printf "\n"
-else
     printf "\n"
 fi
 
