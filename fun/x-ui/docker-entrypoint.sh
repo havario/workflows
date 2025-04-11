@@ -86,7 +86,9 @@ checkConfig() {
             printf "Panel login port: %s\n" "$PANEL_PORT" >/dev/stdout
         fi
         printf "Panel login address: "
-        for IP in "${SHOW_IP[@]}"; do [[ "$IP" == *:* ]] && printf "[%s]:%s " "$IP" "$IS_PANEL_PORT" || printf "%s:%s " "$IP" "$IS_PANEL_PORT"; done
+        for IP in "${SHOW_IP[@]}"; do
+            [[ "$IP" == *:* ]] && printf "[%s]:%s " "$IP" "$IS_PANEL_PORT" || printf "%s:%s " "$IP" "$IS_PANEL_PORT"
+        done
         printf "\n"
     fi
 }
