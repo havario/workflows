@@ -40,7 +40,6 @@ show_status() {
     else
         echo "面板状态: $(_red 'Not Running')"
     fi
-    printf "\n"
     if [ "$(ps -ef | grep 'xray-linux' | grep -v grep | wc -l)" -ge 1 ]; then
         echo "Xray 状态: $(_green 'Running')"
     else
@@ -50,7 +49,7 @@ show_status() {
 
 reset_user() {
     local CHOOSE
-    reading '确定要将用户名和密码重置为admin吗? (y/n)' 'CHOOSE'
+    reading '确定要将用户名和密码重置为admin吗? (y/n) ' 'CHOOSE'
     case "$CHOOSE" in
         'Y' | 'y') : ;;
         *) show_menu ;;
@@ -62,7 +61,7 @@ reset_user() {
 
 reset_config() {
     local CHOOSE
-    reading '确定要重置所有面板设置吗, 账号数据不会丢失, 用户名和密码不会改变! (y/n)' 'CHOOSE'
+    reading '确定要重置所有面板设置吗, 账号数据不会丢失, 用户名和密码不会改变! (y/n) ' 'CHOOSE'
     case "$CHOOSE" in
         'Y' | 'y') : ;;
         *) show_menu ;;
@@ -91,7 +90,6 @@ check_config() {
     xray-ui setting -show true | while IFS= read -r config_row; do
         _green "$config_row"
     done
-    printf "\n"
     separator
 }
 
@@ -108,7 +106,7 @@ show_menu() {
     printf "\n"
     show_status
     printf "\n"
-    reading '请输入选择 [0-4], 查看面板登录信息请输入数字4' 'CHOOSE'
+    reading '请输入选择 [0-4], 查看面板登录信息请输入数字4 ' 'CHOOSE'
     case "$CHOOSE" in
         0) exit 0 ;;
         1) reset_user ;;
