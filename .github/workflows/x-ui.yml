@@ -17,7 +17,6 @@ jobs:
         uses: actions/checkout@v4.2.2
         with:
           fetch-depth: 0
-          submodules: true
 
       - name: 'Compare Xray-core and x-ui versions'
         run: |
