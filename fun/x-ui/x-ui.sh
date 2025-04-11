@@ -70,7 +70,7 @@ reset_config() {
         *) show_menu ;;
     esac
     xray-ui setting -reset
-    printf "所有面板设置已重置为默认值，现在请重启面板，并使用默认的 %s 端口访问面板\n" "$(_green '54321')"
+    printf "所有面板设置已重置为默认值, 现在请重启面板，并使用默认的 %s 端口访问面板\n" "$(_green '54321')"
     exit 0
 }
 
