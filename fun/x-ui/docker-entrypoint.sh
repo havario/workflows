@@ -27,6 +27,8 @@ PASSWDTEMP=$(head -c 6 /dev/urandom | base64)
 # https://www.graalvm.org/latest/reference-manual/ruby/UTF8Locale
 export LANG=en_US.UTF-8
 
+cd "$WORKDIR" || { printf "Error: Failed to enter the x-ui work directory!\n"; exit 1; }
+
 gen_port() {
     IS_COUNT=0
     IS_USED_PORT=''
@@ -47,8 +49,7 @@ gen_port() {
     done
 }
 
-cd "$WORKDIR" || { printf "Error: Failed to enter the x-ui work directory!\n"; exit 1; }
-
+printf "\n"
 # For security reasons, it is necessary to mandatorily change the port and account password after installation or update.
 if [ ! -f "/etc/x-ui/x-ui.db" ]; then
     if [ -z "$USER_NAME" ] || [ -z "$USER_PASSWORD" ]; then
