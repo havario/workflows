@@ -20,6 +20,9 @@
 #     v2-ui          migrate form v2-ui
 #     setting        set settings
 
+# https://www.graalvm.org/latest/reference-manual/ruby/UTF8Locale
+export LANG=en_US.UTF-8
+
 red='\033[31m'
 green='\033[32m'
 yellow='\033[33m'
