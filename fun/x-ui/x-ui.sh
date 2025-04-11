@@ -104,7 +104,6 @@ check_config() {
 
 show_menu() {
     clear_screen
-    printf "\n"
     _green ' x-ui 面板管理脚本'
     printf "\n"
     echo " $(_green '0.') 退出脚本"
