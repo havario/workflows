@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 #
 # Description: 
 #
@@ -19,3 +19,29 @@
 #     run            run web panel
 #     v2-ui          migrate form v2-ui
 #     setting        set settings
+
+red='\033[31m'
+green='\033[32m'
+yellow='\033[33m'
+white='\033[0m'
+_red() { printf "$red%s$white\n" "$*"; }
+_green() { printf "$green%s$white\n" "$*"; }
+_yellow() { printf "$yellow%s$white\n" "$*"; }
+_err_msg() { printf "\033[41m\033[1mError$white %s\n" "$*"; }
+_suc_msg() { printf "\033[42m\033[1mSuccess$white %s\n" "$*"; }
+separator() { printf "%-19s\n" "-" | sed 's/\s/-/g'; }
+reading() { read -rep "$(_yellow "$1")" "$2"; }
+
+show_menu() {
+    printf "\n"
+    _green ' x-ui 面板管理脚本'
+    echo " $(_green '0.') 退出脚本"
+    separator
+    echo " $(_green '1.') 重置用户名密码"
+    echo " $(_green '2.') 重置面板设置"
+    echo " $(_green '3.') 设置面板端口"
+    echo " $(_green '4.') 查看当前面板信息"
+    separator
+}
+
+show_menu
