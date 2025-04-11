@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 #
 # Description: entrypoint script to perform parameter checks and start the x-ui service.
 #
