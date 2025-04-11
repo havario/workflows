@@ -85,6 +85,7 @@ checkConfig() {
             xray-ui setting -port "$PANEL_PORT" >/dev/null 2>&1
             printf "Panel login port: %s\n" "$PANEL_PORT" >/dev/stdout
         fi
+        is_ip
         printf "Panel login address: "
         for IP in "${SHOW_IP[@]}"; do
             [[ "$IP" == *:* ]] && printf "[%s]:%s " "$IP" "$IS_PANEL_PORT" || printf "%s:%s " "$IP" "$IS_PANEL_PORT"
