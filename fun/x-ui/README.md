@@ -23,8 +23,8 @@ services:
 #      USER_PASSWORD: admin
 #      PANEL_PORT: 54321
     volumes:
-      - ./db:/etc/x-ui/
-      - ./cert:/root/cert/
+      - $PWD/db/:/etc/x-ui
+      - $PWD/cert/:/root/cert
     network_mode: host
     cap_add:
       - NET_ADMIN
