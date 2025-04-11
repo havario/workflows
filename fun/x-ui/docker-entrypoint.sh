@@ -47,11 +47,11 @@ generatePort() {
 if [ ! -f "/etc/x-ui/x-ui.db" ]; then
     printf "\n"
     if [ -z "$USER_NAME" ] || [ -z "$USER_PASSWORD" ]; then
-        USERNAMETEMP=$(head -c 6 /dev/urandom | base64)
-        PASSWDTEMP=$(head -c 6 /dev/urandom | base64)
-        xray-ui setting -username "$USERNAMETEMP" -password "$PASSWDTEMP" >/dev/null 2>&1
-        printf "Panel login username: %s\n" "$USERNAMETEMP" >/dev/stdout
-        printf "Panel login user password: %s\n" "$PASSWDTEMP" >/dev/stdout
+        USERNAME_TEMP=$(head -c 6 /dev/urandom | base64)
+        PASSWD_TEMP=$(head -c 6 /dev/urandom | base64)
+        xray-ui setting -username "$USERNAME_TEMP" -password "$PASSWD_TEMP" >/dev/null 2>&1
+        printf "Panel login username: %s\n" "$USERNAME_TEMP" >/dev/stdout
+        printf "Panel login user password: %s\n" "$PASSWD_TEMP" >/dev/stdout
     fi
     if [ -z "$PANEL_PORT" ]; then
         generatePort
