@@ -118,12 +118,12 @@ show_menu() {
     printf "\n"
     reading '请输入选择 [0-4], 查看面板登录信息请输入数字4: ' 'CHOOSE'
     case "$CHOOSE" in
-        0) exit 0 ;;
+        0) clear_screen; exit 0 ;;
         1) resetUser ;;
         2) resetConfig ;;
         3) setPort ;;
         4) checkConfig ;;
-        *) _red '请输入正确的数字 [0-4], 查看面板登录信息请输入数字4' ;;
+        *) _red '请输入正确的数字 [0-4], 查看面板登录信息请输入数字4!' ;;
     esac
 }
 
