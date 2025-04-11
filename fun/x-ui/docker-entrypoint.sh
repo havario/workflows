@@ -91,6 +91,7 @@ checkConfig() {
             [[ "$IP" == *:* ]] && printf "[%s]:%s " "$IP" "$IS_PANEL_PORT" || printf "%s:%s " "$IP" "$IS_PANEL_PORT"
         done
         printf "\n"
+        printf "\n"
     fi
 }
 
