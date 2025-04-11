@@ -43,6 +43,7 @@ COPY docker-entrypoint.sh /docker-entrypoint.sh
 RUN set -ex \
         && apk update && apk upgrade \
         && apk add --no-cache \
+            bash \
             ca-certificates \
             curl \
             tzdata \
