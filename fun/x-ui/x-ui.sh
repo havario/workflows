@@ -41,9 +41,9 @@ show_status() {
         echo "面板状态: $(_red 'Not Running')"
     fi
     if [ "$(ps -ef | grep 'xray-linux' | grep -v grep | wc -l)" -ge 1 ]; then
-        echo "Xray 状态: $(_green 'Running')"
+        echo "Xray状态: $(_green 'Running')"
     else
-        echo "Xray 状态: $(_red 'Not Running')"
+        echo "Xray状态: $(_red 'Not Running')"
     fi
 }
 
