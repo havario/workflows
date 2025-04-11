@@ -53,27 +53,21 @@ if [ ! -f "/etc/x-ui/x-ui.db" ]; then
         USERNAMETEMP=$(head -c 6 /dev/urandom | base64)
         PASSWDTEMP=$(head -c 6 /dev/urandom | base64)
         xray-ui setting -username "$USERNAMETEMP" -password "$PASSWDTEMP" >/dev/null 2>&1
-        printf "面板登录用户名: %s\n" "$USERNAMETEMP" >/dev/stdout
         printf "Panel login username: %s\n" "$USERNAMETEMP" >/dev/stdout
-        printf "面板登录用户密码: %s\n" "$PASSWDTEMP" >/dev/stdout
         printf "Panel login user password: %s\n" "$PASSWDTEMP" >/dev/stdout
     fi
     if [ -z "$PANEL_PORT" ]; then
         generatePort
         xray-ui setting -port "$WEB_PORT" >/dev/null 2>&1
-        printf "面板登录端口: %s\n" "$WEB_PORT" >/dev/stdout
         printf "Panel login port: %s\n" "$WEB_PORT" >/dev/stdout
     fi
     if [ -n "$USER_NAME" ] && [ -n "$USER_PASSWORD" ]; then
         xray-ui setting -username "$USER_NAME" -password "$USER_PASSWORD" >/dev/null 2>&1
-        printf "面板登录用户名: %s\n" "$USER_NAME" >/dev/stdout
         printf "Panel login username: %s\n" "$USER_NAME" >/dev/stdout
-        printf "面板登录用户密码: %s\n" "$USER_PASSWORD" >/dev/stdout
         printf "Panel login user password: %s\n" "$USER_PASSWORD" >/dev/stdout
     fi
     if [ -n "$PANEL_PORT" ]; then
         xray-ui setting -port "$PANEL_PORT" >/dev/null 2>&1
-        printf "面板登录端口: %s\n" "$PANEL_PORT" >/dev/stdout
         printf "Panel login port: %s\n" "$PANEL_PORT" >/dev/stdout
     fi
     printf "\n"
