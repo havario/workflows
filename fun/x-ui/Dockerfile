@@ -6,8 +6,8 @@
 # https://github.com/enwaiax/x-ui
 # https://github.com/FranzKafkaYu/x-ui
 # https://github.com/XTLS/Xray-core
-# https://github.com/v2fly/geoip
 # https://github.com/v2fly/domain-list-community
+# https://github.com/v2fly/geoip
 #
 # Acknowledgments:
 # https://github.com/teddysun
