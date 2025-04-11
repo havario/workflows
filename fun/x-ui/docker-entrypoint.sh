@@ -53,8 +53,8 @@ checkConfig() {
     # www.autodesk.com.cn
     # www.keysight.com.cn
     is_ip() {
-        IPV4_ADDRESS=$(curl -fsSL -m 5 -4 http://www.qualcomm.cn/cdn-cgi/trace | grep '^ip=' | cut -d= -f2 | xargs)
-        IPV6_ADDRESS=$(curl -fsSL -m 5 -6 http://www.qualcomm.cn/cdn-cgi/trace | grep '^ip=' | cut -d= -f2 | xargs)
+        IPV4_ADDRESS=$(curl -fsSL -m 5 -4 http://www.qualcomm.cn/cdn-cgi/trace 2>/dev/null | grep '^ip=' | cut -d= -f2 | xargs)
+        IPV6_ADDRESS=$(curl -fsSL -m 5 -6 http://www.qualcomm.cn/cdn-cgi/trace 2>/dev/null | grep '^ip=' | cut -d= -f2 | xargs)
         [ -n "$IPV4_ADDRESS" ] && SHOW_IP+=("$IPV4_ADDRESS")
         [ -n "$IPV6_ADDRESS" ] && SHOW_IP+=("$IPV6_ADDRESS")
     }
