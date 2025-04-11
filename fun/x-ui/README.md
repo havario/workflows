@@ -1,4 +1,4 @@
-# x-ui Docker Image by honeok 
+# X-UI Docker Image by honeok 
 
 <p align="center">
   <a href="https://hub.docker.com/r/pakho611/x-ui">
@@ -12,6 +12,23 @@
   </a>
 </p>
 
+```dockerfile
+services:
+  x-ui:
+    image: honeok/x-ui
+    container_name: x-ui
+    restart: unless-stopped
+#    environment:
+#      USER_NAME: admin
+#      USER_PASSWORD: admin
+#      PANEL_PORT: 54321
+    volumes:
+      - ./db:/etc/x-ui/
+      - ./cert:/root/cert/
+    network_mode: host
+    cap_add:
+      - NET_ADMIN
+```
 
 ```shell
 docker exec -i x-ui sh -c 'echo 4 | x-ui'
