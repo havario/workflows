@@ -12,7 +12,7 @@
   </a>
 </p>
 
-```dockerfile
+```yml
 services:
   x-ui:
     image: honeok/x-ui
