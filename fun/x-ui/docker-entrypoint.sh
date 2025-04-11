@@ -6,7 +6,6 @@
 #
 # References:
 # https://github.com/233boy/sing-box
-# https://github.com/yonggekkk/sing-box-yg
 #
 # Licensed under the GNU General Public License, version 2 only.
 # This program is distributed WITHOUT ANY WARRANTY.
