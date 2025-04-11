@@ -76,7 +76,7 @@ reset_config() {
         *) show_menu ;;
     esac
     xray-ui setting -reset
-    printf "所有面板设置已重置为默认值, 现在请重启面板，并使用默认的 %s 端口访问面板\n" "$(_green '54321')"
+    printf "所有面板设置已重置为默认值, 现在请重启面板, 并使用默认的 %s 端口访问面板\n" "$(_green '54321')"
     exit 0
 }
 
@@ -117,7 +117,7 @@ show_menu() {
     printf "\n"
     show_status
     printf "\n"
-    reading '请输入选择 [0-4], 查看面板登录信息请输入数字4 ' 'CHOOSE'
+    reading '请输入选择 [0-4], 查看面板登录信息请输入数字4: ' 'CHOOSE'
     case "$CHOOSE" in
         0) exit 0 ;;
         1) reset_user ;;
