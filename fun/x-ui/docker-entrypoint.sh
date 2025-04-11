@@ -43,32 +43,54 @@ generatePort() {
     done
 }
 
-# For security reasons, it is necessary to mandatorily change the port and account password after installation or update.
-if [ ! -f "/etc/x-ui/x-ui.db" ]; then
-    printf "\n"
-    if [ -z "$USER_NAME" ] || [ -z "$USER_PASSWORD" ]; then
-        USERNAME_TEMP=$(head -c 6 /dev/urandom | base64)
-        PASSWD_TEMP=$(head -c 6 /dev/urandom | base64)
-        xray-ui setting -username "$USERNAME_TEMP" -password "$PASSWD_TEMP" >/dev/null 2>&1
-        printf "Panel login username: %s\n" "$USERNAME_TEMP" >/dev/stdout
-        printf "Panel login user password: %s\n" "$PASSWD_TEMP" >/dev/stdout
+checkConfig() {
+    local IPV4_ADDRESS IPV6_ADDRESS
+    local SHOW_IP=()
+    local IS_PANEL_PORT=""
+
+    # References: https://github.com/bin456789/reinstall
+    # www.prologis.cn
+    # www.autodesk.com.cn
+    # www.keysight.com.cn
+    is_ip() {
+        IPV4_ADDRESS=$(curl -fsSL -m 5 -4 http://www.qualcomm.cn/cdn-cgi/trace | grep '^ip=' | cut -d= -f2 | xargs)
+        IPV6_ADDRESS=$(curl -fsSL -m 5 -6 http://www.qualcomm.cn/cdn-cgi/trace | grep '^ip=' | cut -d= -f2 | xargs)
+        [ -n "$IPV4_ADDRESS" ] && SHOW_IP+=("$IPV4_ADDRESS")
+        [ -n "$IPV6_ADDRESS" ] && SHOW_IP+=("$IPV6_ADDRESS")
+    }
+
+    # For security reasons, it is necessary to mandatorily change the port and account password after installation or update.
+    if [ ! -f "/etc/x-ui/x-ui.db" ]; then
+        printf "\n"
+        if [ -z "$USER_NAME" ] || [ -z "$USER_PASSWORD" ]; then
+            USERNAME_TEMP=$(head -c 6 /dev/urandom | base64)
+            PASSWD_TEMP=$(head -c 6 /dev/urandom | base64)
+            xray-ui setting -username "$USERNAME_TEMP" -password "$PASSWD_TEMP" >/dev/null 2>&1
+            printf "Panel login username: %s\n" "$USERNAME_TEMP" >/dev/stdout
+            printf "Panel login user password: %s\n" "$PASSWD_TEMP" >/dev/stdout
+        fi
+        if [ -z "$PANEL_PORT" ]; then
+            generatePort
+            IS_PANEL_PORT="$WEB_PORT"
+            xray-ui setting -port "$WEB_PORT" >/dev/null 2>&1
+            printf "Panel login port: %s\n" "$WEB_PORT" >/dev/stdout
+        fi
+        if [ -n "$USER_NAME" ] && [ -n "$USER_PASSWORD" ]; then
+            xray-ui setting -username "$USER_NAME" -password "$USER_PASSWORD" >/dev/null 2>&1
+            printf "Panel login username: %s\n" "$USER_NAME" >/dev/stdout
+            printf "Panel login user password: %s\n" "$USER_PASSWORD" >/dev/stdout
+        fi
+        if [ -n "$PANEL_PORT" ]; then
+            IS_PANEL_PORT="$PANEL_PORT"
+            xray-ui setting -port "$PANEL_PORT" >/dev/null 2>&1
+            printf "Panel login port: %s\n" "$PANEL_PORT" >/dev/stdout
+        fi
+        [ -n "$IS_PANEL_PORT" ] && is_ip && printf "Panel login address: "; for ip in "${SHOW_IP[@]}"; do [[ "$ip" == *:* ]] && printf "[%s]:%s " "$ip" "$IS_PANEL_PORT" || printf "%s:%s " "$ip" "$IS_PANEL_PORT"; done
+        printf "\n"
     fi
-    if [ -z "$PANEL_PORT" ]; then
-        generatePort
-        xray-ui setting -port "$WEB_PORT" >/dev/null 2>&1
-        printf "Panel login port: %s\n" "$WEB_PORT" >/dev/stdout
-    fi
-    if [ -n "$USER_NAME" ] && [ -n "$USER_PASSWORD" ]; then
-        xray-ui setting -username "$USER_NAME" -password "$USER_PASSWORD" >/dev/null 2>&1
-        printf "Panel login username: %s\n" "$USER_NAME" >/dev/stdout
-        printf "Panel login user password: %s\n" "$USER_PASSWORD" >/dev/stdout
-    fi
-    if [ -n "$PANEL_PORT" ]; then
-        xray-ui setting -port "$PANEL_PORT" >/dev/null 2>&1
-        printf "Panel login port: %s\n" "$PANEL_PORT" >/dev/stdout
-    fi
-    printf "\n"
-fi
+}
+
+checkConfig
 
 if [ "$#" -eq 0 ]; then
     exec bash -c "xray-ui run"
