@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# Description: 
+# Description: x-ui management panel, providing basic x-ui backend management.
 #
 # Copyright (c) 2025 honeok <honeok@duck.com>
 #
