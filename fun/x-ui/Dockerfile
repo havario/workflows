@@ -38,12 +38,15 @@ COPY --from=builder /tmp/x-ui/x-ui /usr/local/bin/xray-ui
 # copy the core program Xray-core
 COPY --from=builder /tmp/Xray/xray /usr/local/bin/bin/xray-linux-${TARGETARCH}
 
+COPY docker-entrypoint.sh /docker-entrypoint.sh
+
 RUN set -ex \
         && apk update && apk upgrade \
         && apk add --no-cache \
             ca-certificates \
             curl \
             tzdata \
+        && chmod +x /docker-entrypoint.sh \
         && curl -fsSL -o /usr/local/bin/bin/geosite.dat "https://github.com/v2fly/domain-list-community/releases/latest/download/dlc.dat" \
         && curl -fsSL -o /usr/local/bin/bin/geoip.dat "https://github.com/v2fly/geoip/releases/latest/download/geoip.dat" \
         && rm -rf /var/cache/apk/* /tmp/*
@@ -53,4 +56,4 @@ VOLUME [ "/etc/x-ui" ]
 # default time of the container
 ENV TZ=Asia/Shanghai
 
-ENTRYPOINT [ "xray-ui", "run" ]
+ENTRYPOINT [ "/docker-entrypoint.sh" ]
