@@ -39,6 +39,7 @@ COPY --from=builder /tmp/x-ui/x-ui /usr/local/bin/xray-ui
 COPY --from=builder /tmp/Xray/xray /usr/local/bin/bin/xray-linux-${TARGETARCH}
 
 COPY docker-entrypoint.sh /docker-entrypoint.sh
+COPY x-ui.sh /usr/local/bin/x-ui
 
 RUN set -ex \
         && apk update && apk upgrade \
@@ -48,7 +49,7 @@ RUN set -ex \
             curl \
             iptables \
             tzdata \
-        && chmod +x /docker-entrypoint.sh \
+        && chmod +x /docker-entrypoint.sh /usr/local/bin/x-ui \
         && curl -fsSL -o /usr/local/bin/bin/geosite.dat "https://github.com/v2fly/domain-list-community/releases/latest/download/dlc.dat" \
         && curl -fsSL -o /usr/local/bin/bin/geoip.dat "https://github.com/v2fly/geoip/releases/latest/download/geoip.dat" \
         && rm -rf /var/cache/apk/* /tmp/*
@@ -57,8 +58,5 @@ VOLUME [ "/etc/x-ui" ]
 
 # default time of the container
 ENV TZ=Asia/Shanghai
-
-# Judge iptables chain failed,error Info exec: "bash": executable file not found in $PATH
-ENV PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:$PATH
 
 ENTRYPOINT [ "/docker-entrypoint.sh" ]

@@ -31,7 +31,8 @@ separator() { printf "%-19s\n" "-" | sed 's/\s/-/g'; }
 reading() { read -rep "$(_yellow "$1")" "$2"; }
 
 WORKDIR="/usr/local/bin"
-XUIBIN="$WORKDIR/xray-ui"
+
+cd "$WORKDIR" || { _red 'Error: Failed to enter the x-ui work directory!\n'; exit 1; }
 
 show_status() {
     if pgrep -x "xray-ui" >/dev/null 2>&1; then
@@ -48,14 +49,50 @@ show_status() {
 }
 
 reset_user() {
-    reading '确定要将用户名和密码重置为admin吗? (y/n)' 'choose'
-    case "$choose" in
+    local CHOOSE
+    reading '确定要将用户名和密码重置为admin吗? (y/n)' 'CHOOSE'
+    case "$CHOOSE" in
         'Y' | 'y') : ;;
         *) show_menu ;;
     esac
-    "$XUIBIN" setting -username admin -password admin
-    echo "用户名和密码已重置为 $(_green 'admin'), 现在请重启面板"
-    confirm_restart
+    xray-ui setting -username admin -password admin
+    printf "用户名和密码已重置为 %s, 现在请重启面板\n" "$(_green 'admin')"
+    exit 0
+}
+
+reset_config() {
+    local CHOOSE
+    reading '确定要重置所有面板设置吗, 账号数据不会丢失, 用户名和密码不会改变! (y/n)' 'CHOOSE'
+    case "$CHOOSE" in
+        'Y' | 'y') : ;;
+        *) show_menu ;;
+    esac
+    xray-ui setting -reset
+    printf "所有面板设置已重置为默认值，现在请重启面板，并使用默认的 %s 端口访问面板\n" "$(_green '54321')"
+    exit 0
+}
+
+set_port() {
+    local CHOOSE
+    reading '输入端口号[1-65535]: ' 'CHOOSE'
+    case "$CHOOSE" in
+        'Y' | 'y') : ;;
+        *) show_menu ;;
+    esac
+    xray-ui setting -port "$CHOOSE"
+    printf "设置端口完毕, 现在请重启面板, 并使用新设置的端口 %s 访问面板\n" "$(_green "$CHOOSE")"
+    exit 0
+}
+
+check_config() {
+    local config_row
+    printf "\n"
+    separator
+    xray-ui setting -show true | while IFS= read -r config_row; do
+        _green "$config_row"
+    done
+    printf "\n"
+    separator
 }
 
 show_menu() {
@@ -71,11 +108,14 @@ show_menu() {
     printf "\n"
     show_status
     printf "\n"
-    reading '请输入选择 [0-4], 查看面板登录信息请输入数字4' 'choose'
-    case "$choose" in
+    reading '请输入选择 [0-4], 查看面板登录信息请输入数字4' 'CHOOSE'
+    case "$CHOOSE" in
         0) exit 0 ;;
         1) reset_user ;;
-        *) _red '请输入正确的数字 [0-17], 查看面板登录信息请输入数字' && show_menu ;;
+        2) reset_config ;;
+        3) set_port ;;
+        4) check_config ;;
+        *) _red '请输入正确的数字 [0-17], 查看面板登录信息请输入数字';;
     esac
 }
 
