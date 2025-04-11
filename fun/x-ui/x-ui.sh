@@ -124,7 +124,7 @@ show_menu() {
         2) reset_config ;;
         3) set_port ;;
         4) check_config ;;
-        *) _red '请输入正确的数字 [0-4], 查看面板登录信息请输入数字';;
+        *) _red '请输入正确的数字 [0-4], 查看面板登录信息请输入数字' && show_menu ;;
     esac
 }
 
