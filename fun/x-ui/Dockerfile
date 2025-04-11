@@ -34,10 +34,7 @@ WORKDIR /usr/local/bin
 
 # Due to the need to use a management script, rename the x-ui process.
 COPY --from=builder /tmp/x-ui/x-ui /usr/local/bin/xray-ui
-
-# copy the core program Xray-core
 COPY --from=builder /tmp/Xray/xray /usr/local/bin/bin/xray-linux-${TARGETARCH}
-
 COPY docker-entrypoint.sh /docker-entrypoint.sh
 COPY x-ui.sh /usr/local/bin/x-ui
 
