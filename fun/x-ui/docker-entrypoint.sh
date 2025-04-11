@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
 #
 # Description: entrypoint script to perform parameter checks and start the x-ui service.
 #
@@ -10,6 +10,15 @@
 # Licensed under the GNU General Public License, version 2 only.
 # This program is distributed WITHOUT ANY WARRANTY.
 # See <https://www.gnu.org/licenses/old-licenses/gpl-2.0.html>.
+
+# /usr/local/bin # x-ui -h
+# Usage of ./x-ui:
+#   -v	show version
+
+# Commands:
+#     run            run web panel
+#     v2-ui          migrate form v2-ui
+#     setting        set settings
 
 workdir="/usr/local/bin"
 usernameTemp=$(head -c 6 /dev/urandom | base64)
@@ -63,7 +72,7 @@ if [ ! -f "/etc/x-ui/x-ui.db" ]; then
 fi
 
 if [ "$#" -eq 0 ]; then
-    exec xray-ui run
+    exec "xray-ui"
 else
     exec "$@"
 fi

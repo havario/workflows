@@ -43,10 +43,8 @@ COPY docker-entrypoint.sh /docker-entrypoint.sh
 RUN set -ex \
         && apk update && apk upgrade \
         && apk add --no-cache \
-            bash \
             ca-certificates \
             curl \
-            iptables \
             tzdata \
         && chmod +x /docker-entrypoint.sh \
         && curl -fsSL -o /usr/local/bin/bin/geosite.dat "https://github.com/v2fly/domain-list-community/releases/latest/download/dlc.dat" \
