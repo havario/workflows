@@ -30,8 +30,8 @@ export LANG=en_US.UTF-8
 cd "$WORKDIR" || { printf "Error: Failed to enter the x-ui work directory!\n"; exit 1; }
 
 gen_port() {
-    IS_COUNT=0
-    IS_USED_PORT=''
+    local IS_USED_PORT=""
+    local IS_COUNT TEMP_PORT
 
     is_test() {
         [ ! "$IS_USED_PORT" ] && IS_USED_PORT=$(netstat -tunlp | sed -n 's/.*:\([0-9]\+\).*/\1/p' | sort -nu)
@@ -39,19 +39,18 @@ gen_port() {
         return
     }
 
-    while :; do
-        ((IS_COUNT++))
-        if [ "$IS_COUNT" -ge 5 ]; then
-            printf "Error: no free port found after 5 attempts.\n" >&2 && exit 1
-        fi
+    for ((IS_COUNT=1; IS_COUNT<=5; IS_COUNT++)); do
         TEMP_PORT=$(shuf -i 10000-65535 -n 1)
-        [ ! "$(is_test "$TEMP_PORT")" ] && { WEB_PORT="$TEMP_PORT"; break; }
+        if [ ! "$(is_test "$TEMP_PORT")" ]; then
+            WEB_PORT="$TEMP_PORT" && break
+        fi
+        [ "$IS_COUNT" -eq 5 ] && { printf "Error: no free port found after 5 attempts.\n" >&2; exit 1; }
     done
 }
 
-printf "\n"
 # For security reasons, it is necessary to mandatorily change the port and account password after installation or update.
 if [ ! -f "/etc/x-ui/x-ui.db" ]; then
+    printf "\n"
     if [ -z "$USER_NAME" ] || [ -z "$USER_PASSWORD" ]; then
         xray-ui setting -username "$USERNAMETEMP" -password "$PASSWDTEMP" >/dev/null 2>&1
         printf "面板登录用户名: %s\n" "$USERNAMETEMP" >/dev/stdout
