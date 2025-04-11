@@ -21,8 +21,6 @@
 #     setting        set settings
 
 WORKDIR="/usr/local/bin"
-USERNAMETEMP=$(head -c 6 /dev/urandom | base64)
-PASSWDTEMP=$(head -c 6 /dev/urandom | base64)
 
 # https://www.graalvm.org/latest/reference-manual/ruby/UTF8Locale
 export LANG=en_US.UTF-8
@@ -52,6 +50,8 @@ generatePort() {
 if [ ! -f "/etc/x-ui/x-ui.db" ]; then
     printf "\n"
     if [ -z "$USER_NAME" ] || [ -z "$USER_PASSWORD" ]; then
+        USERNAMETEMP=$(head -c 6 /dev/urandom | base64)
+        PASSWDTEMP=$(head -c 6 /dev/urandom | base64)
         xray-ui setting -username "$USERNAMETEMP" -password "$PASSWDTEMP" >/dev/null 2>&1
         printf "面板登录用户名: %s\n" "$USERNAMETEMP" >/dev/stdout
         printf "Panel login username: %s\n" "$USERNAMETEMP" >/dev/stdout
