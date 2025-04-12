@@ -43,7 +43,7 @@ clear_screen() {
     fi
 }
 
-showStatus() {
+show_status() {
     if pgrep -x "xray-ui" >/dev/null 2>&1; then
         echo "面板状态: $(_green 'Running')"
     else
@@ -56,7 +56,7 @@ showStatus() {
     fi
 }
 
-resetUser() {
+reset_user() {
     local CHOOSE
     reading '确定要将用户名和密码重置为admin吗? (y/n) ' 'CHOOSE'
     case "$CHOOSE" in
@@ -68,7 +68,7 @@ resetUser() {
     exit 0
 }
 
-resetConfig() {
+reset_config() {
     local CHOOSE
     reading '确定要重置所有面板设置吗, 账号数据不会丢失, 用户名和密码不会改变! (y/n) ' 'CHOOSE'
     case "$CHOOSE" in
@@ -80,7 +80,7 @@ resetConfig() {
     exit 0
 }
 
-setPort() {
+set_port() {
     local CHOOSE
     reading '输入端口号[1-65535]: ' 'CHOOSE'
     case "$CHOOSE" in
@@ -92,7 +92,7 @@ setPort() {
     exit 0
 }
 
-checkConfig() {
+check_config() {
     local CONFIG_ROW
     printf "\n"
     separator
@@ -114,15 +114,15 @@ show_menu() {
     echo " $(_green '4.') 查看当前面板信息"
     separator
     printf "\n"
-    showStatus
+    show_status
     printf "\n"
     reading '请输入选择 [0-4], 查看面板登录信息请输入数字4: ' 'CHOOSE'
     case "$CHOOSE" in
         0) clear_screen; exit 0 ;;
-        1) resetUser ;;
-        2) resetConfig ;;
-        3) setPort ;;
-        4) checkConfig ;;
+        1) reset_user ;;
+        2) reset_config ;;
+        3) set_port ;;
+        4) check_config ;;
         *) _red '请输入正确的数字 [0-4], 查看面板登录信息请输入数字4!' ;;
     esac
 }

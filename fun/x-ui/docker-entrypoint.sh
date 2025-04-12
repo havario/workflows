@@ -26,7 +26,7 @@ separator() { printf "%-50s\n" "-" | sed 's/\s/-/g'; }
 
 cd "$WORKDIR" || { printf "Error: Failed to enter the x-ui work directory!\n"; exit 1; }
 
-generatePort() {
+generate_port() {
     local IS_USED_PORT=""
     local IS_COUNT TEMP_PORT
 
@@ -45,7 +45,7 @@ generatePort() {
     done
 }
 
-checkConfig() {
+check_config() {
     local IPV4_ADDRESS IPV6_ADDRESS
     local SHOW_IP=()
     local IS_PANEL_PORT=""
@@ -74,7 +74,7 @@ checkConfig() {
             printf " Panel login user password: %s\n" "$PASSWD_TEMP" >/dev/stdout
         fi
         if [ -z "$PANEL_PORT" ]; then
-            generatePort
+            generate_port
             IS_PANEL_PORT="$WEB_PORT"
             xray-ui setting -port "$WEB_PORT" >/dev/null 2>&1
             printf " Panel login port: %s\n" "$WEB_PORT" >/dev/stdout
@@ -100,10 +100,10 @@ checkConfig() {
     fi
 }
 
-checkConfig
+check_config
 
 if [ "$#" -eq 0 ]; then
-    exec bash -c "xray-ui run"
+    exec "xray-ui"
 else
     exec "$@"
 fi
