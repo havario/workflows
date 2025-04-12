@@ -93,6 +93,7 @@ X-UI基于原作者: [FranzKafkaYu/x-ui](https://github.com/FranzKafkaYu/x-ui)
   ```shell
   cd x-ui && docker compose down --rmi all --volumes --remove-orphans && cd .. && rm -rf x-ui
   ```
+</details>
 
 ## 默认面板设置
 
