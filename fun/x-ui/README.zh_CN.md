@@ -12,7 +12,9 @@
   </a>
 </p>
 
+**一个经典的面板 • 基于Xray Core构建**
 
+<img src="https://cdn.skyimg.de/up/2025/4/12/ac9x1a.webp" alt="x-ui" width="80%">
 
 ```yml
 services:
