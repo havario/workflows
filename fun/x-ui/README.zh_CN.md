@@ -6,6 +6,10 @@
 
 **一个经典的面板 • 基于Xray Core构建**
 
+> **Disclaimer:** 此项目仅供个人学习交流，请不要用于非法目的，请不要在生产环境中使用。
+
+**如果此项目对你有用，请给一个**:star2:
+
 <img src="https://cdn.skyimg.de/up/2025/4/12/ac9x1a.webp" alt="x-ui" width="80%">
 
 x-ui基于原作者: [FranzKafkaYu/x-ui](https://github.com/FranzKafkaYu/x-ui)
