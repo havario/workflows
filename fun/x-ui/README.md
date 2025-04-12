@@ -22,7 +22,7 @@ If you need to install Docker yourself, please follow the steps below [official 
 
 ## Pull the image
 
-This is the latest version of X-UI. (As FranzKafkaYu's X-UI has been archived and is no longer updated, this image will be updated in accordance with the official Xray version).
+This is the latest version of the X-UI image. (As FranzKafkaYu's X-UI was archived on November 14, 2024, this image will be updated in accordance with the official Xray version.)
 
 ```shell
 docker pull honeok/x-ui
