@@ -92,7 +92,7 @@ docker compose up -d
 
 ## 使用方法
 
-进入容器后使用`x-ui`唤出管理面板，**请注意** 修改后配置需要重启容器`docker restart x-ui`或`docker compose restart`
+进入容器后使用`x-ui`唤出管理面板，**请注意** 修改配置后需要重启容器`docker restart x-ui`或`docker compose restart`
 
 ```shell
 docker exec -ti x-ui sh
