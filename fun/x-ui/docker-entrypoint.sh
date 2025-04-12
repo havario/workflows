@@ -30,7 +30,7 @@ generate_port() {
     local IS_USED_PORT=""
     local IS_COUNT TEMP_PORT
 
-    is_test_port() {
+    is_port() {
         [ ! "$IS_USED_PORT" ] && IS_USED_PORT=$(netstat -tunlp | sed -n 's/.*:\([0-9]\+\).*/\1/p' | sort -nu)
         echo "$IS_USED_PORT" | sed 's/ /\n/g' | grep ^"${1}"$
         return
@@ -38,7 +38,7 @@ generate_port() {
 
     for ((IS_COUNT=1; IS_COUNT<=5; IS_COUNT++)); do
         TEMP_PORT=$(shuf -i 10000-65535 -n 1)
-        if [ ! "$(is_test_port "$TEMP_PORT")" ]; then
+        if [ ! "$(is_port "$TEMP_PORT")" ]; then
             WEB_PORT="$TEMP_PORT" && break
         fi
         [ "$IS_COUNT" -eq 5 ] && { printf "Error: no free port found after 5 attempts.\n" >&2; exit 1; }
