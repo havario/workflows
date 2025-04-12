@@ -85,7 +85,7 @@ services:
 docker compose up -d
 ```
 
-4. 通过 `docker logs x-ui -f` 查看你的登录地址和随机生成的密码。
+4. 通过 `docker logs x-ui -f` 查看登录地址和随机生成的密码。
 
 ## 使用方法
 
