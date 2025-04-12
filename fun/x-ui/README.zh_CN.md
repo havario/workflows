@@ -1,7 +1,7 @@
 # X-UI Docker Image by honeok 
 
-[![Docker Pulls](https://img.shields.io/docker/pulls/pakho611/x-ui.svg?style=flat-square)](https://hub.docker.com/r/pakho611/x-ui)
-[![Docker Image Size](https://img.shields.io/docker/image-size/pakho611/x-ui.svg?style=flat-square)](https://hub.docker.com/r/pakho611/x-ui)
+[![Docker Pulls](https://img.shields.io/docker/pulls/honeok/x-ui.svg?style=flat-square)](https://hub.docker.com/r/honeok/x-ui)
+[![Docker Image Size](https://img.shields.io/docker/image-size/honeok/x-ui.svg?style=flat-square)](https://hub.docker.com/r/honeok/x-ui)
 [![License](https://img.shields.io/github/license/honeok/cross.svg?style=flat-square)](https://www.gnu.org/licenses/old-licenses/gpl-2.0-standalone.html)
 
 **基于Xray Core构建**
