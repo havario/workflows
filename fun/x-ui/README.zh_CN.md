@@ -94,7 +94,7 @@ X-UI基于原作者: [FranzKafkaYu/x-ui](https://github.com/FranzKafkaYu/x-ui)
   cd x-ui && docker compose down --rmi all --volumes --remove-orphans && cd .. && rm -rf x-ui
   ```
 
-### 默认面板设置
+## 默认面板设置
 
 **用户名、密码、端口和 Web Base Path**
 
