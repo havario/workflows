@@ -45,13 +45,10 @@ docker pull honeok/x-ui
 >
 > 启动后通过`docker logs x-ui -f`
 
-1. 使用Docker cli
+1. 使用Docker cli**快速启动**
 
 ```shell
 docker run -d \
-    -e USER_NAME=admin \
-    -e USER_PASSWORD=admin \
-    -e PANEL_PORT=54321 \
     -v $PWD/db:/etc/x-ui/ \
     -v $PWD/cert:/root/cert/ \
     --network=host \
