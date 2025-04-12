@@ -14,8 +14,6 @@ X-UI 使用 Go 语言开发，性能优异，内存占用低。
 
 > **Disclaimer:** 此项目仅供个人学习交流，请不要用于非法目的，请不要在生产环境中使用。
 
-**如果此项目对你有用，请给一个**:star2:
-
 ## 环境准备
 
 如果你需要自己安装docker，请按照以下步骤操作 [official installation guide][2].
@@ -42,14 +40,14 @@ docker pull honeok/x-ui
 | `USER_PASSWORD` |       随机生成       |  面板登录密码  |
 |   `PANEL_PORT`  | 10000~65535 随机端口 |  面板访问端口  |
 
-> [!WARNING]
+> [!WARNING]  
 > 建议在首次启动后记录随机生成的用户名和密码，或通过环境变量自定义设置以增强安全性。
 >
-> 确保`PANEL_PORT`未被占用，以避免端口冲突。
+> 确保 `PANEL_PORT` 未被占用，以避免端口冲突。
 >
 > 如果您选择不修改这些设置，它们将随机生成。
 >
-> 启动后通过`docker logs x-ui -f`查看随机生成的配置。
+> 启动后通过 `docker logs x-ui -f` 查看随机生成的配置。
 
 1. 使用`Docker cli` **快速启动**
 
