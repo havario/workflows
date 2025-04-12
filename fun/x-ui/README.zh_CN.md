@@ -11,8 +11,8 @@
 x-ui基于原作者: [FranzKafkaYu/x-ui](https://github.com/FranzKafkaYu/x-ui)
 
 | amd64 | arm64 | armv7 | s390x |
-| ------ | ------ | ------ | ------ |
-|  ✔️  |  ✔️  |  ❌  |  ✔️  |
+|-------|-------|-------|-------|
+|  ✔️   |  ✔️   |  ❌   |  ✔️   |
 
 ```yml
 services:
