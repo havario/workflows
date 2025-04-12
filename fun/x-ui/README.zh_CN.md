@@ -45,7 +45,7 @@ docker pull honeok/x-ui
 >
 > 启动后通过`docker logs x-ui -f`
 
-1. 使用Docker cli**快速启动**
+1. 使用Docker cli **快速启动**
 
 ```shell
 docker run -d \
