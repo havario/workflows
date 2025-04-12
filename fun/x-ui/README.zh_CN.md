@@ -24,6 +24,7 @@ X-UI基于原作者: [FranzKafkaYu/x-ui](https://github.com/FranzKafkaYu/x-ui)
 >
 
 **支持架构**
+
 | amd64 | arm64 | armv7 | s390x |
 |-------|-------|-------|-------|
 |  ✔️   |  ✔️   |  ❌   |  ✔️   |
