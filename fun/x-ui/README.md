@@ -46,7 +46,7 @@ The following are the default environment variable configurations for container 
 > If you choose not to modify these settings, they will be randomly generated.<br>
 > After startup, pass `docker logs x-ui -f` View randomly generated configurations.
 
-1. use`Docker cli` **Quick Start**
+1. Use`Docker cli` **Quick Start**
 
 ```shell
 docker run -d \
@@ -59,7 +59,7 @@ docker run -d \
     honeok/x-ui:latest
 ```
 
-2. use`Docker Compose`start up **recommend**
+2. Use`Docker Compose`start up **recommend**
 
 ```yaml
 services:
@@ -85,7 +85,7 @@ services:
 docker compose up -d
 ```
 
-4. pass `docker logs x-ui -f` View your login address and randomly generated password.
+4. Use `docker logs x-ui -f` View your login address and randomly generated password.
 
 ## How to use
 
