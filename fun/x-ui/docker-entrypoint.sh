@@ -30,7 +30,7 @@ generate_port() {
     local IS_USED_PORT=""
     local IS_COUNT TEMP_PORT
 
-    is_test() {
+    is_test_port() {
         [ ! "$IS_USED_PORT" ] && IS_USED_PORT=$(netstat -tunlp | sed -n 's/.*:\([0-9]\+\).*/\1/p' | sort -nu)
         echo "$IS_USED_PORT" | sed 's/ /\n/g' | grep ^"${1}"$
         return
@@ -38,7 +38,7 @@ generate_port() {
 
     for ((IS_COUNT=1; IS_COUNT<=5; IS_COUNT++)); do
         TEMP_PORT=$(shuf -i 10000-65535 -n 1)
-        if [ ! "$(is_test "$TEMP_PORT")" ]; then
+        if [ ! "$(is_test_port "$TEMP_PORT")" ]; then
             WEB_PORT="$TEMP_PORT" && break
         fi
         [ "$IS_COUNT" -eq 5 ] && { printf "Error: no free port found after 5 attempts.\n" >&2; exit 1; }
@@ -70,24 +70,24 @@ check_config() {
             USERNAME_TEMP=$(head -c 6 /dev/urandom | base64)
             PASSWD_TEMP=$(head -c 6 /dev/urandom | base64)
             xray-ui setting -username "$USERNAME_TEMP" -password "$PASSWD_TEMP" >/dev/null 2>&1
-            printf " Panel login username: %s\n" "$USERNAME_TEMP" >&1
-            printf " Panel login user password: %s\n" "$PASSWD_TEMP" >&1
+            printf " Panel login username: %s\n" "$USERNAME_TEMP"
+            printf " Panel login user password: %s\n" "$PASSWD_TEMP"
         fi
         if [ -z "$PANEL_PORT" ]; then
             generate_port
             IS_PANEL_PORT="$WEB_PORT"
             xray-ui setting -port "$WEB_PORT" >/dev/null 2>&1
-            printf " Panel login port: %s\n" "$WEB_PORT" >&1
+            printf " Panel login port: %s\n" "$WEB_PORT"
         fi
         if [ -n "$USER_NAME" ] && [ -n "$USER_PASSWORD" ]; then
             xray-ui setting -username "$USER_NAME" -password "$USER_PASSWORD" >/dev/null 2>&1
-            printf " Panel login username: %s\n" "$USER_NAME" >&1
-            printf " Panel login user password: %s\n" "$USER_PASSWORD" >&1
+            printf " Panel login username: %s\n" "$USER_NAME"
+            printf " Panel login user password: %s\n" "$USER_PASSWORD"
         fi
         if [ -n "$PANEL_PORT" ]; then
             IS_PANEL_PORT="$PANEL_PORT"
             xray-ui setting -port "$PANEL_PORT" >/dev/null 2>&1
-            printf " Panel login port: %s\n" "$PANEL_PORT" >&1
+            printf " Panel login port: %s\n" "$PANEL_PORT"
         fi
         is_ip
         printf " Panel login address: "
