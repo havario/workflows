@@ -16,6 +16,8 @@
 
 <img src="https://cdn.skyimg.de/up/2025/4/12/ac9x1a.webp" alt="x-ui" width="80%">
 
+`x-ui`基于原作者: [FranzKafkaYu/x-ui](https://github.com/FranzKafkaYu/x-ui)
+
 ```yml
 services:
   x-ui:
