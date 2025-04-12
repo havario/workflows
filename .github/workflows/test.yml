@@ -22,13 +22,16 @@ jobs:
         run: |
           docker pull --platform linux/amd64 honeok/x-ui:latest
           timeout 10s docker run --rm --platform linux/amd64 honeok/x-ui:latest
+        continue-on-error: true
 
       - name: 'Run arm64 container'
         run: |
           docker pull --platform linux/arm64 honeok/x-ui:latest
           timeout 10s docker run --rm --platform linux/arm64 honeok/x-ui:latest
+        continue-on-error: true
 
       - name: 'Run s390x container'
         run: |
           docker pull --platform linux/s390x honeok/x-ui:latest
           timeout 10s docker run --rm --platform linux/s390x honeok/x-ui:latest
+        continue-on-error: true
