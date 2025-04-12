@@ -27,8 +27,8 @@ done
 XUI_VERSION=$(curl -fsSL "https://api.github.com/repos/FranzKafkaYu/x-ui/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
 XRAY_VERSION=$(curl -fsSL "https://api.github.com/repos/XTLS/Xray-core/releases" | jq -r 'map(select(.prerelease == true)) | sort_by(.created_at) | last | .tag_name' | sed 's/^v//')
 readonly XUI_VERSION XRAY_VERSION
-[ -z "$XUI_VERSION" ] && { printf "Error: Unable to obtain x-ui version!\n" >/dev/stderr; exit 1; }
-[ -z "$XRAY_VERSION" ] && { printf "Error: Unable to obtain xray version!\n" >/dev/stderr; exit 1; }
+[ -z "$XUI_VERSION" ] && { printf "Error: Unable to obtain x-ui version!\n" >&2; exit 1; }
+[ -z "$XRAY_VERSION" ] && { printf "Error: Unable to obtain xray version!\n" >&2; exit 1; }
 
 # map system architecture to framework variable
 case "$(uname -m)" in
@@ -45,19 +45,19 @@ case "$(uname -m)" in
         XRAY_FRAMEWORK='arm64-v8a'
     ;;
     *)
-        printf "Error: unsupported architecture: %s\n" "$(uname -m)" >/dev/stderr; exit 1
+        printf "Error: unsupported architecture: %s\n" "$(uname -m)" >&2; exit 1
     ;;
 esac
 
-cd /tmp || { printf 'Error: permission denied or directory does not exist\n' >/dev/stderr; exit 1; }
+cd /tmp || { printf 'Error: permission denied or directory does not exist\n' >&2; exit 1; }
 
 # Extract x-ui
 if ! curl -fsSL -O "https://github.com/FranzKafkaYu/x-ui/releases/download/${XUI_VERSION}/x-ui-linux-${XUI_FRAMEWORK}.tar.gz"; then
-    printf 'Error: download x-ui failed, please check the network!\n' >/dev/stderr; exit 1
+    printf 'Error: download x-ui failed, please check the network!\n' >&2; exit 1
 fi
 # Extract xray
 if ! curl -fsSL -O "https://github.com/XTLS/Xray-core/releases/download/v${XRAY_VERSION}/Xray-linux-${XRAY_FRAMEWORK}.zip"; then
-    printf 'Error: download xray failed, please check the network!\n' >/dev/stderr; exit 1
+    printf 'Error: download xray failed, please check the network!\n' >&2; exit 1
 fi
 
 # Unzip xui and add execute permissions
