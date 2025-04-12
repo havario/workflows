@@ -34,7 +34,7 @@ docker pull honeok/x-ui
 
 **默认面板设置**
 
-| 容器启动变量 | 值 |
+| 变量 | 值 |
 | -- | -- |
 | USER_NAME | 随机 |
 | USER_PASSWORD | 随机 |
