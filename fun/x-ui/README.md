@@ -4,7 +4,7 @@
 [![Docker Image Size](https://img.shields.io/docker/image-size/honeok/x-ui.svg?style=flat-square)](https://hub.docker.com/r/honeok/x-ui)
 [![License](https://img.shields.io/github/license/honeok/cross.svg?style=flat-square)](https://www.gnu.org/licenses/old-licenses/gpl-2.0-standalone.html)
 
-[English](./fun/x-ui/README.md) |  [中文](./fun/x-ui/README.zh_CN.md)
+[English](./README.md) |  [中文](./README.zh_CN.md)
 
 [FranzKafkaYu/x-ui][1] It is a multi-protocol, multi-user management panel based on the Xray core, offering an intuitive web interface to facilitate user management and proxy server configuration.
 

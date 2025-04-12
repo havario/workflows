@@ -4,7 +4,7 @@
 [![Docker Image Size](https://img.shields.io/docker/image-size/honeok/x-ui.svg?style=flat-square)](https://hub.docker.com/r/honeok/x-ui)
 [![License](https://img.shields.io/github/license/honeok/cross.svg?style=flat-square)](https://www.gnu.org/licenses/old-licenses/gpl-2.0-standalone.html)
 
-[English](./fun/x-ui/README.md) |  [中文](./fun/x-ui/README.zh_CN.md)
+[English](./README.md) |  [中文](./README.zh_CN.md)
 
 [FranzKafkaYu/x-ui][1] 是一个基于 Xray 核心的多协议、多用户管理面板，提供直观的 Web 界面，方便用户管理和配置代理服务器。
 
