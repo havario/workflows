@@ -89,7 +89,15 @@ docker compose up -d
 
 4. 通过 `docker logs x-ui -f` 查看你的登录地址和随机生成的密码。
 
+## 使用方法
 
+进入容器后使用`x-ui`唤出管理面板，**请注意**修改后需要重启容器`docker restart x-ui`或`docker compose restart`
+
+```shell
+docker exec -ti x-ui sh
+```
+
+**在宿主机查看您的X-UI配置信息**
 
 ```shell
 docker exec -i x-ui sh -c 'echo 4 | x-ui'
