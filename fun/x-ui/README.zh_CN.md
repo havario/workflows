@@ -33,6 +33,22 @@ X-UI基于原作者: [FranzKafkaYu/x-ui](https://github.com/FranzKafkaYu/x-ui)
 curl -fsSL get.docker.com | sh
 ```
 
+2. 通过Docker cli安装
+
+```shell
+docker run -d \
+    -e USER_NAME=admin \
+    -e USER_PASSWORD=admin \
+    -e PANEL_PORT=54321 \
+    -v $PWD/db:/etc/x-ui/ \
+    -v $PWD/cert:/root/cert/ \
+    --network=host \
+    --cap-add=NET_ADMIN \
+    --restart=unless-stopped \
+    --name x-ui \
+    honeok/x-ui:latest
+```
+
 2. 通过Docker Compose安装
 
 ```yml
@@ -53,6 +69,20 @@ services:
       - NET_ADMIN
 ```
 
+3. 运行服务：
+
+```shell
+docker compose up -d
+```
+
+### 默认面板设置
+
+**用户名、密码、端口和 Web Base Path**
+
+> [!WARNING]
+> 如果您选择不修改这些设置，它们将随机生成
+>
+> 通过 `docker logs x-ui -f` 查看
 
 
 
