@@ -100,7 +100,7 @@ docker compose up -d
 docker exec -ti x-ui sh
 ```
 
-**在宿主机查看您的X-UI配置信息**
+在宿主机查看您的X-UI配置信息
 
 ```shell
 docker exec -i x-ui sh -c 'echo 4 | x-ui'
