@@ -1,4 +1,4 @@
-# X-UI Docker Image by honeok 
+# x-ui Docker Image by honeok 
 
 <p align="center">
   <a href="https://hub.docker.com/r/pakho611/x-ui">
