@@ -14,11 +14,11 @@ Users can access the panel via a browser to easily set inbound rules, add users,
 
 > **Disclaimer:** This project is solely for personal learning and communication. Please do not use it for illegal purposes or in production environments.
 
-## 环境准备
+## Environment Preparation
 
 If you need to install Docker yourself, please follow the steps below [official installation guide][2].
 
-## 拉取镜像
+## Pull the image
 
 This is the latest version of X-UI. (As FranzKafkaYu's X-UI has been archived and is no longer updated, this image will be updated in accordance with the official Xray version).
 
@@ -28,9 +28,9 @@ docker pull honeok/x-ui
 
 It can be found at the following URL [Docker Hub][3].
 
-## 启动容器
+## Start the container
 
-**默认面板设置**
+**Default Panel Settings**
 
 The following are the default environment variable configurations for container startup:
 
@@ -87,7 +87,7 @@ docker compose up -d
 
 4. 通过 `docker logs x-ui -f` View your login address and randomly generated password.
 
-## 使用方法
+## How to use
 
 Use after entering the container`x-ui`Call up the management panel, **Please note** After modifying the configuration, you need to restart the container`docker restart x-ui`or`docker compose restart`
 
