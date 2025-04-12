@@ -10,16 +10,15 @@ X-UI基于原作者: [FranzKafkaYu/x-ui](https://github.com/FranzKafkaYu/x-ui)
 
 ## 特点
 
-- X-UI 是一个基于 Xray 核心的多协议、多用户管理面板，提供直观的 Web 界面，方便用户管理和配置代理服务器。
-- 它支持多种协议（如 V2Ray、Trojan、Shadowsocks、VLESS、VMess 等），能够实时监控 VPS 性能和流量使用情况。
-- X-UI 使用 Go 语言开发，性能优异，内存占用低，适合在 Debian、Ubuntu、CentOS 等系统上部署。
-- 用户可以通过浏览器访问面板，轻松设置入站规则、添加用户、管理流量和到期时间。
+- X-UI 是一个用于构建代理以绕过网络限制的平台
 
 > **Disclaimer:** 此项目仅供个人学习交流，请不要用于非法目的，请不要在生产环境中使用。
 
 **如果此项目对你有用，请给一个**:star2:
 
 <img src="https://cdn.skyimg.de/up/2025/4/12/ac9x1a.webp" alt="x-ui" width="80%">
+
+## 架构要求
 
 | amd64 | arm64 | armv7 | s390x |
 |-------|-------|-------|-------|
