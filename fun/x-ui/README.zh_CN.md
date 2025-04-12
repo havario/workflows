@@ -19,11 +19,14 @@ X-UI基于原作者: [FranzKafkaYu/x-ui](https://github.com/FranzKafkaYu/x-ui)
 
 **如果此项目对你有用，请给一个**:star2:
 
+<img src="https://cdn.skyimg.de/up/2025/4/12/ac9x1a.webp" alt="x-ui" width="80%">
+
+>
+
+**支持架构**
 | amd64 | arm64 | armv7 | s390x |
 |-------|-------|-------|-------|
 |  ✔️   |  ✔️   |  ❌   |  ✔️   |
-
-<img src="https://cdn.skyimg.de/up/2025/4/12/ac9x1a.webp" alt="x-ui" width="80%">
 
 ## 通过Docker安装
 
