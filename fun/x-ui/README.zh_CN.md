@@ -28,7 +28,7 @@ docker pull honeok/x-ui
 
 这是X-UI的最新版本。
 
-It can be found at [Docker Hub][3].
+可以在以下网址找到 [Docker Hub][3].
 
 ## 启动容器
 
