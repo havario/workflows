@@ -23,7 +23,7 @@ X-UI基于原作者: [FranzKafkaYu/x-ui](https://github.com/FranzKafkaYu/x-ui)
 
 >
 
-**支持架构**
+## 支持的架构
 
 | amd64 | arm64 | armv7 | s390x |
 |-------|-------|-------|-------|
@@ -31,53 +31,68 @@ X-UI基于原作者: [FranzKafkaYu/x-ui](https://github.com/FranzKafkaYu/x-ui)
 
 ## 通过Docker安装
 
+<details>
+  <summary>点击查看 通过Docker安装</summary>
+
+#### 使用
+
 1. 安装Docker：
 
-```shell
-curl -fsSL get.docker.com | sh
-```
+  ```shell
+  curl -fsSL get.docker.com | sh
+  ```
 
 2. 通过Docker cli安装
 
-```shell
-docker run -d \
-    -e USER_NAME=admin \
-    -e USER_PASSWORD=admin \
-    -e PANEL_PORT=54321 \
-    -v $PWD/db:/etc/x-ui/ \
-    -v $PWD/cert:/root/cert/ \
-    --network=host \
-    --cap-add=NET_ADMIN \
-    --restart=unless-stopped \
-    --name x-ui \
-    honeok/x-ui:latest
-```
+  ```shell
+  docker run -d \
+      -e USER_NAME=admin \
+      -e USER_PASSWORD=admin \
+      -e PANEL_PORT=54321 \
+      -v $PWD/db:/etc/x-ui/ \
+      -v $PWD/cert:/root/cert/ \
+      --network=host \
+      --cap-add=NET_ADMIN \
+      --restart=unless-stopped \
+      --name x-ui \
+      honeok/x-ui:latest
+  ```
 
-2. 通过Docker Compose安装
+3. 通过Docker Compose安装
 
-```yml
-services:
-  x-ui:
-    image: honeok/x-ui
-    container_name: x-ui
-    restart: unless-stopped
-#    environment:
-#      USER_NAME: admin
-#      USER_PASSWORD: admin
-#      PANEL_PORT: 54321
-    volumes:
-      - $PWD/db/:/etc/x-ui
-      - $PWD/cert/:/root/cert
-    network_mode: host
-    cap_add:
-      - NET_ADMIN
-```
+  ```yml
+  services:
+    x-ui:
+      image: honeok/x-ui
+      container_name: x-ui
+      restart: unless-stopped
+      environment:
+        USER_NAME: admin
+        USER_PASSWORD: admin
+        PANEL_PORT: 54321
+      volumes:
+        - $PWD/db/:/etc/x-ui
+        - $PWD/cert/:/root/cert
+      network_mode: host
+      cap_add:
+        - NET_ADMIN
+  ```
 
-3. 运行服务：
+4. 运行服务：
 
-```shell
-docker compose up -d
-```
+  ```shell
+  docker compose up -d
+  ```
+
+从Docker中删除3x-ui
+
+  ```shell
+  docker rm -f x-ui && rm -rf /etc/x-ui ./db ./cert
+  ```
+  or
+  ```shell
+  cd x-ui && docker compose down --rmi all --volumes --remove-orphans && cd .. && rm -rf x-ui
+  ```
 
 ### 默认面板设置
 
