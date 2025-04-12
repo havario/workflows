@@ -70,24 +70,24 @@ check_config() {
             USERNAME_TEMP=$(head -c 6 /dev/urandom | base64)
             PASSWD_TEMP=$(head -c 6 /dev/urandom | base64)
             xray-ui setting -username "$USERNAME_TEMP" -password "$PASSWD_TEMP" >/dev/null 2>&1
-            printf " Panel login username: %s\n" "$USERNAME_TEMP" >&2
-            printf " Panel login user password: %s\n" "$PASSWD_TEMP" >&2
+            printf " Panel login username: %s\n" "$USERNAME_TEMP" >&1
+            printf " Panel login user password: %s\n" "$PASSWD_TEMP" >&1
         fi
         if [ -z "$PANEL_PORT" ]; then
             generate_port
             IS_PANEL_PORT="$WEB_PORT"
             xray-ui setting -port "$WEB_PORT" >/dev/null 2>&1
-            printf " Panel login port: %s\n" "$WEB_PORT" >&2
+            printf " Panel login port: %s\n" "$WEB_PORT" >&1
         fi
         if [ -n "$USER_NAME" ] && [ -n "$USER_PASSWORD" ]; then
             xray-ui setting -username "$USER_NAME" -password "$USER_PASSWORD" >/dev/null 2>&1
-            printf " Panel login username: %s\n" "$USER_NAME" >&2
-            printf " Panel login user password: %s\n" "$USER_PASSWORD" >&2
+            printf " Panel login username: %s\n" "$USER_NAME" >&1
+            printf " Panel login user password: %s\n" "$USER_PASSWORD" >&1
         fi
         if [ -n "$PANEL_PORT" ]; then
             IS_PANEL_PORT="$PANEL_PORT"
             xray-ui setting -port "$PANEL_PORT" >/dev/null 2>&1
-            printf " Panel login port: %s\n" "$PANEL_PORT" >&2
+            printf " Panel login port: %s\n" "$PANEL_PORT" >&1
         fi
         is_ip
         printf " Panel login address: "
