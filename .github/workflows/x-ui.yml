@@ -10,7 +10,7 @@ env:
   DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
 
 jobs:
-  build_xui:
+  build_x-ui:
     name: 'Build and publish x-ui'
     runs-on: ubuntu-latest
 
