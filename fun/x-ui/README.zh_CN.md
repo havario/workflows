@@ -22,7 +22,7 @@ X-UI 使用 Go 语言开发，性能优异，内存占用低。
 
 ## 拉取镜像
 
-这是X-UI的最新版本。
+这是X-UI的最新版本
 
 ```shell
 docker pull honeok/x-ui
