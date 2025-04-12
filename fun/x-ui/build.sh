@@ -62,7 +62,7 @@ fi
 
 # Unzip xui and add execute permissions
 tar -zxf "x-ui-linux-$XUI_FRAMEWORK.tar.gz"
-chmod +x x-ui/x-ui
+if [ ! -x "x-ui/x-ui" ]; then chmod +x x-ui/x-ui; fi
 # Unzip xray and add execute permissions
 unzip -q "Xray-linux-$XRAY_FRAMEWORK.zip" -d ./xray
-chmod +x xray/xray
+if [ ! -x "xray/xray" ]; then chmod +x xray/xray; fi
