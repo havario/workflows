@@ -22,7 +22,7 @@ X-UI 使用 Go 语言开发，性能优异，内存占用低。
 
 ## 拉取镜像
 
-```bash
+```shell
 docker pull honeok/x-ui
 ```
 
@@ -32,7 +32,20 @@ It can be found at [Docker Hub][3].
 
 ## 启动容器
 
-使用Docker cli
+**默认面板设置**
+
+| 容器启动变量 | 值 |
+| -- | -- |
+| USER_NAME | 随机 |
+| USER_PASSWORD | 随机 |
+| PANEL_PORT | 10000~65535 随机 |
+
+> [!WARNING]
+> 如果您选择不修改这些设置，它们将随机生成。
+>
+> 启动后通过`docker logs x-ui -f`
+
+1. 使用Docker cli
 
 ```shell
 docker run -d \
@@ -47,9 +60,8 @@ docker run -d \
     --name x-ui \
     honeok/x-ui:latest
 ```
-or
 
-使用Docker Compose
+2. 使用Docker Compose
 
 ```yaml
 services:
@@ -69,18 +81,15 @@ services:
       - NET_ADMIN
 ```
 
-最后，运行以下命令来启动容器：
+3. 最后，运行以下命令来启动容器：
 
-```bash
+```shell
 docker compose up -d
 ```
 
-> [!WARNING]
-> 如果您选择不修改这些设置，它们将随机生成
->
-> 通过 `docker logs x-ui -f` 查看
+4. 通过 `docker logs x-ui -f` 查看你的登录地址和随机生成的密码。
 
-###
+
 
 ```shell
 docker exec -i x-ui sh -c 'echo 4 | x-ui'
