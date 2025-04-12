@@ -30,8 +30,6 @@ readonly XUI_VERSION XRAY_VERSION
 [ -z "$XUI_VERSION" ] && { printf "Error: Unable to obtain x-ui version!\n" >&2; exit 1; }
 [ -z "$XRAY_VERSION" ] && { printf "Error: Unable to obtain xray version!\n" >&2; exit 1; }
 
-echo "$XUI_VERSION" >> "$GITHUB_ENV"
-
 # map system architecture to framework variable
 case "$(uname -m)" in
     's390x')
