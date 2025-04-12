@@ -1,11 +1,11 @@
-name: 'Multi-architecture container testing'
+name: 'Cross arch docker run test'
 
 on:
   workflow_dispatch:
 
 jobs:
   test:
-    name: 'Multi-architecture container testing'
+    name: 'Cross arch docker run test'
     runs-on: ubuntu-latest
 
     steps:
