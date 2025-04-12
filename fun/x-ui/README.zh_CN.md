@@ -6,6 +6,8 @@
 
 **一个经典的面板 • 基于Xray Core构建**
 
+X-UI 是一个基于 Xray 核心的多协议、多用户管理面板，提供直观的 Web 界面，方便用户管理和配置代理服务器。它支持多种协议（如 V2Ray、Trojan、Shadowsocks、VLESS、VMess 等），能够实时监控 VPS 性能和流量使用情况。X-UI 使用 Go 语言开发，性能优异，内存占用低，适合在 Debian、Ubuntu、CentOS 等系统上部署。用户可以通过浏览器访问面板，轻松设置入站规则、添加用户、管理流量和到期时间，还支持通过 Telegram 机器人接收通知和执行管理操作。安装简单，通常通过官方脚本或 Docker 部署，广泛用于搭建高效、安全的代理服务。
+
 > **Disclaimer:** 此项目仅供个人学习交流，请不要用于非法目的，请不要在生产环境中使用。
 
 **如果此项目对你有用，请给一个**:star2:
@@ -17,6 +19,16 @@ x-ui基于原作者: [FranzKafkaYu/x-ui](https://github.com/FranzKafkaYu/x-ui)
 | amd64 | arm64 | armv7 | s390x |
 |-------|-------|-------|-------|
 |  ✔️   |  ✔️   |  ❌   |  ✔️   |
+
+## 通过Docker安装
+
+1. 安装Docker：
+
+```shell
+curl -fsSL get.docker.com | sh
+```
+
+2. 通过Docker Compose安装
 
 ```yml
 services:
@@ -35,6 +47,9 @@ services:
     cap_add:
       - NET_ADMIN
 ```
+
+
+
 
 ```shell
 docker exec -i x-ui sh -c 'echo 4 | x-ui'
