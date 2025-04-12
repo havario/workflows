@@ -6,7 +6,7 @@ on:
   #  - cron: '0 16 * * *'
 
 jobs:
-  build:
+  build_xui:
     name: 'Build and publish x-ui'
     runs-on: ubuntu-latest
     env:
