@@ -51,7 +51,7 @@ docker pull honeok/x-ui
 >
 > 启动后通过`docker logs x-ui -f`查看随机生成的配置。
 
-1. 使用Docker cli **快速启动**
+1. 使用`Docker cli` **快速启动**
 
 ```shell
 docker run -d \
@@ -64,7 +64,7 @@ docker run -d \
     honeok/x-ui:latest
 ```
 
-2. 使用Docker Compose
+2. 使用`Docker Compose`启动 **推荐**
 
 ```yaml
 services:
