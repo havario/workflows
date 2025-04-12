@@ -28,7 +28,7 @@ This is the latest version of the X-UI image. (As FranzKafkaYu's X-UI was archiv
 docker pull honeok/x-ui
 ```
 
-It can be found at the following URL [Docker Hub][3].
+It can be found at the following URL: [Docker Hub][3].
 
 ## Start the container
 
