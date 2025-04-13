@@ -59,7 +59,7 @@ check_config() {
             3x-ui setting -port "$WEB_PORT"
         fi
         if [ -n "$USER_NAME" ] && [ -n "$USER_PASSWORD" ] && [ -n "$BASE_PATH" ]; then
-            3x-ui setting -username "$USER_NAME" -password "$USER_PASSWORD" -webBasePath "$BASEPATH_TEMP"
+            3x-ui setting -username "$USER_NAME" -password "$USER_PASSWORD" -webBasePath "$BASE_PATH"
         fi
         if [ -n "$PANEL_PORT" ]; then
             3x-ui setting -port "$PANEL_PORT"
