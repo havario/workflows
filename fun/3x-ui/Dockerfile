@@ -28,6 +28,7 @@ COPY x-ui.sh /usr/local/bin/x-ui
 RUN set -ex \
         && apk update && apk upgrade \
         && apk add --no-cache \
+            bash \
             ca-certificates \
             tzdata \
         && chmod +x /docker-entrypoint.sh /usr/local/bin/x-ui \
