@@ -37,7 +37,6 @@ RUN set -ex \
         && sed -i "s/^\[ssh\]$/&\nenabled = false/" /etc/fail2ban/jail.local \
         && sed -i "s/^\[sshd\]$/&\nenabled = false/" /etc/fail2ban/jail.local \
         && sed -i "s/#allowipv6 = auto/allowipv6 = auto/g" /etc/fail2ban/fail2ban.conf \
-        && ln -sf /3x-ui/3x-ui /usr/local/bin/3x-ui \
         && curl -fsSL -o /3x-ui/bin/geosite.dat "https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geosite.dat" \
         && curl -fsSL -o /3x-ui/bin/geoip.dat "https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geoip.dat" \
         && rm -rf /var/cache/apk/* /tmp/*
