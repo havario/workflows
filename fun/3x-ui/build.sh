@@ -22,7 +22,7 @@ done
 XUI_VERSION=$(curl -fsSL "https://api.github.com/repos/MHSanaei/3x-ui/releases/latest" | awk -F '["v]' '/tag_name/{print $5}')
 XRAY_VERSION=$(curl -fsSL "https://api.github.com/repos/XTLS/Xray-core/releases" | jq -r 'map(select(.prerelease == true)) | sort_by(.created_at) | last | .tag_name' | sed 's/^v//')
 readonly XUI_VERSION XRAY_VERSION
-[ -z "$XUI_VERSION" ] && { printf "Error: Unable to obtain x-ui version!\n" >&2; exit 1; }
+[ -z "$XUI_VERSION" ] && { printf "Error: Unable to obtain 3x-ui version!\n" >&2; exit 1; }
 [ -z "$XRAY_VERSION" ] && { printf "Error: Unable to obtain xray version!\n" >&2; exit 1; }
 
 # map system architecture to framework variable
