@@ -58,7 +58,7 @@ esac
 
 cd /tmp || { printf 'Error: permission denied or directory does not exist\n' >&2; exit 1; }
 
-if ! curl -fsSL -O "https://github.com/MHSanaei/3x-ui/releases/download/${XUI_VERSION}/x-ui-linux-${XUI_FRAMEWORK}.tar.gz"; then
+if ! curl -fsSL -O "https://github.com/MHSanaei/3x-ui/releases/download/v${XUI_VERSION}/x-ui-linux-${XUI_FRAMEWORK}.tar.gz"; then
     printf 'Error: download 3x-ui failed, please check the network!\n' >&2; exit 1
 fi
 if ! curl -fsSL -O "https://github.com/XTLS/Xray-core/releases/download/v${XRAY_VERSION}/Xray-linux-${XRAY_FRAMEWORK}.zip"; then
