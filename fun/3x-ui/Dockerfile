@@ -29,8 +29,8 @@ RUN set -ex \
         && apk update && apk upgrade \
         && apk add --no-cache \
             ca-certificates \
-            tzdata \
             fail2ban \
+            tzdata \
         && chmod +x /docker-entrypoint.sh /usr/local/bin/x-ui \
         && rm -f /etc/fail2ban/jail.d/alpine-ssh.conf \
         && cp -f /etc/fail2ban/jail.conf /etc/fail2ban/jail.local \
