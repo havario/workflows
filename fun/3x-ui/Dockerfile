@@ -29,14 +29,8 @@ RUN set -ex \
         && apk update && apk upgrade \
         && apk add --no-cache \
             ca-certificates \
-            fail2ban \
             tzdata \
         && chmod +x /docker-entrypoint.sh /usr/local/bin/x-ui \
-        && rm -f /etc/fail2ban/jail.d/alpine-ssh.conf \
-        && cp -f /etc/fail2ban/jail.conf /etc/fail2ban/jail.local \
-        && sed -i "s/^\[ssh\]$/&\nenabled = false/" /etc/fail2ban/jail.local \
-        && sed -i "s/^\[sshd\]$/&\nenabled = false/" /etc/fail2ban/jail.local \
-        && sed -i "s/#allowipv6 = auto/allowipv6 = auto/g" /etc/fail2ban/fail2ban.conf \
         && curl -fsSL -o /3x-ui/bin/geosite.dat "https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geosite.dat" \
         && curl -fsSL -o /3x-ui/bin/geoip.dat "https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geoip.dat" \
         && rm -rf /var/cache/apk/* /tmp/*
