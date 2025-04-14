@@ -10,7 +10,7 @@ RUN set -ex \
 FROM --platform=$TARGETPLATFORM alpine:latest
 RUN set -ex \
     && apk update && apk upgrade \
-    && apk add tzdata \
+    && apk add --no-cache tzdata \
     && rm -rf /var/cache/apk/*
 COPY --from=builder /go/bin/myip /usr/local/bin/myip
 ENV TZ=Asia/Shanghai
