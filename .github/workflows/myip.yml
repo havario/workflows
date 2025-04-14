@@ -10,17 +10,6 @@ jobs:
     env:
       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
       DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-    # strategy:
-    #   matrix:
-    #     platform:
-    #       - linux/386
-    #       - linux/amd64
-    #       - linux/arm/v5
-    #       - linux/arm/v7
-    #       - linux/arm64/v8
-    #       - linux/mips64le
-    #       - linux/ppc64le
-    #       - linux/s390x
 
     steps:
       - name: 'Check out repository'
@@ -49,5 +38,4 @@ jobs:
           tags: |
             "${{ env.DOCKER_USERNAME }}/myip:0.0.1"
             "${{ env.DOCKER_USERNAME }}/myip:latest"
-          # platforms: ${{ matrix.platform }}
           platforms: linux/386, linux/amd64, linux/arm/v6, linux/arm/v7, linux/arm64/v8, linux/s390x
