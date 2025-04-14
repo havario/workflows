@@ -1,9 +1,7 @@
-FROM golang:alpine AS builder
+FROM --platform=$BUILDPLATFORM golang:1.23-alpine AS builder
 WORKDIR /go/src/github.com/honeok/Tools/myip
-COPY main.go .
+COPY . .
 RUN set -ex \
-    && go mod init github.com/honeok/Tools/myip \
-    && go mod tidy \
     && CGO_ENABLED=0 GOOS=$TARGETOS GOARCH=$TARGETARCH \
     && go build -tags netgo -ldflags '-w -s' -o /go/bin/myip main.go
 
