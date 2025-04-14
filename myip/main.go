@@ -16,7 +16,7 @@ func main() {
 
     // 初始化Gin路由器, 移除默认中间件
     r := gin.New()
-    r.Use(gin.Recovery()) // 保留恢复中间件
+    r.Use(gin.Recovery())  // 保留恢复中间件
     r.Use(minimalLogger()) // 添加自定义简洁日志中间件
 
     // 定义根路径的GET端点
@@ -34,14 +34,14 @@ func main() {
     }
 }
 
-// minimalLogger记录简洁的请求信息, 包含所有状态码
+// minimalLogger记录简洁的请求信息, 包含所有状态码和客户端IP
 func minimalLogger() gin.HandlerFunc {
     return func(c *gin.Context) {
         // 处理请求
         c.Next()
 
-        // 记录方法、路径和状态码
-        log.Printf("[GIN] %s %s %d", c.Request.Method, c.Request.URL.Path, c.Writer.Status())
+        // 记录方法、路径、状态码和客户端IP
+        log.Printf("[GIN] %s %s %d %s", c.Request.Method, c.Request.URL.Path, c.Writer.Status(), getClientIP(c))
     }
 }
 
