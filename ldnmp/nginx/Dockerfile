@@ -90,9 +90,9 @@ RUN set -ex \
         && curl -fsSL -O "https://github.com/coreruleset/coreruleset/archive/v${CORERULESET_LVER}.tar.gz" \
         && tar -xzf v${CORERULESET_LVER}.tar.gz --strip-components=1 -C /etc/nginx/modsec \
         && rm -f v${CORERULESET_LVER}.tar.gz \
-        && curl -fsSL "https://github.com/coreruleset/wordpress-rule-exclusions-plugin/raw/master/plugins/wordpress-rule-exclusions-before.conf" -o /etc/nginx/modsec/plugins \
-        && curl -fsSL "https://github.com/coreruleset/wordpress-rule-exclusions-plugin/raw/master/plugins/wordpress-rule-exclusions-config.conf" -o /etc/nginx/modsec/plugins \
-        && curl -fsSL "https://github.com/kejilion/nginx/raw/main/waf/ldnmp-before.conf" -o /etc/nginx/modsec/plugins \
+        && curl -fsSL "https://github.com/coreruleset/wordpress-rule-exclusions-plugin/raw/master/plugins/wordpress-rule-exclusions-before.conf" -o /etc/nginx/modsec/plugins/wordpress-rule-exclusions-before.conf \
+        && curl -fsSL "https://github.com/coreruleset/wordpress-rule-exclusions-plugin/raw/master/plugins/wordpress-rule-exclusions-config.conf" -o /etc/nginx/modsec/plugins/wordpress-rule-exclusions-config.conf \
+        && curl -fsSL "https://github.com/kejilion/nginx/raw/main/waf/ldnmp-before.conf" -o /etc/nginx/modsec/plugins/ldnmp-before.conf \
         && cp -f /etc/nginx/modsec/crs-setup.conf.example /etc/nginx/modsec/crs-setup.conf \
         && echo 'SecAction "id:900110, phase:1, pass, setvar:tx.inbound_anomaly_score_threshold=30, setvar:tx.outbound_anomaly_score_threshold=16"' >> /etc/nginx/modsec/crs-setup.conf \
         && curl -fsSL "https://github.com/owasp-modsecurity/ModSecurity/raw/v3/master/modsecurity.conf-recommended" -o /etc/nginx/modsec/modsecurity.conf \
