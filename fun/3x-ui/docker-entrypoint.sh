@@ -43,26 +43,48 @@ generate_port() {
     done
 }
 
+is_ip() {
+    # 获取一个登录IP即返回
+    IPV4_ADDRESS=$(curl -fsSL -m 5 -4 http://www.qualcomm.cn/cdn-cgi/trace 2>/dev/null | grep -i '^ip=' | cut -d'=' -f2 | grep .)
+    IPV6_ADDRESS=$(curl -fsSL -m 5 -6 http://www.qualcomm.cn/cdn-cgi/trace 2>/dev/null | grep -i '^ip=' | cut -d'=' -f2 | grep .)
+    if [ -n "$IPV4_ADDRESS" ]; then
+        echo "$IPV4_ADDRESS" && return
+    fi
+    if [ -n "$IPV6_ADDRESS" ]; then
+        echo "[$IPV6_ADDRESS]" && return
+    fi
+    if [ -z "$IPV4_ADDRESS" ] && [ -z "$IPV6_ADDRESS" ]; then
+        printf "Error: Could not retrieve public IP.\n" >&2 && exit 1
+    fi
+}
+
 check_config() {
+    local PUBLIC_IP
+    PUBLIC_IP=$(is_ip)
+
     if [ ! -f "/etc/x-ui/x-ui.db" ]; then
         printf "\n"
         printf "                  \033[42m\033[1m%s\033[0m\n" "login info"
         separator
-        if [ -z "$USER_NAME" ] || [ -z "$USER_PASSWORD" ] || [ -z "$BASE_PATH" ]; then
+        if [ -z "$USER_NAME" ] || [ -z "$USER_PASSWORD" ] || [ -z "$BASE_PATH" ] || [ -z "$PANEL_PORT" ]; then
             USERNAME_TEMP=$(generate_string 10)
             PASSWD_TEMP=$(generate_string 10)
             BASEPATH_TEMP=$(generate_string 15)
-            3x-ui setting -username "$USERNAME_TEMP" -password "$PASSWD_TEMP" -webBasePath "$BASEPATH_TEMP"
-        fi
-        if [ -z "$PANEL_PORT" ]; then
             generate_port
-            3x-ui setting -port "$WEB_PORT"
+            3x-ui setting -username "$USERNAME_TEMP" -password "$PASSWD_TEMP" -port "$WEB_PORT" -webBasePath "$BASEPATH_TEMP" >/dev/null 2>&1
+            printf " Panel login username: %s\n" "$USERNAME_TEMP"
+            printf " Panel login user password: %s\n" "$PASSWD_TEMP"
+            printf " Panel login Port: %s\n" "$WEB_PORT"
+            printf " Panel login WebBasePath: %s\n" "$BASEPATH_TEMP"
+            printf " Panel login address: %s\n" "http://$PUBLIC_IP:$WEB_PORT/$BASEPATH_TEMP"
         fi
-        if [ -n "$USER_NAME" ] && [ -n "$USER_PASSWORD" ] && [ -n "$BASE_PATH" ]; then
-            3x-ui setting -username "$USER_NAME" -password "$USER_PASSWORD" -webBasePath "$BASE_PATH"
-        fi
-        if [ -n "$PANEL_PORT" ]; then
-            3x-ui setting -port "$PANEL_PORT"
+        if [ -n "$USER_NAME" ] && [ -n "$USER_PASSWORD" ] && [ -n "$BASE_PATH" ] && [ -n "$PANEL_PORT" ]; then
+            3x-ui setting -username "$USER_NAME" -password "$USER_PASSWORD" -port "$PANEL_PORT" -webBasePath "$BASE_PATH" >/dev/null 2>&1
+            printf " Panel login username: %s\n" "$USER_NAME"
+            printf " Panel login user password: %s\n" "$USER_PASSWORD"
+            printf " Panel login Port: %s\n" "$PANEL_PORT"
+            printf " Panel login WebBasePath: %s\n" "$BASE_PATH"
+            printf " Panel login address: %s\n" "http://$PUBLIC_IP:$PANEL_PORT/$BASE_PATH"
         fi
         3x-ui migrate
         separator
