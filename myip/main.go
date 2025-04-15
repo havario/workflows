@@ -34,13 +34,13 @@ func main() {
     }
 }
 
-// minimalLogger记录简洁的请求信息, 包含所有状态码和客户端IP
+// minimallogger记录简洁的请求信息, 包含所有状态码和客户端IP
 func minimalLogger() gin.HandlerFunc {
     return func(c *gin.Context) {
         // 处理请求
         c.Next()
 
-        // 记录方法、路径、状态码和客户端IP
+        // 记录方法 路径 状态码和客户端IP
         log.Printf("[GIN] %s %s %d %s", c.Request.Method, c.Request.URL.Path, c.Writer.Status(), getClientIP(c))
     }
 }
@@ -64,7 +64,7 @@ func getClientIP(c *gin.Context) string {
     return c.ClientIP()
 }
 
-// isValidIP 验证IP地址格式
+// isValidIP验证IP地址格式
 func isValidIP(ip string) bool {
     if ip == "" {
         return false
