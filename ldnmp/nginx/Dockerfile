@@ -2,10 +2,7 @@
 #
 # Copyright (c) 2025 honeok <honeok@duck.com>
 #
-# References:
-# https://github.com/google/ngx_brotli
-# https://github.com/facebook/zstd
-# https://github.com/kejilion/docker
+# Thanks: kejilion <Lion12776@outlook.com>
 #
 # Licensed under the Apache License, Version 2.0.
 # Distributed on an "AS IS" basis, WITHOUT WARRANTIES.
