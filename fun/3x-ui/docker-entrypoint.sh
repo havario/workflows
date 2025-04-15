@@ -39,7 +39,7 @@ generate_port() {
         if [ ! "$(is_port "$TEMP_PORT")" ]; then
             WEB_PORT="$TEMP_PORT" && break
         fi
-        [ "$IS_COUNT" -eq 5 ] && { printf "Error: no free port found after 5 attempts.\n" >&2; exit 1; }
+        [ "$IS_COUNT" -eq 5 ] && { printf "Error: no free port found after 5 attempts.\n" >&2 && exit 1; }
     done
 }
 
@@ -48,10 +48,10 @@ is_ip() {
     IPV4_ADDRESS=$(curl -fsSL -m 5 -4 http://www.qualcomm.cn/cdn-cgi/trace 2>/dev/null | grep -i '^ip=' | cut -d'=' -f2 | grep .)
     IPV6_ADDRESS=$(curl -fsSL -m 5 -6 http://www.qualcomm.cn/cdn-cgi/trace 2>/dev/null | grep -i '^ip=' | cut -d'=' -f2 | grep .)
     if [ -n "$IPV4_ADDRESS" ]; then
-        echo "$IPV4_ADDRESS" && return
+        printf "%s\n" "$IPV4_ADDRESS" && return
     fi
     if [ -n "$IPV6_ADDRESS" ]; then
-        echo "[$IPV6_ADDRESS]" && return
+        printf "%s\n" "[$IPV6_ADDRESS]" && return
     fi
     if [ -z "$IPV4_ADDRESS" ] && [ -z "$IPV6_ADDRESS" ]; then
         printf "Error: Could not retrieve public IP.\n" >&2 && exit 1
