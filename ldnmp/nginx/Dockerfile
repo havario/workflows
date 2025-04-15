@@ -87,7 +87,7 @@ RUN set -ex \
             yajl \
             yajl-dev \
         && mkdir -p /etc/nginx/modsec/plugins \
-        && curl -fsSL "https://github.com/coreruleset/coreruleset/archive/v${CORERULESET_LVER}.tar.gz" \
+        && curl -fsSL -O "https://github.com/coreruleset/coreruleset/archive/v${CORERULESET_LVER}.tar.gz" \
         && tar -xzf v${CORERULESET_LVER}.tar.gz --strip-components=1 -C /etc/nginx/modsec \
         && rm -f v${CORERULESET_LVER}.tar.gz \
         && curl -fsSL "https://github.com/coreruleset/wordpress-rule-exclusions-plugin/raw/master/plugins/wordpress-rule-exclusions-before.conf" -o /etc/nginx/modsec/plugins \
