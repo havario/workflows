@@ -8,7 +8,7 @@
 # This program is distributed WITHOUT ANY WARRANTY.
 # See <https://www.gnu.org/licenses/old-licenses/gpl-2.0.html>.
 
-WORKDIR="/3x-ui"
+WORKDIR="/usr/local/bin"
 
 # https://www.graalvm.org/latest/reference-manual/ruby/UTF8Locale
 export LANG=en_US.UTF-8

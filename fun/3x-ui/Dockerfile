@@ -18,10 +18,10 @@ FROM --platform=$BUILDPLATFORM alpine:latest
 # https://docs.docker.com/build/building/multi-platform/
 ARG TARGETARCH
 
-WORKDIR /3x-ui
+WORKDIR /usr/local/bin
 
-COPY --from=builder /tmp/x-ui/x-ui /3x-ui/3x-ui
-COPY --from=builder /tmp/xray/xray /3x-ui/bin/xray-linux-${TARGETARCH}
+COPY --from=builder /tmp/x-ui/x-ui /usr/local/bin/3x-ui
+COPY --from=builder /tmp/xray/xray /usr/local/bin/bin/xray-linux-${TARGETARCH}
 COPY docker-entrypoint.sh /docker-entrypoint.sh
 COPY x-ui.sh /usr/local/bin/x-ui
 
@@ -33,12 +33,12 @@ RUN set -ex \
             curl \
             tzdata \
         && chmod +x /docker-entrypoint.sh /usr/local/bin/x-ui \
-        && curl -fsSL -o /3x-ui/bin/geoip.dat "https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geoip.dat" \
-        && curl -fsSL -o /3x-ui/bin/geosite.dat "https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geosite.dat" \
-        && curl -fsSL -o /3x-ui/bin/geoip_IR.dat "https://github.com/chocolate4u/Iran-v2ray-rules/releases/latest/download/geoip.dat" \
-        && curl -fsSL -o /3x-ui/bin/geosite_IR.dat "https://github.com/chocolate4u/Iran-v2ray-rules/releases/latest/download/geosite.dat" \
-        && curl -fsSL -o /3x-ui/bin/geoip_RU.dat "https://github.com/runetfreedom/russia-v2ray-rules-dat/releases/latest/download/geoip.dat" \
-        && curl -fsSL -o /3x-ui/bin/geosite_RU.dat "https://github.com/runetfreedom/russia-v2ray-rules-dat/releases/latest/download/geosite.dat" \
+        && curl -fsSL -o /usr/local/bin/bin/geoip.dat "https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geoip.dat" \
+        && curl -fsSL -o /usr/local/bin/bin/geosite.dat "https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geosite.dat" \
+        && curl -fsSL -o /usr/local/bin/bin/geoip_IR.dat "https://github.com/chocolate4u/Iran-v2ray-rules/releases/latest/download/geoip.dat" \
+        && curl -fsSL -o /usr/local/bin/bin/geosite_IR.dat "https://github.com/chocolate4u/Iran-v2ray-rules/releases/latest/download/geosite.dat" \
+        && curl -fsSL -o /usr/local/bin/bin/geoip_RU.dat "https://github.com/runetfreedom/russia-v2ray-rules-dat/releases/latest/download/geoip.dat" \
+        && curl -fsSL -o /usr/local/bin/bin/geosite_RU.dat "https://github.com/runetfreedom/russia-v2ray-rules-dat/releases/latest/download/geosite.dat" \
         && rm -rf /var/cache/apk/* /tmp/*
 
 VOLUME [ "/etc/x-ui" ]
