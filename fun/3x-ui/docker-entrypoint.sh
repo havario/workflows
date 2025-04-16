@@ -86,7 +86,7 @@ check_config() {
             printf " Panel login WebBasePath: %s\n" "$BASE_PATH"
             printf " Panel login address: %s\n" "http://$PUBLIC_IP:$PANEL_PORT/$BASE_PATH"
         fi
-        3x-ui migrate
+        3x-ui migrate >/dev/null 2>&1
         separator
         printf "\n"
     fi
