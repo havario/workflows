@@ -21,7 +21,7 @@ _yellow() { printf "$yellow%s$white\n" "$*"; }
 separator() { printf "%-19s\n" "-" | sed 's/\s/-/g'; }
 reading() { read -rep "$(_yellow "$1")" "$2"; }
 
-WORKDIR="/3x-ui"
+WORKDIR="/usr/local/bin"
 
 cd "$WORKDIR" || { printf "Error: Failed to enter the 3x-ui work directory!\n"; exit 1; }
 
