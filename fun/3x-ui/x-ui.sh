@@ -64,7 +64,6 @@ reset_user() {
             show_menu
         ;;
     esac
-    printf "用户名和密码已重置为 %s, 现在请重启面板\n" "$(_green 'admin')"
     exit 0
 }
 
