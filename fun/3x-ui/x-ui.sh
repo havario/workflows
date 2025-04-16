@@ -45,7 +45,8 @@ show_status() {
 }
 
 reset_user() {
-    local CHOOSE USERNAME_TEMP
+    local CHOOSE USERNAME_TEMP PASSWD_TEMP
+
     reading ' 您确定要重置面板的用户名和密码吗? (y/n) ' 'CHOOSE'
     case "$CHOOSE" in
         'Y' | 'y')
