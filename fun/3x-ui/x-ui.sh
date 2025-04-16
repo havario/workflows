@@ -52,14 +52,14 @@ reset_user() {
         'Y' | 'y')
             reading ' 请设置登录用户名[默认为随机用户名]: ' 'USERNAME_TEMP'
             [ -z "$USERNAME_TEMP" ] && USERNAME_TEMP=$(date +%s%N | md5sum | cut -c 1-8)
-            reading '请设置登录密码[默认为随机密码]: ' 'PASSWD_TEMP'
+            reading ' 请设置登录密码[默认为随机密码]: ' 'PASSWD_TEMP'
             [ -z "$PASSWD_TEMP" ] && PASSWD_TEMP=$(date +%s%N | md5sum | cut -c 1-8)
             3x-ui setting -username "$USERNAME_TEMP" -password "$PASSWD_TEMP" >/dev/null 2>&1
             3x-ui setting -remove_secret >/dev/null 2>&1
             printf " 面板登录用户名已重置为: %s" "$(_green "$USERNAME_TEMP")"
             printf " 面板登录密码已重置为: %s" "$(_green "$PASSWD_TEMP")"
-            printf "面板登录密码令牌已禁用\n"
-            printf "请使用新的登录用户名和密码访问X-UI面板\n"
+            printf " 面板登录密码令牌已禁用\n"
+            printf " 请使用新的登录用户名和密码访问X-UI面板\n"
         ;;
         *)
             show_menu
