@@ -20,8 +20,8 @@ RUN set -ex \
             git \
         && git clone --depth=1 https://github.com/MHSanaei/3x-ui.git \
         && cd 3x-ui \
-        && CGO_ENABLED=1 GOOS=$TARGETOS CGO_CFLAGS="-D_LARGEFILE64_SOURCE" GO111MODULE=on \
-        && go build -a -trimpath -ldflags "-s -w -linkmode external -extldflags '-static'" -o /go/bin/x-ui \
+        && CGO_ENABLED=0 GOOS=$TARGETOS GO111MODULE=on \
+            go build -a -trimpath -ldflags "-s -w" -o /go/bin/x-ui \
         && cd .. \
         && chmod +x build.sh && ./build.sh
 
