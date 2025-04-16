@@ -32,16 +32,23 @@ clear_screen() {
 }
 
 show_status() {
-    if pgrep -x "xray-ui" >/dev/null 2>&1; then
-        echo "面板状态: $(_green 'Running')"
+    if pgrep -x "3x-ui" >/dev/null 2>&1; then
+        echo " 面板状态: $(_green 'Running')"
     else
-        echo "面板状态: $(_red 'Not Running')"
+        echo " 面板状态: $(_red 'Not Running')"
     fi
     if [ "$(ps -ef | grep 'xray-linux' | grep -v grep | wc -l)" -ge 1 ]; then
-        echo "Xray状态: $(_green 'Running')"
+        echo " Xray状态: $(_green 'Running')"
     else
-        echo "Xray状态: $(_red 'Not Running')"
+        echo " Xray状态: $(_red 'Not Running')"
     fi
+}
+
+generate_string() {
+    local LENGTH="$1"
+
+    RANDOM_STRING=$(LC_ALL=C tr -dc 'a-zA-Z0-9' </dev/urandom | fold -w "$LENGTH" | head -n 1)
+    echo "$RANDOM_STRING"
 }
 
 reset_user() {
@@ -68,15 +75,39 @@ reset_user() {
     exit 0
 }
 
+reset_basepath() {
+    local CHOOSE BASEPATH_TEMP
+
+    _yellow '重置Web基础路径'
+    reading '确定要重置web基本路径吗? (y/n): ' 'CHOOSE'
+    case "$CHOOSE" in
+        'Y' | 'y')
+            BASEPATH_TEMP=$(generate_string 10)
+            # 应用新的web基础路径设置
+            3x-ui setting -webBasePath "$BASEPATH_TEMP" >/dev/null 2>&1
+            printf "Web基本路径已重置为: %s\n" "$BASEPATH_TEMP"
+            printf "请使用新的web基础路径访问面板\n"
+        ;;
+        *)
+            show_menu
+        ;;
+    esac
+    exit 0
+}
+
 reset_config() {
     local CHOOSE
-    reading '确定要重置所有面板设置吗, 账号数据不会丢失, 用户名和密码不会改变! (y/n) ' 'CHOOSE'
+
+    reading '您确定要重置所有面板设置, 帐户数据不会丢失, 用户名和密码不会更改! (y/n) ' 'CHOOSE'
     case "$CHOOSE" in
-        'Y' | 'y') : ;;
-        *) show_menu ;;
+        'Y' | 'y')
+            3x-ui setting -reset
+            printf "所有面板设置均已重置为默认值\n"
+        ;;
+        *)
+            show_menu
+        ;;
     esac
-    xray-ui setting -reset
-    printf "所有面板设置已重置为默认值, 现在请重启面板, 并使用默认的 %s 端口访问面板\n" "$(_green '54321')"
     exit 0
 }
 
@@ -84,11 +115,14 @@ set_port() {
     local CHOOSE
     reading '输入端口号[1-65535]: ' 'CHOOSE'
     case "$CHOOSE" in
-        'Y' | 'y') : ;;
-        *) show_menu ;;
+        'Y' | 'y')
+            3x-ui setting -port "$CHOOSE"
+            printf "设置端口完毕, 现在请重启面板, 并使用新设置的端口 %s 访问面板\n" "$(_green "$CHOOSE")"
+        ;;
+        *)
+            show_menu
+        ;;
     esac
-    xray-ui setting -port "$CHOOSE"
-    printf "设置端口完毕, 现在请重启面板, 并使用新设置的端口 %s 访问面板\n" "$(_green "$CHOOSE")"
     exit 0
 }
 
@@ -96,7 +130,7 @@ check_config() {
     local CONFIG_ROW
     printf "\n"
     separator
-    xray-ui setting -show true | while IFS= read -r CONFIG_ROW; do
+    3x-ui setting -show true | while IFS= read -r CONFIG_ROW; do
         _green "$CONFIG_ROW"
     done
     separator
@@ -108,22 +142,24 @@ show_menu() {
     printf "\n"
     echo " $(_green '0.') 退出脚本"
     separator
-    echo " $(_green '1.') 重置用户名密码"
+    echo " $(_green '1.') 重置用户名密码Secret Token"
     echo " $(_green '2.') 重置面板设置"
-    echo " $(_green '3.') 设置面板端口"
-    echo " $(_green '4.') 查看当前面板信息"
+    echo " $(_green '3.') 重置Web基础路径"
+    echo " $(_green '4.') 设置面板端口"
+    echo " $(_green '5.') 查看当前面板信息"
     separator
     printf "\n"
     show_status
     printf "\n"
-    reading '请输入选择 [0-4], 查看面板登录信息请输入数字4: ' 'CHOOSE'
+    reading '请输入选择 [0-4], 查看面板登录信息请输入数字5: ' 'CHOOSE'
     case "$CHOOSE" in
         0) clear_screen; exit 0 ;;
         1) reset_user ;;
-        2) reset_config ;;
-        3) set_port ;;
-        4) check_config ;;
-        *) _red '请输入正确的数字 [0-4], 查看面板登录信息请输入数字4!' ;;
+        2) reset_basepath ;;
+        3) reset_config ;;
+        4) set_port ;;
+        5) check_config ;;
+        *) _red '请输入正确的数字 [0-4], 查看面板登录信息请输入数字5!' ;;
     esac
 }
 
