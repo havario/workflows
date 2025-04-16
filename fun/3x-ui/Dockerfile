@@ -6,11 +6,23 @@
 # This program is distributed WITHOUT ANY WARRANTY.
 # See <https://www.gnu.org/licenses/old-licenses/gpl-2.0.html>.
 
-FROM --platform=$BUILDPLATFORM alpine:latest AS builder
+FROM --platform=$BUILDPLATFORM golang:alpine AS builder
+
+WORKDIR /go/src/github.com/MHSanaei/3x-ui
 
 COPY build.sh .
 
 RUN set -ex \
+        && apk update && apk upgrade \
+        && apk add --no-cache \
+            build-base \
+            gcc \
+            git \
+        && git clone --depth=1 https://github.com/MHSanaei/3x-ui.git \
+        && cd 3x-ui \
+        && CGO_ENABLED=1 GOOS=$TARGETOS CGO_CFLAGS="-D_LARGEFILE64_SOURCE" GO111MODULE=on \
+        && go build -a -trimpath -ldflags "-s -w -linkmode external -extldflags '-static'" -o /go/bin/x-ui \
+        && cd .. \
         && chmod +x build.sh && ./build.sh
 
 FROM --platform=$BUILDPLATFORM alpine:latest
@@ -20,7 +32,7 @@ ARG TARGETARCH
 
 WORKDIR /usr/local/bin
 
-COPY --from=builder /tmp/x-ui/x-ui /usr/local/bin/3x-ui
+COPY --from=builder /go/bin/x-ui /usr/local/bin/3x-ui
 COPY --from=builder /tmp/xray/xray /usr/local/bin/bin/xray-linux-${TARGETARCH}
 COPY docker-entrypoint.sh /docker-entrypoint.sh
 COPY x-ui.sh /usr/local/bin/x-ui
