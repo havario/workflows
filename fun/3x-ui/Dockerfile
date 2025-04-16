@@ -32,8 +32,12 @@ RUN set -ex \
             ca-certificates \
             tzdata \
         && chmod +x /docker-entrypoint.sh /usr/local/bin/x-ui \
-        && curl -fsSL -o /3x-ui/bin/geosite.dat "https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geosite.dat" \
         && curl -fsSL -o /3x-ui/bin/geoip.dat "https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geoip.dat" \
+        && curl -fsSL -o /3x-ui/bin/geosite.dat "https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geosite.dat" \
+        && curl -fsSL -o /3x-ui/bin/geoip_IR.dat "https://github.com/chocolate4u/Iran-v2ray-rules/releases/latest/download/geoip.dat" \
+        && curl -fsSL -o /3x-ui/bin/geosite_IR.dat "https://github.com/chocolate4u/Iran-v2ray-rules/releases/latest/download/geosite.dat" \
+        && curl -fsSL -o /3x-ui/bin/geoip_RU.dat "https://github.com/runetfreedom/russia-v2ray-rules-dat/releases/latest/download/geoip.dat" \
+        && curl -fsSL -o /3x-ui/bin/geosite_RU.dat "https://github.com/runetfreedom/russia-v2ray-rules-dat/releases/latest/download/geosite.dat" \
         && rm -rf /var/cache/apk/* /tmp/*
 
 VOLUME [ "/etc/x-ui" ]
