@@ -1,4 +1,4 @@
-name: 'Build and publish nginx'
+name: 'Build and Publish Nginx'
 
 on:
   schedule:
@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    name: 'Build and publish nginx'
+    name: 'Build and Publish Nginx'
     runs-on: ubuntu-latest
     env:
       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
@@ -58,7 +58,7 @@ jobs:
           username: ${{ env.DOCKER_USERNAME }}
           password: ${{ env.DOCKER_PASSWORD }}
 
-      - name: 'Build and push Nginx image'
+      - name: 'Build and Push Nginx image'
         if: env.IS_RENEW == 1 || github.event_name == 'workflow_dispatch'
         uses: docker/build-push-action@v6.11.0
         with:
