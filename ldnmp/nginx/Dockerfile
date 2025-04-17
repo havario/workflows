@@ -1,4 +1,4 @@
-# Description: Self-compiled NGINX with Brotli and Zstandard compression
+# Description: custom compiled nginx with brotli, zstandard compression, and modsecurity waf.
 #
 # Copyright (c) 2025 honeok <honeok@duck.com>
 #
