@@ -29,15 +29,15 @@ jobs:
             jq -r '.tag_name | sub("^v"; "")') && \
           CORERULESET_LVER=$(curl -fsSL "https://api.github.com/repos/coreruleset/coreruleset/releases/latest" | \
             grep -oP '"tag_name": "\K[^"]+' | sed 's/v//') && \
-          NGX_TAG=$(docker run --rm nginx:alpine sh -c 'cat /etc/alpine-release | cut -d "." -f 1-2') && \
-          if [ -z "$NGX_LVER" ] || [ -z "$ZSTD_LVER" ] || [ -z "$CORERULESET_LVER" ] || [ -z "$NGX_TAG" ]; then \
+          ALPINE_TAG=$(docker run --rm nginx:alpine sh -c 'cat /etc/alpine-release | cut -d "." -f 1-2') && \
+          if [ -z "$NGX_LVER" ] || [ -z "$ZSTD_LVER" ] || [ -z "$CORERULESET_LVER" ] || [ -z "$ALPINE_TAG" ]; then \
             echo 'Error: Required parameters cannot be empty.' && exit 1; \
           fi && \
           echo "NGX_CVER=${NGX_CVER}" >> $GITHUB_ENV && \
           echo "NGX_LVER=${NGX_LVER}" >> $GITHUB_ENV && \
           echo "ZSTD_LVER=${ZSTD_LVER}" >> $GITHUB_ENV && \
           echo "CORERULESET_LVER=${CORERULESET_LVER}" >> $GITHUB_ENV && \
-          echo "NGX_TAG=${NGX_TAG}" >> $GITHUB_ENV && \
+          echo "ALPINE_TAG=${ALPINE_TAG}" >> $GITHUB_ENV && \
           if [[ "$(echo -e "${{ env.NGX_LVER }}\n${{ env.NGX_CVER }}" | sort -V | head -n1)" != "${{ env.NGX_LVER }}" ]] || \
             [[ -z "$NGX_CVER" ]]; then \
             echo "IS_RENEW=1" >> $GITHUB_ENV; \
@@ -66,7 +66,8 @@ jobs:
           file: Dockerfile
           push: true
           tags: |
-            "${{ env.DOCKER_USERNAME }}/nginx:${{ env.NGX_LVER }}-alpine${{ env.NGX_TAG }}"
+            "${{ env.DOCKER_USERNAME }}/nginx:${{ env.NGX_LVER }}-alpine${{ env.ALPINE_TAG }}"
+            "${{ env.DOCKER_USERNAME }}/nginx:${{ env.NGX_LVER }}-alpine
             "${{ env.DOCKER_USERNAME }}/nginx:alpine"
           platforms: linux/386, linux/amd64, linux/arm/v6, linux/arm/v7, linux/arm64/v8, linux/ppc64le, linux/riscv64, linux/s390x
           build-args: |
