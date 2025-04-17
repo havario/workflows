@@ -54,8 +54,7 @@ RUN set -ex \
         && tar -xzf zstd-${ZSTD_LVER}.tar.gz \
         && cd zstd-${ZSTD_LVER} \
         && make clean \
-        && CFLAGS="-fPIC" make \
-        && make install \
+        && CFLAGS="-fPIC" make && make install \
         && cd /tmp \
         && git clone --depth=10 "https://github.com/tokers/zstd-nginx-module.git" \
         && cd nginx-${NGX_LVER} \
