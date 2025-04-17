@@ -13,7 +13,6 @@ FROM alpine:latest AS builder
 # Docker Build Arguments
 ARG NGX_LVER
 ARG ZSTD_LVER
-ARG NGX_J="4"
 
 RUN set -ex \
         && apk update && apk upgrade \
@@ -48,15 +47,15 @@ RUN set -ex \
         && git submodule update \
         && ./build.sh \
         && ./configure \
-        && make -j${NGX_J} && make -j${NGX_J} install \
+        && make && make install \
         && cd /tmp \
         && git clone "https://github.com/owasp-modsecurity/ModSecurity-nginx" \
         && curl -fsSL "https://github.com/facebook/zstd/releases/download/v${ZSTD_LVER}/zstd-${ZSTD_LVER}.tar.gz" -o zstd-${ZSTD_LVER}.tar.gz \
         && tar -xzf zstd-${ZSTD_LVER}.tar.gz \
         && cd zstd-${ZSTD_LVER} \
         && make clean \
-        && CFLAGS="-fPIC" make -j${NGX_J} \
-        && make -j${NGX_J} install \
+        && CFLAGS="-fPIC" make \
+        && make install \
         && cd /tmp \
         && git clone --depth=10 "https://github.com/tokers/zstd-nginx-module.git" \
         && cd nginx-${NGX_LVER} \
@@ -64,7 +63,7 @@ RUN set -ex \
             --add-dynamic-module=../ngx_brotli \
             --add-dynamic-module=../ModSecurity-nginx \
             --add-dynamic-module=../zstd-nginx-module \
-        && make -j${NGX_J} modules \
+        && make modules \
         && apk del .build-deps \
         && rm -rf /var/cache/apk/*
 
