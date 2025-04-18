@@ -74,3 +74,12 @@ jobs:
             NGX_LVER=${{ env.NGX_LVER }}
             ZSTD_LVER=${{ env.ZSTD_LVER }}
             CORERULESET_LVER=${{ env.CORERULESET_LVER }}
+
+      - name: 'Sync README.md to Dockerhub'
+        if: env.IS_RENEW == 1 || github.event_name == 'workflow_dispatch'
+        uses: ms-jpq/sync-dockerhub-readme@v1
+        with:
+          username: ${{ env.DOCKER_USERNAME }}
+          password: ${{ env.DOCKER_PASSWORD }}
+          repository: ${{ env.DOCKER_USERNAME }}/nginx
+          readme: "./ldnmp/nginx/README.md"
