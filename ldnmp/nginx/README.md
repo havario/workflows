@@ -1,5 +1,9 @@
 # Nginx Docker Image by honeok
 
+[![Docker Pulls](https://img.shields.io/docker/pulls/honeok/nginx.svg?style=flat-square)](https://hub.docker.com/r/honeok/nginx)
+[![Docker Image Size](https://img.shields.io/docker/image-size/honeok/nginx.svg?style=flat-square)](https://hub.docker.com/r/honeok/nginx)
+[![License](https://img.shields.io/github/license/honeok/Tools.svg?style=flat-square)](https://www.apache.org/licenses/LICENSE-2.0)
+
 [Nginx][1] is a high-performance HTTP and reverse proxy web server renowned for its stability,
 
 extensive feature set, straightforward configuration, and minimal resource usage.
@@ -38,6 +42,7 @@ load_module /etc/nginx/modules/ngx_http_zstd_filter_module.so;
 load_module /etc/nginx/modules/ngx_http_zstd_static_module.so;
 load_module /etc/nginx/modules/ngx_http_brotli_filter_module.so;
 load_module /etc/nginx/modules/ngx_http_brotli_static_module.so;
+load_module /etc/nginx/modules/ngx_http_modsecurity_module.so;
 ...
 ```
 
