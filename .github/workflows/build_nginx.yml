@@ -24,9 +24,9 @@ jobs:
           NGX_CVER=$(curl -fsSL "https://hub.docker.com/v2/repositories/${{ env.DOCKER_USERNAME }}/nginx/tags" 2>/dev/null | \
             jq -r ".results // [] | .[].name" | grep -v '^alpine$' | sort -Vr | head -n1 | cut -d'-' -f1 || echo "") && \
           NGX_LVER=$(curl -fsSL "https://api.github.com/repos/nginx/nginx/releases/latest" | \
-            jq -r '.tag_name | sub("release-"; "")') && \
+            grep -oP '"tag_name": "\K[^"]+' | sed 's/release-//') && \
           ZSTD_LVER=$(curl -fsSL "https://api.github.com/repos/facebook/zstd/releases/latest" | \
-            jq -r '.tag_name | sub("^v"; "")') && \
+            grep -oP '"tag_name": "\K[^"]+' | sed 's/v//') && \
           CORERULESET_LVER=$(curl -fsSL "https://api.github.com/repos/coreruleset/coreruleset/releases/latest" | \
             grep -oP '"tag_name": "\K[^"]+' | sed 's/v//') && \
           ALPINE_TAG=$(docker run --rm nginx:alpine sh -c 'cat /etc/alpine-release | cut -d "." -f 1-2') && \
