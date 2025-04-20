@@ -52,7 +52,7 @@ _exit() {
     exit "$RETURN_VALUE"
 }
 
-trap "_exit" SIGINT SIGQUIT SIGTERM EXIT
+trap '_exit' SIGINT SIGQUIT SIGTERM EXIT
 
 mkdir -p "$TEMP_DIR" >/dev/null 2>&1
 
