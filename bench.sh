@@ -151,7 +151,7 @@ pre_check() {
         unset GITHUB_PROXY
     fi
     # 脚本当天及累计运行次数统计
-    runcount=$(curl -fsSL "$CURL_OPTS" "http://hits.honeok.com/bench?action=hit")
+    runcount=$(curl -fsSL "${CURL_OPTS[@]}" "http://hits.honeok.com/bench?action=hit")
 
     start_time=$(date +%s)
 }
