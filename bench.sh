@@ -19,13 +19,13 @@ yellow='\033[93m'
 purple='\033[95m'
 cyan='\033[96m'
 white='\033[0m'
-_red() { echo -e "${red}$*${white}"; }
-_green() { echo -e "${green}$*${white}"; }
-_yellow() { echo -e "${yellow}$*${white}"; }
-_purple() { echo -e "${purple}$*${white}"; }
-_cyan() { echo -e "${cyan}$*${white}"; }
+_red() { echo -e "$red$*$white"; }
+_green() { echo -e "$green$*$white"; }
+_yellow() { echo -e "$yellow$*$white"; }
+_purple() { echo -e "$purple$*$white"; }
+_cyan() { echo -e "$cyan$*$white"; }
 
-_err_msg() { echo -e "\033[41m\033[1mError${white} $*"; }
+_err_msg() { echo -e "\033[41m\033[1mError$white $*"; }
 
 # 环境变量用于在debian或ubuntu操作系统中设置非交互式 (noninteractive) 安装模式
 export DEBIAN_FRONTEND=noninteractive
