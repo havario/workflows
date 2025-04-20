@@ -335,12 +335,12 @@ ip_dual_stack() {
     if ping -4 -c 1 -W 4 1.1.1.1 >/dev/null 2>&1; then
         IPV4_CHECK="true"
     else
-        IPV4_CHECK=$(curl -fsSL -A "$UA_BROWSER" -fsSL "${CURL_OPTS[@]}" -4 ipinfo.io/ip 2>/dev/null)
+        IPV4_CHECK=$(curl -A "$UA_BROWSER" -fsSL "${CURL_OPTS[@]}" -4 ipinfo.io/ip 2>/dev/null)
     fi
     if ping -6 -c 1 -W 4 2606:4700:4700::1111 >/dev/null 2>&1; then
         IPV6_CHECK="true"
     else
-        IPV6_CHECK=$(curl -fsSL -A "$UA_BROWSER" -fsSL "${CURL_OPTS[@]}" -6 v6.ipinfo.io/ip 2>/dev/null)
+        IPV6_CHECK=$(curl -A "$UA_BROWSER" -fsSL "${CURL_OPTS[@]}" -6 v6.ipinfo.io/ip 2>/dev/null)
     fi
 
     if [ -z "$IPV4_CHECK" ] && [ -z "$IPV6_CHECK" ]; then
