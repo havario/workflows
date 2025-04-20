@@ -150,7 +150,7 @@ pre_check() {
         unset GITHUB_PROXY
     fi
     # 脚本当天及累计运行次数统计
-    RUNCOUNT=$(curl -fsSL "${CURL_OPTS[@]}" "http://hits.honeok.com/bench?action=hit")
+    RUNCOUNT=$(curl -fsSL "${CURL_OPTS[@]}" -k "https://hits.honeok.com/bench?action=hit")
 
     START_TIME=$(date +%s)
 }
