@@ -74,50 +74,52 @@ _exists() {
 }
 
 pkg_install() {
-    for package in "$@"; do
-        _yellow "Installing $package"
+    for pkg in "$@"; do
+        _yellow "Installing $pkg"
         if _exists dnf; then
-            dnf install -y "$package"
+            dnf install -y "$pkg"
         elif _exists yum; then
-            yum install -y "$package"
+            yum install -y "$pkg"
         elif _exists apt-get; then
-            apt-get install -y -q "$package"
+            apt-get install -y -q "$pkg"
         elif _exists apt; then
-            apt install -y -q "$package"
+            apt install -y -q "$pkg"
         elif _exists apk; then
-            apk add --no-cache "$package"
+            apk add --no-cache "$pkg"
         elif _exists pacman; then
-            pacman -S --noconfirm --needed "$package"
+            pacman -S --noconfirm --needed "$pkg"
         elif _exists zypper; then
-            zypper install -y "$package"
+            zypper install -y "$pkg"
         elif _exists opkg; then
-            opkg install "$package"
+            opkg install "$pkg"
         elif _exists pkg; then
-            pkg install -y "$package"
+            pkg install -y "$pkg"
+        else
+            _err_msg "$(_red 'The package manager is not supported.')" && exit 1
         fi
     done
 }
 
 pkg_uninstall() {
-    for package in "$@"; do
+    for pkg in "$@"; do
         if _exists dnf; then
-            dnf remove -y "$package"
+            dnf remove -y "$pkg"
         elif _exists yum; then
-            yum remove -y "$package"
+            yum remove -y "$pkg"
         elif _exists apt-get; then
-            apt-get purge -y "$package"
+            apt-get purge -y "$pkg"
         elif _exists apt; then
-            apt purge -y "$package"
+            apt purge -y "$pkg"
         elif _exists apk; then
-            apk del "$package"
+            apk del "$pkg"
         elif _exists pacman; then
-            pacman -Rns --noconfirm "$package"
+            pacman -Rns --noconfirm "$pkg"
         elif _exists zypper; then
-            zypper remove -y "$package"
+            zypper remove -y "$pkg"
         elif _exists opkg; then
-            opkg remove "$package"
+            opkg remove "$pkg"
         elif _exists pkg; then
-            pkg delete -y "$package"
+            pkg delete -y "$pkg"
         fi
     done
 }
