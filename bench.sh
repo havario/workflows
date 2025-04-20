@@ -147,8 +147,8 @@ pre_check() {
         fi
     done
     # 境外服务器仅ipv4访问测试通过后取消github代理
-    if [ "$(curl -A "$UA_BROWSER" -fsSL "$CURL_OPTS" "http://$cloudflare_api/cdn-cgi/trace" | grep -i '^loc=' | cut -d'=' -f2 | xargs)" != "CN" ] ||
-        curl -fsSL "$CURL_OPTS" -k -o /dev/null --write-out "%{http_code}" "http://github.com/honeok/honeok/raw/master/README.md" >/dev/null; then
+    if [ "$(curl -A "$UA_BROWSER" -fsSL "$CURL_OPTS" "http://$cloudflare_api/cdn-cgi/trace" | grep -i '^loc=' | cut -d'=' -f2 | xargs)" != "CN" ] || \
+        curl -fsSL "$CURL_OPTS" -k -o /dev/null --write-out "%{http_code}" "https://github.com/honeok/honeok/raw/master/README.md" >/dev/null; then
         unset GITHUB_PROXY
     fi
     # 脚本当天及累计运行次数统计
