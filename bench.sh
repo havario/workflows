@@ -38,9 +38,8 @@ GITHUB_PROXY="https://gh-proxy.com/"
 TEMP_DIR="/tmp/bench"
 SPEEDTEST_DIR="$TEMP_DIR/speedtest"
 UA_BROWSER="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36"
-CURL_OPTS=(-m 5 --retry 1 --retry-max-time 10)
 
-# 存储用户未安装的软件包便于运行后卸载
+declare -a CURL_OPTS=(-m 5 --retry 1 --retry-max-time 10)
 declare -a uninstall_depend_pkg=()
 
 _exit() {
