@@ -11,7 +11,7 @@
 # See <https://www.gnu.org/licenses/old-licenses/gpl-2.0.html>.
 
 # 当前脚本版本号
-readonly version='v0.1.9 (2025.04.01)'
+readonly VERSION='v0.1.9 (2025.04.01)'
 
 red='\033[91m'
 green='\033[92m'
@@ -34,39 +34,40 @@ export DEBIAN_FRONTEND=noninteractive
 separator() { printf "%-70s\n" "-" | sed 's/\s/-/g'; }
 
 # 各变量默认值
-github_proxy='https://gh-proxy.com/'
-temp_dir='/tmp/bench'
-speedtest_dir="$temp_dir/speedtest"
-ua_browser='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36'
+GITHUB_PROXY='https://gh-proxy.com/'
+TEMP_DIR='/tmp/bench'
+SPEEDTEST_DIR="$TEMP_DIR/speedtest"
+UA_BROWSER='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36'
+CURL_OPTS='-m 5 --retry 1 --retry-max-time 10'
 
-# 定义一个数组存储用户未安装的软件包
+# 存储用户未安装的软件包便于运行后卸载
 declare -a uninstall_depend_pkg=()
 
 _exit() {
-    local return_value="$?"
+    local RETURN_VALUE="$?"
 
-    rm -rf "$temp_dir"
+    rm -rf "$TEMP_DIR" >/dev/null 2>&1
     if [ ${#uninstall_depend_pkg[@]} -gt 0 ]; then
         (for pkg in "${uninstall_depend_pkg[@]}"; do pkg_uninstall "$pkg" >/dev/null 2>&1; done) & disown
     fi
-    exit "$return_value"
+    exit "$RETURN_VALUE"
 }
 
 trap "_exit" SIGINT SIGQUIT SIGTERM EXIT
 
-mkdir -p "$temp_dir"
+mkdir -p "$TEMP_DIR" >/dev/null 2>&1
 
 print_title() {
     echo "--------------------- A Bench.sh Script By honeok --------------------"
-    echo " Version            : $(_green "$version") $(_purple "\xf0\x9f\x92\x80")"
+    echo " Version            : $(_green "$VERSION") $(_purple "\xf0\x9f\x92\x80")"
     echo " $(_cyan 'bash <(curl -sL https://github.com/honeok/cross/raw/master/bench.sh)')"
 }
 
 _exists() {
-    local _cmd="$1"
-    if type "$_cmd" >/dev/null 2>&1; then
+    local _CMD="$1"
+    if type "$_CMD" >/dev/null 2>&1; then
         return 0
-    elif command -v "$_cmd" >/dev/null 2>&1; then
+    elif command -v "$_CMD" >/dev/null 2>&1; then
         return 0
     else
         return 1
@@ -146,11 +147,12 @@ pre_check() {
         fi
     done
     # 境外服务器仅ipv4访问测试通过后取消github代理
-    if [ "$(curl -A "$ua_browser" -fskL -m 3 "https://$cloudflare_api/cdn-cgi/trace" | grep -i '^loc=' | cut -d'=' -f2 | xargs)" != "CN" ]; then
-        unset github_proxy
+    if [ "$(curl -A "$UA_BROWSER" -fsSL "$CURL_OPTS" "http://$cloudflare_api/cdn-cgi/trace" | grep -i '^loc=' | cut -d'=' -f2 | xargs)" != "CN" ] ||
+        curl -fsSL "$CURL_OPTS" -k -o /dev/null --write-out "%{http_code}" "https://github.com/honeok/honeok/raw/master/README.md" >/dev/null; then
+        unset GITHUB_PROXY
     fi
     # 脚本当天及累计运行次数统计
-    runcount=$(curl -fskL -m 10 --retry 1 "https://hits.honeok.com/bench?action=hit")
+    runcount=$(curl -fsSL "$CURL_OPTS" "http://hits.honeok.com/bench?action=hit")
 
     start_time=$(date +%s)
 }
@@ -400,7 +402,7 @@ print_system_info() {
 ip_details() {
     local ipinfo_result ip_org ip_city ip_country ip_region
 
-    ipinfo_result=$(curl -fskL -m 10 ipinfo.io)
+    ipinfo_result=$(curl -fsSL -m 10 ipinfo.io)
     ip_org=$(echo "$ipinfo_result" | awk -F'"' '/"org":/ {print $4}')
     ip_city=$(echo "$ipinfo_result" | awk -F'"' '/"city":/ {print $4}')
     ip_country=$(echo "$ipinfo_result" | awk -F'"' '/"country":/ {print $4}')
@@ -424,7 +426,7 @@ io_test() {
     local speed
     local block_count="$1"
 
-    speed=$(LANG=C dd if=/dev/zero of="$temp_dir/io_$$" bs=512k count="$block_count" conv=fdatasync 2>&1 | grep -o "[0-9.]\+ [MG]B/s")
+    speed=$(LANG=C dd if=/dev/zero of="$TEMP_DIR/io_$$" bs=512k count="$block_count" conv=fdatasync 2>&1 | grep -o "[0-9.]\+ [MG]B/s")
     echo "$speed"
 }
 
@@ -465,7 +467,7 @@ install_speedtest() {
     local speedtest_ver sys_arch
 
     speedtest_ver="1.7.10"
-    mkdir -p "$speedtest_dir"
+    mkdir -p "$SPEEDTEST_DIR"
 
     case "$(uname -m)" in
         'i386' | 'i686')
@@ -488,11 +490,11 @@ install_speedtest() {
         ;;
     esac
 
-    if ! curl -fskL -o "$speedtest_dir/speedtest.tar.gz" "${github_proxy}https://github.com/showwin/speedtest-go/releases/download/v${speedtest_ver}/speedtest-go_${speedtest_ver}_Linux_${sys_arch}.tar.gz"; then
+    if ! curl -fsSL -o "$SPEEDTEST_DIR/speedtest.tar.gz" "${GITHUB_PROXY}https://github.com/showwin/speedtest-go/releases/download/v${speedtest_ver}/speedtest-go_${speedtest_ver}_Linux_${sys_arch}.tar.gz"; then
         _err_msg "$(_red 'Failed to download speedtest-go')" && exit 1
     fi
 
-    tar zxf "$speedtest_dir/speedtest.tar.gz" -C "$speedtest_dir"
+    tar zxf "$SPEEDTEST_DIR/speedtest.tar.gz" -C "$SPEEDTEST_DIR"
 
     printf "%-18s%-18s%-20s%-12s\n" " Node Name" "Upload Speed" "Download Speed" "Latency"
 }
@@ -503,14 +505,14 @@ speedtest() {
     local nodeName="$2"
 
     if [ -z "$1" ]; then
-        "$speedtest_dir/speedtest-go" --unix > "$speedtest_dir/speedtest.log" 2>&1 || return
+        "$SPEEDTEST_DIR/speedtest-go" --unix > "$SPEEDTEST_DIR/speedtest.log" 2>&1 || return
     else
-        "$speedtest_dir/speedtest-go" --unix -s "$1" > "$speedtest_dir/speedtest.log" 2>&1 || return
+        "$SPEEDTEST_DIR/speedtest-go" --unix -s "$1" > "$SPEEDTEST_DIR/speedtest.log" 2>&1 || return
     fi
 
-    upload_speed=$(awk -F': ' '/Upload/ {split($2, a, " "); print a[1] " " a[2]; exit}' "$speedtest_dir/speedtest.log")
-    download_speed=$(awk -F': ' '/Download/ {split($2, a, " "); print a[1] " " a[2]; exit}' "$speedtest_dir/speedtest.log")
-    latency=$(awk '/Latency:/ {sub(/ms$/, "", $2); printf "%.2fms", $2; exit}' "$speedtest_dir/speedtest.log")
+    upload_speed=$(awk -F': ' '/Upload/ {split($2, a, " "); print a[1] " " a[2]; exit}' "$SPEEDTEST_DIR/speedtest.log")
+    download_speed=$(awk -F': ' '/Download/ {split($2, a, " "); print a[1] " " a[2]; exit}' "$SPEEDTEST_DIR/speedtest.log")
+    latency=$(awk '/Latency:/ {sub(/ms$/, "", $2); printf "%.2fms", $2; exit}' "$SPEEDTEST_DIR/speedtest.log")
 
     if [ -n "$download_speed" ] && [ -n "$upload_speed" ] && [ -n "$latency" ]; then
         printf "${yellow}%-18s${green}%-18s${red}%-20s${cyan}%-12s${white}\n" " $nodeName" "$upload_speed" "$download_speed" "$latency"
