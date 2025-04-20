@@ -475,16 +475,16 @@ install_speedtest() {
         x86_64|amd64)
             SYS_ARCH="x86_64"
         ;;
-        armv5* | armv5)
+        armv5*)
             SYS_ARCH="armv5"
         ;;
-        armv6* | armv6)
+        armv6*)
             SYS_ARCH="armv6"
         ;;
-        armv7* | armv7)
+        armv7*)
             SYS_ARCH="armv7"
         ;;
-        armv8* | armv8 | arm64 | aarch64)
+        armv8* | arm64 | aarch64)
             SYS_ARCH="arm64"
         ;;
         s390x)
