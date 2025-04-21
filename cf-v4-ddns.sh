@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# Description: cloudflare api v4 dynamic dns update in bash.
+# Description: dynamically updates dns records via cloudflare api v4 for ddns.
 #
 # Copyright (c) 2025 honeok <honeok@duck.com>
 #
