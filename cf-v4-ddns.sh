@@ -21,14 +21,13 @@
 # Optional flags:
 #            -f false|true \           # force dns update, disregard local stored ip
 
-# API key, see https://dash.cloudflare.com/profile/api-tokens
-# incorrect api-key results in E_UNAUTH error
-
 set \
     -o errexit \
     -o nounset \
     -o pipefail
 
+# API key, see https://dash.cloudflare.com/profile/api-tokens
+# incorrect api-key results in E_UNAUTH error
 CFKEY=
 
 # Zone name, eg: example.com
