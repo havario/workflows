@@ -24,7 +24,7 @@ bash <(curl -sL https://gitlab.com/honeok/Tools/raw/master/xanmod.sh)
 ## get-docker.sh
 
 <div align="center">
-<img src="https://hits.honeok.com/get-docker.svg?action=view" alt="Hits"/>
+<img src="https://hits.honeok.com/get-docker.svg?action=view&count_bg=%2379C83D&title_bg=%23555555&edge_flat=false" alt="Hits"/>
 </div>
 
 Description: This script allows you to install the latest version of Docker on your server with a single command.
