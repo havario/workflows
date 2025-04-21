@@ -12,11 +12,6 @@
 # Distributed on an "AS IS" basis, WITHOUT WARRANTIES.
 # See http://www.apache.org/licenses/LICENSE-2.0 for details.
 
-set -o \
-    errexit \
-    nounset \
-    pipefail
-
 # Usage:
 # cf-ddns.sh -k cloudflare-api-key \
 #            -h host.example.com \     # fqdn of the record you want to update
@@ -28,6 +23,11 @@ set -o \
 
 # API key, see https://dash.cloudflare.com/profile/api-tokens
 # incorrect api-key results in E_UNAUTH error
+
+set \
+    -o errexit \
+    -o nounset \
+    -o pipefail
 
 CFKEY=
 
