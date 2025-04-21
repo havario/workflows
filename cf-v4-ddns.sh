@@ -91,16 +91,16 @@ if [ "$CFRECORD_NAME" = "" ]; then
 fi
 
 # If the hostname is not a FQDN
-if [ "$CFRECORD_NAME" != "$CFZONE_NAME" ] && ! [ -z "${CFRECORD_NAME##*$CFZONE_NAME}" ]; then
+if [ "$CFRECORD_NAME" != "$CFZONE_NAME" ] && ! [ -z "${CFRECORD_NAME##*"$CFZONE_NAME"}" ]; then
     CFRECORD_NAME="$CFRECORD_NAME.$CFZONE_NAME"
     echo " => Hostname is not a FQDN, assuming $CFRECORD_NAME"
 fi
 
 # Get current and old WAN ip
-WAN_IP=`curl -s ${WANIPSITE}`
+WAN_IP=$(curl -s ${WANIPSITE})
 WAN_IP_FILE=$HOME/.cf-wan_ip_$CFRECORD_NAME.txt
-if [ -f $WAN_IP_FILE ]; then
-    OLD_WAN_IP=`cat $WAN_IP_FILE`
+if [ -f "$WAN_IP_FILE" ]; then
+    OLD_WAN_IP=$(cat "$WAN_IP_FILE")
 else
     echo "No file, need IP"
     OLD_WAN_IP=""
@@ -114,7 +114,7 @@ fi
 
 # Get zone_identifier & record_identifier
 ID_FILE=$HOME/.cf-id_$CFRECORD_NAME.txt
-if [ -f $ID_FILE ] && [ $(wc -l $ID_FILE | cut -d " " -f 1) == 4 ] \
+if [ -f "$ID_FILE" ] && [ $(wc -l "$ID_FILE" | cut -d " " -f 1) == 4 ] \
     && [ "$(sed -n '3,1p' "$ID_FILE")" == "$CFZONE_NAME" ] \
     && [ "$(sed -n '4,1p' "$ID_FILE")" == "$CFRECORD_NAME" ]; then
     CFZONE_ID=$(sed -n '1,1p' "$ID_FILE")
@@ -123,10 +123,10 @@ else
     echo "Updating zone_identifier & record_identifier"
     CFZONE_ID=$(curl -s -X GET "https://api.cloudflare.com/client/v4/zones?name=$CFZONE_NAME" -H "Authorization: Bearer $CFKEY" -H "Content-Type: application/json" | grep -Eo '"id":"[^"]*'|sed 's/"id":"//' | head -1 )
     CFRECORD_ID=$(curl -s -X GET "https://api.cloudflare.com/client/v4/zones/$CFZONE_ID/dns_records?name=$CFRECORD_NAME" -H "Authorization: Bearer $CFKEY" -H "Content-Type: application/json"  | grep -Eo '"id":"[^"]*'|sed 's/"id":"//' | head -1 )
-    echo "$CFZONE_ID" > $ID_FILE
-    echo "$CFRECORD_ID" >> $ID_FILE
-    echo "$CFZONE_NAME" >> $ID_FILE
-    echo "$CFRECORD_NAME" >> $ID_FILE
+    echo "$CFZONE_ID" > "$ID_FILE"
+    echo "$CFRECORD_ID" >> "$ID_FILE"
+    echo "$CFZONE_NAME" >> "$ID_FILE"
+    echo "$CFRECORD_NAME" >> "$ID_FILE"
 fi
 
 # If WAN is changed, update cloudflare
@@ -137,9 +137,9 @@ RESPONSE=$(curl -s -X PUT "https://api.cloudflare.com/client/v4/zones/$CFZONE_ID
     -H "Content-Type: application/json" \
     --data "{\"id\":\"$CFZONE_ID\",\"type\":\"$CFRECORD_TYPE\",\"name\":\"$CFRECORD_NAME\",\"content\":\"$WAN_IP\", \"ttl\":$CFTTL}")
 
-if [ "$RESPONSE" != "${RESPONSE%success*}" ] && [ "$(echo $RESPONSE | grep "\"success\":true")" != "" ]; then
+if [ "$RESPONSE" != "${RESPONSE%success*}" ] && [ "$(echo "$RESPONSE" | grep "\"success\":true")" != "" ]; then
     echo "Updated succesfuly!"
-    echo $WAN_IP > $WAN_IP_FILE
+    echo "$WAN_IP" > "$WAN_IP_FILE"
     exit
 else
     echo 'Something went wrong :('
