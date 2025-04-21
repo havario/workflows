@@ -348,14 +348,14 @@ ip_dual_stack() {
         _yellow "Warning: Both IPv4 and IPv6 connectivity were not detected."
     fi
     if [ -n "$IPV4_CHECK" ]; then
-        ONLINE=$(_green "\xe2\x9c\x93 Online")
+        ONLINE=("$(_green "\xe2\x9c\x93 Online")")
     else
-        ONLINE=$(_red "\xe2\x9c\x97 Offline")
+        ONLINE=("$(_red "\xe2\x9c\x97 Offline")")
     fi
     if [ -n "$IPV6_CHECK" ]; then
-        ONLINE+=" / $(_green "\xe2\x9c\x93 Online")"
+        ONLINE+=("/ $(_green "\xe2\x9c\x93 Online")")
     else
-        ONLINE+=" / $(_red "\xe2\x9c\x97 Offline")"
+        ONLINE+=("/ $(_red "\xe2\x9c\x97 Offline")")
     fi
 }
 
@@ -396,7 +396,7 @@ print_system_info() {
     echo " Kernel             : $(_cyan "$KERNEL_VER")"
     echo " TCP CC             : $(_yellow "$CONGESTION_ALGORITHM $QUEUE_ALGORITHM")"
     echo " Virtualization     : $(_cyan "$VIRT_TYPE")"
-    echo " IPv4/IPv6          : $ONLINE"
+    echo " IPv4/IPv6          : ${ONLINE[*]}"
 }
 
 # 获取当前IP相关信息
