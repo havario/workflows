@@ -4,7 +4,9 @@
 #
 # Copyright (c) 2025 honeok <honeok@duck.com>
 #
-# Thanks: aipeach https://github.com/aipeach
+# References:
+# https://github.com/yulewang/cloudflare-api-v4-ddns
+# https://github.com/aipeach/cloudflare-api-v4-ddns
 #
 # Licensed under the Apache License, Version 2.0.
 # Distributed on an "AS IS" basis, WITHOUT WARRANTIES.
