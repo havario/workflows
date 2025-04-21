@@ -41,6 +41,7 @@ UA_BROWSER="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML,
 
 declare -a CURL_OPTS=(-m 5 --retry 1 --retry-max-time 10)
 declare -a UNINSTALL_PKG=()
+declare -a ONLINE=()
 
 _exit() {
     local RETURN_VALUE="$?"
@@ -269,7 +270,7 @@ obtain_system_info() {
 
 # 虚拟化校验
 virt_check() {
-    local PROCESSOR_TYPE KERNEL_LOGS SYSTEM_MANUFACTURER SYSTEM_PRODUCT_NAME SYSTEM_VERSION
+    local PROCESSOR_TYPE KERNEL_LOGS SYSTEM_MANUFACTURER SYSTEM_PRODUCT_NAME SYSTEM_VER
 
     PROCESSOR_TYPE=$(awk -F: '/model name/ {name=$2} END {print name}' /proc/cpuinfo | sed 's/^[ \t]*//;s/[ \t]*$//')
 
@@ -280,7 +281,7 @@ virt_check() {
     if _exists "dmidecode" >/dev/null 2>&1; then
         SYSTEM_MANUFACTURER=$(dmidecode -s system-manufacturer 2>/dev/null)
         SYSTEM_PRODUCT_NAME=$(dmidecode -s system-product-name 2>/dev/null)
-        SYSTEM_VERSION=$(dmidecode -s system-version 2>/dev/null)
+        SYSTEM_VER=$(dmidecode -s system-version 2>/dev/null)
     fi
 
     if grep -qai docker /proc/1/cgroup; then
@@ -317,7 +318,7 @@ virt_check() {
         VIRT_TYPE="Xen"
     elif echo "$SYSTEM_MANUFACTURER" | grep -qi "microsoft corporation" 2>/dev/null; then
         if echo "$SYSTEM_PRODUCT_NAME" | grep -qi "virtual machine" 2>/dev/null; then
-            if echo "$SYSTEM_VERSION" | grep -qi "7.0" 2>/dev/null || echo "$SYSTEM_VERSION" | grep -qi "hyper-v" 2>/dev/null; then
+            if echo "$SYSTEM_VER" | grep -qi "7.0" 2>/dev/null || echo "$SYSTEM_VER" | grep -qi "hyper-v" 2>/dev/null; then
                 VIRT_TYPE="Hyper-V"
             else
                 VIRT_TYPE="Microsoft Virtual Machine"
@@ -509,7 +510,7 @@ install_speedtest() {
 # https://github.com/showwin/speedtest-go
 speedtest() {
     local UPLOAD_SPEED DOWNLOAD_SPEED LATENCY
-    local nodeName="$2"
+    local NODENAME="$2"
 
     if [ -z "$1" ]; then
         "$SPEEDTEST_DIR/speedtest-go" --unix > "$SPEEDTEST_DIR/speedtest.log" 2>&1 || return
@@ -522,7 +523,7 @@ speedtest() {
     LATENCY=$(awk '/Latency:/ {sub(/ms$/, "", $2); printf "%.2fms", $2; exit}' "$SPEEDTEST_DIR/speedtest.log")
 
     if [ -n "$DOWNLOAD_SPEED" ] && [ -n "$UPLOAD_SPEED" ] && [ -n "$LATENCY" ]; then
-        printf "${yellow}%-18s${green}%-18s${red}%-20s${cyan}%-12s${white}\n" " $nodeName" "$UPLOAD_SPEED" "$DOWNLOAD_SPEED" "$LATENCY"
+        printf "${yellow}%-18s${green}%-18s${red}%-20s${cyan}%-12s${white}\n" " $NODENAME" "$UPLOAD_SPEED" "$DOWNLOAD_SPEED" "$LATENCY"
     fi
 }
 
