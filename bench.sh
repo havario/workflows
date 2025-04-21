@@ -128,7 +128,7 @@ pkg_uninstall() {
 # 运行前校验
 pre_check() {
     local INSTALL_PKG
-    INSTALL_PKG=('tar' 'bc')
+    INSTALL_PKG=("tar" "bc")
 
     # 备用 www.prologis.cn
     # 备用 www.autodesk.com.cn
