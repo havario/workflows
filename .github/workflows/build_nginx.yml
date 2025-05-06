@@ -21,7 +21,7 @@ jobs:
 
       - name: 'Fetch Versions and Determine Build'
         run: |
-          NGX_CVER=$(curl -fsSL "https://hub.docker.com/v2/repositories/${{ env.DOCKER_USERNAME }}/nginx/tags" 2>/dev/null | \
+          NGX_CVER=$(curl -fsSL "https://hub.docker.com/v2/repositories/honeok/nginx/tags" 2>/dev/null | \
             jq -r ".results // [] | .[].name" | grep -v '^alpine$' | sort -Vr | head -n1 | cut -d'-' -f1 || echo "") && \
           NGX_LVER=$(curl -fsSL "https://api.github.com/repos/nginx/nginx/releases/latest" | \
             grep -oP '"tag_name": "\K[^"]+' | sed 's/release-//') && \
