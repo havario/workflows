@@ -35,7 +35,7 @@ jobs:
           echo "ZSTD_LVER=${ZSTD_LVER}" >> $GITHUB_ENV
           echo "CORERULESET_LVER=${CORERULESET_LVER}" >> $GITHUB_ENV
           echo "ALPINE_TAG=${ALPINE_TAG}" >> $GITHUB_ENV
-          if [[ "$(echo -e "${{ env.NGX_LVER }}\n${{ env.NGX_CVER }}" | sort -V | head -n1)" != "${{ env.NGX_LVER }}" ]] || [[ -z "${{ env.NGX_CVER }}" ]]; then
+          if [[ "$(echo -e "$NGX_LVER\n$NGX_CVER" | sort -V | head -n1)" != "$NGX_LVER" || -z "$NGX_CVER" ]]; then
             echo "IS_RENEW=1" >> $GITHUB_ENV
           fi
 
