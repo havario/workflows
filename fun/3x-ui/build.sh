@@ -21,7 +21,7 @@ readonly XRAY_VERSION
 
 # map system architecture to framework variable
 case "$(uname -m)" in
-    i*86 | x86)
+    i*86)
         XRAY_FRAMEWORK='32'
     ;;
     x86_64 | amd64)
@@ -30,7 +30,7 @@ case "$(uname -m)" in
     armv6*)
         XRAY_FRAMEWORK='arm32-v6'
     ;;
-    armv7* | arm)
+    armv7*)
         XRAY_FRAMEWORK='arm32-v7a'
     ;;
     armv8* | arm64 | aarch64)
