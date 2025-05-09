@@ -24,7 +24,7 @@ func main() {
     })
 
     if err := r.Run(":8080"); err != nil {
-        log.Fatalf("启动服务器失败: %v", err)
+        log.Fatalf("Failed to start server: %v", err)
     }
 }
 
