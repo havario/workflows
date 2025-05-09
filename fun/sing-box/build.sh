@@ -41,11 +41,20 @@ case "$(uname -m)" in
     x86_64 | amd64)
         SINGBOX_FRAMEWORK='amd64' # 64-bit x86
     ;;
-    armv7* | armv7l)
+    armv6* | armv6)
+        SINGBOX_FRAMEWORK='armv6' # ARMv6
+    ;;
+    armv7* | armv7)
         SINGBOX_FRAMEWORK='armv7' # 32-bit ARM
     ;;
-    armv8* | armv8 | arm64 | aarch64)
+    arm64 | aarch64)
         SINGBOX_FRAMEWORK='arm64' # 64-bit ARM
+    ;;
+    ppc64le)
+        SINGBOX_FRAMEWORK='ppc64le' # PowerPC 64-bit
+    ;;
+    riscv64)
+        SINGBOX_FRAMEWORK='riscv64' # RISC-V 64-bit
     ;;
     s390x)
         SINGBOX_FRAMEWORK='s390x' # IBM S390x
