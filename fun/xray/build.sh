@@ -13,6 +13,13 @@ set \
     -o nounset \
     -o xtrace
 
+# Run default path
+XRAY_WORKDIR="/etc/xray"
+XRAY_BINDIR="$XRAY_WORKDIR/bin"
+XRAY_CONFDIR="$XRAY_WORKDIR/conf"
+XRAY_LOGDIR="/var/log/xray"
+XRAY_LOGFILE="$XRAY_LOGDIR/access.log"
+
 command -v curl >/dev/null 2>&1 || apk add --no-cache curl
 
 function build_xray {
@@ -63,7 +70,8 @@ function build_xray {
 }
 
 function pre_config {
-
+    mkdir -p "$XRAY_WORKDIR" "$XRAY_BINDIR" "$XRAY_CONFDIR" "$XRAY_LOGDIR" >/dev/null 2>&1
+    touch "$XRAY_LOGFILE" >/dev/null 2>&1
 }
 
 case "$1" in
