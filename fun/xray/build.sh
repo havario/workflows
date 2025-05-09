@@ -72,6 +72,7 @@ function build_xray {
 function pre_config {
     mkdir -p "$XRAY_WORKDIR" "$XRAY_BINDIR" "$XRAY_CONFDIR" "$XRAY_LOGDIR" >/dev/null 2>&1
     touch "$XRAY_LOGFILE" >/dev/null 2>&1
+    ln -sf "$XRAY_BINDIR/xray" /usr/local/bin/xray
 }
 
 case "$1" in
