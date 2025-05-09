@@ -36,6 +36,12 @@ case "$(uname -m)" in
     armv8* | arm64 | aarch64)
         XRAY_FRAMEWORK='arm64-v8a'
     ;;
+    ppc64le)
+        XRAY_FRAMEWORK='ppc64le'
+    ;;
+    riscv64)
+        XRAY_FRAMEWORK='riscv64'
+    ;;
     s390x)
         XRAY_FRAMEWORK='s390x'
     ;;
