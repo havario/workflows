@@ -26,9 +26,7 @@ WORKDIR="/usr/local/bin"
 cd "$WORKDIR" || { printf "Error: Failed to enter the 3x-ui work directory!\n"; exit 1; }
 
 clear_screen() {
-    if [ -t 1 ]; then
-        tput clear 2>/dev/null || echo -e "\033[2J\033[H" || clear
-    fi
+    [ -t 1 ] && tput clear 2>/dev/null || echo -e "\033[2J\033[H" || clear
 }
 
 show_status() {
@@ -128,7 +126,7 @@ set_port() {
 
 check_config() {
     local CONFIG_ROW
-    printf "\n"
+    echo
     separator
     3x-ui setting -show true | while IFS= read -r CONFIG_ROW; do
         _green "$CONFIG_ROW"
@@ -139,7 +137,7 @@ check_config() {
 show_menu() {
     clear_screen
     _green ' x-ui 面板管理脚本'
-    printf "\n"
+    echo
     echo " $(_green '0.') 退出脚本"
     separator
     echo " $(_green '1.') 重置用户名密码Secret Token"
@@ -148,9 +146,9 @@ show_menu() {
     echo " $(_green '4.') 设置面板端口"
     echo " $(_green '5.') 查看当前面板信息"
     separator
-    printf "\n"
+    echo
     show_status
-    printf "\n"
+    echo
     reading '请输入选择 [0-4], 查看面板登录信息请输入数字5: ' 'CHOOSE'
     case "$CHOOSE" in
         0) clear_screen; exit 0 ;;

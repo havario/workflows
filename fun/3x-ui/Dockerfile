@@ -8,7 +8,7 @@
 
 FROM --platform=$BUILDPLATFORM golang:alpine AS builder
 
-WORKDIR /go/src/github.com/MHSanaei/3x-ui
+WORKDIR /go/src
 
 COPY build.sh .
 

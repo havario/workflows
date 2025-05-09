@@ -12,14 +12,11 @@ set \
     -o errexit \
     -o nounset
 
-COMMANDS="curl jq"
-for _CMD in $COMMANDS; do
-    if ! command -v "$_CMD" >/dev/null 2>&1; then
-        apk add --no-cache "$_CMD"
-    fi
-done
+if ! command -v curl >/dev/null 2>&1; then
+    apk add --no-cache curl
+fi
 
-XRAY_VERSION=$(curl -fsSL "https://api.github.com/repos/XTLS/Xray-core/releases" | jq -r 'map(select(.prerelease == true)) | sort_by(.created_at) | last | .tag_name' | sed 's/^v//')
+XRAY_VERSION=$(curl -fsSL "https://api.github.com/repos/XTLS/Xray-core/releases/latest" | awk -F '["v]' '/tag_name/{print $5}')
 readonly XUI_VERSION XRAY_VERSION
 [ -z "$XRAY_VERSION" ] && { printf "Error: Unable to obtain xray version!\n" >&2; exit 1; }
 
