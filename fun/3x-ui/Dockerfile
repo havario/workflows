@@ -21,7 +21,7 @@ RUN set -ex \
         && git clone --depth=1 https://github.com/MHSanaei/3x-ui.git \
         && cd 3x-ui \
         && CGO_ENABLED=1 GOOS=$TARGETOS CGO_CFLAGS="-D_LARGEFILE64_SOURCE" GO111MODULE=on \
-        && go build -a -trimpath -ldflags "-s -w -linkmode external -extldflags '-static'" -o /go/bin/x-ui \
+        && go build -a -trimpath -ldflags "-s -w -linkmode external -extldflags '-static'" -o /go/bin/3x-ui \
         && cd .. \
         && chmod +x build.sh && ./build.sh
 
@@ -32,7 +32,7 @@ ARG TARGETARCH
 
 WORKDIR /usr/local/bin
 
-COPY --from=builder /go/bin/x-ui /usr/local/bin/3x-ui
+COPY --from=builder /go/bin/3x-ui /usr/local/bin/3x-ui
 COPY --from=builder /tmp/xray/xray /usr/local/bin/bin/xray-linux-${TARGETARCH}
 COPY docker-entrypoint.sh /docker-entrypoint.sh
 COPY x-ui.sh /usr/local/bin/x-ui
