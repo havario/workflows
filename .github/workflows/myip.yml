@@ -30,7 +30,7 @@ jobs:
           password: ${{ env.DOCKER_PASSWORD }}
 
       - name: 'Build and push myip image'
-        uses: docker/build-push-action@v6.15.0
+        uses: docker/build-push-action@v6.16.0
         with:
           context: "{{ defaultContext }}:myip"
           file: Dockerfile
@@ -38,4 +38,4 @@ jobs:
           tags: |
             "${{ env.DOCKER_USERNAME }}/myip:0.0.1"
             "${{ env.DOCKER_USERNAME }}/myip:latest"
-          platforms: linux/386, linux/amd64, linux/arm/v6, linux/arm/v7, linux/arm64/v8, linux/s390x
+          platforms: linux/386, linux/amd64, linux/arm/v6, linux/arm/v7, linux/arm64/v8, linux/ppc64le, linux/riscv64, linux/s390x
