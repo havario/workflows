@@ -12,13 +12,14 @@
 
 FROM alpine:latest AS builder
 
-COPY build.sh .
+COPY xray.sh .
 
 RUN set -ex \
         && apk update \
         && apk add --no-cache \
             curl \
-        && chmod +x build.sh && ./build.sh
+        && chmod +x xray.sh && ./xray.sh \
+        && rm -f xray.sh
 
 FROM alpine:latest
 

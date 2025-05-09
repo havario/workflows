@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 #
-# Description: This script is used to build 3x-ui binary files for multiple architectures.
+# Description: This script is used to build xray binary files for multiple architectures.
 #
 # Copyright (c) 2025 honeok <honeok@duck.com>
 #
