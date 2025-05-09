@@ -10,7 +10,7 @@ FROM golang:1.23-alpine AS builder
 WORKDIR /go/src
 COPY . .
 RUN set -ex \
-    && CGO_ENABLED=0 GOOS=$TARGETOS GOARCH=$TARGETARCH \
+    && CGO_ENABLED=0 GOOS=$TARGETOS \
     && go build -tags netgo -ldflags '-w -s' -o /go/bin/myip main.go
 
 FROM alpine:latest
