@@ -11,7 +11,7 @@ env:
 
 jobs:
   build_stable:
-    name: 'Build and Publish Stable Sing-box'
+    name: 'Build Stable Sing-box'
     runs-on: ubuntu-latest
 
     steps:
@@ -63,7 +63,7 @@ jobs:
           build-args: VERSION=stable
 
   build_beta:
-    name: 'Build and Publish Beta Sing-box'
+    name: 'Build Beta Sing-box'
     runs-on: ubuntu-latest
 
     steps:
