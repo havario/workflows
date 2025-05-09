@@ -10,9 +10,20 @@
 # This program is distributed WITHOUT ANY WARRANTY.
 # See <https://www.gnu.org/licenses/old-licenses/gpl-2.0.html>.
 
+FROM alpine:latest AS builder
+
+COPY build.sh .
+
+RUN set -ex \
+        && apk update \
+        && apk add --no-cache \
+            curl \
+        && chmod +x build.sh && ./build.sh
+
 FROM alpine:latest
 
-COPY . .
+COPY --from=builder /tmp/xray/xray /etc/xray/bin/xray
+COPY config.json /etc/xray/config.json
 
 RUN set -ex \
         && apk update && apk upgrade \
@@ -23,6 +34,8 @@ RUN set -ex \
         && chmod +x docker-entrypoint.sh \
         && chmod +x build.sh && ./build.sh \
         && rm -f build.sh \
+        && curl -fsL -o /etc/xray/bin/geoip.dat "https://github.com/v2fly/geoip/releases/latest/download/geoip.dat" \
+        && curl -fsL -o /etc/xray/bin/geosite.dat "https://github.com/v2fly/domain-list-community/releases/latest/download/dlc.dat" \
         && rm -rf /var/cache/apk/* /tmp/* \
         && ln -sf /dev/stdout /var/log/xray/access.log
 
