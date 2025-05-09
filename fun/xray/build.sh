@@ -15,7 +15,7 @@ set \
 
 command -v curl >/dev/null 2>&1 || apk add --no-cache curl
 
-build_xray() {
+function build_xray {
     XRAY_VERSION=$(curl -fsL "https://api.github.com/repos/XTLS/Xray-core/releases/latest" | awk -F '["v]' '/tag_name/{print $5}')
     readonly XRAY_VERSION
     [ -z "$XRAY_VERSION" ] && { printf 'Error: Unable to obtain xray version!\n' >&2; exit 1; }
@@ -62,7 +62,7 @@ build_xray() {
     if [ ! -x "xray/xray" ]; then chmod +x xray/xray; fi
 }
 
-pre_config() {
+function pre_config {
 
 }
 
