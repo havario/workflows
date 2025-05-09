@@ -63,7 +63,7 @@ check_config() {
     PUBLIC_IP=$(is_ip)
 
     if [ ! -f "/etc/x-ui/x-ui.db" ]; then
-        printf "\n"
+        echo
         printf "                  \033[42m\033[1m%s\033[0m\n" "login info"
         separator
         if [ -z "$USER_NAME" ] || [ -z "$USER_PASSWORD" ] || [ -z "$BASE_PATH" ] || [ -z "$PANEL_PORT" ]; then
@@ -87,7 +87,7 @@ check_config() {
             printf " Panel login address: %s\n" "http://$PUBLIC_IP:$PANEL_PORT/$BASE_PATH"
         fi
         separator
-        printf "\n"
+        echo
     fi
     3x-ui migrate >/dev/null 2>&1
 }
