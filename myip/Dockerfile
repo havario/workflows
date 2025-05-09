@@ -7,27 +7,19 @@
 # See http://www.apache.org/licenses/LICENSE-2.0 for details.
 
 FROM golang:1.23-alpine AS builder
-
 WORKDIR /go/src
-
 COPY . .
-
 RUN set -ex \
-        && CGO_ENABLED=0 GOOS=$TARGETOS GOARCH=$TARGETARCH \
-        && go build -tags netgo -ldflags '-w -s' -o /go/bin/myip main.go
+    && CGO_ENABLED=0 GOOS=$TARGETOS GOARCH=$TARGETARCH \
+    && go build -tags netgo -ldflags '-w -s' -o /go/bin/myip main.go
 
 FROM alpine:latest
-
 COPY --from=builder /go/bin/myip /usr/local/bin/myip
-
 RUN set -ex \
-        && apk update && apk upgrade \
-        && apk add --no-cache \
-            tzdata \
-        && rm -rf /var/cache/apk/* /tmp/*
-
+    && apk update && apk upgrade \
+    && apk add --no-cache \
+        tzdata \
+    && rm -rf /var/cache/apk/* /tmp/*
 ENV TZ=Asia/Shanghai
-
 EXPOSE 8080
-
 ENTRYPOINT [ "myip" ]
