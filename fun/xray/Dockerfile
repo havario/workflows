@@ -16,8 +16,6 @@ COPY build.sh .
 
 RUN set -ex \
         && apk update \
-        && apk add --no-cache \
-            curl \
         && chmod +x build.sh && ./build.sh xray \
         && rm -f build.sh
 
@@ -32,7 +30,6 @@ RUN set -ex \
         && apk update && apk upgrade \
         && apk add --no-cache \
             ca-certificates \
-            curl \
             tzdata \
         && chmod +x docker-entrypoint.sh \
         && chmod +x build.sh && ./build.sh pre \
