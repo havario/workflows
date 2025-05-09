@@ -36,7 +36,7 @@ esac
 # Determine system arch based
 case "$(uname -m)" in
     i*86 | x86)
-        SINGBOX_FRAMEWORK='386'   # 32-bit x86
+        SINGBOX_FRAMEWORK='386' # 32-bit x86
     ;;
     x86_64 | amd64)
         SINGBOX_FRAMEWORK='amd64' # 64-bit x86
