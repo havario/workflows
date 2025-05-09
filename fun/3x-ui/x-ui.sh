@@ -54,7 +54,7 @@ reset_user() {
 
     reading ' 您确定要重置面板的用户名和密码吗? (y/n) ' 'CHOOSE'
     case "$CHOOSE" in
-        [ Yy ] | "")
+        [Yy]*|"")
             reading ' 请设置登录用户名[默认为随机用户名]: ' 'USERNAME_TEMP'
             [ -z "$USERNAME_TEMP" ] && USERNAME_TEMP=$(date +%s%N | md5sum | cut -c 1-8)
             reading ' 请设置登录密码[默认为随机密码]: ' 'PASSWD_TEMP'
@@ -79,7 +79,7 @@ reset_basepath() {
     _yellow ' 重置Web基础路径'
     reading ' 确定要重置web基本路径吗? (y/n): ' 'CHOOSE'
     case "$CHOOSE" in
-        [ Yy ] | "")
+        [Yy]*|"")
             BASEPATH_TEMP=$(generate_string 10)
             # 应用新的web基础路径设置
             3x-ui setting -webBasePath "$BASEPATH_TEMP" >/dev/null 2>&1
@@ -98,7 +98,7 @@ reset_config() {
 
     reading ' 您确定要重置所有面板设置, 帐户数据不会丢失, 用户名和密码不会更改! (y/n) ' 'CHOOSE'
     case "$CHOOSE" in
-        [ Yy ] | "")
+        [Yy]*|"")
             3x-ui setting -reset
             printf " 所有面板设置均已重置为默认值\n"
         ;;
@@ -113,7 +113,7 @@ set_port() {
     local CHOOSE
     reading ' 输入端口号[1-65535]: ' 'CHOOSE'
     case "$CHOOSE" in
-        [ Yy ] | "")
+        [Yy]*|"")
             3x-ui setting -port "$CHOOSE"
             printf " 设置端口完毕, 现在请重启面板, 并使用新设置的端口 %s 访问面板\n" "$(_green "$CHOOSE")"
         ;;
