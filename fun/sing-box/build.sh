@@ -29,7 +29,7 @@ case "$1" in
         VERSION=$(curl -fsL "https://api.github.com/repos/SagerNet/sing-box/releases" | awk -F '["v]' '/tag_name.*-.*/{print $5;exit}')
     ;;
     *)
-        printf 'Error: Unable to obtain Sing-box version!\n' >&2; exit 1;
+        printf 'Error: Unable to determine Sing-box version!\n' >&2; exit 1;
     ;;
 esac
 
