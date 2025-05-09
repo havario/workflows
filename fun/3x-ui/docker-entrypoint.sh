@@ -43,7 +43,7 @@ generate_port() {
     done
 }
 
-is_ip() {
+ip_address() {
     # 获取一个登录IP即返回
     IPV4_ADDRESS=$(curl -fsSL -m 5 -4 http://www.qualcomm.cn/cdn-cgi/trace 2>/dev/null | grep -i '^ip=' | cut -d'=' -f2 | grep .)
     IPV6_ADDRESS=$(curl -fsSL -m 5 -6 http://www.qualcomm.cn/cdn-cgi/trace 2>/dev/null | grep -i '^ip=' | cut -d'=' -f2 | grep .)
@@ -60,7 +60,7 @@ is_ip() {
 
 check_config() {
     local PUBLIC_IP
-    PUBLIC_IP=$(is_ip)
+    PUBLIC_IP="$(ip_address)"
 
     if [ ! -f "/etc/x-ui/x-ui.db" ]; then
         echo
