@@ -16,17 +16,16 @@ RUN set -ex \
         && apk update && apk upgrade \
         && apk add --no-cache \
             build-base \
-            curl \
             gcc \
             git \
         && chmod +x build.sh && ./build.sh \
-        && TAG=$(curl -fsL https://api.github.com/repos/MHSanaei/3x-ui/releases/latest | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/') \
+        && TAG=$(wget -qO- https://api.github.com/repos/MHSanaei/3x-ui/releases/latest | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/') \
         && git clone --depth=1 --branch "$TAG" https://github.com/MHSanaei/3x-ui.git \
         && cd 3x-ui \
         && CGO_ENABLED=1 GOOS=$TARGETOS CGO_CFLAGS="-D_LARGEFILE64_SOURCE" GO111MODULE=on \
         && go build -a -trimpath -ldflags "-s -w -linkmode external -extldflags '-static'" -o /go/bin/3x-ui \
         && cd .. \
-        && rm -rf /go/src /var/cache/apk/*
+        && rm -rf /go/src/3x-ui /var/cache/apk/*
 
 FROM alpine:latest
 
