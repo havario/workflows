@@ -15,7 +15,7 @@ export LANG=en_US.UTF-8
 
 separator() { printf "%-50s\n" "-" | sed 's/\s/-/g'; }
 
-cd "$WORKDIR" || { printf "Error: Failed to enter the 3x-ui work directory!\n"; exit 1; }
+cd "$WORKDIR" || { printf "Error: Failed to enter the 3x-ui work directory!\n" >&2; exit 1; }
 
 generate_string() {
     local LENGTH="$1"
@@ -39,7 +39,7 @@ generate_port() {
         if [ ! "$(is_port "$TEMP_PORT")" ]; then
             WEB_PORT="$TEMP_PORT" && break
         fi
-        [ "$IS_COUNT" -eq 5 ] && { printf "Error: no free port found after 5 attempts.\n" >&2 && exit 1; }
+        [ "$IS_COUNT" -eq 5 ] && { printf "Error: no free port found after 5 attempts.\n" >&2; exit 1; }
     done
 }
 
