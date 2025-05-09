@@ -64,7 +64,7 @@ reset_user() {
             printf " 面板登录用户名已重置为: %s" "$(_green "$USERNAME_TEMP")"
             printf " 面板登录密码已重置为: %s" "$(_green "$PASSWD_TEMP")"
             printf " 面板登录密码令牌已禁用\n"
-            printf " 请使用新的登录用户名和密码访问X-UI面板\n"
+            printf " 请使用新的登录用户名和密码访问x-ui面板\n"
         ;;
         *)
             show_menu
