@@ -15,8 +15,8 @@ set \
 
 command -v curl >/dev/null 2>&1 || apk add --no-cache curl
 
-XRAY_VERSION=$(curl -fsSL "https://api.github.com/repos/XTLS/Xray-core/releases/latest" | awk -F '["v]' '/tag_name/{print $5}')
-readonly XUI_VERSION XRAY_VERSION
+XRAY_VERSION=$(curl -fsL "https://api.github.com/repos/XTLS/Xray-core/releases/latest" | awk -F '["v]' '/tag_name/{print $5}')
+readonly XRAY_VERSION
 [ -z "$XRAY_VERSION" ] && { printf "Error: Unable to obtain xray version!\n" >&2; exit 1; }
 
 # map system architecture to framework variable
