@@ -14,7 +14,7 @@ RUN set -ex \
     && go build -tags netgo -ldflags '-w -s' -o /go/bin/myip main.go
 
 FROM alpine:latest
-COPY --from=builder /go/bin/myip /usr/local/bin/myip
+COPY --from=builder /go/bin/myip /usr/bin/myip
 RUN set -ex \
     && apk update && apk upgrade \
     && apk add --no-cache \
