@@ -18,13 +18,15 @@ RUN set -ex \
         && apk update \
         && apk add --no-cache \
             curl \
-        && chmod +x build.sh && ./build.sh \
+        && chmod +x build.sh && ./build.sh xray \
         && rm -f build.sh
 
 FROM alpine:latest
 
 COPY --from=builder /tmp/xray/xray /etc/xray/bin/xray
 COPY config.json /etc/xray/config.json
+COPY build.sh .
+COPY docker-entrypoint.sh /docker-entrypoint.sh
 
 RUN set -ex \
         && apk update && apk upgrade \
@@ -33,7 +35,7 @@ RUN set -ex \
             curl \
             tzdata \
         && chmod +x docker-entrypoint.sh \
-        && chmod +x build.sh && ./build.sh \
+        && chmod +x build.sh && ./build.sh pre \
         && rm -f build.sh \
         && curl -fsL -o /etc/xray/bin/geoip.dat "https://github.com/v2fly/geoip/releases/latest/download/geoip.dat" \
         && curl -fsL -o /etc/xray/bin/geosite.dat "https://github.com/v2fly/domain-list-community/releases/latest/download/dlc.dat" \
