@@ -45,12 +45,12 @@ RUN set -ex \
             curl \
             tzdata \
         && chmod +x /docker-entrypoint.sh /usr/local/bin/x-ui \
-        && curl -fsSL -o /usr/local/bin/bin/geoip.dat "https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geoip.dat" \
-        && curl -fsSL -o /usr/local/bin/bin/geosite.dat "https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geosite.dat" \
-        && curl -fsSL -o /usr/local/bin/bin/geoip_IR.dat "https://github.com/chocolate4u/Iran-v2ray-rules/releases/latest/download/geoip.dat" \
-        && curl -fsSL -o /usr/local/bin/bin/geosite_IR.dat "https://github.com/chocolate4u/Iran-v2ray-rules/releases/latest/download/geosite.dat" \
-        && curl -fsSL -o /usr/local/bin/bin/geoip_RU.dat "https://github.com/runetfreedom/russia-v2ray-rules-dat/releases/latest/download/geoip.dat" \
-        && curl -fsSL -o /usr/local/bin/bin/geosite_RU.dat "https://github.com/runetfreedom/russia-v2ray-rules-dat/releases/latest/download/geosite.dat" \
+        && curl -fsL -o /usr/local/bin/bin/geoip.dat "https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geoip.dat" \
+        && curl -fsL -o /usr/local/bin/bin/geosite.dat "https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geosite.dat" \
+        && curl -fsL -o /usr/local/bin/bin/geoip_IR.dat "https://github.com/chocolate4u/Iran-v2ray-rules/releases/latest/download/geoip.dat" \
+        && curl -fsL -o /usr/local/bin/bin/geosite_IR.dat "https://github.com/chocolate4u/Iran-v2ray-rules/releases/latest/download/geosite.dat" \
+        && curl -fsL -o /usr/local/bin/bin/geoip_RU.dat "https://github.com/runetfreedom/russia-v2ray-rules-dat/releases/latest/download/geoip.dat" \
+        && curl -fsL -o /usr/local/bin/bin/geosite_RU.dat "https://github.com/runetfreedom/russia-v2ray-rules-dat/releases/latest/download/geosite.dat" \
         && rm -rf /var/cache/apk/* /tmp/*
 
 VOLUME [ "/etc/x-ui" ]

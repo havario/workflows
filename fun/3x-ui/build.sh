@@ -58,4 +58,4 @@ fi
 
 # Unzip xray and add execute permissions
 unzip -q "Xray-linux-$XRAY_FRAMEWORK.zip" -d ./xray
-[ ! -x "xray/xray" ] && chmod +x xray/xray
+if [ ! -x "xray/xray" ]; then chmod +x xray/xray; fi
