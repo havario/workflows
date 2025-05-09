@@ -21,10 +21,17 @@ SINGBOX_LOGFILE="$SINGBOX_LOGDIR/access.log"
 
 command -v curl >/dev/null 2>&1 || apk add --no-cache curl
 
-STABLE_VERSION=$(curl -fsL "https://api.github.com/repos/SagerNet/sing-box/releases/latest" | awk -F '["v]' '/tag_name/{print $5}')
-BETA_VERSION=$(curl -fsL "https://api.github.com/repos/SagerNet/sing-box/releases" | awk -F '["v]' '/tag_name.*-.*/{print $5;exit}')
-readonly STABLE_VERSION
-[ -z "$STABLE_VERSION" ] && { printf 'Error: Unable to obtain Sing-box version!\n'; exit 1; }
+case "$1" in
+    stable)
+        VERSION=$(curl -fsL "https://api.github.com/repos/SagerNet/sing-box/releases/latest" | awk -F '["v]' '/tag_name/{print $5}')
+    ;;
+    beta)
+        VERSION=$(curl -fsL "https://api.github.com/repos/SagerNet/sing-box/releases" | awk -F '["v]' '/tag_name.*-.*/{print $5;exit}')
+    ;;
+    *)
+        printf 'Error: Unable to obtain Sing-box version!\n' >&2; exit 1;
+    ;;
+esac
 
 # Determine system arch based
 case "$(uname -m)" in
@@ -55,16 +62,11 @@ touch "$SINGBOX_LOGFILE" 1>/dev/null
 cd "$SINGBOX_BINDIR" || { printf 'Error: Failed to enter the sing-box bin directory!\n'; exit 1; }
 
 # Extract and install Sing-Box
-if ! curl -fsL -O "https://github.com/SagerNet/sing-box/releases/download/v${STABLE_VERSION}/sing-box-${STABLE_VERSION}-linux-${SINGBOX_FRAMEWORK}.tar.gz"; then
+if ! curl -fsL -O "https://github.com/SagerNet/sing-box/releases/download/v${VERSION}/sing-box-${VERSION}-linux-${SINGBOX_FRAMEWORK}.tar.gz"; then
     printf 'Error: Download sing-Box failed, please check the network!\n' >&2; exit 1
 fi
 
-tar -zxf "sing-box-${STABLE_VERSION}-linux-${SINGBOX_FRAMEWORK}.tar.gz" --strip-components=1 || { printf 'Error: tar Sing-box package failed!\n'; exit 1;}
-
+tar -zxf "sing-box-${VERSION}-linux-${SINGBOX_FRAMEWORK}.tar.gz" --strip-components=1 || { printf 'Error: tar Sing-box package failed!\n'; exit 1; }
 find . -mindepth 1 -maxdepth 1 ! -name 'sing-box' -exec rm -rf {} +
-
-if [ ! -x "$SINGBOX_BINDIR/sing-box" ]; then
-    chmod +x "$SINGBOX_BINDIR/sing-box"
-fi
-
+[ ! -x "$SINGBOX_BINDIR/sing-box" ] && chmod +x "$SINGBOX_BINDIR/sing-box"
 ln -s "$SINGBOX_BINDIR/sing-box" /usr/local/bin/sing-box
