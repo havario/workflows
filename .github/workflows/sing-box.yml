@@ -82,7 +82,7 @@ jobs:
           fi
           echo "SINGBOX_BETA_LVER=${SINGBOX_BETA_LVER}" >> $GITHUB_ENV
           echo "SINGBOX_BETA_CVER=${SINGBOX_BETA_CVER}" >> $GITHUB_ENV
-          if [[ "$(echo -e "$SINGBOX_BETA_LVER\n$SINGBOX_BETA_CVER" | sort -V | head -n1)" != "$SINGBOX_BETA_LVER" || -z "$SINGBOX_BETA_CVER" ]]; then
+          if [[ "$(printf '%s\n' "$SINGBOX_BETA_LVER" "$SINGBOX_BETA_CVER" | sort -V | head -n1)" != "$SINGBOX_BETA_LVER" || -z "$SINGBOX_BETA_CVER" ]]; then
             echo "IS_RENEW=1" >> $GITHUB_ENV
           fi
 
@@ -110,6 +110,5 @@ jobs:
           push: true
           tags: |
             "${{ env.DOCKER_USERNAME }}/sing-box:${{ env.SINGBOX_BETA_LVER }}"
-            "${{ env.DOCKER_USERNAME }}/sing-box:latest"
           platforms: linux/386, linux/amd64, linux/arm/v6, linux/arm/v7, linux/arm64/v8, linux/ppc64le, linux/riscv64, linux/s390x
           build-args: VERSION=beta
