@@ -76,15 +76,15 @@ reset_user() {
 reset_basepath() {
     local CHOOSE BASEPATH_TEMP
 
-    _yellow '重置Web基础路径'
-    reading '确定要重置web基本路径吗? (y/n): ' 'CHOOSE'
+    _yellow ' 重置Web基础路径'
+    reading ' 确定要重置web基本路径吗? (y/n): ' 'CHOOSE'
     case "$CHOOSE" in
         'Y' | 'y')
             BASEPATH_TEMP=$(generate_string 10)
             # 应用新的web基础路径设置
             3x-ui setting -webBasePath "$BASEPATH_TEMP" >/dev/null 2>&1
-            printf "Web基本路径已重置为: %s\n" "$BASEPATH_TEMP"
-            printf "请使用新的web基础路径访问面板\n"
+            printf " Web基本路径已重置为: %s\n" "$BASEPATH_TEMP"
+            printf " 请使用新的web基础路径访问面板\n"
         ;;
         *)
             show_menu
@@ -96,11 +96,11 @@ reset_basepath() {
 reset_config() {
     local CHOOSE
 
-    reading '您确定要重置所有面板设置, 帐户数据不会丢失, 用户名和密码不会更改! (y/n) ' 'CHOOSE'
+    reading ' 您确定要重置所有面板设置, 帐户数据不会丢失, 用户名和密码不会更改! (y/n) ' 'CHOOSE'
     case "$CHOOSE" in
         'Y' | 'y')
             3x-ui setting -reset
-            printf "所有面板设置均已重置为默认值\n"
+            printf " 所有面板设置均已重置为默认值\n"
         ;;
         *)
             show_menu
@@ -111,11 +111,11 @@ reset_config() {
 
 set_port() {
     local CHOOSE
-    reading '输入端口号[1-65535]: ' 'CHOOSE'
+    reading ' 输入端口号[1-65535]: ' 'CHOOSE'
     case "$CHOOSE" in
         'Y' | 'y')
             3x-ui setting -port "$CHOOSE"
-            printf "设置端口完毕, 现在请重启面板, 并使用新设置的端口 %s 访问面板\n" "$(_green "$CHOOSE")"
+            printf " 设置端口完毕, 现在请重启面板, 并使用新设置的端口 %s 访问面板\n" "$(_green "$CHOOSE")"
         ;;
         *)
             show_menu
@@ -149,7 +149,7 @@ show_menu() {
     echo
     show_status
     echo
-    reading '请输入选择 [0-4], 查看面板登录信息请输入数字5: ' 'CHOOSE'
+    reading ' 请输入选择 [0-5], 查看面板登录信息请输入数字5: ' 'CHOOSE'
     case "$CHOOSE" in
         0) clear_screen; exit 0 ;;
         1) reset_user ;;
@@ -157,7 +157,7 @@ show_menu() {
         3) reset_config ;;
         4) set_port ;;
         5) check_config ;;
-        *) _red '请输入正确的数字 [0-5], 查看面板登录信息请输入数字5!' ;;
+        *) _red ' 请输入正确的数字 [0-5], 查看面板登录信息请输入数字5!' ;;
     esac
 }
 
