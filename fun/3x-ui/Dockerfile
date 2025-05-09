@@ -6,7 +6,7 @@
 # This program is distributed WITHOUT ANY WARRANTY.
 # See <https://www.gnu.org/licenses/old-licenses/gpl-2.0.html>.
 
-FROM --platform=$BUILDPLATFORM golang:alpine AS builder
+FROM --platform=$BUILDPLATFORM golang:1-alpine AS builder
 
 WORKDIR /go/src
 
