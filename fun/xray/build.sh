@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 #
-# Description: This script is used to build xray binary files for multiple architectures.
+# Description: This script builds Xray binaries for multiple architectures and prepares the Xray container runtime environment.
 #
 # Copyright (c) 2025 honeok <honeok@duck.com>
 #
