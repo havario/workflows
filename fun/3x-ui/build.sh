@@ -17,23 +17,23 @@ command -v curl >/dev/null 2>&1 || apk add --no-cache curl
 
 XRAY_VERSION=$(curl -fsL "https://api.github.com/repos/XTLS/Xray-core/releases/latest" | awk -F '["v]' '/tag_name/{print $5}')
 readonly XRAY_VERSION
-[ -z "$XRAY_VERSION" ] && { printf "Error: Unable to obtain xray version!\n" >&2; exit 1; }
+[ -z "$XRAY_VERSION" ] && { printf 'Error: Unable to obtain xray version!\n' >&2; exit 1; }
 
 # map system architecture to framework variable
 case "$(uname -m)" in
     i*86 | x86)
         XRAY_FRAMEWORK='32'
     ;;
-    x86_64 | x64 | amd64)
+    x86_64 | amd64)
         XRAY_FRAMEWORK='64'
     ;;
-    armv6* | armv6)
+    armv6*)
         XRAY_FRAMEWORK='arm32-v6'
     ;;
-    armv7* | armv7 | arm)
+    armv7* | arm)
         XRAY_FRAMEWORK='arm32-v7a'
     ;;
-    armv8* | armv8 | arm64 | aarch64)
+    armv8* | arm64 | aarch64)
         XRAY_FRAMEWORK='arm64-v8a'
     ;;
     s390x)
@@ -46,10 +46,10 @@ esac
 
 cd /tmp || { printf 'Error: permission denied or directory does not exist\n' >&2; exit 1; }
 
-if ! curl -fsSL -O "https://github.com/XTLS/Xray-core/releases/download/v${XRAY_VERSION}/Xray-linux-${XRAY_FRAMEWORK}.zip"; then
+if ! curl -fsL -O "https://github.com/XTLS/Xray-core/releases/download/v${XRAY_VERSION}/Xray-linux-${XRAY_FRAMEWORK}.zip"; then
     printf 'Error: download xray failed, please check the network!\n' >&2; exit 1
 fi
 
 # Unzip xray and add execute permissions
 unzip -q "Xray-linux-$XRAY_FRAMEWORK.zip" -d ./xray
-if [ ! -x "xray/xray" ]; then chmod +x xray/xray; fi
+[ ! -x "xray/xray" ] && chmod +x xray/xray
