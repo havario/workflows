@@ -21,9 +21,9 @@ SINGBOX_BINDIR="$SINGBOX_WORKDIR/bin"
 SINGBOX_CONFDIR="$SINGBOX_WORKDIR/conf"
 SINGBOX_LOGDIR="/var/log/sing-box"
 SINGBOX_LOGFILE="$SINGBOX_LOGDIR/access.log"
-
-PUBLIC_IP=$(curl -fsL -m 5 -4 http://www.qualcomm.cn/cdn-cgi/trace 2>/dev/null | awk -F'=' '/^ip=/ {print $2}' || \
-            curl -fsL -m 5 -6 http://www.qualcomm.cn/cdn-cgi/trace 2>/dev/null | awk -F'=' '/^ip=/ {print $2}')
+CLOUDFLARE_API="www.qualcomm.cn"
+PUBLIC_IP=$(curl -fsL -m 5 -4 "http://$CLOUDFLARE_API/cdn-cgi/trace" 2>/dev/null | awk -F'=' '/^ip=/ {print $2}' || \
+            curl -fsL -m 5 -6 "http://$CLOUDFLARE_API/cdn-cgi/trace" 2>/dev/null | awk -F'=' '/^ip=/ {print $2}')
 
 if [ ! -s "$SINGBOX_BINDIR/tls.key" ] || [ ! -s "$SINGBOX_BINDIR/tls.cer" ]; then
     # tls generation
