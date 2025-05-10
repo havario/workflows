@@ -20,12 +20,12 @@ It can be found at [Docker Hub][3].
 
 ## Start a container
 
-First, you must create a configuration file at  `/etc/sing-box/config.json` on the host:
+First, you must create a configuration file at  `$PWD/config.json` on the host:
 
 This file can be empty.
 
 ```shell
-mkdir -p /etc/sing-box && touch /etc/sing-box/config.json
+touch $PWD/config.json
 ```
 
 Next, to start a container that listens on port `30000`, create a `docker-compose.yml` file in the `/etc/sing-box` directory using the following command:
@@ -43,13 +43,9 @@ services:
     container_name: sing-box
     restart: unless-stopped
     volumes:
-      - /etc/sing-box/config.json:/etc/sing-box/config.json
-      - /etc/sing-box/conf:/etc/sing-box/conf
+      - $PWD/config.json:/etc/sing-box/config.json
+      - $PWD/conf:/etc/sing-box/conf
     network_mode: host
-    cap_add:
-      - NET_ADMIN
-    devices:
-      - /dev/net/tun
 ```
 
 Finally, run the following command to start the container:
