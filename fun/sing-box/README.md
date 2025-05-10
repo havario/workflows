@@ -54,7 +54,7 @@ Finally, run the following command to start the container.
 docker compose up -d
 ```
 
-Get the randomly generated REALITY configuration by viewing the container log.
+Get the randomly generated `REALITY` configuration by viewing the container log.
 
 ```shell
 docker logs -f sing-box
