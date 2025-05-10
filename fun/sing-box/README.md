@@ -54,6 +54,12 @@ Finally, run the following command to start the container:
 docker compose up -d
 ```
 
+Get the randomly generated REALITY configuration by viewing the container log.
+
+```shell
+docker logs -f sing-box
+```
+
 For reference, you can check the [Configuration][4] for Sing-box.
 
 **Warning**: The port number must be same as configuration and opened in firewall.
