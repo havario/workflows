@@ -25,7 +25,7 @@ PUBLIC_IP=$(curl -fsL -m 5 -4 http://www.qualcomm.cn/cdn-cgi/trace 2>/dev/null |
 if [ -d "$XRAY_CONFDIR" ] && [ -z "$(ls -A "$XRAY_CONFDIR" 2>/dev/null)" ]; then
     # https://github.com/XTLS/Xray-core/issues/2005
     TLS_SERVERS="www.icloud.com apps.apple.com music.apple.com icloud.cdn-apple.com updates.cdn-apple.com"
-    GENERATE_UUID=$(cat /proc/sys/kernel/random/uuid)
+    GENERATE_UUID=$(xray uuid || cat /proc/sys/kernel/random/uuid)
     GENERATE_KEYS=$(xray x25519)
     PRIVATE_KEY=$(printf "%s" "$GENERATE_KEYS" | sed -n 's/^Private key: *\(.*\)$/\1/p')
     PUBLIC_KEY=$(printf "%s" "$GENERATE_KEYS" | sed -n 's/^Public key: *\(.*\)$/\1/p')
