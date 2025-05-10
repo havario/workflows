@@ -83,9 +83,7 @@ EOF
 
     {
         echo "-------------------- URL --------------------"
-        echo ""
         echo "vless://${GENERATE_UUID}@${PUBLIC_IP}:30000?encryption=none&security=reality&flow=xtls-rprx-vision&type=tcp&sni=${TLS_SERVER}&pbk=${PUBLIC_KEY}&fp=chrome#REALITY-${PUBLIC_IP}"
-        echo ""
         echo "-------------------- END --------------------"
     } >> "$XRAY_LOGFILE"
 fi
