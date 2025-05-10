@@ -20,7 +20,7 @@ It can be found at [Docker Hub][3].
 
 ## Start a container
 
-First, you must create a configuration file at  `$PWD/config.json` on the host:
+First, you must create a configuration file on your localhost:
 
 This file can be empty.
 
@@ -28,13 +28,13 @@ This file can be empty.
 touch "$PWD/config.json"
 ```
 
-Next, start a container with a listening port of 30000, first create `docker-compose.yml`.
+Next, start a container with a listening port of `30000`, first create `docker-compose.yml`.
 
 ```shell
 vim docker-compose.yml
 ```
 
-Add the following content to the `docker-compose.yml`  file:
+Add the following content to the `docker-compose.yml`  file.
 
 ```yaml
 services:
@@ -48,7 +48,7 @@ services:
     network_mode: host
 ```
 
-Finally, run the following command to start the container:
+Finally, run the following command to start the container.
 
 ```shell
 docker compose up -d
