@@ -1,5 +1,7 @@
 #!/usr/bin/env sh
 #
+# Description: This script to configure Xray proxy in a container.
+#
 # Copyright (c) 2025 honeok <honeok@duck.com>
 #
 # References:
