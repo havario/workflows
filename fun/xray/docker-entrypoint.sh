@@ -22,6 +22,8 @@ XRAY_LOGFILE="$XRAY_LOGDIR/access.log"
 PUBLIC_IP=$(curl -fsL -m 5 -4 http://www.qualcomm.cn/cdn-cgi/trace 2>/dev/null | grep -i '^ip=' | cut -d'=' -f2 | xargs || \
             curl -fsL -m 5 -6 http://www.qualcomm.cn/cdn-cgi/trace 2>/dev/null | grep -i '^ip=' | cut -d'=' -f2 | xargs)
 
+[ ! -s "$XRAY_WORKDIR/config.json" ] && command cp -f "/opt/config.json" "$XRAY_WORKDIR/config.json"
+
 if [ -d "$XRAY_CONFDIR" ] && [ -z "$(ls -A "$XRAY_CONFDIR" 2>/dev/null)" ]; then
     # https://github.com/XTLS/Xray-core/issues/2005
     TLS_SERVERS="www.icloud.com apps.apple.com music.apple.com icloud.cdn-apple.com updates.cdn-apple.com"

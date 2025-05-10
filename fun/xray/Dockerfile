@@ -22,7 +22,7 @@ RUN set -ex \
 FROM alpine:latest
 
 COPY --from=builder /tmp/xray/xray /etc/xray/bin/xray
-COPY config.json /etc/xray/config.json
+COPY config.json /opt/config.json
 COPY build.sh .
 COPY docker-entrypoint.sh /docker-entrypoint.sh
 
