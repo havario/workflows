@@ -25,10 +25,10 @@ First, you must create a configuration file at  `$PWD/config.json` on the host:
 This file can be empty.
 
 ```shell
-touch $PWD/config.json
+touch "$PWD/config.json"
 ```
 
-Next, to start a container that listens on port `30000`, create a `docker-compose.yml` file in the `/etc/sing-box` directory using the following command:
+Next, start a container with a listening port of 30000, first create `docker-compose.yml`.
 
 ```shell
 vim docker-compose.yml
