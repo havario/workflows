@@ -53,3 +53,5 @@ rm -rf DanmakuRender
 tar xf "biliupR-v$BILIUPR_VERSION-$BILIUPR_FRAMEWORK-linux.tar.xz" --strip-components=1
 rm -f "biliupR-v$BILIUPR_VERSION-$BILIUPR_FRAMEWORK-linux.tar.xz"
 mv -f biliup tools/
+
+command cp -rf configs /opt/configs

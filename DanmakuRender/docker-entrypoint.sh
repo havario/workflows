@@ -11,7 +11,7 @@
 
 WORKDIR="/DanmakuRender"
 DANMAKU_CONFIG="$WORKDIR/configs"
-DANMAKU_TEMP_CONFIG="$WORKDIR/configs_temp"
+DANMAKU_TEMP_CONFIG="/opt/configs"
 
 if [ -d "$DANMAKU_CONFIG" ] && [ -z "$(find "$DANMAKU_CONFIG" -mindepth 1 -print -quit)" ]; then
     command cp -rf "$DANMAKU_TEMP_CONFIG"/* "$DANMAKU_CONFIG/"

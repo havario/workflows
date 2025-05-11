@@ -26,12 +26,9 @@ RUN set -ex \
         && chmod +x /docker-entrypoint.sh build.sh \
         && ./build.sh && rm -f build.sh \
         && python3 -m pip install --no-cache-dir -r requirements.txt \
-        && rm -rf configs_temp \
-        && mkdir -p configs_temp \
         && apt-get -y remove --purge \
             git \
         && apt-get clean \
-        && cp -rf configs/* configs_temp/ \
         && rm -rf /var/lib/apt/lists/* /var/log/* /tmp/*
 
 ENTRYPOINT [ "/docker-entrypoint.sh" ]
