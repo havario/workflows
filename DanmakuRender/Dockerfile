@@ -29,7 +29,6 @@ RUN set -ex \
         && python3 -m pip install --no-cache-dir quickjs \
         && apt-get -y remove --purge \
             git \
-            jq \
         && apt-get clean \
         && rm -rf /var/lib/apt/lists/* /var/log/* /tmp/*
 
