@@ -21,7 +21,7 @@ if ! git clone --branch "$DANMAKU_BRANCH" https://github.com/SmallPeaches/Danmak
 fi
 
 DANMAKU_TGA=$(curl -fsL https://api.github.com/repos/SmallPeaches/DanmakuRender/releases/latest | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
-cd DanmakuRender || && { printf 'Error: The DanmakuRender folder does not exist!\n' >&2; exit 1; }
+cd DanmakuRender || { printf 'Error: The DanmakuRender folder does not exist!\n' >&2; exit 1; }
 if ! git checkout "$DANMAKU_TAG"; then
     printf 'Error: tag does not exist!\n' >&2; exit 1
 else
