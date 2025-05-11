@@ -26,6 +26,7 @@ RUN set -ex \
         && chmod +x /docker-entrypoint.sh build.sh \
         && ./build.sh && rm -f build.sh \
         && python3 -m pip install --no-cache-dir -r requirements.txt \
+        && python3 -m pip install --no-cache-dir quickjs \
         && apt-get -y remove --purge \
             git \
         && apt-get clean \
