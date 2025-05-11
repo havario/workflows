@@ -21,8 +21,19 @@ jobs:
 
       - name: 'Fetch Versions and Determine Build'
         run: |
-          REMOTE_BRANCH=$(curl -fsL "https://api.github.com/repos/SmallPeaches/DanmakuRender" | jq -r '.default_branch')
-          echo "REMOTE_BRANCH=${REMOTE_BRANCH}" >> $GITHUB_ENV
+          DANMAKU_CVER=$(curl -fsL "https://hub.docker.com/v2/repositories/honeok/danmakurender/tags" 2>/dev/null | \
+            jq -r ".results // [] | .[].name" | grep -v '^alpine$' | sort -Vr | head -n1 | cut -d'-' -f1 || echo "")
+          DANMAKU_LVER=$(curl -fsL "https://api.github.com/repos/SmallPeaches/DanmakuRender/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
+          DANMAKU_BRANCH=$(curl -fsL "https://api.github.com/repos/SmallPeaches/DanmakuRender" | jq -r '.default_branch')
+          if [[ -z "$DANMAKU_LVER" || -z "$DANMAKU_BRANCH" ]]; then
+            echo 'Error: Required parameters cannot be empty.' && exit 1
+          fi
+          echo "DANMAKU_CVER=${DANMAKU_CVER}" >> $GITHUB_ENV
+          echo "DANMAKU_LVER=${DANMAKU_LVER}" >> $GITHUB_ENV
+          echo "DANMAKU_BRANCH=${DANMAKU_BRANCH}" >> $GITHUB_ENV
+          if [[ "$(echo -e "$DANMAKU_LVER\n$DANMAKU_CVER" | sort -V | head -n1)" != "$DANMAKU_LVER" || -z "$DANMAKU_CVER" ]]; then
+            echo "IS_RENEW=1" >> $GITHUB_ENV
+          fi
 
       - name: 'Set up Docker QEMU'
         if: env.IS_RENEW == 1 || github.event_name == 'workflow_dispatch'
@@ -47,6 +58,6 @@ jobs:
           file: Dockerfile
           push: true
           tags: |
-            "${{ env.DOCKER_USERNAME }}/danmakurender:${{ env.REMOTE_BRANCH }}"
+            "${{ env.DOCKER_USERNAME }}/danmakurender:${{ env.DANMAKU_BRANCH }}-${{ env.DANMAKU_LVER }}"
             "${{ env.DOCKER_USERNAME }}/danmakurender:latest"
           platforms: linux/amd64, linux/arm64/v8
