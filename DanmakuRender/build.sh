@@ -14,6 +14,7 @@ set \
     -o xtrace
 
 command -v curl >/dev/null 2>&1 || apt-get install -y curl
+command -v jq >/dev/null 2>&1 || apt-get install -y jq
 
 DANMAKU_BRANCH=$(curl -fsL https://api.github.com/repos/SmallPeaches/DanmakuRender/branches | jq -r 'sort_by(.commit.committer.date) | last | .name')
 if ! git clone --branch "$DANMAKU_BRANCH" https://github.com/SmallPeaches/DanmakuRender.git; then
