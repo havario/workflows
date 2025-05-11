@@ -32,11 +32,11 @@ case "$(uname -m)" in
 esac
 
 DANMAKU_BRANCH=$(curl -fsL https://api.github.com/repos/SmallPeaches/DanmakuRender/branches | jq -r 'sort_by(.commit.committer.date) | last | .name')
-DANMAKU_TGA=$(curl -fsL https://api.github.com/repos/SmallPeaches/DanmakuRender/releases/latest | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
 if ! git clone --branch "$DANMAKU_BRANCH" https://github.com/SmallPeaches/DanmakuRender.git; then
     printf 'Error: Unable to obtain DanmakuRender source code!\n' >&2; exit 1
 fi
 
+DANMAKU_TGA=$(curl -fsL https://api.github.com/repos/SmallPeaches/DanmakuRender/releases/latest | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
 cd DanmakuRender || && { printf 'Error: The DanmakuRender folder does not exist!\n' >&2; exit 1; }
 if ! git checkout "$DANMAKU_TAG"; then
     printf 'Error: tag does not exist!\n' >&2; exit 1
