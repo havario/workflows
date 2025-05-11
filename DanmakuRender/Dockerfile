@@ -19,7 +19,6 @@ COPY docker-entrypoint.sh /docker-entrypoint.sh
 RUN set -ex \
         && apt-get update \
         && apt-get -y install \
-            curl \
             ffmpeg \
             git \
             nodejs \
