@@ -18,9 +18,14 @@ COPY docker-entrypoint.sh /docker-entrypoint.sh
 
 RUN set -ex \
         && apk update && apk upgrade \
+        && apk add --no-cache --virtual .build-deps \
+            build-base \
+            git \
+            linux-headers \
+            musl-dev \
+            python3-dev \
         && apk add --no-cache \
             ffmpeg \
-            git \
             nodejs \
             npm \
             tzdata \
@@ -28,8 +33,7 @@ RUN set -ex \
         && ./build.sh && rm -f build.sh \
         && python3 -m pip install --no-cache-dir -r requirements.txt \
         && python3 -m pip install --no-cache-dir quickjs \
-        && apk del \
-            git \
+        && apk del .build-deps \
         && rm -rf /var/cache/apk/* /tmp/*
 
 ENV TZ=Asia/Shanghai
