@@ -21,7 +21,7 @@ pkg_install() {
         elif command -v apk >/dev/null 2>&1; then
             apk add --no-cache "$pkg"
         else
-            printf 'The package manager is not supported.\n'; exit 1
+            printf 'The package manager is not supported.\n' >&2; exit 1
         fi
     done
 }
@@ -56,7 +56,7 @@ fi
 # prepare running environment.
 mv -f DanmakuRender/* .
 rm -rf DanmakuRender
-tar xf "biliupR-v$BILIUPR_VERSION-$BILIUPR_FRAMEWORK-linux.tar.xz" --strip-components=1 
+tar xf "biliupR-v$BILIUPR_VERSION-$BILIUPR_FRAMEWORK-linux.tar.xz" --strip-components=1
 rm -f "biliupR-v$BILIUPR_VERSION-$BILIUPR_FRAMEWORK-linux.tar.xz"
 mv -f biliup tools/
 

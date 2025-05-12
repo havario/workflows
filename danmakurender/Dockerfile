@@ -9,7 +9,7 @@
 # Distributed on an "AS IS" basis, WITHOUT WARRANTIES.
 # See http://www.apache.org/licenses/LICENSE-2.0 for details.
 
-FROM python:3.9-slim-bookworm
+FROM python:3.9-alpine
 
 WORKDIR /DanmakuRender
 
@@ -17,8 +17,8 @@ COPY build.sh .
 COPY docker-entrypoint.sh /docker-entrypoint.sh
 
 RUN set -ex \
-        && apt-get update \
-        && apt-get -y install \
+        && apk update && apk upgrade \
+        && apk add --no-cache \
             ffmpeg \
             git \
             nodejs \
@@ -28,10 +28,9 @@ RUN set -ex \
         && ./build.sh && rm -f build.sh \
         && python3 -m pip install --no-cache-dir -r requirements.txt \
         && python3 -m pip install --no-cache-dir quickjs \
-        && apt-get -y remove --purge \
+        && apk del \
             git \
-        && apt-get clean \
-        && rm -rf /var/lib/apt/lists/* /var/log/* /tmp/*
+        && rm -rf /var/cache/apk/* /tmp/*
 
 ENV TZ=Asia/Shanghai
 
