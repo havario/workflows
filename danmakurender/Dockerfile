@@ -19,11 +19,10 @@ COPY docker-entrypoint.sh /docker-entrypoint.sh
 RUN set -ex \
         && apk update && apk upgrade \
         && apk add --no-cache --virtual .build-deps \
-            build-base \
+            cargo \
             git \
-            linux-headers \
-            musl-dev \
             python3-dev \
+            rust \
         && apk add --no-cache \
             ffmpeg \
             nodejs \
@@ -31,8 +30,8 @@ RUN set -ex \
             tzdata \
         && chmod +x /docker-entrypoint.sh build.sh \
         && ./build.sh && rm -f build.sh \
-        && python3 -m pip install --no-cache-dir -r requirements.txt \
-        && python3 -m pip install --no-cache-dir quickjs \
+        && python3 -m pip install --no-cache-dir -r requirements.txt --root-user-action=ignore \
+        && python3 -m pip install --no-cache-dir quickjs --root-user-action=ignore \
         && apk del .build-deps \
         && rm -rf /var/cache/apk/* /tmp/*
 
