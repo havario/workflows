@@ -19,8 +19,11 @@ COPY docker-entrypoint.sh /docker-entrypoint.sh
 RUN set -ex \
         && apk update && apk upgrade \
         && apk add --no-cache --virtual .build-deps \
+            build-base \
             cargo \
             git \
+            linux-headers \
+            musl-dev \
             python3-dev \
             rust \
         && apk add --no-cache \
