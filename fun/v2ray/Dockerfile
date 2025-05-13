@@ -20,7 +20,7 @@ RUN set -ex \
             build-base \
             curl \
             git \
-        && TAG=$(curl -fsL "https://api.github.com/repos/v2fly/v2ray-core/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/') \
+        && TAG=$(curl -fsL --retry 5 "https://api.github.com/repos/v2fly/v2ray-core/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/') \
         && git clone --depth=1 --branch "$TAG" https://github.com/v2fly/v2ray-core.git \
         && cd v2ray-core \
         && CGO_ENABLED=0 GOOS=linux go build -v -trimpath -ldflags="-s -w -buildid=" -o /go/bin/v2ray ./main \
