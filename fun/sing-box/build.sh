@@ -24,10 +24,10 @@ case "$1" in
         VERSION=$(curl -fsL --retry 5 "https://api.github.com/repos/SagerNet/sing-box/releases/latest" | awk -F '["v]' '/tag_name/{print $5}')
     ;;
     beta)
-        VERSION=$(curl -fsL --retry 5 "https://api.github.com/repos/SagerNet/sing-box/releases" | awk -F '"' '/tag_name/ && /-beta/ {sub(/^v/, "", $4); print $4; exit}')
+        VERSION=$(curl -fsL --retry 5 "https://api.github.com/repos/SagerNet/sing-box/releases" | awk -F '"' '/tag_name/ && /-beta/ {sub(/^v/, "", $4); print $4}' | sort -Vr | head -n1)
     ;;
     alpha)
-        VERSION=$(curl -fsL --retry 5 "https://api.github.com/repos/SagerNet/sing-box/releases" | awk -F '"' '/tag_name/ && /-alpha/ {sub(/^v/, "", $4); print $4; exit}')
+        VERSION=$(curl -fsL --retry 5 "https://api.github.com/repos/SagerNet/sing-box/releases" | awk -F '"' '/tag_name/ && /-alpha/ {sub(/^v/, "", $4); print $4}' | sort -Vr | head -n1)
     ;;
     *)
         printf 'Error: Unable to determine Sing-box version!\n' >&2; exit 1;

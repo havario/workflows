@@ -75,7 +75,7 @@ jobs:
 
       - name: 'Fetch Versions and Determine Build'
         run: |
-          SINGBOX_BETA_LVER=$(curl -fsL --retry 5 "https://api.github.com/repos/SagerNet/sing-box/releases" | awk -F '"' '/tag_name/ && /-beta/ {sub(/^v/, "", $4); print $4; exit}')
+          SINGBOX_BETA_LVER=$(curl -fsL --retry 5 "https://api.github.com/repos/SagerNet/sing-box/releases" | awk -F '"' '/tag_name/ && /-beta/ {sub(/^v/, "", $4); print $4}' | sort -Vr | head -n1)
           SINGBOX_BETA_CVER=$(curl -fsL --retry 5 "https://hub.docker.com/v2/repositories/honeok/sing-box/tags" 2>/dev/null | \
             jq -r ".results // [] | .[].name" | grep -v '^latest$' | grep 'beta' | sort -Vr | head -n1 || echo "")
           if [[ -z "$SINGBOX_BETA_LVER" ]]; then
@@ -126,7 +126,7 @@ jobs:
 
       - name: 'Fetch Versions and Determine Build'
         run: |
-          SINGBOX_ALPHA_LVER=$(curl -fsL --retry 5 "https://api.github.com/repos/SagerNet/sing-box/releases" | awk -F '"' '/tag_name/ && /-alpha/ {sub(/^v/, "", $4); print $4; exit}')
+          SINGBOX_ALPHA_LVER=$(curl -fsL --retry 5 "https://api.github.com/repos/SagerNet/sing-box/releases" | awk -F '"' '/tag_name/ && /-alpha/ {sub(/^v/, "", $4); print $4}' | sort -Vr | head -n1)
           SINGBOX_ALPHA_CVER=$(curl -fsL --retry 5 "https://hub.docker.com/v2/repositories/honeok/sing-box/tags" 2>/dev/null | \
             jq -r ".results // [] | .[].name" | grep -v '^latest$' | grep 'alpha' | sort -Vr | head -n1 || echo "")
           if [[ -z "$SINGBOX_ALPHA_LVER" ]]; then
