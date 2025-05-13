@@ -32,4 +32,18 @@ FROM alpine:latest
 
 COPY --from=builder /go/bin/v2ray /usr/bin/v2ray
 
+RUN set -ex \
+        && apk update && apk upgrade \
+        && apk add --no-cache \
+            ca-certificates \
+            curl \
+            tzdata \
+        && mkdir -p /usr/share/v2ray /var/log/v2ray \
+        && curl -fsL -o /usr/share/v2ray/geoip.dat "https://github.com/v2fly/geoip/releases/latest/download/geoip.dat" \
+        && curl -fsL -o /usr/share/v2ray/geosite.dat "https://github.com/v2fly/domain-list-community/releases/latest/download/dlc.dat" \
+        && curl -fsL -o /usr/share/v2ray/geoip-only-cn-private.dat "https://github.com/v2fly/geoip/releases/latest/download/geoip-only-cn-private.dat" \
+        && rm -rf /var/cache/apk/* /tmp/*
+
+ENV TZ=Asia/Shanghai
+
 ENTRYPOINT ["/usr/bin/v2ray"]
