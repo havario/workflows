@@ -8,10 +8,7 @@
 # This program is distributed WITHOUT ANY WARRANTY.
 # See <https://www.gnu.org/licenses/old-licenses/gpl-2.0.html>.
 
-set \
-    -o errexit \
-    -o nounset \
-    -o xtrace
+set -eux
 
 # Run default path
 SINGBOX_WORKDIR="/etc/sing-box"
