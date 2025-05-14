@@ -30,8 +30,10 @@ RUN set -ex \
 
 FROM alpine:latest
 
-COPY --from=builder /go/bin/v2ray /usr/bin/v2ray
+COPY --from=builder /go/bin/v2ray /etc/v2ray/bin/v2ray
+COPY config.json /opt/config.json
 COPY build.sh .
+COPY docker-entrypoint.sh /docker-entrypoint.sh
 
 RUN set -ex \
         && apk update \
@@ -39,16 +41,15 @@ RUN set -ex \
             ca-certificates \
             curl \
             tzdata \
-        && chmod +x build.sh && ./build.sh && rm -f build.sh \
-        && mkdir -p /usr/share/v2ray /var/log/v2ray \
-        && touch /var/log/v2ray/access.log  /var/log/v2ray/error.log \
-        && curl -fsL -o /usr/share/v2ray/geoip.dat "https://github.com/v2fly/geoip/releases/latest/download/geoip.dat" \
-        && curl -fsL -o /usr/share/v2ray/geosite.dat "https://github.com/v2fly/domain-list-community/releases/latest/download/dlc.dat" \
-        && curl -fsL -o /usr/share/v2ray/geoip-only-cn-private.dat "https://github.com/v2fly/geoip/releases/latest/download/geoip-only-cn-private.dat" \
+        && chmod +x /docker-entrypoint.sh build.sh \
+        && ./build.sh && rm -f build.sh \
+        && curl -fsL -o /etc/v2ray/bin/geoip.dat "https://github.com/v2fly/geoip/releases/latest/download/geoip.dat" \
+        && curl -fsL -o /etc/v2ray/bin/geosite.dat "https://github.com/v2fly/domain-list-community/releases/latest/download/dlc.dat" \
+        && curl -fsL -o /etc/v2ray/bin/geoip-only-cn-private.dat "https://github.com/v2fly/geoip/releases/latest/download/geoip-only-cn-private.dat" \
         && ln -sf /dev/stdout /var/log/v2ray/access.log \
         && ln -sf /dev/stderr /var/log/v2ray/error.log \
         && rm -rf /var/cache/apk/* /tmp/*
 
 ENV TZ=Asia/Shanghai
 
-ENTRYPOINT ["/usr/bin/v2ray"]
+ENTRYPOINT ["/docker-entrypoint.sh"]

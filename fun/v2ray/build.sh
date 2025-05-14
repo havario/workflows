@@ -10,3 +10,14 @@
 
 set -eux
 
+# Run default path
+V2RAY_WORKDIR="/etc/v2ray"
+V2RAY_BINDIR="$V2RAY_WORKDIR/bin"
+V2RAY_CONFDIR="$V2RAY_WORKDIR/conf"
+V2RAY_LOGDIR="/var/log/v2ray"
+V2RAY_ACCESS_LOG="$V2RAY_LOGDIR/access.log"
+V2RAY_ERROR_LOG="$V2RAY_LOGDIR/error.log"
+
+mkdir -p "$V2RAY_WORKDIR" "$V2RAY_BINDIR" "$V2RAY_CONFDIR" "$V2RAY_LOGDIR" >/dev/null 2>&1
+touch "$V2RAY_ACCESS_LOG" "$V2RAY_ERROR_LOG" >/dev/null 2>&1
+ln -sf "$V2RAY_BINDIR/v2ray" /usr/local/bin/v2ray
