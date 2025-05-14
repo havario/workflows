@@ -21,10 +21,7 @@
 # Optional flags:
 #            -f false|true \           # force dns update, disregard local stored ip
 
-set \
-    -o errexit \
-    -o nounset \
-    -o pipefail
+set -euo pipefail
 
 # API key, see https://dash.cloudflare.com/profile/api-tokens
 # incorrect api-key results in E_UNAUTH error
