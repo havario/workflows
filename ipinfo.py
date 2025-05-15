@@ -5,34 +5,34 @@ import json
 import socket
 import signal
 import sys
+import time
 
 class RequestHandler(http.server.BaseHTTPRequestHandler):
     def do_GET(self):
         try:
-            # 获取 X-Forwarded-For 头部
+            # 初始化响应，包含时间戳
+            response = {'code': 1, 'client_ip': 'Unknown', 'timestamp': int(time.time())}
+            
+            # 获取 IP 候选
+            ip_candidates = []
             x_forwarded_for = self.headers.get('X-Forwarded-For')
-            response = {'code': 1, 'client_ip': 'Unknown'}
-
             if x_forwarded_for:
-                for ip in [ip.strip() for ip in x_forwarded_for.split(',')]:
-                    try:
-                        ipaddress.ip_address(ip)
-                        response = {'code': 0, 'client_ip': ip}
-                        break
-                    except ValueError:
-                        continue
-            else:
-                if self.client_address and self.client_address[0]:
-                    try:
-                        ipaddress.ip_address(self.client_address[0])
-                        response = {'code': 0, 'client_ip': self.client_address[0]}
-                    except ValueError:
-                        pass
+                ip_candidates.extend(ip.strip() for ip in x_forwarded_for.split(','))
+            if self.client_address and self.client_address[0]:
+                ip_candidates.append(self.client_address[0])
 
-            # 准备 JSON 响应
-            response_body = json.dumps(response).encode('utf-8')
+            # 验证第一个有效 IP
+            for ip in ip_candidates:
+                try:
+                    ipaddress.ip_address(ip)
+                    response['code'] = 0
+                    response['client_ip'] = ip
+                    break
+                except ValueError:
+                    continue
 
             # 发送响应
+            response_body = json.dumps(response).encode('utf-8')
             self.send_response(200)
             self.send_header('Content-Type', 'application/json')
             self.send_header('Content-Length', len(response_body))
@@ -43,7 +43,7 @@ class RequestHandler(http.server.BaseHTTPRequestHandler):
             # 客户端断开连接，静默处理
             pass
         except Exception:
-            response = {'code': 2, 'client_ip': 'Unknown'}
+            response = {'code': 2, 'client_ip': 'Unknown', 'timestamp': int(time.time())}
             response_body = json.dumps(response).encode('utf-8')
             self.send_response(500)
             self.send_header('Content-Type', 'application/json')
