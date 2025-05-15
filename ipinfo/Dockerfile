@@ -6,11 +6,11 @@
 # This software is provided "as is", without any warranty.
 
 FROM python:3.13-alpine3.21
-COPY ipinfo.py /usr/local/bin/ipinfo
+COPY ipinfo.py /usr/bin/ipinfo
 RUN apk update && apk upgrade \
-    && chmod +x /usr/local/bin/ipinfo \
+    && chmod +x /usr/bin/ipinfo \
     && apk add --no-cache \
         tzdata \
     && rm -rf /var/cache/apk/* /tmp/*
 ENV TZ=Asia/Shanghai
-ENTRYPOINT [ "ipinfo" ]
+ENTRYPOINT [ "/usr/bin/ipinfo" ]
