@@ -1,0 +1,8 @@
+services:
+  bserver:
+    image: registry.cn-chengdu.aliyuncs.com/havario/ipinfo:0.0.1
+    container_name: ipinfo
+    restart: unless-stopped
+    ports:
+      - 8000:8000
+    network_mode: bridge
