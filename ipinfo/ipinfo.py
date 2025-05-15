@@ -19,7 +19,7 @@ import time
 class RequestHandler(http.server.BaseHTTPRequestHandler):
     def do_GET(self):
         try:
-            # 初始化响应，包含时间戳
+            # 初始化响应
             response = {'code': 1, 'client_ip': 'Unknown', 'timestamp': int(time.time())}
             
             # 获取 IP 候选
