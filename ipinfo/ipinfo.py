@@ -2,7 +2,7 @@
 #
 # Description: Lightweight server that returns the client IP from the X-Forwarded-For header or remote address.
 #
-# Copyright (c) 2024-2025 honeok <honeok@duck.com>
+# Copyright (c) 2025 honeok <honeok@duck.com>
 #
 # Licensed under the MIT License.
 # This software is provided "as is", without any warranty.
