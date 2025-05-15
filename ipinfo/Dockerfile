@@ -7,8 +7,7 @@
 
 FROM python:3.13-alpine3.21
 COPY ipinfo.py /usr/local/bin/ipinfo
-RUN set -ex \
-    && apk update && apk upgrade \
+RUN apk update && apk upgrade \
     && chmod +x /usr/local/bin/ipinfo \
     && apk add --no-cache \
         tzdata \
