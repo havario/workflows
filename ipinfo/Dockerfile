@@ -13,4 +13,5 @@ RUN apk upgrade \
     && rm -rf /var/cache/apk/* /tmp/*
 EXPOSE 8000
 ENV TZ=Asia/Shanghai
+ENV PYTHONUNBUFFERED=1
 ENTRYPOINT [ "python3", "ipinfo.py" ]
