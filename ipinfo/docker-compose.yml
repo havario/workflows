@@ -1,5 +1,5 @@
 services:
-  bserver:
+  ipinfo:
     image: registry.cn-chengdu.aliyuncs.com/havario/ipinfo:0.0.1
     container_name: ipinfo
     restart: unless-stopped
