@@ -1,5 +1,8 @@
 ## KMS Server Docker Image by honeok
 
+[![Docker Pulls](https://img.shields.io/docker/pulls/honeok/kms.svg?style=flat-square)](https://hub.docker.com/r/honeok/kms)
+[![Docker Image Size](https://img.shields.io/docker/image-size/honeok/kms.svg?style=flat-square)](https://hub.docker.com/r/honeok/kms)
+
 This is A fully Microsoft compatible KMS server with Docker Image.
 
 vlmcsd is a fully Microsoft compatible KMS server that provides product activation services to clients. It is meant as a drop-in replacement for a Microsoft KMS server (Windows computer with KMS key entered). It currently supports KMS protocol versions 4, 5 and 6.
