@@ -29,6 +29,11 @@ RUN set -ex \
 
 FROM alpine:latest
 COPY --from=builder /vlmcsd/bin/vlmcsd /usr/bin/vlmcsd
+RUN set -ex \
+    && apk upgrade \
+    && apk add --no-cache tzdata \
+    && rm -rf /var/cache/apk/* /tmp/*
+ENV TZ=Asia/Shanghai
 EXPOSE 1688
 ENTRYPOINT [ "vlmcsd" ]
 CMD [ "-D", "-e" ]
