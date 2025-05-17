@@ -4,7 +4,7 @@ services:
     container_name: ipinfo
     restart: unless-stopped
     ports:
-      - 20008:80
+      - 80:80
     environment:
       - TZ=Asia/Shanghai
     volumes:
