@@ -12,34 +12,25 @@
 # Distributed on an "AS IS" basis, WITHOUT WARRANTIES.
 # See http://www.apache.org/licenses/LICENSE-2.0 for details.
 
-# Usage:
-# cf-ddns.sh -k cloudflare-api-key \
-#            -h host.example.com \     # fqdn of the record you want to update
-#            -z example.com \          # will show you all zones if forgot, but you need this
-#            -t A|AAAA                 # specify ipv4/ipv6, default: ipv4
-
-# Optional flags:
-#            -f false|true \           # force dns update, disregard local stored ip
-
-set -euo pipefail
+set -eu
 
 # API key, see https://dash.cloudflare.com/profile/api-tokens
-# incorrect api-key results in E_UNAUTH error
+# 不正确的 api-key 会导致 E_UNAUTH 错误
 CFKEY=
 
-# Zone name, eg: example.com
+# 区域名称 例如: example.com
 CFZONE_NAME=
 
-# Hostname to update, eg: homeserver.example.com
+# 要更新的主机名 例如: homeserver.example.com
 CFRECORD_NAME=
 
-# Record type, A(IPv4)|AAAA(IPv6), default IPv4
+# 记录类型 A(IPv4)|AAAA(IPv6) 默认 IPv4
 CFRECORD_TYPE=A
 
-# Cloudflare TTL for record, between 120 and 86400 seconds
-CFTTL=60
+# Cloudflare TTL记录 介于120到86400秒之间
+CFTTL=120
 
-# Ignore local file, update ip anyway
+# 忽略本地文件 仍然更新IP
 FORCE=false
 
 WANIPSITE="http://ipv4.icanhazip.com"
@@ -54,14 +45,14 @@ else
     exit 2
 fi
 
-# get parameter
+# 获取参数
 while getopts k:h:z:t:f: opts; do
-    case ${opts} in
-        k) CFKEY=${OPTARG} ;;
-        h) CFRECORD_NAME=${OPTARG} ;;
-        z) CFZONE_NAME=${OPTARG} ;;
-        t) CFRECORD_TYPE=${OPTARG} ;;
-        f) FORCE=${OPTARG} ;;
+    case "$opts" in
+        k) CFKEY="$OPTARG" ;;
+        h) CFRECORD_NAME="$OPTARG" ;;
+        z) CFZONE_NAME="$OPTARG" ;;
+        t) CFRECORD_TYPE="$OPTARG" ;;
+        f) FORCE="$OPTARG" ;;
     esac
 done
 
