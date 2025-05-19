@@ -41,7 +41,7 @@ gamedb1_bak() {
 
     # 执行备份
     for database in "${DATABASES_1[@]}"; do
-        /usr/bin/mysqldump "${BAK_PARAMETERS[@]}" -h "${GAMEDB_1[MYSQL_IP_GAMEDB1]}" -P "${GAMEDB_1[MYSQL_PORT_GAMEDB1]}" -u "${GAMEDB_1[MYSQL_USER_GAMEDB1]}" -p"${GAMEDB_1[MYSQL_PASSWD_GAMEDB1]}" -R "$database" > "$WORKDIR_TMP/${database}_$(date +%Y%m%d%H%M%S).sql" 2>/dev/null
+        /usr/bin/mysqldump "${BAK_PARAMETERS[@]}" -h "${GAMEDB_1[MYSQL_IP_GAMEDB1]}" -P "${GAMEDB_1[MYSQL_PORT_GAMEDB1]}" -u "${GAMEDB_1[MYSQL_USER_GAMEDB1]}" -p"${GAMEDB_1[MYSQL_PASSWD_GAMEDB1]}" -R "$database" > "$WORKDIR_TMP/${database}_$(LC_TIME="en_DK.UTF-8" TZ=Asia/Shanghai date +%Y.%m.%d-%H:%M:%S).sql" 2>/dev/null
         _suc_msg "$(_green "$database Backup Complete!")"
     done
 }
