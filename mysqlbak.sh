@@ -72,19 +72,19 @@ pre_check() {
             error_and_exit "$pkg command does not exist."
         fi
     done
-    (env | grep -qi '^MYSQL') || error_and_exit "No valid mysql variable found."
+    { env | grep -qi '^MYSQL'; } || error_and_exit "No valid mysql variable found."
 }
 
 before_run() {
    local GAMEDB_DIR="$1"
-   ([ -n "$GAMEDB_DIR" ] && [ ! -d "$GAMEDB_DIR" ]) && mkdir -p "$GAMEDB_DIR" >/dev/null 2>&1
+   { [ -n "$GAMEDB_DIR" ] && [ ! -d "$GAMEDB_DIR" ]; } && mkdir -p "$GAMEDB_DIR" >/dev/null 2>&1
    [ ! -d "$TEMPDIR" ] && mkdir -p "$TEMPDIR" >/dev/null 2>&1
 }
 
 # 用于将临时路径的sql文件移动到最终存储路径
 after_run() {
     local GAMEDB_DIR="$1"
-    ([ -n "$GAMEDB_DIR" ] && cd "$GAMEDB_DIR") || error_and_exit "The path is incorrect or there is no permission."
+    { [ -n "$GAMEDB_DIR" ] && cd "$GAMEDB_DIR"; } || error_and_exit "The path is incorrect or there is no permission."
     rm -rf "${GAMEDB_DIR:?Error: Game directory not set}"/* >/dev/null 2>&1
     mv -f "$TEMPDIR"/* "$GAMEDB_DIR" >/dev/null 2>&1
     rm -rf "${TEMPDIR:?Error: Temp directory not set}" >/dev/null 2>&1
