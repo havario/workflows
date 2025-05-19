@@ -76,14 +76,14 @@ pre_check() {
 
 before_run() {
    local GAMEDB_DIR="$1"
-   [ -n "$GAMEDB_DIR" ] && [ ! -d "$GAMEDB_DIR" ] && mkdir -p "$GAMEDB_DIR" >/dev/null 2>&1
+   ([ -n "$GAMEDB_DIR" ] && [ ! -d "$GAMEDB_DIR" ]) && mkdir -p "$GAMEDB_DIR" >/dev/null 2>&1
    [ ! -d "$TMPDIR" ] && mkdir -p "$TMPDIR" >/dev/null 2>&1
 }
 
 # 用于将临时路径的sql文件移动到最终存储路径
 after_run() {
     local GAMEDB_DIR="$1"
-    ( [ -n "$GAMEDB_DIR" ] && cd "$GAMEDB_DIR" ) || error_and_exit "The path is incorrect or there is no permission."
+    ([ -n "$GAMEDB_DIR" ] && cd "$GAMEDB_DIR") || error_and_exit "The path is incorrect or there is no permission."
     rm -rf ./* >/dev/null 2>&1
     mv -f ../tmp/* . >/dev/null 2>&1
     rm -rf "$TMPDIR" >/dev/null 2>&1
