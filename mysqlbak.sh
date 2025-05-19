@@ -20,7 +20,7 @@ _suc_msg() { printf "\033[42m\033[1mSuccess\033[0m %s\n" "$*"; }
 # 各变量默认值
 MYSQLBAK_PID="/tmp/mysqlbak.pid"
 WORKDIR="/data/dbback"
-TMPDIR="/data/dbback/tmp"
+TEMPDIR="/data/dbback/temp"
 
 # mysqdump备份参数
 BAK_PARAMETERS=(--no-defaults --single-transaction --set-gtid-purged=OFF)
@@ -48,7 +48,7 @@ clear_screen() {
 }
 
 # 用于检查命令是否存在
-is_exists() {
+_is_exists() {
     local _CMD="$1"
     if command -v "$_CMD" >/dev/null 2>&1; then return 0;
     elif type "$_CMD" >/dev/null 2>&1; then return 0;
@@ -68,7 +68,7 @@ pre_check() {
         error_and_exit "This script needs to be run with bash, not sh!"
     fi
     for pkg in "${DEPEND_PKG[@]}"; do
-        if ! is_exists "$pkg"; then
+        if ! _is_exists "$pkg"; then
             error_and_exit "$pkg command does not exist."
         fi
     done
@@ -77,7 +77,7 @@ pre_check() {
 before_run() {
    local GAMEDB_DIR="$1"
    ([ -n "$GAMEDB_DIR" ] && [ ! -d "$GAMEDB_DIR" ]) && mkdir -p "$GAMEDB_DIR" >/dev/null 2>&1
-   [ ! -d "$TMPDIR" ] && mkdir -p "$TMPDIR" >/dev/null 2>&1
+   [ ! -d "$TEMPDIR" ] && mkdir -p "$TEMPDIR" >/dev/null 2>&1
 }
 
 # 用于将临时路径的sql文件移动到最终存储路径
@@ -85,8 +85,8 @@ after_run() {
     local GAMEDB_DIR="$1"
     ([ -n "$GAMEDB_DIR" ] && cd "$GAMEDB_DIR") || error_and_exit "The path is incorrect or there is no permission."
     rm -rf "${GAMEDB_DIR:?Error: Game directory not set}"/* >/dev/null 2>&1
-    mv -f "$TMPDIR"/* "$GAMEDB_DIR" >/dev/null 2>&1
-    rm -rf "${TMPDIR:?Error: Temp directory not set}" >/dev/null 2>&1
+    mv -f "$TEMPDIR"/* "$GAMEDB_DIR" >/dev/null 2>&1
+    rm -rf "${TEMPDIR:?Error: Temp directory not set}" >/dev/null 2>&1
 }
 
 gamedb1_bak() {
@@ -119,7 +119,7 @@ gamedb1_bak() {
         -P "${GAMEDB[MYSQL_PORT_GAMEDB1]}" \
         -u "${GAMEDB[MYSQL_USER_GAMEDB1]}" \
         -p"${GAMEDB[MYSQL_PASSWD_GAMEDB1]}" \
-        -R "$database" > "$TMPDIR/${database}_$(LC_TIME="en_DK.UTF-8" TZ=Asia/Shanghai date +%Y.%m.%d-%H:%M:%S).sql" 2>/dev/null
+        -R "$database" > "$TEMPDIR/${database}_$(LC_TIME="en_DK.UTF-8" TZ=Asia/Shanghai date +%Y.%m.%d-%H:%M:%S).sql" 2>/dev/null
         _suc_msg "$(_green "$database Backup Complete!")"
     done
     after_run "$GAMEDB_DIR"
