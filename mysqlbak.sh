@@ -39,7 +39,7 @@ gamedb1_bak() {
         DATABASES+=("$DB")
     done < <(mysql -h "${GAMEDB[MYSQL_IP_GAMEDB1]}" \
             -u "${GAMEDB[MYSQL_USER_GAMEDB1]}" \
-            -p"${GAMEDB[MYSQL_PASSWD_GAMEDB1]}" \
+            -p "${GAMEDB[MYSQL_PASSWD_GAMEDB1]}" \
             -e "SHOW DATABASES;" 2>/dev/null | grep -Ev "(Database|information_schema|mysql|performance_schema|sys)")
 
     # 执行备份
