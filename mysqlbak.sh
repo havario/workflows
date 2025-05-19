@@ -126,6 +126,7 @@ gamedb1_bak() {
 }
 
 mysqlbak() {
+    clear_screen
     pre_check
     gamedb1_bak
 }
