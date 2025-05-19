@@ -84,8 +84,8 @@ before_run() {
 after_run() {
     local GAMEDB_DIR="$1"
     ([ -n "$GAMEDB_DIR" ] && cd "$GAMEDB_DIR") || error_and_exit "The path is incorrect or there is no permission."
-    rm -rf ./* >/dev/null 2>&1
-    mv -f ../tmp/* . >/dev/null 2>&1
+    rm -rf "$GAMEDB_DIR"/* >/dev/null 2>&1
+    mv -f "$TMPDIR"/* "$GAMEDB_DIR" >/dev/null 2>&1
     rm -rf "$TMPDIR" >/dev/null 2>&1
 }
 
@@ -109,7 +109,7 @@ gamedb1_bak() {
         DATABASES+=("$DB")
     done < <(mysql -h "${GAMEDB[MYSQL_IP_GAMEDB1]}" \
             -u "${GAMEDB[MYSQL_USER_GAMEDB1]}" \
-            -p "${GAMEDB[MYSQL_PASSWD_GAMEDB1]}" \
+            -p"${GAMEDB[MYSQL_PASSWD_GAMEDB1]}" \
             -e "SHOW DATABASES;" 2>/dev/null | grep -Ev "(Database|information_schema|mysql|performance_schema|sys)")
 
     # 执行备份
@@ -118,7 +118,7 @@ gamedb1_bak() {
         -h "${GAMEDB[MYSQL_IP_GAMEDB1]}" \
         -P "${GAMEDB[MYSQL_PORT_GAMEDB1]}" \
         -u "${GAMEDB[MYSQL_USER_GAMEDB1]}" \
-        -p "${GAMEDB[MYSQL_PASSWD_GAMEDB1]}" \
+        -p"${GAMEDB[MYSQL_PASSWD_GAMEDB1]}" \
         -R "$database" > "$TMPDIR/${database}_$(LC_TIME="en_DK.UTF-8" TZ=Asia/Shanghai date +%Y.%m.%d-%H:%M:%S).sql" 2>/dev/null
         _suc_msg "$(_green "$database Backup Complete!")"
     done
