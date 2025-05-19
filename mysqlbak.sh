@@ -120,9 +120,9 @@ gamedb1_bak() {
         -u "${GAMEDB[MYSQL_USER_GAMEDB1]}" \
         -p "${GAMEDB[MYSQL_PASSWD_GAMEDB1]}" \
         -R "$database" > "$TMPDIR/${database}_$(LC_TIME="en_DK.UTF-8" TZ=Asia/Shanghai date +%Y.%m.%d-%H:%M:%S).sql" 2>/dev/null
+        _suc_msg "$(_green "$database Backup Complete!")"
     done
     after_run "$GAMEDB_DIR"
-    _suc_msg "$(_green "$database Backup Complete!")"
 }
 
 mysqlbak() {
