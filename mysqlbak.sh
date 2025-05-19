@@ -84,7 +84,7 @@ before_run() {
 after_run() {
     local GAMEDB_DIR="$1"
     ([ -n "$GAMEDB_DIR" ] && cd "$GAMEDB_DIR") || error_and_exit "The path is incorrect or there is no permission."
-    rm -rf "$GAMEDB_DIR"/* >/dev/null 2>&1
+    rm -rf "${GAMEDB_DIR:?Error: Directory not set}"/* >/dev/null 2>&1
     mv -f "$TMPDIR"/* "$GAMEDB_DIR" >/dev/null 2>&1
     rm -rf "$TMPDIR" >/dev/null 2>&1
 }
