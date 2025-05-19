@@ -120,7 +120,7 @@ gamedb1_bak() {
         -P "${GAMEDB[MYSQL_PORT_GAMEDB1]}" \
         -u "${GAMEDB[MYSQL_USER_GAMEDB1]}" \
         -p"${GAMEDB[MYSQL_PASSWD_GAMEDB1]}" \
-        -R "$database" > "$TEMPDIR/${database}_$(LC_TIME="en_DK.UTF-8" TZ=Asia/Shanghai date +%Y.%m.%d-%H:%M:%S).sql" 2>/dev/null
+        -R "$database" > "$TEMPDIR/${database}_$(LC_TIME="en_DK.UTF-8" TZ=Asia/Shanghai date +%Y%m%d%H%M%S).sql" 2>/dev/null
         _suc_msg "$(_green "$database Backup Complete!")" || error_and_exit "$database Backup fail."
     done
     after_run "$GAMEDB_DIR"
