@@ -5,7 +5,7 @@
 
 This is a fully self-contained FlappyBird game server with Docker image.
 
-FlappyBird Docker image is a lightweight, browser-based FlappyBird game container for demos, testing, or embedded use. Built with JavaScript, CSS, and HTML.
+The FlappyBird Docker image is a lightweight, browser-based FlappyBird game server that can be used for demonstrations, testing, or embedded use. It is built with JavaScript, CSS, and HTML.
 
 Runs on any POSIX-compatible OS with minimal graphics or web support. It can be deployed locally, on servers, Raspberry Pi, or smart devices.
 
