@@ -5,7 +5,7 @@
 
 This is a fully self-contained FlappyBird game server with Docker image.
 
-The FlappyBird Docker image is a lightweight, browser-based FlappyBird game server that can be used for demonstrations, testing, or embedded use. It is built with JavaScript, CSS, and HTML.
+The [FlappyBird][1] Docker image is a lightweight, browser-based FlappyBird game server that can be used for demonstrations, testing, or embedded use. It is built with JavaScript, CSS, and HTML.
 
 Runs on any POSIX-compatible OS with minimal graphics or web support. It can be deployed locally, on servers, Raspberry Pi, or smart devices.
 
@@ -14,9 +14,9 @@ Runs on any POSIX-compatible OS with minimal graphics or web support. It can be 
 ## Prepare the host
 
 Docker images are built for quick deployment in various computing cloud providers.
-For more information on docker and containerization technologies, refer to [official document][1].
+For more information on docker and containerization technologies, refer to [official document][2].
 
-If you need to install docker by yourself, follow the [official installation guide][2].
+If you need to install docker by yourself, follow the [official installation guide][3].
 
 ## Pull the image
 
@@ -25,7 +25,7 @@ docker pull honeok/flappybird
 ```
 
 This pulls the latest release of KMS Server.
-It can be found at [Docker Hub][3].
+It can be found at [Docker Hub][4].
 
 ## Start a container
 
@@ -35,6 +35,7 @@ docker run -d -p 80:80 --name flappybird --restart=unless-stopped honeok/flappyb
 
 **Note**: The TCP port number `80` must be opened in firewall.
 
-[1]: https://docs.docker.com
-[2]: https://docs.docker.com/install
-[3]: https://hub.docker.com/r/honeok/flappybird
+[1]: https://github.com/noanonoa/flappy-bird
+[2]: https://docs.docker.com
+[3]: https://docs.docker.com/install
+[4]: https://hub.docker.com/r/honeok/flappybird
