@@ -9,7 +9,7 @@
 FROM unityci/editor:2018.2.0f1-webgl-3.1.0 AS builder
 WORKDIR /AngryBirds
 RUN set -ex \
-    apt-get update && apt-get install git \
+    && apt-get update && apt-get install git \
     && git clone --branch master --single-branch https://github.com/fctony/AngryBirds.git . \
     && unity-editor \
         -batchmode \
