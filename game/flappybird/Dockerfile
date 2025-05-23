@@ -8,7 +8,7 @@
 
 FROM nginx:stable-alpine
 
-# RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
+# RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.nju.edu.cn/g' /etc/apk/repositories
 
 RUN set -ex \
     && apk update && apk upgrade \
