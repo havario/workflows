@@ -80,7 +80,8 @@ if [ -d "$SINGBOX_CONFDIR" ] && [ -z "$(ls -A "$SINGBOX_CONFDIR" 2>/dev/null)" ]
     PRIVATE_KEY=$(printf "%s" "$GENERATE_KEYS" | sed -n 's/^PrivateKey: *\(.*\)$/\1/p')
     PUBLIC_KEY=$(printf "%s" "$GENERATE_KEYS" | sed -n 's/^PublicKey: *\(.*\)$/\1/p')
     TLS_SERVER=$(printf "%s" "$TLS_SERVERS" | tr " " "\n" | shuf -n 1)
-    jq -n --arg port "$REALITY_PORT" \
+    jq -n \
+        --arg port "$REALITY_PORT" \
         --arg uuid "$GENERATE_UUID" \
         --arg server "$TLS_SERVER" \
         --arg private_key "$PRIVATE_KEY" \
