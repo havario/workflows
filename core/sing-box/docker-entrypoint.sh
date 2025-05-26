@@ -68,22 +68,7 @@ fi
 
 # generate default config if not provided by the user
 if [ ! -s "$SINGBOX_WORKDIR/config.json" ]; then
-    cat > "$SINGBOX_WORKDIR/config.json" <<EOF
-{
-  "log": {
-    "output": "${SINGBOX_LOGFILE}",
-    "level": "info",
-    "timestamp": true
-  },
-  "dns": {},
-  "outbounds": [
-    {
-      "tag": "direct",
-      "type": "direct"
-    }
-  ]
-}
-EOF
+    jq -n --arg log_file "$SINGBOX_LOGFILE" '{"log":{"output":$log_file,"level":"info","timestamp":true},"dns":{},"outbounds":[{"tag":"direct","type":"direct"}]}' > "$SINGBOX_WORKDIR/config.json"
 fi
 
 if [ -d "$SINGBOX_CONFDIR" ] && [ -z "$(ls -A "$SINGBOX_CONFDIR" 2>/dev/null)" ]; then
@@ -95,48 +80,7 @@ if [ -d "$SINGBOX_CONFDIR" ] && [ -z "$(ls -A "$SINGBOX_CONFDIR" 2>/dev/null)" ]
     PRIVATE_KEY=$(printf "%s" "$GENERATE_KEYS" | sed -n 's/^PrivateKey: *\(.*\)$/\1/p')
     PUBLIC_KEY=$(printf "%s" "$GENERATE_KEYS" | sed -n 's/^PublicKey: *\(.*\)$/\1/p')
     TLS_SERVER=$(printf "%s" "$TLS_SERVERS" | tr " " "\n" | shuf -n 1)
-    cat > "$SINGBOX_CONFDIR/VLESS-REALITY-$REALITY_PORT.json" <<EOF
-{
-  "inbounds": [
-    {
-      "tag": "VLESS-REALITY-${REALITY_PORT}.json",
-      "type": "vless",
-      "listen": "::",
-      "listen_port": ${REALITY_PORT},
-      "users": [
-        {
-          "flow": "xtls-rprx-vision",
-          "uuid": "${GENERATE_UUID}"
-        }
-      ],
-      "tls": {
-        "enabled": true,
-        "server_name": "${TLS_SERVER}",
-        "reality": {
-          "enabled": true,
-          "handshake": {
-            "server": "${TLS_SERVER}",
-            "server_port": 443
-          },
-          "private_key": "${PRIVATE_KEY}",
-          "short_id": [
-            ""
-          ]
-        }
-      }
-    }
-  ],
-  "outbounds": [
-    {
-      "type": "direct"
-    },
-    {
-      "tag": "public_key_${PUBLIC_KEY}",
-      "type": "direct"
-    }
-  ]
-}
-EOF
+    jq -n --arg port "$REALITY_PORT" --arg uuid "$GENERATE_UUID" --arg server "$TLS_SERVER" --arg private_key "$PRIVATE_KEY" --arg public_key "$PUBLIC_KEY" '{"inbounds":[{"tag":"VLESS-REALITY-\($port).json","type":"vless","listen":"::","listen_port":($port|tonumber),"users":[{"flow":"xtls-rprx-vision","uuid":$uuid}],"tls":{"enabled":true,"server_name":$server,"reality":{"enabled":true,"handshake":{"server":$server,"server_port":443},"private_key":$private_key,"short_id":[""]}}}],"outbounds":[{"type":"direct"},{"tag":"public_key_\($public_key)","type":"direct"}]}' > "$SINGBOX_CONFDIR/VLESS-REALITY-$REALITY_PORT.json"
     [ -z "$PUBLIC_IP" ] && { printf 'Error: Failed to retrieve IP address, configuration generation aborted!\n'; exit 1; }
     {
         echo "-------------------- URL --------------------"
