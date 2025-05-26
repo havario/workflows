@@ -68,7 +68,9 @@ fi
 
 # generate default config if not provided by the user
 if [ ! -s "$SINGBOX_WORKDIR/config.json" ]; then
-    jq -n --arg log_file "$SINGBOX_LOGFILE" '{"log":{"output":$log_file,"level":"info","timestamp":true},"dns":{},"outbounds":[{"tag":"direct","type":"direct"}]}' > "$SINGBOX_WORKDIR/config.json"
+    jq -n \
+        --arg log_file "$SINGBOX_LOGFILE" \
+        '{"log":{"output":$log_file,"level":"info","timestamp":true},"dns":{},"outbounds":[{"tag":"direct","type":"direct"}]}' > "$SINGBOX_WORKDIR/config.json"
 fi
 
 if [ -d "$SINGBOX_CONFDIR" ] && [ -z "$(ls -A "$SINGBOX_CONFDIR" 2>/dev/null)" ]; then
