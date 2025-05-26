@@ -16,10 +16,7 @@ ENV CGO_ENABLED=0
 ENV GOOS=$TARGETOS
 ENV GOARCH=$TARGETARCH
 RUN set -ex \
-    && apk add --no-cache \
-        build-base \
-        gcc \
-        git \
+    && apk add --no-cache build-base gcc git \
     && TAG=$(curl -fsL --retry 3 "https://api.github.com/repos/jonssonyan/h-ui/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/') \
     && git clone --depth=1 --branch "$TAG" "https://github.com/jonssonyan/h-ui.git" . \
     && go build -trimpath -ldflags "-s -w" -o /go/bin/h-ui ./main.go \
@@ -29,11 +26,7 @@ FROM --platform=$TARGETPLATFORM alpine:latest
 LABEL maintainer="honeok <honeok@duck.com>"
 RUN set -ex \
     && apk upgrade \
-    && apk add --no-cache \
-        bash \
-        ca-certificates \
-        nftables \
-        tzdata \
+    && apk add --no-cache bash ca-certificates nftables tzdata \
     && rm -rf /var/cache/apk/*
 COPY --from=builder /go/bin/h-ui /usr/bin/h-ui
 ENV TZ=Asia/Shanghai
