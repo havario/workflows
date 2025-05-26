@@ -22,21 +22,21 @@ command -v curl >/dev/null 2>&1 || apk add --no-cache curl
 # Sing-box version adaptation
 case "$1" in
     stable)
-        VERSION=$(curl -fsL --retry 5 "https://api.github.com/repos/SagerNet/sing-box/releases/latest" | awk -F '["v]' '/tag_name/{print $5}')
+        VERSION="$(curl -fsL --retry 5 "https://api.github.com/repos/SagerNet/sing-box/releases/latest" | awk -F '["v]' '/tag_name/{print $5}')"
     ;;
     beta)
-        VERSION=$(curl -fsL --retry 5 "https://api.github.com/repos/SagerNet/sing-box/releases" | awk -F '"' '/tag_name/ && /-beta/ {sub(/^v/, "", $4); print $4}' | sort -Vr | head -n1)
+        VERSION="$(curl -fsL --retry 5 "https://api.github.com/repos/SagerNet/sing-box/releases" | awk -F '"' '/tag_name/ && /-beta/ {sub(/^v/, "", $4); print $4}' | sort -Vr | head -n1)"
     ;;
     alpha)
-        VERSION=$(curl -fsL --retry 5 "https://api.github.com/repos/SagerNet/sing-box/releases" | awk -F '"' '/tag_name/ && /-alpha/ {sub(/^v/, "", $4); print $4}' | sort -Vr | head -n1)
+        VERSION="$(curl -fsL --retry 5 "https://api.github.com/repos/SagerNet/sing-box/releases" | awk -F '"' '/tag_name/ && /-alpha/ {sub(/^v/, "", $4); print $4}' | sort -Vr | head -n1)"
     ;;
     *)
         printf 'Error: Unable to determine Sing-box version!\n' >&2; exit 1;
     ;;
 esac
 
-# jq version adaptation
-JQ_VERSION=$(curl -fsL --retry 5 "https://api.github.com/repos/jqlang/jq/releases/latest" | grep '"tag_name":' | cut -d '"' -f4)
+# JQ version adaptation
+JQ_VERSION="$(curl -fsL --retry 5 "https://api.github.com/repos/jqlang/jq/releases/latest" | grep '"tag_name":' | cut -d '"' -f4)"
 
 # Determine system arch based
 case "$(uname -m)" in
@@ -84,11 +84,11 @@ touch "$SINGBOX_LOGFILE" >/dev/null 2>&1
 cd "$SINGBOX_BINDIR" || { printf 'Error: Failed to enter the sing-box bin directory!\n'; exit 1; }
 
 # Extract and install Sing-Box
-if ! curl -fsL -O "https://github.com/SagerNet/sing-box/releases/download/v${VERSION}/sing-box-${VERSION}-linux-${SINGBOX_FRAMEWORK}.tar.gz"; then
+if ! curl -fsL -O "https://github.com/SagerNet/sing-box/releases/download/v$VERSION/sing-box-$VERSION-linux-$SINGBOX_FRAMEWORK.tar.gz"; then
     printf 'Error: Download sing-Box failed, please check the network!\n' >&2; exit 1
 fi
 
-tar -zxf "sing-box-${VERSION}-linux-${SINGBOX_FRAMEWORK}.tar.gz" --strip-components=1 || { printf 'Error: tar Sing-box package failed!\n'; exit 1; }
+tar -zxf "sing-box-$VERSION-linux-$SINGBOX_FRAMEWORK.tar.gz" --strip-components=1 || { printf 'Error: tar Sing-box package failed!\n'; exit 1; }
 find . -mindepth 1 -maxdepth 1 ! -name 'sing-box' -exec rm -rf {} +
 [ ! -x "$SINGBOX_BINDIR/sing-box" ] && chmod +x "$SINGBOX_BINDIR/sing-box"
 ln -s "$SINGBOX_BINDIR/sing-box" /usr/local/bin/sing-box
