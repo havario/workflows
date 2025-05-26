@@ -80,7 +80,12 @@ if [ -d "$SINGBOX_CONFDIR" ] && [ -z "$(ls -A "$SINGBOX_CONFDIR" 2>/dev/null)" ]
     PRIVATE_KEY=$(printf "%s" "$GENERATE_KEYS" | sed -n 's/^PrivateKey: *\(.*\)$/\1/p')
     PUBLIC_KEY=$(printf "%s" "$GENERATE_KEYS" | sed -n 's/^PublicKey: *\(.*\)$/\1/p')
     TLS_SERVER=$(printf "%s" "$TLS_SERVERS" | tr " " "\n" | shuf -n 1)
-    jq -n --arg port "$REALITY_PORT" --arg uuid "$GENERATE_UUID" --arg server "$TLS_SERVER" --arg private_key "$PRIVATE_KEY" --arg public_key "$PUBLIC_KEY" '{"inbounds":[{"tag":"VLESS-REALITY-\($port).json","type":"vless","listen":"::","listen_port":($port|tonumber),"users":[{"flow":"xtls-rprx-vision","uuid":$uuid}],"tls":{"enabled":true,"server_name":$server,"reality":{"enabled":true,"handshake":{"server":$server,"server_port":443},"private_key":$private_key,"short_id":[""]}}}],"outbounds":[{"type":"direct"},{"tag":"public_key_\($public_key)","type":"direct"}]}' > "$SINGBOX_CONFDIR/VLESS-REALITY-$REALITY_PORT.json"
+    jq -n --arg port "$REALITY_PORT" \
+        --arg uuid "$GENERATE_UUID" \
+        --arg server "$TLS_SERVER" \
+        --arg private_key "$PRIVATE_KEY" \
+        --arg public_key "$PUBLIC_KEY" \
+        '{"inbounds":[{"tag":"VLESS-REALITY-\($port).json","type":"vless","listen":"::","listen_port":($port|tonumber),"users":[{"flow":"xtls-rprx-vision","uuid":$uuid}],"tls":{"enabled":true,"server_name":$server,"reality":{"enabled":true,"handshake":{"server":$server,"server_port":443},"private_key":$private_key,"short_id":[""]}}}],"outbounds":[{"type":"direct"},{"tag":"public_key_\($public_key)","type":"direct"}]}' > "$SINGBOX_CONFDIR/VLESS-REALITY-$REALITY_PORT.json"
     [ -z "$PUBLIC_IP" ] && { printf 'Error: Failed to retrieve IP address, configuration generation aborted!\n'; exit 1; }
     {
         echo "-------------------- URL --------------------"
