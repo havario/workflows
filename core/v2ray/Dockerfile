@@ -8,7 +8,7 @@
 
 FROM golang:1-alpine AS builder
 LABEL maintainer="honeok <honeok@duck.com"
-WORKDIR /go/src/v2ray
+WORKDIR /go/src
 ARG TARGETOS TARGETARCH
 ARG GOPROXY=""
 ARG VERSION
