@@ -22,10 +22,10 @@ RUN set -ex \
     && cd v2ray \
     && EXTRA_ARG="" \
     && case "$GOOS-$GOARCH" in \
-        "linux-amd64" | "linux-arm64") \
-            if [ -n "$PIE_ENABLED" ]; then \
-                EXTRA_ARG="$EXTRA_ARG -buildmode=pie"; \
-            fi \
-            ;; \
-        esac \
+         "linux-amd64" | "linux-arm64") \
+           if [ -n "$PIE_ENABLED" ]; then \
+             EXTRA_ARG="$EXTRA_ARG -buildmode=pie"; \
+           fi \
+           ;; \
+       esac \
     && go build $EXTRA_ARG -v -trimpath -ldflags "-s -w -buildid=" -o /go/bin/v2ray ./main
