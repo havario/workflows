@@ -10,7 +10,7 @@
 # See <https://www.gnu.org/licenses/old-licenses/gpl-2.0.html>.
 
 FROM node:alpine AS frontend
-WORKDIR /h-ui
+WORKDIR /go/src
 RUN set -ex \
     && apk add --no-cache git \
     && TAG=$(wget -qO- --tries=3 "https://api.github.com/repos/jonssonyan/h-ui/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/') \
@@ -18,16 +18,16 @@ RUN set -ex \
     && cd frontend \
     && npm install && npm run build
 
-FROM golang:1-alpine AS builder
+FROM golang:1-alpine AS backend
 WORKDIR /go/src
+COPY --from=frontend /go/src/h-ui /go/src/h-ui
 ARG TARGETOS TARGETARCH
 ENV CGO_ENABLED=0
 ENV GOOS=$TARGETOS
 ENV GOARCH=$TARGETARCH
 RUN set -ex \
     && apk add --no-cache build-base gcc git \
-    && TAG=$(wget -qO- --tries=3 "https://api.github.com/repos/jonssonyan/h-ui/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/') \
-    && git clone --depth=1 --branch "$TAG" "https://github.com/jonssonyan/h-ui.git" . \
+    && cd h-ui \
     && go build -trimpath -ldflags "-s -w" -o /go/bin/h-ui ./main.go \
     && rm -rf /go/src/h-ui /var/cache/apk/*
 
