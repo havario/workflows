@@ -15,7 +15,6 @@ build_v2ray() {
         printf 'Error: Failed to clone the project branch.\n' >&2; exit 1
     fi
     cd v2ray || { printf 'Error: permission denied or directory does not exist\n' >&2; exit 1; }
-
     EXTRA_ARG=""
     case "$(go env GOOS)-$(go env GOARCH)" in
         linux-amd64|linux-arm64)
