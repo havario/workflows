@@ -9,16 +9,7 @@
 # This program is distributed WITHOUT ANY WARRANTY.
 # See <https://www.gnu.org/licenses/old-licenses/gpl-2.0.html>.
 
-FROM node:alpine AS frontend
-WORKDIR /go/src
-RUN set -ex \
-    && apk add --no-cache git \
-    && TAG=$(wget -qO- --tries=3 "https://api.github.com/repos/jonssonyan/h-ui/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/') \
-    && git clone --depth=1 --branch "$TAG" "https://github.com/jonssonyan/h-ui.git" . \
-    && cd frontend \
-    && npm install && npm run build
-
-FROM golang:1-alpine AS backend
+FROM golang:1-alpine AS builder
 WORKDIR /go/src
 COPY --from=frontend /go/src /go/src/h-ui
 ARG TARGETOS TARGETARCH
@@ -26,8 +17,12 @@ ENV CGO_ENABLED=0
 ENV GOOS=$TARGETOS
 ENV GOARCH=$TARGETARCH
 RUN set -ex \
-    && apk add --no-cache build-base gcc git \
-    && cd h-ui \
+    && apk add --no-cache build-base gcc git nodejs npm \
+    && TAG=$(wget -qO- --tries=3 "https://api.github.com/repos/jonssonyan/h-ui/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/') \
+    && git clone --depth=1 --branch "$TAG" "https://github.com/jonssonyan/h-ui.git" . \
+    && cd frontend \
+    && npm install && npm run build \
+    && cd .. \
     && go build -trimpath -ldflags "-s -w" -o /go/bin/h-ui ./main.go
 
 FROM alpine:latest
@@ -36,6 +31,6 @@ RUN set -ex \
     && apk upgrade \
     && apk add --no-cache bash ca-certificates nftables tzdata \
     && rm -rf /var/cache/apk/*
-COPY --from=backend /go/bin/h-ui /usr/bin/h-ui
+COPY --from=builder /go/bin/h-ui /usr/bin/h-ui
 ENV TZ=Asia/Shanghai
 ENTRYPOINT ["h-ui"]
