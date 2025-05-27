@@ -12,17 +12,6 @@ jobs:
     env:
       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
       DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-    strategy:
-      fail-fast: true
-      matrix:
-        platform:
-          - linux/386
-          - linux/amd64
-          - linux/arm/v6
-          - linux/arm/v7
-          - linux/arm64/v8
-          - linux/ppc64le
-          - linux/s390x
 
     steps:
       - name: 'Check out repository'
@@ -43,8 +32,6 @@ jobs:
           if [[ "$(echo -e "$HUI_LVER\n$HUI_CVER" | sort -V | head -n1)" != "$HUI_LVER" || -z "$HUI_CVER" ]]; then
             echo "IS_RENEW=1" >> $GITHUB_ENV
           fi
-          PLATFORM_PAIR="${{ matrix.platform }}" && PLATFORM_PAIR="${PLATFORM_PAIR//\//-}"
-          echo "PLATFORM_PAIR=$PLATFORM_PAIR" >> $GITHUB_ENV
 
       - name: 'Set up Docker QEMU'
         if: env.IS_RENEW == 1 || github.event_name == 'workflow_dispatch'
@@ -67,6 +54,8 @@ jobs:
         with:
           context: "{{ defaultContext }}:core/h-ui"
           file: Dockerfile
-          platforms: ${{ matrix.platform }}
           push: true
-          tags: ${{ env.DOCKER_USERNAME }}/h-ui:${{ env.HUI_LVER }}
+          tags: |
+            "${{ env.DOCKER_USERNAME }}/h-ui:${{ env.HUI_LVER }}"
+            "${{ env.DOCKER_USERNAME }}/h-ui:latest"
+          platforms: linux/386, linux/amd64, linux/arm/v6, linux/arm/v7, linux/arm64/v8, linux/ppc64le, linux/s390x
