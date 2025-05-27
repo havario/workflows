@@ -20,7 +20,7 @@ RUN set -ex \
     && TAG=$(wget -qO- --tries=3 "https://api.github.com/repos/jonssonyan/h-ui/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/') \
     && git clone --depth=1 --branch "$TAG" "https://github.com/jonssonyan/h-ui.git" . \
     && cd frontend \
-    && npm install && npm run build \
+    && npm install && npm run build:prod \
     && cd .. \
     && go build -trimpath -ldflags "-s -w" -o /go/bin/h-ui ./main.go
 
