@@ -11,7 +11,6 @@
 
 FROM golang:1-alpine AS builder
 WORKDIR /go/src
-COPY --from=frontend /go/src /go/src/h-ui
 ARG TARGETOS TARGETARCH
 ENV CGO_ENABLED=0
 ENV GOOS=$TARGETOS
