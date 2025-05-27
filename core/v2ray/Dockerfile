@@ -18,5 +18,5 @@ ENV GOARCH=$TARGETARCH
 COPY build.sh .
 RUN set -ex \
     && apk add --no-cache build-base git \
-    && chmod +x build.sh && ./build.sh ${VERSION}
+    && chmod +x build.sh && ./build.sh ${VERSION} \
     && rm -rf /var/cache/apk/* /tmp/*
