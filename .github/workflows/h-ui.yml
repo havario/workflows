@@ -12,6 +12,17 @@ jobs:
     env:
       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
       DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+    strategy:
+      fail-fast: true
+      matrix:
+        platform:
+          - linux/386
+          - linux/amd64
+          - linux/arm/v6
+          - linux/arm/v7
+          - linux/arm64/v8
+          - linux/ppc64le
+          - linux/s390x
 
     steps:
       - name: 'Check out repository'
@@ -55,7 +66,9 @@ jobs:
           context: "{{ defaultContext }}:core/h-ui"
           file: Dockerfile
           push: true
+          build-args: |
+            USE_BUILT_FRONTEND=${{ matrix.platform == 'linux/amd64' && 'true' || 'true' }}
           tags: |
             "${{ env.DOCKER_USERNAME }}/h-ui:${{ env.HUI_LVER }}"
             "${{ env.DOCKER_USERNAME }}/h-ui:latest"
-          platforms: linux/386, linux/amd64, linux/arm/v6, linux/arm/v7, linux/arm64/v8, linux/ppc64le, linux/s390x
+          platforms: ${{ matrix.platform }}
