@@ -25,4 +25,8 @@ case "$(go env GOOS)-$(go env GOARCH)" in
     ;;
 esac
 
-go build ${EXTRA_ARG:+$EXTRA_ARG} -v -trimpath -ldflags "-s -w -buildid=" -o /go/bin/v2ray ./main
+if [ -n "$EXTRA_ARG" ]; then
+    go build "$EXTRA_ARG" -v -trimpath -ldflags "-s -w -buildid=" -o /go/bin/v2ray ./main
+else
+    go build -v -trimpath -ldflags "-s -w -buildid=" -o /go/bin/v2ray ./main
+fi
