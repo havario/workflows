@@ -9,7 +9,7 @@
 # This program is distributed WITHOUT ANY WARRANTY.
 # See <https://www.gnu.org/licenses/old-licenses/gpl-2.0.html>.
 
-FROM nginx:latest AS frontend
+FROM debian:stable-slim AS frontend
 WORKDIR /go/src/h-ui
 RUN set -ex \
     && apt-get update && apt-get install -y --no-install-recommends git nodejs npm wget \
