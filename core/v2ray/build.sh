@@ -8,7 +8,7 @@
 # This program is distributed WITHOUT ANY WARRANTY.
 # See <https://www.gnu.org/licenses/old-licenses/gpl-2.0.html>.
 
-set -eux
+set -ex
 
 VERSION="$1"
 
@@ -25,8 +25,4 @@ case "$(go env GOOS)-$(go env GOARCH)" in
     ;;
 esac
 
-if [ -n "$EXTRA_ARG" ]; then
-    go build "$EXTRA_ARG" -v -trimpath -ldflags "-s -w -buildid=" -o /go/bin/v2ray ./main
-else
-    go build -v -trimpath -ldflags "-s -w -buildid=" -o /go/bin/v2ray ./main
-fi
+go build ${EXTRA_ARG:+$EXTRA_ARG} -v -trimpath -ldflags "-s -w -buildid=" -o /go/bin/v2ray ./main
