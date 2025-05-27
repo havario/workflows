@@ -20,7 +20,7 @@ RUN set -ex \
 
 FROM golang:1-alpine AS backend
 WORKDIR /go/src
-COPY --from=frontend /go/src/h-ui /go/src/h-ui
+COPY --from=frontend /go/src /go/src/h-ui
 ARG TARGETOS TARGETARCH
 ENV CGO_ENABLED=0
 ENV GOOS=$TARGETOS
@@ -28,8 +28,7 @@ ENV GOARCH=$TARGETARCH
 RUN set -ex \
     && apk add --no-cache build-base gcc git \
     && cd h-ui \
-    && go build -trimpath -ldflags "-s -w" -o /go/bin/h-ui ./main.go \
-    && rm -rf /go/src/h-ui /var/cache/apk/*
+    && go build -trimpath -ldflags "-s -w" -o /go/bin/h-ui ./main.go
 
 FROM alpine:latest
 LABEL maintainer="honeok <honeok@duck.com>"
