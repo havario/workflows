@@ -22,6 +22,6 @@ case "$1" in
     ;;
 esac
 
-if git clone --depth=1 --branch "$VERSION" https://github.com/v2fly/v2ray-core.git; then
+if ! git clone --depth=1 --branch "$VERSION" https://github.com/v2fly/v2ray-core.git v2ray; then
     printf 'Error: Failed to clone the project branch.\n' >&2; exit 1
 fi

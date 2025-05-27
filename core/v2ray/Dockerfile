@@ -19,6 +19,7 @@ COPY build.sh .
 RUN set -ex \
     && apk add --no-cache build-base git \
     && chmod +x build.sh && ./build.sh ${VERSION} \
+    && cd v2ray \
     && EXTRA_ARG="" \
     && case "$GOOS-$GOARCH" in \
         "linux-amd64" | "linux-arm64") \
