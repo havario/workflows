@@ -16,7 +16,7 @@ ENV CGO_ENABLED=0
 ENV GOOS=$TARGETOS
 ENV GOARCH=$TARGETARCH
 RUN set -ex \
-    && apk add --no-cache build-base gcc git nodejs npm \
+    && apk add --no-cache build-base gcc g++ git nodejs npm python3 rust \
     && TAG=$(wget -qO- --tries=3 "https://api.github.com/repos/jonssonyan/h-ui/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/') \
     && git clone --depth=1 --branch "$TAG" "https://github.com/jonssonyan/h-ui.git" . \
     && cd frontend \
