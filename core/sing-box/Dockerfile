@@ -11,7 +11,7 @@
 # This program is distributed WITHOUT ANY WARRANTY.
 # See <https://www.gnu.org/licenses/old-licenses/gpl-2.0.html>.
 
-FROM alpine:latest
+FROM docker.gh-proxy.com/alpine:latest
 
 ARG VERSION
 
