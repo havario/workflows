@@ -12,7 +12,9 @@
 FROM debian:stable-slim AS frontend
 WORKDIR /go/src/h-ui
 RUN set -ex \
-    && apt-get update && apt-get install -y --no-install-recommends git nodejs npm wget \
+    && apt-get update && apt-get install -y --no-install-recommends curl gnupg wget ca-certificates git \
+    && curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+    && apt-get install -y nodejs npm \
     && TAG=$(wget -qO- --tries=3 "https://api.github.com/repos/jonssonyan/h-ui/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/') \
     && git clone --depth=1 --branch "$TAG" "https://github.com/jonssonyan/h-ui.git" . \
     && cd frontend \
