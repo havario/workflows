@@ -37,6 +37,6 @@ RUN set -ex \
     && apk upgrade \
     && apk add --no-cache bash ca-certificates nftables tzdata \
     && rm -rf /var/cache/apk/*
-COPY --from=builder /go/bin/h-ui /usr/bin/h-ui
+COPY --from=backend /go/bin/h-ui /usr/bin/h-ui
 ENV TZ=Asia/Shanghai
 ENTRYPOINT ["h-ui"]
