@@ -10,7 +10,7 @@
 
 set -eux
 
-VERSION=$1
+VERSION="$1"
 
 if ! git clone --depth=1 --branch "$VERSION" https://github.com/v2fly/v2ray-core.git v2ray; then
     printf 'Error: Failed to clone the project branch.\n' >&2; exit 1
