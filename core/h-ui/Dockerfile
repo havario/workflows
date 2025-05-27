@@ -9,7 +9,7 @@
 # This program is distributed WITHOUT ANY WARRANTY.
 # See <https://www.gnu.org/licenses/old-licenses/gpl-2.0.html>.
 
-FROM golang:1-alpine AS builder
+FROM docker.gh-proxy.com/golang:1-alpine AS builder
 WORKDIR /go/src/h-ui
 ARG TARGETOS TARGETARCH
 ENV CGO_ENABLED=0
@@ -24,7 +24,7 @@ RUN set -ex \
     && cd .. \
     && go build -trimpath -ldflags "-s -w" -o /go/bin/h-ui ./main.go
 
-FROM alpine:latest
+FROM docker.gh-proxy.com/alpine:latest
 LABEL maintainer="honeok <honeok@duck.com>"
 RUN set -ex \
     && apk upgrade \
