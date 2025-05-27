@@ -18,14 +18,5 @@ ENV GOARCH=$TARGETARCH
 COPY build.sh .
 RUN set -ex \
     && apk add --no-cache build-base git \
-    && chmod +x build.sh && ./build.sh ${VERSION} \
-    && cd v2ray \
-    && EXTRA_ARG="" \
-    && case "$GOOS-$GOARCH" in \
-         "linux-amd64" | "linux-arm64") \
-           if [ -n "$PIE_ENABLED" ]; then \
-             EXTRA_ARG="$EXTRA_ARG -buildmode=pie"; \
-           fi \
-           ;; \
-       esac \
-    && go build $EXTRA_ARG -v -trimpath -ldflags "-s -w -buildid=" -o /go/bin/v2ray ./main
+    && chmod +x build.sh && ./build.sh ${VERSION}
+    && rm -rf /var/cache/apk/* /tmp/*
