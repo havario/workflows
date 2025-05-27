@@ -29,9 +29,9 @@ jobs:
           if [[ -z "$V2RAY_LTAG" || -z "$V2RAY_LVER" ]]; then
             echo 'Error: Required parameters cannot be empty.'; exit 1
           fi
-          echo V2RAY_LTAG=$V2RAY_LTAG >> $GITHUB_ENV
-          echo V2RAY_LVER=$V2RAY_LVER >> $GITHUB_ENV
-          echo V2RAY_CVER=$V2RAY_CVER >> $GITHUB_ENV
+          echo "V2RAY_LTAG=$V2RAY_LTAG" >> $GITHUB_ENV
+          echo "V2RAY_LVER=$V2RAY_LVER" >> $GITHUB_ENV
+          echo "V2RAY_CVER=$V2RAY_CVER" >> $GITHUB_ENV
           if [[ "$(echo -e "$V2RAY_LVER\n$V2RAY_CVER" | sort -V | head -n1)" != "$V2RAY_LVER" || -z "$V2RAY_CVER" ]]; then
             echo "IS_RENEW=1" >> $GITHUB_ENV
           fi
