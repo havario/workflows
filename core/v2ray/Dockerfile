@@ -27,4 +27,4 @@ RUN set -ex \
             fi \
             ;; \
         esac \
-    && go build $EXTRA_ARG -v -o /go/bin/v2ray -trimpath -ldflags "-s -w -buildid=" ./main
+    && go build $EXTRA_ARG -v -trimpath -ldflags "-s -w -buildid=" -o /go/bin/v2ray ./main
