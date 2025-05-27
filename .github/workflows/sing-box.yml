@@ -14,6 +14,18 @@ jobs:
   build_stable:
     name: 'Build Stable Sing-box'
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
+      matrix:
+        platform:
+          - linux/386
+          - linux/amd64
+          - linux/arm/v6
+          - linux/arm/v7
+          - linux/arm64/v8
+          - linux/ppc64le
+          - linux/riscv64
+          - linux/s390x
 
     steps:
       - name: 'Check out repository'
@@ -60,12 +72,24 @@ jobs:
           tags: |
             "${{ env.DOCKER_USERNAME }}/sing-box:${{ env.SINGBOX_STABLE_LVER }}"
             "${{ env.DOCKER_USERNAME }}/sing-box:latest"
-          platforms: linux/386, linux/amd64, linux/arm/v6, linux/arm/v7, linux/arm64/v8, linux/ppc64le, linux/riscv64, linux/s390x
+          platforms: ${{ matrix.platform }}
           build-args: VERSION=stable
 
   build_beta:
     name: 'Build Beta Sing-box'
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
+      matrix:
+        platform:
+          - linux/386
+          - linux/amd64
+          - linux/arm/v6
+          - linux/arm/v7
+          - linux/arm64/v8
+          - linux/ppc64le
+          - linux/riscv64
+          - linux/s390x
 
     steps:
       - name: 'Check out repository'
@@ -111,12 +135,24 @@ jobs:
           push: true
           tags: |
             "${{ env.DOCKER_USERNAME }}/sing-box:${{ env.SINGBOX_BETA_LVER }}"
-          platforms: linux/386, linux/amd64, linux/arm/v6, linux/arm/v7, linux/arm64/v8, linux/ppc64le, linux/riscv64, linux/s390x
+          platforms: ${{ matrix.platform }}
           build-args: VERSION=beta
 
   build_alpha:
     name: 'Build Alpha Sing-box'
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
+      matrix:
+        platform:
+          - linux/386
+          - linux/amd64
+          - linux/arm/v6
+          - linux/arm/v7
+          - linux/arm64/v8
+          - linux/ppc64le
+          - linux/riscv64
+          - linux/s390x
 
     steps:
       - name: 'Check out repository'
@@ -162,5 +198,5 @@ jobs:
           push: true
           tags: |
             "${{ env.DOCKER_USERNAME }}/sing-box:${{ env.SINGBOX_ALPHA_LVER }}"
-          platforms: linux/386, linux/amd64, linux/arm/v6, linux/arm/v7, linux/arm64/v8, linux/ppc64le, linux/riscv64, linux/s390x
+          platforms: ${{ matrix.platform }}
           build-args: VERSION=alpha
