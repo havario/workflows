@@ -5,15 +5,13 @@ on:
     - cron: '0 16 * * 0'
   workflow_dispatch:
 
-env:
-  IMAGE_NAME: havario/h-ui
-  DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-  DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-
 jobs:
   build:
     name: 'Build and Publish h-ui'
     runs-on: ubuntu-latest
+    env:
+      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
     strategy:
       fail-fast: true
       matrix:
@@ -72,54 +70,4 @@ jobs:
           file: Dockerfile
           platforms: ${{ matrix.platform }}
           push: true
-          build-args: |
-            BUILDKIT_CONTEXT_KEEP_GIT_DIR=1
-          outputs: type=image,name=${{ env.IMAGE_NAME }},push-by-digest=true,name-canonical=true
-          tags: ${{ env.IMAGE_NAME }}:${{ env.HUI_LVER }}
-
-      - name: 'Export image digest to file'
-        if: steps.build.outputs.digest != ''
-        run: |
-          mkdir -p /tmp/digests
-           echo "${{ steps.build.outputs.digest }}" > "/tmp/digests/${{ env.PLATFORM_PAIR }}.digest"
-
-      - name: 'Upload image digest artifact'
-        if: steps.build.outputs.digest != ''
-        uses: actions/upload-artifact@v4.6.2
-        with:
-          name: digest-${{ env.PLATFORM_PAIR }}
-          path: /tmp/digests/${{ env.PLATFORM_PAIR }}.digest
-          retention-days: 1
-
-  merge:
-    name: 'Merge manifests'
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: 'Set up Docker Buildx'
-        uses: docker/setup-buildx-action@v3.10.0
-
-      - name: 'Login to DockerHub'
-        uses: docker/login-action@v3.4.0
-        with:
-          username: ${{ env.DOCKER_USERNAME }}
-          password: ${{ env.DOCKER_PASSWORD }}
-
-      - name: 'Download all digests'
-        uses: actions/download-artifact@v4.3.0
-        with:
-          path: /tmp/digests
-          pattern: digest-*
-          merge-multiple: true
-
-      - name: 'Create manifest list and push'
-        run: |
-          DIGESTS=$(find /tmp/digests -type f -exec cat {} \;)
-          docker buildx imagetools create \
-            -t "${IMAGE_NAME}:${{ env.HUI_LVER }}" \
-            -t "${IMAGE_NAME}:latest" \
-            $(echo "$DIGESTS" | awk '{print "'"${IMAGE_NAME}"'" "@" $1}')
-
-      - name: 'Inspect merged image'
-        run: |
-          docker buildx imagetools inspect ${IMAGE_NAME}:${{ env.HUI_LVER }}
+          tags: ${{ env.DOCKER_USERNAME }}/h-ui:${{ env.HUI_LVER }}

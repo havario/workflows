@@ -9,7 +9,7 @@
 # This program is distributed WITHOUT ANY WARRANTY.
 # See <https://www.gnu.org/licenses/old-licenses/gpl-2.0.html>.
 
-FROM --platform=$BUILDPLATFORM golang:1-alpine AS builder
+FROM golang:1-alpine AS builder
 WORKDIR /go/src
 ARG TARGETOS TARGETARCH
 ENV CGO_ENABLED=0
@@ -22,7 +22,7 @@ RUN set -ex \
     && go build -trimpath -ldflags "-s -w" -o /go/bin/h-ui ./main.go \
     && rm -rf /go/src/h-ui /var/cache/apk/*
 
-FROM --platform=$TARGETPLATFORM alpine:latest
+FROM alpine:latest
 LABEL maintainer="honeok <honeok@duck.com>"
 RUN set -ex \
     && apk upgrade \
