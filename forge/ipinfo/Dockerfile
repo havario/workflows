@@ -56,5 +56,4 @@ RUN set -ex \
     && rm -f /etc/nginx/conf.d/default.conf \
     && wget -qO /usr/share/nginx/html/favicon.ico "https://ipinfo.tw/favicon.ico" \
     && rm -rf /var/cache/apk/*
-EXPOSE 8080
-HEALTHCHECK --timeout=10s --start-period=5s CMD curl -fs http://127.0.0.1:8080/health || exit 1
+HEALTHCHECK --timeout=10s --start-period=5s CMD curl -fs http://127.0.0.1:80/health || exit 1
