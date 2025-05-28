@@ -54,6 +54,7 @@ RUN set -ex \
     && apk upgrade \
     && apk add --no-cache libmaxminddb \
     && rm -f /etc/nginx/conf.d/default.conf \
+    && wget -qO /usr/share/nginx/html/favicon.ico "https://ipinfo.tw/favicon.ico" \
     && rm -rf /var/cache/apk/*
-HEALTHCHECK --timeout=10s --start-period=10s CMD curl -fs http://127.0.0.1:8080 || exit 1
+HEALTHCHECK --timeout=10s --start-period=10s CMD curl -fs http://127.0.0.1:8080/health || exit 1
 EXPOSE 8080
