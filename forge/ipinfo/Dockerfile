@@ -47,7 +47,7 @@ RUN --mount=type=secret,id=maxmind_key \
 FROM nginx:stable-alpine AS dist
 LABEL maintainer="honeok <honeok@duck.com>"
 ARG NGX_LVER
-COPY --from=builder /tmp/nginx-${NGX_LVER}/objs/*.so /usr/lib/nginx/modules
+COPY --from=builder /tmp/nginx-${NGX_LVER}/objs/*.so /usr/lib/nginx/modules/
 COPY --from=builder /GeoLite2/*.mmdb /usr/share/GeoIP/
 COPY nginx/nginx.conf /etc/nginx/nginx.conf
 COPY nginx/conf.d/* /etc/nginx/conf.d/
@@ -57,5 +57,5 @@ RUN set -ex \
     && rm -f /etc/nginx/conf.d/default.conf \
     && wget -qO /usr/share/nginx/html/favicon.ico "https://ipinfo.tw/favicon.ico" \
     && rm -rf /var/cache/apk/*
-HEALTHCHECK --timeout=10s --start-period=10s CMD curl -fs http://127.0.0.1:8080/health || exit 1
 EXPOSE 8080
+HEALTHCHECK --timeout=10s --start-period=5s CMD curl -fs http://127.0.0.1:8080/health || exit 1
