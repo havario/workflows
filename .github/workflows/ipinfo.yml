@@ -48,10 +48,6 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: 'Write MaxMind secret'
-        if: env.IS_RENEW == 1 || github.event_name == 'workflow_dispatch'
-        run: echo "${{ env.MAXMIND_KEY }}" > /tmp/maxmind_key.txt
-
       - name: 'Build and Push ipinfo image'
         if: env.IS_RENEW == 1 || github.event_name == 'workflow_dispatch'
         uses: docker/build-push-action@v6.17.0
@@ -59,8 +55,6 @@ jobs:
           context: "{{ defaultContext }}:forge/ipinfo"
           file: Dockerfile
           platforms: linux/386, linux/amd64, linux/arm/v6, linux/arm/v7, linux/arm64/v8, linux/ppc64le, linux/riscv64, linux/s390x
-          secrets: |
-            id=maxmind_key,src=/tmp/maxmind_key.txt
           build-args: |
             MAXMIND_KEY=${{ secrets.MAXMIND_KEY }}
             NGX_LVER=${{ env.NGX_LVER }}
@@ -69,4 +63,3 @@ jobs:
             "${{ env.DOCKER_USERNAME }}/ipinfo:${{ env.IPINFO_LVER }}"
             "${{ env.DOCKER_USERNAME }}/ipinfo:latest"
           push: true
-          provenance: false
