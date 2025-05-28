@@ -8,6 +8,7 @@ on:
 
 jobs:
   build:
+    name: 'Build and Publish ipinfo'
     runs-on: ubuntu-latest
     env:
       DOCKER_BUILDKIT: 1
@@ -34,6 +35,7 @@ jobs:
           echo "IPINFO_LVER=$IPINFO_LVER" >> $GITHUB_ENV
           echo "NGX_LVER=$NGX_LVER" >> $GITHUB_ENV
           echo "GEOIP2_TAG=$GEOIP2_TAG" >> $GITHUB_ENV
+          echo $IPINFO_CVER $IPINFO_LVER $NGX_LVER $GEOIP2_TAG
           [[ ( "$(echo -e "$IPINFO_LVER\n$IPINFO_CVER" | sort -V | head -n1)" != "$IPINFO_LVER" ) || -z "$IPINFO_CVER" ]] && echo "IS_RENEW=1" >> $GITHUB_ENV
 
       - name: 'Set up Docker QEMU'
