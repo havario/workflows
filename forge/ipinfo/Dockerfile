@@ -32,6 +32,11 @@ RUN --mount=type=secret,id=maxmind_key \
     && sed -i 's/GeoLite2-Country_[0-9]*.tar.gz/GeoLite2-Country.tar.gz/g' GeoLite2-Country.tar.gz.sha256 \
     && sha256sum -c GeoLite2-Country.tar.gz.sha256 \
     && tar -zxf GeoLite2-Country.tar.gz --strip 1 \
+    && wget -qO GeoLite2-City.tar.gz "https://download.maxmind.com/app/geoip_download?license_key=${MAXMIND_KEY}&edition_id=GeoLite2-City&suffix=tar.gz" \
+    && wget -qO GeoLite2-City.tar.gz.sha256 "https://download.maxmind.com/app/geoip_download?license_key=${MAXMIND_KEY}&edition_id=GeoLite2-City&suffix=tar.gz.sha256" \
+    && sed -i 's/GeoLite2-City_[0-9]*.tar.gz/GeoLite2-City.tar.gz/g' GeoLite2-City.tar.gz.sha256 \
+    && sha256sum -c GeoLite2-City.tar.gz.sha256 \
+    && tar -zxf GeoLite2-City.tar.gz --strip 1 \
     && cd /tmp \
     && wget -qO nginx-${NGX_LVER}.tar.gz "https://nginx.org/download/nginx-${NGX_LVER}.tar.gz" \
     && tar -zxf nginx-${NGX_LVER}.tar.gz \
