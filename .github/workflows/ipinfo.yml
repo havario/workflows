@@ -11,6 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       DOCKER_BUILDKIT: 1
+      MAXMIND_KEY: ${{ secrets.MAXMIND_KEY }}
 
     steps:
       - name: 'Check out repository'
