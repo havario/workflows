@@ -71,3 +71,4 @@ jobs:
             "${{ env.DOCKER_USERNAME }}/ipinfo:${{ env.IPINFO_LVER }}"
             "${{ env.DOCKER_USERNAME }}/ipinfo:latest"
           push: true
+          provenance: false
