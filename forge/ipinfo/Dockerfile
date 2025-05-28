@@ -52,6 +52,7 @@ COPY nginx/nginx.conf /etc/nginx/nginx.conf
 COPY nginx/conf.d/* /etc/nginx/conf.d/
 RUN set -ex \
     && apk upgrade \
+    && apk add --no-cache libmaxminddb \
     && rm -f /etc/nginx/conf.d/default.conf \
     && rm -rf /var/cache/apk/*
 HEALTHCHECK --timeout=10s --start-period=10s CMD curl -fs http://127.0.0.1:8080 || exit 1
