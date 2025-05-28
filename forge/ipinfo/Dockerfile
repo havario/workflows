@@ -16,10 +16,11 @@
 
 FROM alpine:latest AS builder
 LABEL maintainer="honeok <honeok@duck.com>"
-ARG MAXMIND_KEY
 ARG NGX_LVER
 WORKDIR /GeoLite2
-RUN set -ex \
+RUN --mount=type=secret,id=maxmind_key \
+    MAXMIND_KEY=$(cat /run/secrets/maxmind_key) \
+    && set -ex \
     && apk add --no-cache --virtual .build-deps build-base git libmaxminddb-dev pcre-dev zlib-dev \
     && wget -qO GeoLite2-ASN.tar.gz "https://download.maxmind.com/app/geoip_download?license_key=${MAXMIND_KEY}&edition_id=GeoLite2-ASN&suffix=tar.gz" \
     && wget -qO GeoLite2-ASN.tar.gz.sha256 "https://download.maxmind.com/app/geoip_download?license_key=${MAXMIND_KEY}&edition_id=GeoLite2-ASN&suffix=tar.gz.sha256" \
