@@ -61,13 +61,13 @@ jobs:
         with:
           context: "{{ defaultContext }}:forge/ipinfo"
           file: Dockerfile
-          push: true
-          tags: |
-            "${{ env.DOCKER_USERNAME }}/ipinfo:${{ env.IPINFO_LVER }}"
-            "${{ env.DOCKER_USERNAME }}/ipinfo:latest"
           platforms: linux/386, linux/amd64, linux/arm/v6, linux/arm/v7, linux/arm64/v8, linux/ppc64le, linux/riscv64, linux/s390x
           secrets: |
             id=maxmind_key,src=maxmind_key.txt
           build-args: |
             NGX_LVER=${{ env.NGX_LVER }}
             GEOIP2_TAG=${{ env.GEOIP2_TAG }}
+          tags: |
+            "${{ env.DOCKER_USERNAME }}/ipinfo:${{ env.IPINFO_LVER }}"
+            "${{ env.DOCKER_USERNAME }}/ipinfo:latest"
+          push: true
