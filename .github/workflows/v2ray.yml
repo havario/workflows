@@ -115,44 +115,47 @@ jobs:
     needs:
       - build
     steps:
-      - name: Get commit to build
-        id: ref
-        run: |-
+      - name: 'Fetch Versions and Determine Build'
+        run: |
           if [[ -z "${{ github.event.inputs.tag }}" ]]; then
-            ref="${{ github.ref_name }}"
+            V2RAY_LTAG="$(wget -qO- --tries 5 "https://api.github.com/repos/v2fly/v2ray-core/releases" | sed -n 's/.*"tag_name": *"\(v[^"]*\)".*/\1/p' | sort -Vr | head -n1)"
+            V2RAY_LVER="${V2RAY_LTAG#v}"
           else
-            ref="${{ github.event.inputs.tag }}"
+            V2RAY_LTAG="${{ github.event.inputs.tag }}"
+            V2RAY_LVER="${V2RAY_LTAG#v}"
           fi
-          echo "ref=$ref"
-          echo "ref=$ref" >> $GITHUB_OUTPUT
-          if [[ $ref == *"-"* ]]; then
-            latest=latest-beta
-          else
-            latest=latest
+          if [[ -z "$V2RAY_LTAG" || -z "$V2RAY_LVER" ]]; then
+            echo 'Error: Required parameters cannot be empty.'; exit 1
           fi
-          echo "latest=$latest"
-          echo "latest=$latest" >> $GITHUB_OUTPUT
-      - name: Download digests
-        uses: actions/download-artifact@v4
+          V2RAY_CVER="$(wget -qO- --tries 5 "https://hub.docker.com/v2/repositories/honeok/v2ray/tags" 2>/dev/null | jq -r ".results // [] | .[].name" | grep -v '^latest$' | sort -Vr | head -n1 | cut -d'-' -f1 || echo "")"
+          echo "V2RAY_LTAG=$V2RAY_LTAG" >> $GITHUB_ENV
+          echo "V2RAY_LVER=$V2RAY_LVER" >> $GITHUB_ENV
+          echo "V2RAY_CVER=$V2RAY_CVER" >> $GITHUB_ENV
+
+      - name: 'Download image digests'
+        uses: actions/download-artifact@v4.2.1
         with:
           path: /tmp/digests
           pattern: digests-*
           merge-multiple: true
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v3
+
+      - name: 'Set up Docker Buildx'
+        uses: docker/setup-buildx-action@v3.10.0
+
+      - name: 'Login to DockerHub'
+        uses: docker/login-action@v3.4.0
         with:
-          registry: ghcr.io
-          username: ${{ github.repository_owner }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Create manifest list and push
+          username: ${{ env.DOCKER_USERNAME }}
+          password: ${{ env.DOCKER_PASSWORD }}
+
+      - name: 'Create manifest list and push'
         working-directory: /tmp/digests
         run: |
           docker buildx imagetools create \
             -t "${{ env.REGISTRY_IMAGE }}:${{ steps.ref.outputs.latest }}" \
             -t "${{ env.REGISTRY_IMAGE }}:${{ steps.ref.outputs.ref }}" \
             $(printf '${{ env.REGISTRY_IMAGE }}@sha256:%s ' *)
+
       - name: Inspect image
         run: |
           docker buildx imagetools inspect ${{ env.REGISTRY_IMAGE }}:${{ steps.ref.outputs.latest }}
