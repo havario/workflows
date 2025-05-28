@@ -25,7 +25,7 @@ jobs:
       - name: 'Fetch Versions and Determine Build'
         run: |
           IPINFO_CVER="$(wget -qO- --tries=5 "https://hub.docker.com/v2/repositories/honeok/ipinfo/tags" | grep -o '"name":"[^"]*"' | sed 's/"name":"//;s/"//' | grep -v '^latest$' | sort -Vr | head -n1 || echo "")"
-          IPINFO_LVER="$(wget -qO- --tries=5 "https://download.maxmind.com/app/geoip_download?license_key=$MAXMIND_KEY&edition_id=GeoLite2-City&suffix=tar.gz.sha256" | awk '{print $2}' | sed -E 's/.*_([0-9]{8})\.tar\.gz/\1/')"
+          IPINFO_LVER="$(wget -qO- --tries=5 "https://download.maxmind.com/app/geoip_download?license_key=$MAXMIND_KEY&edition_id=GeoLite2-ASN&suffix=tar.gz.sha256" | awk '{print $2}' | sed -E 's/.*_([0-9]{8})\.tar\.gz/\1/')"
           NGX_LVER="$(wget -qO- --tries=5 "https://api.github.com/repos/nginx/nginx/releases/latest" | grep -oP '"tag_name": "\K[^"]+' | sed 's/release-//')"
           GEOIP2_TAG="$(wget -qO- --tries 5 "https://api.github.com/repos/leev/ngx_http_geoip2_module/releases/latest" | grep -o '"tag_name": *"[^"]*"' | sed 's/.*"v\?\([^"]*\)".*/\1/')"
           if [[ -z "$IPINFO_LVER" || -z "$NGX_LVER" || -z "$GEOIP2_TAG" ]]; then
