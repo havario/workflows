@@ -17,6 +17,7 @@
 FROM alpine:latest AS builder
 LABEL maintainer="honeok <honeok@duck.com>"
 ARG NGX_LVER
+ARG GEOIP2_TAG
 WORKDIR /GeoLite2
 RUN --mount=type=secret,id=maxmind_key \
     MAXMIND_KEY=$(cat /run/secrets/maxmind_key) \
@@ -40,8 +41,7 @@ RUN --mount=type=secret,id=maxmind_key \
     && cd /tmp \
     && wget -qO nginx-${NGX_LVER}.tar.gz "https://nginx.org/download/nginx-${NGX_LVER}.tar.gz" \
     && tar -zxf nginx-${NGX_LVER}.tar.gz \
-    && GEOIP2_TAG=$(wget -qO- --tries 5 "https://api.github.com/repos/leev/ngx_http_geoip2_module/releases/latest" | grep -o '"tag_name": *"[^"]*"' | sed 's/.*"v\?\([^"]*\)".*/\1/') \
-    && git clone --depth=1 --branch "$GEOIP2_TAG" "https://github.com/leev/ngx_http_geoip2_module.git" \
+    && git clone --depth=1 --branch ${GEOIP2_TAG} "https://github.com/leev/ngx_http_geoip2_module.git" \
     && cd nginx-${NGX_LVER} \
     && ./configure --with-compat \
         --add-dynamic-module=../ngx_http_geoip2_module \
