@@ -92,15 +92,16 @@ jobs:
           context: "{{ defaultContext }}:core/v2ray"
           file: Dockerfile
           platforms: ${{ matrix.platform }}
+          push: true
           build-args: |
             BUILDKIT_CONTEXT_KEEP_GIT_DIR=1
             VERSION=${{ env.V2RAY_LTAG }}
           labels: ${{ steps.meta.outputs.labels }}
           outputs: |
-            type=image,name=${{ env.REGISTRY_IMAGE }}
+            type=image
+            name=${{ env.REGISTRY_IMAGE }}
             push-by-digest=true
             name-canonical=true
-            push=true
 
       - name: 'Export image digest'
         if: env.IS_RENEW == 1 || github.event_name == 'workflow_dispatch'
