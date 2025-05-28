@@ -53,7 +53,7 @@ jobs:
 
       - name: 'Write MaxMind secret'
         if: env.IS_RENEW == 1 || github.event_name == 'workflow_dispatch'
-        run: echo "${{ env.MAXMIND_KEY }}" > maxmind_key.txt
+        run: echo "${{ env.MAXMIND_KEY }}" > /tmp/maxmind_key.txt
 
       - name: 'Build and Push ipinfo image'
         if: env.IS_RENEW == 1 || github.event_name == 'workflow_dispatch'
@@ -63,7 +63,7 @@ jobs:
           file: Dockerfile
           platforms: linux/386, linux/amd64, linux/arm/v6, linux/arm/v7, linux/arm64/v8, linux/ppc64le, linux/riscv64, linux/s390x
           secrets: |
-            id=maxmind_key,src=maxmind_key.txt
+            id=maxmind_key,src=/tmp/maxmind_key.txt
           build-args: |
             NGX_LVER=${{ env.NGX_LVER }}
             GEOIP2_TAG=${{ env.GEOIP2_TAG }}
