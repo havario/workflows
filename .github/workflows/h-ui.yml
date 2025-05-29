@@ -40,11 +40,13 @@ jobs:
       - name: 'Download H-UI Source Code and Build frontend assets'
         if: env.IS_RENEW == 1 || github.event_name == 'workflow_dispatch'
         run: |
+          set -ex
           cd /tmp
           apt-get update && apt-get install -y git
           git clone --depth=1 --branch "$HUI_LTAG" https://github.com/jonssonyan/h-ui.git
           cd h-ui/frontend
-          npm install --legacy-peer-deps && npm run build:prod
+          npm install --legacy-peer-deps
+          NODE_OPTIONS="--experimental-vm-modules" npm run build:prod
           cd ../..
 
       - name: 'Set up Docker QEMU'
