@@ -41,8 +41,8 @@ jobs:
         if: env.IS_RENEW == 1 || github.event_name == 'workflow_dispatch'
         run: |
           set -ex
-          git clone --depth=1 --branch "$HUI_LTAG" https://github.com/jonssonyan/h-ui.git /tmp/h-ui
-          cd /tmp/h-ui/frontend/
+          git clone --depth=1 --branch "$HUI_LTAG" https://github.com/jonssonyan/h-ui.git "$GITHUB_WORKSPACE/h-ui"
+          cd "$GITHUB_WORKSPACE/h-ui/frontend/"
           npm install -g pnpm
           pnpm install
           pnpm build:prod
@@ -66,8 +66,8 @@ jobs:
         if: env.IS_RENEW == 1 || github.event_name == 'workflow_dispatch'
         uses: docker/build-push-action@v6.17.0
         with:
-          context: /tmp/h-ui
-          file: core/h-ui/Dockerfile
+          context: ${{ github.workspace }}/h-ui
+          file: ${{ github.workspace }}/core/h-ui/Dockerfile
           platforms: linux/386, linux/amd64, linux/arm/v6, linux/arm/v7, linux/arm64/v8, linux/ppc64le, linux/riscv64, linux/s390x
           tags: |
             "${{ env.DOCKER_USERNAME }}/h-ui:${{ env.HUI_LVER }}"
