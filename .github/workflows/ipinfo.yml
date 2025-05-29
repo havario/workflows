@@ -40,6 +40,7 @@ jobs:
 
       - name: 'Download GeoLite2 mmdb file'
         run: |
+          cd ${{ github.workspace }}/forge/ipinfo
           wget --tries=5 -qO GeoLite2-ASN.tar.gz "https://download.maxmind.com/app/geoip_download?license_key=${MAXMIND_KEY}&edition_id=GeoLite2-ASN&suffix=tar.gz"
           wget --tries=5 -qO GeoLite2-ASN.tar.gz.sha256 "https://download.maxmind.com/app/geoip_download?license_key=${MAXMIND_KEY}&edition_id=GeoLite2-ASN&suffix=tar.gz.sha256"
           sed -i 's/GeoLite2-ASN_[0-9]*.tar.gz/GeoLite2-ASN.tar.gz/g' GeoLite2-ASN.tar.gz.sha256
@@ -70,7 +71,7 @@ jobs:
         if: env.IS_RENEW == 1 || github.event_name == 'workflow_dispatch'
         uses: docker/build-push-action@v6.17.0
         with:
-          context: ${{ github.workspace }}
+          context: ${{ github.workspace }}/forge/ipinfo
           file: ${{ github.workspace }}/forge/ipinfo/Dockerfile
           platforms: linux/386, linux/amd64, linux/arm/v6, linux/arm/v7, linux/arm64/v8, linux/ppc64le, linux/riscv64, linux/s390x
           build-args: |
