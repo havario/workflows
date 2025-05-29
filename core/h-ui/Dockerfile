@@ -20,8 +20,11 @@ ENV GOOS=$TARGETOS
 ENV GOARCH=$TARGETARCH
 COPY build.sh .
 RUN set -ex \
-    && apk add --no-cache build-base git \
-    && chmod +x build.sh && ./build.sh ${VERSION} \
+    && apk update \
+    && apk add --no-cache build-base git nodejs npm \
+    && git clone --depth=1 --branch ${VERSION} https://github.com/jonssonyan/h-ui.git \
+    && cd h-ui \
+    && go build -trimpath -ldflags "-s -w" -o /go/bin/h-ui ./main.go \
     && rm -rf /var/cache/apk/*
 
 FROM alpine:latest AS dist
