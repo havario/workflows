@@ -11,6 +11,7 @@ permissions:
 
 jobs:
   clean:
+    name: 'Delete old workflow runs'
     runs-on: ubuntu-latest
 
     steps:
