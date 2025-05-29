@@ -12,7 +12,7 @@
 FROM golang:1-alpine AS builder
 LABEL maintainer="honeok <honeok@duck.com>"
 WORKDIR /go/src/github.com/jonssonyan/h-ui
-COPY build/* .
+COPY build/ ./
 ARG TARGETOS
 ARG TARGETARCH
 ARG GOPROXY=""
