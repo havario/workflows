@@ -23,7 +23,9 @@ RUN set -ex \
     && apk update \
     && apk add --no-cache build-base git nodejs npm \
     && git clone --depth=1 --branch ${VERSION} https://github.com/jonssonyan/h-ui.git \
-    && cd h-ui \
+    && cd h-ui/frontend \
+    && npm install && npm run build:prod \
+    && cd .. \
     && go build -trimpath -ldflags "-s -w" -o /go/bin/h-ui ./main.go \
     && rm -rf /var/cache/apk/*
 
