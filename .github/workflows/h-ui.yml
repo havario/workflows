@@ -42,13 +42,12 @@ jobs:
         run: |
           set -ex
           apt-get update && apt-get install -y git
-          mkdir -p core/h-ui
-          git clone --depth=1 --branch "$HUI_LTAG" https://github.com/jonssonyan/h-ui.git core/h-ui
-          cd core/h-ui/frontend
+          mkdir -p core/h-ui/build
+          git clone --depth=1 --branch "$HUI_LTAG" https://github.com/jonssonyan/h-ui.git core/h-ui/build
+          cd core/h-ui/build/frontend
           npm install -g pnpm
           pnpm install
           pnpm build:prod
-          cd ../..
 
       - name: 'Set up Docker QEMU'
         if: env.IS_RENEW == 1 || github.event_name == 'workflow_dispatch'
