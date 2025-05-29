@@ -48,6 +48,7 @@ jobs:
           npm install -g pnpm
           pnpm install
           pnpm build:prod
+          cd ../..
 
       - name: 'Set up Docker QEMU'
         if: env.IS_RENEW == 1 || github.event_name == 'workflow_dispatch'
