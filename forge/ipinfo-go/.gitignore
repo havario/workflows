@@ -1,7 +1,7 @@
 .vscode/
 .idea/
 .svn/
-.DS_Store
+ipinfo-go
 *.log
 *.md
-ipinfo-go
+*.mmdb
