@@ -15,5 +15,5 @@ jobs:
           fetch-depth: 0
 
       - name: 'Fetch Versions and Determine Build'
-        run:
+        run: |
           echo $PWD
