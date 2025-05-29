@@ -11,21 +11,17 @@
 
 FROM golang:1-alpine AS builder
 LABEL maintainer="honeok <honeok@duck.com>"
-WORKDIR /go/src
-ARG TARGETOS TARGETARCH
+WORKDIR /go/src/github.com/jonssonyan/h-ui
+COPY h-ui/* .
+ARG TARGETOS
+ARG TARGETARCH
 ARG GOPROXY=""
-ARG VERSION
 ENV CGO_ENABLED=0
 ENV GOOS=$TARGETOS
 ENV GOARCH=$TARGETARCH
-COPY build.sh .
 RUN set -ex \
     && apk update \
-    && apk add --no-cache build-base git nodejs npm \
-    && git clone --depth=1 --branch ${VERSION} https://github.com/jonssonyan/h-ui.git \
-    && cd h-ui/frontend \
-    && npm install && npm run build:prod \
-    && cd .. \
+    && apk add --no-cache build-base \
     && go build -trimpath -ldflags "-s -w" -o /go/bin/h-ui ./main.go \
     && rm -rf /var/cache/apk/*
 

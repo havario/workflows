@@ -25,10 +25,27 @@ jobs:
           HUI_CVER="$(wget -qO- --tries=5 "https://hub.docker.com/v2/repositories/honeok/h-ui/tags" | grep -o '"name":"[^"]*"' | sed 's/"name":"//;s/"//' | grep -v '^latest$' | sort -Vr | head -n1 || echo "")"
           HUI_LTAG="$(wget -qO- --tries=5 "https://api.github.com/repos/jonssonyan/h-ui/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')"
           HUI_LVER="${HUI_LTAG#v}"
-          [[ -z "$HUI_LTAG" || -z "$HUI_LVER" || ]] && echo 'Error: Required parameters cannot be empty.' && exit 1
+          [[ -z "$HUI_CVER" || -z "$HUI_LTAG" || -z "$HUI_LVER" || ]] && echo 'Error: Required parameters cannot be empty.' && exit 1
           echo "HUI_CVER=$HUI_CVER" >> $GITHUB_ENV
+          echo "HUI_LTAG=$HUI_LTAG" >> $GITHUB_ENV
           echo "HUI_LVER=$HUI_LVER" >> $GITHUB_ENV
           [[ ( "$(echo -e "$HUI_LVER\n$HUI_CVER" | sort -V | head -n1)" != "$HUI_LVER" ) || -z "$HUI_CVER" ]] && echo "IS_RENEW=1" >> $GITHUB_ENV
+
+      - name: 'Set up Node.js'
+        if: env.IS_RENEW == 1 || github.event_name == 'workflow_dispatch'
+        uses: actions/setup-node@v4.4.0
+        with:
+          node-version: 20
+
+      - name: 'Download H-UI Source Code and Build frontend assets'
+        if: env.IS_RENEW == 1 || github.event_name == 'workflow_dispatch'
+        run: |
+          cd /core/h-ui
+          apt-get update && apt-get install -y git
+          git clone --depth=1 --branch "$HUI_LTAG" https://github.com/jonssonyan/h-ui.git
+          cd h-ui && rm -f Dockerfile
+          cd frontend && npm install && npm run build:prod
+          cd ../..
 
       - name: 'Set up Docker QEMU'
         if: env.IS_RENEW == 1 || github.event_name == 'workflow_dispatch'
@@ -49,10 +66,9 @@ jobs:
         if: env.IS_RENEW == 1 || github.event_name == 'workflow_dispatch'
         uses: docker/build-push-action@v6.17.0
         with:
-          context: "{{ defaultContext }}:core/h-ui"
+          context: "./core/h-ui"
           file: Dockerfile
           platforms: linux/386, linux/amd64, linux/arm/v6, linux/arm/v7, linux/arm64/v8, linux/ppc64le, linux/riscv64, linux/s390x
-          build-args: VERSION=${{ env.HUI_LTAG }}
           tags: |
             "${{ env.DOCKER_USERNAME }}/h-ui:${{ env.HUI_LVER }}"
             "${{ env.DOCKER_USERNAME }}/h-ui:latest"
