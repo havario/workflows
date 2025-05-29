@@ -25,7 +25,7 @@ jobs:
           HUI_CVER="$(wget -qO- --tries=5 "https://hub.docker.com/v2/repositories/honeok/h-ui/tags" | grep -o '"name":"[^"]*"' | sed 's/"name":"//;s/"//' | grep -v '^latest$' | sort -Vr | head -n1 || echo "")"
           HUI_LTAG="$(wget -qO- --tries=5 "https://api.github.com/repos/jonssonyan/h-ui/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')"
           HUI_LVER="${HUI_LTAG#v}"
-          if [[ -z "$HUI_CVER" || -z "$HUI_LTAG" || -z "$HUI_LVER" ]]; then
+          if [[ -z "$HUI_LTAG" || -z "$HUI_LVER" ]]; then
             echo 'Error: Required parameters cannot be empty.' && exit 1
           fi
           echo "HUI_CVER=$HUI_CVER" >> $GITHUB_ENV
