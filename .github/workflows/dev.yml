@@ -1,0 +1,19 @@
+---
+name: 'Workspace Confirmation'
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 'Check out repository'
+        uses: actions/checkout@v4.2.2
+        with:
+          fetch-depth: 0
+
+      - name: 'Fetch Versions and Determine Build'
+        run:
+          echo $PWD
