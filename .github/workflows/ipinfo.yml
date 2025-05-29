@@ -27,16 +27,18 @@ jobs:
           IPINFO_CVER="$(wget -qO- --tries=5 "https://hub.docker.com/v2/repositories/honeok/ipinfo/tags" | grep -o '"name":"[^"]*"' | sed 's/"name":"//;s/"//' | grep -v '^latest$' | sort -Vr | head -n1 || echo "")"
           IPINFO_LVER="$(wget -qO- --tries=5 "https://download.maxmind.com/app/geoip_download?license_key=$MAXMIND_KEY&edition_id=GeoLite2-ASN&suffix=tar.gz.sha256" | awk '{print $2}' | sed -E 's/.*_([0-9]{8})\.tar\.gz/\1/')"
           NGX_LVER="$(wget -qO- --tries=5 "https://api.github.com/repos/nginx/nginx/releases/latest" | grep -oP '"tag_name": "\K[^"]+' | sed 's/release-//')"
+          NGX_ALPINE_LVER="$(docker run --rm nginx:stable-alpine sh -c "nginx -v 2>&1 | awk -F'/' '{print \$NF}'")"
           GEOIP2_TAG="$(wget -qO- --tries 5 "https://api.github.com/repos/leev/ngx_http_geoip2_module/releases/latest" | grep -o '"tag_name": *"[^"]*"' | sed 's/.*"v\?\([^"]*\)".*/\1/')"
-          if [[ -z "$IPINFO_LVER" || -z "$NGX_LVER" || -z "$GEOIP2_TAG" ]]; then
+          if [[ -z "$IPINFO_LVER" || -z "$NGX_LVER" || -z "$NGX_ALPINE_LVER" || -z "$GEOIP2_TAG" ]]; then
             echo 'Error: Required parameters cannot be empty.'; exit 1
           fi
           echo "IPINFO_CVER=$IPINFO_CVER" >> $GITHUB_ENV
           echo "IPINFO_LVER=$IPINFO_LVER" >> $GITHUB_ENV
           echo "NGX_LVER=$NGX_LVER" >> $GITHUB_ENV
+          echo "NGX_ALPINE_LVER=$NGX_ALPINE_LVER" >> $GITHUB_ENV
           echo "GEOIP2_TAG=$GEOIP2_TAG" >> $GITHUB_ENV
           echo $IPINFO_CVER $IPINFO_LVER $NGX_LVER $GEOIP2_TAG
-          [[ ( "$(echo -e "$IPINFO_LVER\n$IPINFO_CVER" | sort -V | head -n1)" != "$IPINFO_LVER" ) || -z "$IPINFO_CVER" ]] && echo "IS_RENEW=1" >> $GITHUB_ENV
+          [[ ( "$(echo -e "$IPINFO_LVER\n$IPINFO_CVER" | sort -V | head -n1)" != "$IPINFO_LVER" && "$NGX_ALPINE_LVER" == "$NGX_LVER" ) || -z "$IPINFO_CVER" ]] && echo "IS_RENEW=1" >> $GITHUB_ENV
 
       - name: 'Set up Docker QEMU'
         if: env.IS_RENEW == 1 || github.event_name == 'workflow_dispatch'
