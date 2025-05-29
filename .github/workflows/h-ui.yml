@@ -45,6 +45,7 @@ jobs:
           apt-get update && apt-get install -y git
           git clone --depth=1 --branch "$HUI_LTAG" https://github.com/jonssonyan/h-ui.git
           cd h-ui/frontend
+          npm install -g pnpm
           pnpm install
           pnpm build:prod
           cd ../..
