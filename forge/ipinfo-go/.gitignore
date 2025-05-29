@@ -1,0 +1,7 @@
+.vscode/
+.idea/
+.svn/
+.DS_Store
+*.log
+*.md
+ipinfo-go
