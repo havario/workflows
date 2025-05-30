@@ -1,10 +1,11 @@
 package handlers
 
 import (
-	"github.com/gin-gonic/gin"
 	"ipinfo/geoip"
 	"ipinfo/models"
 	"net/http"
+
+	"github.com/gin-gonic/gin"
 )
 
 // GeoIPService encapsulates GeoIP service
@@ -131,9 +132,8 @@ func (s *GeoIPService) handleJSON(c *gin.Context) {
 
 	// Build response data, only include non-empty fields
 	ipInfo := map[string]interface{}{
-		"ip":     clientIP,
-		"loc":    models.GetLocation(cityRecord),
-		"readme": "https://ipinfo.io/missingauth",
+		"ip":  clientIP,
+		"loc": models.GetLocation(cityRecord),
 	}
 
 	// Include fields only if non-empty
