@@ -26,18 +26,18 @@ ENV GOARCH=$TARGETARCH
 COPY . .
 RUN set -ex \
     && apk add --no-cache build-base \
-    && go build -v -a -trimpath -ldflags "-s -w -buildid=" -o /go/bin/ipinfo ./main
+    && go build -v -trimpath -ldflags "-s -w -buildid=" -o /go/bin/ipinfo ./main
 
 FROM alpine:latest AS dist
 LABEL maintainer="honeok <honeok@duck.com>"
 WORKDIR /ipinfo
 COPY --from=builder /go/bin/ipinfo /ipinfo/ipinfo
 COPY --from=builder /go/src/ipinfo/*.mmdb /ipinfo/
-COPY --from=builder /go/src/ipinfo/favicon.ico /ipinfo/
 RUN set -ex \
     && apk upgrade \
     && apk add --no-cache tzdata \
     && ln -sf /ipinfo/ipinfo /usr/bin/ipinfo \
+    && wget --no-check-certificate -qO /ipinfo/favicon.ico "https://cdn.skyimg.net/up/2025/5/29/e8c32aa5.webp" \
     && rm -rf /var/cache/apk/*
 ENV TZ=Asia/Shanghai
 ENV GIN_MODE=release
