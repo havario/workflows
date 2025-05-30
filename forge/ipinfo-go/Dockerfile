@@ -37,6 +37,7 @@ COPY --from=builder /go/src/github.com/honeok/Tools/favicon.ico /ipinfo-go/
 RUN set -ex \
     && apk upgrade \
     && apk add --no-cache tzdata \
+    && ln -sf /ipinfo-go/ipinfo-go /usr/bin/ipinfo-go \
     && rm -rf /var/cache/apk/*
 ENV TZ=Asia/Shanghai
 ENV GIN_MODE=release
