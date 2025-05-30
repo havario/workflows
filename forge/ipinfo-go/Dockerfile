@@ -26,7 +26,7 @@ ENV GOARCH=$TARGETARCH
 COPY . .
 RUN set -ex \
     && apk add --no-cache build-base \
-    && go build -v -a -trimpath -ldflags "-s -w -buildid=" -o /go/bin/ipinfo ./main.go
+    && go build -v -a -trimpath -ldflags "-s -w -buildid=" -o /go/bin/ipinfo ./main
 
 FROM alpine:latest AS dist
 LABEL maintainer="honeok <honeok@duck.com>"
