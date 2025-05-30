@@ -36,5 +36,6 @@ RUN set -ex \
     && apk add --no-cache tzdata \
     && rm -rf /var/cache/apk/*
 ENV TZ=Asia/Shanghai
+ENV GIN_MODE=release
 EXPOSE 8080
 ENTRYPOINT [ "ipinfo-go" ]
