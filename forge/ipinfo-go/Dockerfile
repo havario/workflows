@@ -16,7 +16,7 @@
 
 FROM golang:1-alpine AS builder
 LABEL maintainer="honeok <honeok@duck.com>"
-WORKDIR /go/src/github.com/honeok/Tools
+WORKDIR /go/src/ipinfo
 ARG TARGETOS TARGETARCH
 ARG GOPROXY=""
 ARG VERSION
@@ -32,8 +32,8 @@ FROM alpine:latest AS dist
 LABEL maintainer="honeok <honeok@duck.com>"
 WORKDIR /ipinfo
 COPY --from=builder /go/bin/ipinfo /ipinfo/ipinfo
-COPY --from=builder /go/src/github.com/honeok/Tools/*.mmdb /ipinfo/
-COPY --from=builder /go/src/github.com/honeok/Tools/favicon.ico /ipinfo/
+COPY --from=builder /go/src/ipinfo/*.mmdb /ipinfo/
+COPY --from=builder /go/src/ipinfo/favicon.ico /ipinfo/
 RUN set -ex \
     && apk upgrade \
     && apk add --no-cache tzdata \
