@@ -1,0 +1,40 @@
+# Description: This Dockerfile is used to build the ipinfo-go query interface container image.
+#
+# Copyright (c) 2025 honeok <honeok@duck.com>
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+FROM golang:1-alpine AS builder
+LABEL maintainer="honeok <honeok@duck.com>"
+WORKDIR /go/src/github.com/honeok/Tools
+ARG TARGETOS TARGETARCH
+ARG GOPROXY=""
+ARG VERSION
+ENV CGO_ENABLED=0
+ENV GOOS=$TARGETOS
+ENV GOARCH=$TARGETARCH
+COPY . .
+RUN set -ex \
+    && apk add --no-cache build-base \
+    && go build -v -a -trimpath -ldflags "-s -w -buildid=" -o /go/bin/ipinfo-go ./main.go
+
+FROM alpine:latest AS dist
+LABEL maintainer="honeok <honeok@duck.com>"
+COPY --from=builder /go/bin/ipinfo-go /usr/bin/ipinfo-go
+RUN set -ex \
+    && apk upgrade \
+    && apk add --no-cache tzdata \
+    && rm -rf /var/cache/apk/*
+ENV TZ=Asia/Shanghai
+EXPOSE 8080
+ENTRYPOINT [ "ipinfo-go" ]
