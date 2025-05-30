@@ -26,20 +26,20 @@ ENV GOARCH=$TARGETARCH
 COPY . .
 RUN set -ex \
     && apk add --no-cache build-base \
-    && go build -v -a -trimpath -ldflags "-s -w -buildid=" -o /go/bin/ipinfo-go ./main.go
+    && go build -v -a -trimpath -ldflags "-s -w -buildid=" -o /go/bin/ipinfo ./main.go
 
 FROM alpine:latest AS dist
 LABEL maintainer="honeok <honeok@duck.com>"
-WORKDIR /ipinfo-go
-COPY --from=builder /go/bin/ipinfo-go /ipinfo-go/ipinfo-go
-COPY --from=builder /go/src/github.com/honeok/Tools/*.mmdb /ipinfo-go/
-COPY --from=builder /go/src/github.com/honeok/Tools/favicon.ico /ipinfo-go/
+WORKDIR /ipinfo
+COPY --from=builder /go/bin/ipinfo /ipinfo/ipinfo
+COPY --from=builder /go/src/github.com/honeok/Tools/*.mmdb /ipinfo/
+COPY --from=builder /go/src/github.com/honeok/Tools/favicon.ico /ipinfo/
 RUN set -ex \
     && apk upgrade \
     && apk add --no-cache tzdata \
-    && ln -sf /ipinfo-go/ipinfo-go /usr/bin/ipinfo-go \
+    && ln -sf /ipinfo/ipinfo /usr/bin/ipinfo \
     && rm -rf /var/cache/apk/*
 ENV TZ=Asia/Shanghai
 ENV GIN_MODE=release
 EXPOSE 8080
-ENTRYPOINT [ "ipinfo-go" ]
+ENTRYPOINT [ "ipinfo" ]
