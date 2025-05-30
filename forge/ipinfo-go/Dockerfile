@@ -30,7 +30,10 @@ RUN set -ex \
 
 FROM alpine:latest AS dist
 LABEL maintainer="honeok <honeok@duck.com>"
-COPY --from=builder /go/bin/ipinfo-go /usr/bin/ipinfo-go
+WORKDIR /ipinfo-go
+COPY --from=builder /go/bin/ipinfo-go /ipinfo-go/ipinfo-go
+COPY --from=builder /go/src/github.com/honeok/Tools/*.mmdb /ipinfo-go/
+COPY --from=builder /go/src/github.com/honeok/Tools/favicon.ico /ipinfo-go/
 RUN set -ex \
     && apk upgrade \
     && apk add --no-cache tzdata \
