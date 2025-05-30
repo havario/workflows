@@ -1,6 +1,9 @@
 .vscode/
 .idea/
 .svn/
-ipinfo-go
+
 *.log
 *.mmdb
+
+# excluding post-build binaries
+ipinfo
