@@ -22,7 +22,4 @@ WORK_DIR="$(pwd)"
 
 docker buildx build \
     --platform linux/386,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64/v8,linux/ppc64le,linux/riscv64,linux/s390x \
-    --no-cache \
-    -t "honeok/ipinfo-go:$BUMP_VERSION" \
-    -t honeok/ipinfo-go:latest \
-    --push .
+    --no-cache -t "honeok/ipinfo-go:$BUMP_VERSION" -t "honeok/ipinfo-go:latest" --push .
