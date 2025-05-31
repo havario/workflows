@@ -5,6 +5,8 @@
 
 [ipinfo][1] is a self-hosted, no-tracking, no-ads solution for displaying client IP information such as IP address, country, AS number/description.
 
+Built based on the latest version of `Nginx`, retaining the latest features of `Nginx`!
+
 ## Prepare the host
 
 If you need to install docker by yourself, follow the [official installation guide][2].
