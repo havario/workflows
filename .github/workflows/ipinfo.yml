@@ -24,7 +24,6 @@ jobs:
 
       - name: 'Fetch Versions and Determine Build'
         run: |
-          IPINFO_CVER="$(wget -qO- --tries=5 "https://hub.docker.com/v2/repositories/honeok/ipinfo/tags" | grep -o '"name":"[^"]*"' | sed 's/"name":"//;s/"//' | grep -v '^latest$' | sort -Vr | head -n1 || echo "")"
           NGX_LVER="$(wget -qO- --tries=5 "https://api.github.com/repos/nginx/nginx/releases/latest" | grep -oP '"tag_name": "\K[^"]+' | sed 's/release-//')"
           NGX_ALPINE_LVER="$(docker run --rm nginx:stable-alpine sh -c "nginx -v 2>&1 | awk -F'/' '{print \$NF}'")"
           GEOIP2_TAG="$(wget -qO- --tries 5 "https://api.github.com/repos/leev/ngx_http_geoip2_module/releases/latest" | grep -o '"tag_name": *"[^"]*"' | sed 's/.*"v\?\([^"]*\)".*/\1/')"
@@ -32,7 +31,7 @@ jobs:
           echo "NGX_LVER=$NGX_LVER" >> $GITHUB_ENV
           echo "NGX_ALPINE_LVER=$NGX_ALPINE_LVER" >> $GITHUB_ENV
           echo "GEOIP2_TAG=$GEOIP2_TAG" >> $GITHUB_ENV
-          [[ ( "$NGX_LVER" == "$NGX_ALPINE_LVER" ) || ( -z "$IPINFO_CVER" && "$NGX_ALPINE_LVER" == "$NGX_LVER" ) ]] && echo "IS_RENEW=1" >> $GITHUB_ENV
+          [[ "$NGX_LVER" == "$NGX_ALPINE_LVER" ]] && echo "IS_RENEW=1" >> $GITHUB_ENV
 
       - name: 'Download GeoLite2 mmdb file'
         if: env.IS_RENEW == 1 || github.event_name == 'workflow_dispatch'
