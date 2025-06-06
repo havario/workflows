@@ -1,8 +1,12 @@
 #!/bin/bash
 #
+# Description: This script is used to set the upstream repository commit user.
+#
 # Copyright (c) 2025 honeok <honeok@autistici.org>
 #
-# SPDX-License-Identifier: GPL-2.0
+# Licensed under the GNU General Public License, version 2 only.
+# This program is distributed WITHOUT ANY WARRANTY.
+# See <https://www.gnu.org/licenses/old-licenses/gpl-2.0.html>.
 
 set -e
 
@@ -19,7 +23,7 @@ read -rep "Please enter user: " USER
 case "$USER" in
     honeok)
         git config user.name "$USER"
-        git config user.email "100125733+honeok@users.noreply.github.com"
+        [ "$WORK_PLATFORM" = "github" ] && git config user.email "100125733+honeok@users.noreply.github.com"
         git remote set-url origin "git@${WORK_PLATFORM}-${USER}:${USER}/${REPOSITORY}.git"
         echo "----------"
         git config --get user.name
@@ -27,7 +31,7 @@ case "$USER" in
     ;;
     havario)
         git config user.name "$USER"
-        git config user.email "157877551+havario@users.noreply.github.com"
+        [ "$WORK_PLATFORM" = "github" ] && git config user.email "157877551+havario@users.noreply.github.com"
         git remote set-url origin "git@${WORK_PLATFORM}-${USER}:${USER}/${REPOSITORY}.git"
         echo "----------"
         git config --get user.name
