@@ -112,3 +112,19 @@ jobs:
             "${{ env.DOCKER_USERNAME }}/caddy:${{ env.CADDY_BETA_LVER }}-alpine"
             "${{ env.DOCKER_USERNAME }}/caddy:${{ env.CADDY_BETA_LVER }}"
           push: true
+
+  sync_doc:
+    name: 'Sync Caddy README.md'
+    runs-on: ubuntu-latest
+    needs:
+      - build_stable
+      - build_beta
+    if: success()
+    steps:
+      - name: 'Sync Caddy README.md'
+        uses: ms-jpq/sync-dockerhub-readme@v1
+        with:
+          username: ${{ env.DOCKER_USERNAME }}
+          password: ${{ env.DOCKER_PASSWORD }}
+          repository: ${{ env.DOCKER_USERNAME }}/caddy
+          readme: ${{ github.workspace }}/ldnmp/caddy/README.md
