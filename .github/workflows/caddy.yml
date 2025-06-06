@@ -3,8 +3,7 @@ name: 'Build and Publish Caddy'
 
 on:
   schedule:
-    # - cron: '0 16 * * 0'
-    - cron: '0 13 * * 5'
+    - cron: '0 16 * * 0'
   workflow_dispatch:
 
 env:
@@ -31,7 +30,7 @@ jobs:
           CADDY_ALPINE_LVER="$(docker run --rm caddy:"${CADDY_STABLE_LVER}"-alpine 2>/dev/null sh -c "caddy version 2>&1" | head -n1 | cut -d' ' -f1 | sed 's/^v//' | grep . || echo "")"
           echo "CADDY_STABLE_LVER=$CADDY_STABLE_LVER" >> $GITHUB_ENV
           echo "CADDY_STABLE_CVER=$CADDY_STABLE_CVER" >> $GITHUB_ENV
-          if [[ ( "$(echo -e "$CADDY_STABLE_LVER\n$CADDY_STABLE_CVER" | sort -V | head -n1)" != "$CADDY_STABLE_LVER" && "$CADDY_ALPINE_LVER" == "$CADDY_STABLE_LVER" ) || -z "$CADDY_STABLE_CVER" ]]; then
+          if [[ ( "$(echo -e "$CADDY_STABLE_LVER\n$CADDY_STABLE_CVER" | sort -V | head -n1)" != "$CADDY_STABLE_LVER" && "$CADDY_ALPINE_LVER" == "$CADDY_STABLE_LVER" ) || ( -z "$CADDY_STABLE_CVER" && -n "$CADDY_ALPINE_LVER" ) ]]; then
             echo "IS_RENEW=1" >> $GITHUB_ENV
           fi
 
