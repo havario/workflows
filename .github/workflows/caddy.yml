@@ -3,7 +3,8 @@ name: 'Build and Publish Caddy'
 
 on:
   schedule:
-    - cron: '0 16 * * 0'
+    # - cron: '0 16 * * 0'
+    - cron: '0 9 * * 5'
   workflow_dispatch:
 
 env:
