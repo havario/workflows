@@ -1,9 +1,0 @@
-.vscode/
-.idea/
-.svn/
-
-*.log
-*.mmdb
-
-# excluding post-build binaries
-ipinfo
