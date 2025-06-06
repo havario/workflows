@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Copyright (c) 2025 honeok <honeok@disroot.org>
+# Copyright (c) 2025 honeok <honeok@autistici.org>
 #
 # SPDX-License-Identifier: GPL-2.0
 
