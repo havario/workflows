@@ -60,7 +60,7 @@ It can be found at [Docker Hub][4].
 docker run -d -p 80:80 --name caddy --restart=unless-stopped honeok/caddy
 ```
 
-For the rest of the configuration, you only need to refer to the [caddy official documentation][5].
+For all other configuration details, please refer to the [Caddy official documentation][5].
 
 **Note**: The TCP port number `80` must be opened in firewall.
 
