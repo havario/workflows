@@ -82,7 +82,7 @@ jobs:
           CADDY_ALPINE_LVER="$(docker run --rm caddy:"${CADDY_BETA_LVER}"-alpine 2>/dev/null sh -c "caddy version 2>&1" | head -n1 | cut -d' ' -f1 | sed 's/^v//' | grep . || echo "")"
           echo "CADDY_BETA_LVER=$CADDY_BETA_LVER" >> $GITHUB_ENV
           echo "CADDY_BETA_CVER=$CADDY_BETA_CVER" >> $GITHUB_ENV
-          if [[ ( "$(echo -e "$CADDY_BETA_LVER\n$CADDY_BETA_CVER" | sort -V | head -n1)" != "$CADDY_BETA_LVER" && "$CADDY_ALPINE_LVER" == "$CADDY_BETA_LVER" ) || -z "$CADDY_BETA_CVER" ]]; then
+          if [[ ( "$(echo -e "$CADDY_BETA_LVER\n$CADDY_BETA_CVER" | sort -V | head -n1)" != "$CADDY_BETA_LVER" && "$CADDY_ALPINE_LVER" == "$CADDY_BETA_LVER" ) || ( -z "$CADDY_BETA_CVER" && -n "$CADDY_ALPINE_LVER" ) ]]; then
             echo "IS_RENEW=1" >> $GITHUB_ENV
           fi
 
