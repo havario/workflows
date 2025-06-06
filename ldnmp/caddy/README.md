@@ -3,6 +3,8 @@
 [![Docker Pulls](https://img.shields.io/docker/pulls/honeok/caddy.svg?style=flat-square)](https://hub.docker.com/r/honeok/caddy)
 [![Docker Image Size](https://img.shields.io/docker/image-size/honeok/caddy.svg?style=flat-square)](https://hub.docker.com/r/honeok/caddy)
 
+<img src="https://user-images.githubusercontent.com/1128849/210187356-dfb7f1c5-ac2e-43aa-bb23-fc014280ae1f.svg" alt="Nginx" width="40%">
+
 [Caddy][1] is a powerful, extensible platform to serve your sites, services, and apps, written in Go. If you're new to Caddy, the way you serve the Web is about to change.
 
 Most people use Caddy as a web server or proxy, but at its core, Caddy is a server of servers. With the requisite modules, it can take on the role of any long-running process!
