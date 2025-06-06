@@ -11,6 +11,9 @@
   <a href="https://hub.docker.com/r/honeok/caddy">
       <img src="https://img.shields.io/docker/image-size/honeok/caddy.svg?style=flat-square" alt="Docker Image Size">
   </a>
+  <a href="https://hub.docker.com/r/honeok/caddy">
+      <img src="https://img.shields.io/docker/v/honeok/caddy.svg?style=flat-square" alt="Docker Image Version">
+  </a>
 </p>
 
 [Caddy][1] is a powerful, extensible platform to serve your sites, services, and apps, written in Go. If you're new to Caddy, the way you serve the Web is about to change.
