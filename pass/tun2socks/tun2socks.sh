@@ -4,7 +4,7 @@
 #
 # Copyright (c) 2025 honeok <honeok@disroot.org>
 #
-# Acknowledgment: https://github.com/xjasonlyu/tun2socks
+# Thanks: https://github.com/xjasonlyu/tun2socks
 #
 # SPDX-License-Identifier: GPL-2.0-only
 
