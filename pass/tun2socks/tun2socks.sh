@@ -31,7 +31,7 @@ _suc_msg() { printf "\033[42m\033[1mSuccess\033[0m %b\n" "$*"; }
 _info_msg() { printf "\033[43m\033[1mInfo\033[0m %b\n" "$*"; }
 
 # 各变量默认值
-RANDOM_CHAR="$(head /dev/urandom | tr -dc 'A-Za-z0-9' | head -c 5)"
+RANDOM_CHAR="$(head /dev/urandom 2>/dev/null | tr -dc 'A-Za-z0-9' | head -c 5)"
 TEMP_WORKDIR="/tmp/tun2socks_$RANDOM_CHAR"
 UA_BROWSER='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36'
 
