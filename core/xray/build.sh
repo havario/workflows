@@ -6,7 +6,7 @@
 #
 # SPDX-License-Identifier: GPL-2.0-only
 
-set -eux
+set -ex
 
 XRAY_LVER="$2"
 
