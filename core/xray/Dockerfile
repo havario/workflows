@@ -15,7 +15,8 @@ COPY build.sh .
 RUN set -ex \
     && apk update \
     && chmod +x build.sh && ./build.sh build "$XRAY_LVER" \
-    && rm -f build.sh
+    && rm -f build.sh \
+    && rm -rf /var/cache/apk/*
 
 FROM alpine:latest AS dist
 LABEL maintainer="honeok <honeok@disroot.org>"
