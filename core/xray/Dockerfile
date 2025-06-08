@@ -33,7 +33,7 @@ RUN set -ex \
     && rm -f build.sh \
     && curl -fsL -o /etc/xray/bin/geoip.dat "https://github.com/v2fly/geoip/releases/latest/download/geoip.dat" \
     && curl -fsL -o /etc/xray/bin/geosite.dat "https://github.com/v2fly/domain-list-community/releases/latest/download/dlc.dat" \
-    && rm -rf /var/cache/apk/* /tmp/* \
+    && rm -rf /var/cache/apk/* \
     && ln -sf /dev/stdout /var/log/xray/access.log \
     && ln -sf /dev/stderr /var/log/xray/error.log
 ENV TZ=Asia/Shanghai
