@@ -26,9 +26,7 @@ COPY build.sh .
 COPY docker-entrypoint.sh /docker-entrypoint.sh
 RUN set -ex \
     && apk update && apk upgrade \
-    && apk add --no-cache \
-        ca-certificates \
-        tzdata \
+    && apk add --no-cache ca-certificates tzdata \
     && chmod +x docker-entrypoint.sh \
     && chmod +x build.sh && ./build.sh before \
     && rm -f build.sh \
