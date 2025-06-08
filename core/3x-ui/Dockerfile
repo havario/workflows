@@ -6,15 +6,16 @@
 
 FROM golang:1-alpine AS builder
 LABEL maintainer="honeok <honeok@disroot.org>"
+ARG XRAY_LVER
+ARG XUI_LTAG
 WORKDIR /go/src/github.com/MHSanaei/3x-ui
 ENV CGO_ENABLED=1
 COPY build.sh .
 RUN set -ex \
     && apk update \
     && apk add --no-cache build-base gcc git \
-    && chmod +x build.sh && ./build.sh \
-    && TAG=$(wget --tries=5 -qO- "https://api.github.com/repos/MHSanaei/3x-ui/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/') \
-    && git clone --depth=1 --branch "$TAG" https://github.com/MHSanaei/3x-ui.git ./3x-ui \
+    && chmod +x build.sh && ./build.sh "$XRAY_LVER" \
+    && git clone --depth=1 --branch "$XUI_LTAG" https://github.com/MHSanaei/3x-ui.git ./3x-ui \
     && cd 3x-ui \
     && CGO_CFLAGS="-D_LARGEFILE64_SOURCE" GO111MODULE=on \
     && go build -a -trimpath -ldflags "-s -w -linkmode external -extldflags '-static'" -o /go/bin/3x-ui \

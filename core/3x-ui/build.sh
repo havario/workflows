@@ -8,8 +8,8 @@
 
 set -eux
 
-XRAY_VERSION="$(wget --tries=5 -qO- "https://api.github.com/repos/XTLS/Xray-core/releases/latest" | awk -F '["v]' '/tag_name/{print $5}')"
-if [ -z "$XRAY_VERSION" ]; then
+XRAY_LVER="$1"
+if [ -z "$XRAY_LVER" ]; then
     printf "Error: Unable to obtain xray version!\n" >&2
 fi
 
@@ -45,7 +45,7 @@ case "$(uname -m)" in
 esac
 
 cd /tmp || { printf "Error: permission denied or directory does not exist\n" >&2; exit 1; }
-if ! wget --tries=5 -q "https://github.com/XTLS/Xray-core/releases/download/v${XRAY_VERSION}/Xray-linux-${XRAY_FRAMEWORK}.zip"; then
+if ! wget --tries=5 -q "https://github.com/XTLS/Xray-core/releases/download/v${XRAY_LVER}/Xray-linux-${XRAY_FRAMEWORK}.zip"; then
     printf "Error: download xray failed, please check the network!\n" >&2; exit 1
 fi
 # Unzip xray and add execute permissions
