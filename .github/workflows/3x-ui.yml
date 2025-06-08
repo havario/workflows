@@ -21,7 +21,7 @@ jobs:
 
       - name: 'Fetch Versions and Determine Build'
         run: |
-          XRAY_LVER="$(wget -qO- --tries=5 "https://api.github.com/repos/XTLS/Xray-core/releases/latest" | awk -F '["v]' '/tag_name/{print $5}')"
+          XRAY_LVER="$(wget -qO- --tries=5 "https://api.github.com/repos/XTLS/Xray-core/releases" | sed -n 's/.*"tag_name": *"v\([^"]*\)".*/\1/p' | sort -Vr | head -n1)"
           XUI_LTAG="$(wget -qO- --tries=5 "https://api.github.com/repos/MHSanaei/3x-ui/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')"
           XUI_LVER="${XUI_LTAG#v}"
           XUI_CVER="$(wget -qO- --tries=5 "https://hub.docker.com/v2/repositories/honeok/3x-ui/tags" 2>/dev/null | \
