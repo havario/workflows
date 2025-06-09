@@ -25,7 +25,7 @@ jobs:
         run: |
           NGX_LVER="$(wget -qO- --tries=5 "https://api.github.com/repos/nginx/nginx/releases/latest" | grep -oP '"tag_name": "\K[^"]+' | sed 's/release-//')"
           GEOIP2_TAG="$(wget -qO- --tries 5 "https://api.github.com/repos/leev/ngx_http_geoip2_module/releases/latest" | grep -o '"tag_name": *"[^"]*"' | sed 's/.*"v\?\([^"]*\)".*/\1/')"
-          [[ -z "$NGX_LVER" || -z "$GEOIP2_TAG" ]] && echo 'Error: Required parameters cannot be empty.'; exit 1
+          [[ -z "$NGX_LVER" || -z "$GEOIP2_TAG" ]] && { echo 'Error: Required parameters cannot be empty.'; exit 1; }
           echo "NGX_LVER=$NGX_LVER" >> $GITHUB_ENV
           echo "GEOIP2_TAG=$GEOIP2_TAG" >> $GITHUB_ENV
 
