@@ -31,30 +31,83 @@ _suc_msg() { printf "\033[42m\033[1mSuccess\033[0m %b\n" "$*"; }
 _info_msg() { printf "\033[43m\033[1mInfo\033[0m %b\n" "$*"; }
 
 # 各变量默认值
+GITHUB_PROXY='https://gh-proxy.com/'
 RANDOM_CHAR="$(head /dev/urandom 2>/dev/null | tr -dc 'A-Za-z0-9' | head -c 5)"
-TEMP_WORKDIR="/tmp/tun2socks_$RANDOM_CHAR"
+TEMP_DIR="/tmp/tun2socks_$RANDOM_CHAR"
 UA_BROWSER='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36'
 
 # curl默认参数
 declare -a CURL_OPTS=(--max-time 5 --retry 2 --retry-max-time 10)
 
+_exit() {
+    local ERR_CODE="$?"
+    rm -rf "$TEMP_DIR" >/dev/null 2>&1
+    exit "$ERR_CODE"
+}
+
+trap '_exit' SIGINT SIGQUIT SIGTERM EXIT
+
 die() {
     _err_msg "$(_red "$@")" >&2; exit 1
 }
 
-# https://github.com/xjasonlyu/tun2socks/wiki/Load-TUN-Module
-# Create the necessary file structure for /dev/net/tun
-if [ ! -c /dev/net/tun ]; then
-    if [ ! -d /dev/net ]; then
-        mkdir -m 755 /dev/net
-    fi
-    mknod /dev/net/tun c 10 200
-    chmod 0755 /dev/net/tun
+mkdir -p "$TEMP_DIR" >/dev/null 2>&1 || die "Failed to create work directory."
+
+if [ "$(cd -P -- "$(dirname -- "$0")" && pwd -P)" != "$TEMP_DIR" ]; then
+    cd "$TEMP_DIR" 2>/dev/null || die "Cannot access work directory. Check permissions."
 fi
 
-# Load the tun module if not already loaded
-if ( ! (lsmod | grep -q "^tun\s")); then
-    insmod /lib/modules/tun.ko
-fi
+check_cdn() {
+    local CF_API COUNTRY IP4 IP6
+    # 备用 www.prologis.cn www.autodesk.com.cn www.keysight.com.cn
+    CF_API="www.qualcomm.cn"
+
+    # https://danwin1210.de/github-ipv6-proxy.php
+    ipv6_proxy() {
+        local -a HOST_ENTRIES
+        command cp -f /etc/hosts /etc/hosts.bak
+        HOST_ENTRIES=(
+            "2a01:4f8:c010:d56::2 github.com"
+            "2a01:4f8:c010:d56::3 api.github.com"
+            "2a01:4f8:c010:d56::4 codeload.github.com"
+            "2a01:4f8:c010:d56::5 objects.githubusercontent.com"
+            "2a01:4f8:c010:d56::6 ghcr.io"
+            "2a01:4f8:c010:d56::7 pkg.github.com npm.pkg.github.com maven.pkg.github.com nuget.pkg.github.com rubygems.pkg.github.com"
+            "2a01:4f8:c010:d56::8 uploads.github.com"
+        )
+        for ENTRY in "${HOST_ENTRIES[@]}"; do
+            echo "$ENTRY" >> /etc/hosts
+        done
+    }
+
+    COUNTRY="$(curl --user-agent "$UA_BROWSER" -fsL "${CURL_OPTS[@]}" -4 "http://$CF_API/cdn-cgi/trace" | grep -i '^loc=' | cut -d'=' -f2 | grep . || echo "")"
+    IP4="$(curl --user-agent "$UA_BROWSER" -fsL "${CURL_OPTS[@]}" -4 "http://$CF_API/cdn-cgi/trace" | grep -i '^ip=' | cut -d'=' -f2 | grep . || echo "")"
+    IP6="$(curl --user-agent "$UA_BROWSER" -fsL "${CURL_OPTS[@]}" -6 "http://$CF_API/cdn-cgi/trace" | grep -i '^ip=' | cut -d'=' -f2 | grep . || echo "")"
+
+    [ -n "$GITHUB_PROXY" ] && curl -skI -o /dev/null --max-time 3 --retry 2 "https://github.com/honeok/honeok/raw/master/README.md" && unset GITHUB_PROXY && return
+
+    if [[ "$COUNTRY" != "CN" && -n "$IP4" ]]; then
+        unset GITHUB_PROXY
+    elif [[ "$COUNTRY" != "CN" && -z "$IP4" && -n "$IP6" ]]; then
+        ipv6_proxy
+    fi
+}
+
+# https://github.com/xjasonlyu/tun2socks/wiki/Load-TUN-Module
+check_tun() {
+    # Create the necessary file structure for /dev/net/tun
+    if [ ! -c /dev/net/tun ]; then
+        if [ ! -d /dev/net ]; then
+            mkdir -m 755 /dev/net
+        fi
+        mknod /dev/net/tun c 10 200
+        chmod 0755 /dev/net/tun
+    fi
+
+    # Load the tun module if not already loaded
+    if ( ! (lsmod | grep -q "^tun\s")); then
+        insmod /lib/modules/tun.ko
+    fi
+}
 
 TUN2SOCKS_VER="$(curl "${CURL_OPTS[@]}" -fsL "https://api.github.com/repos/xjasonlyu/tun2socks/releases/latest" | awk -F'"' '/"tag_name":/{print $4}')"
