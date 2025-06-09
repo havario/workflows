@@ -21,7 +21,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: 'Fetch Versions'
+      - name: 'Fetch Versions and Determine Build'
         run: |
           NGX_LVER="$(wget -qO- --tries=5 "https://api.github.com/repos/nginx/nginx/releases/latest" | grep -oP '"tag_name": "\K[^"]+' | sed 's/release-//')"
           NGX_ALPINE_LVER="$(docker run --rm nginx:stable-alpine sh -c "nginx -v 2>&1 | awk -F'/' '{print \$NF}'")"
