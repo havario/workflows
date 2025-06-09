@@ -85,12 +85,7 @@ check_cdn() {
     IP6="$(curl --user-agent "$UA_BROWSER" -fsL "${CURL_OPTS[@]}" -6 "http://$CF_API/cdn-cgi/trace" | grep -i '^ip=' | cut -d'=' -f2 | grep . || echo "")"
 
     [ -n "$GITHUB_PROXY" ] && curl -skI -o /dev/null --max-time 3 --retry 2 "https://github.com/honeok/honeok/raw/master/README.md" && unset GITHUB_PROXY && return
-
-    if [[ "$COUNTRY" != "CN" && -n "$IP4" ]]; then
-        unset GITHUB_PROXY
-    elif [[ "$COUNTRY" != "CN" && -z "$IP4" && -n "$IP6" ]]; then
-        ipv6_proxy
-    fi
+    [[ "$COUNTRY" != "CN" && -z "$IP4" && -n "$IP6" ]] && ipv6_proxy
 }
 
 # https://github.com/xjasonlyu/tun2socks/wiki/Load-TUN-Module
