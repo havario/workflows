@@ -80,9 +80,9 @@ check_cdn() {
         done
     }
 
-    COUNTRY="$(curl --user-agent "$UA_BROWSER" -fsL "${CURL_OPTS[@]}" -4 "http://$CF_API/cdn-cgi/trace" | grep -i '^loc=' | cut -d'=' -f2 | grep . || echo "")"
-    IP4="$(curl --user-agent "$UA_BROWSER" -fsL "${CURL_OPTS[@]}" -4 "http://$CF_API/cdn-cgi/trace" | grep -i '^ip=' | cut -d'=' -f2 | grep . || echo "")"
-    IP6="$(curl --user-agent "$UA_BROWSER" -fsL "${CURL_OPTS[@]}" -6 "http://$CF_API/cdn-cgi/trace" | grep -i '^ip=' | cut -d'=' -f2 | grep . || echo "")"
+    COUNTRY="$(curl -fsL "${CURL_OPTS[@]}" -4 "http://$CF_API/cdn-cgi/trace" | grep -i '^loc=' | cut -d'=' -f2 | grep . || echo "")"
+    IP4="$(curl -fsL "${CURL_OPTS[@]}" -4 "http://$CF_API/cdn-cgi/trace" | grep -i '^ip=' | cut -d'=' -f2 | grep . || echo "")"
+    IP6="$(curl -fsL "${CURL_OPTS[@]}" -6 "http://$CF_API/cdn-cgi/trace" | grep -i '^ip=' | cut -d'=' -f2 | grep . || echo "")"
 
     [ -n "$GITHUB_PROXY" ] && curl -skI -o /dev/null --max-time 3 --retry 2 "https://github.com/honeok/honeok/raw/master/README.md" && unset GITHUB_PROXY && return
     [[ "$COUNTRY" != "CN" && -z "$IP4" && -n "$IP6" ]] && ipv6_proxy
