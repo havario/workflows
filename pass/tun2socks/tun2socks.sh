@@ -108,4 +108,21 @@ check_tun() {
     fi
 }
 
-TUN2SOCKS_VER="$(curl "${CURL_OPTS[@]}" -fsL "https://api.github.com/repos/xjasonlyu/tun2socks/releases/latest" | awk -F'"' '/"tag_name":/{print $4}')"
+install_tun2socks() {
+    local TUN2SOCKS_VER TUN2SOCKS_FRAMEWORK
+    TUN2SOCKS_VER="$(curl "${CURL_OPTS[@]}" -fsL "https://api.github.com/repos/xjasonlyu/tun2socks/releases/latest" | awk -F'"' '/"tag_name":/{print $4}')"
+    TUN2SOCKS_VER="${TUN2SOCKS_VER:-v2.6.0}"
+
+    case "$(uname -m)" in
+        i*86 ) TUN2SOCKS_FRAMEWORK="386" ;;
+        x86_64 | amd64 ) TUN2SOCKS_FRAMEWORK="amd64" ;;
+        armv6* ) TUN2SOCKS_FRAMEWORK="armv6" ;;
+        armv7* ) TUN2SOCKS_FRAMEWORK="armv7" ;;
+        armv8* | arm64 | aarch64 ) TUN2SOCKS_FRAMEWORK="arm64" ;;
+        ppc64le ) TUN2SOCKS_FRAMEWORK="ppc64le" ;;
+        s390x ) TUN2SOCKS_FRAMEWORK="s390x" ;;
+        * ) die "Unsupported architecture: $(uname -m)"
+    esac
+    curl -LO  --retry 2 "${GITHUB_PROXY}https://github.com/xjasonlyu/tun2socks/releases/download/${TUN2SOCKS_VER}/tun2socks-linux-${TUN2SOCKS_FRAMEWORK}.zip" || die "Download tun2socks failed."
+    unzip "tun2socks-linux-$TUN2SOCKS_FRAMEWORK.zip"
+}
