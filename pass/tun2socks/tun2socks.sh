@@ -80,12 +80,15 @@ check_cdn() {
         done
     }
 
-    COUNTRY="$(curl -fsL "${CURL_OPTS[@]}" -4 "http://$CF_API/cdn-cgi/trace" | grep -i '^loc=' | cut -d'=' -f2 | grep . || echo "")"
-    IP4="$(curl -fsL "${CURL_OPTS[@]}" -4 "http://$CF_API/cdn-cgi/trace" | grep -i '^ip=' | cut -d'=' -f2 | grep . || echo "")"
-    IP6="$(curl -fsL "${CURL_OPTS[@]}" -6 "http://$CF_API/cdn-cgi/trace" | grep -i '^ip=' | cut -d'=' -f2 | grep . || echo "")"
+    COUNTRY="$(curl "${CURL_OPTS[@]}" -fsL -4 "http://$CF_API/cdn-cgi/trace" | grep -i '^loc=' | cut -d'=' -f2 | grep . || echo "")"
+    IP4="$(curl "${CURL_OPTS[@]}" -fsL -4 "http://$CF_API/cdn-cgi/trace" | grep -i '^ip=' | cut -d'=' -f2 | grep . || echo "")"
+    IP6="$(curl "${CURL_OPTS[@]}" -fsL -6 "http://$CF_API/cdn-cgi/trace" | grep -i '^ip=' | cut -d'=' -f2 | grep . || echo "")"
 
-    [ -n "$GITHUB_PROXY" ] && curl -skI -o /dev/null --max-time 3 --retry 2 "https://github.com/honeok/honeok/raw/master/README.md" && unset GITHUB_PROXY && return
-    [[ "$COUNTRY" != "CN" && -z "$IP4" && -n "$IP6" ]] && ipv6_proxy
+    if [[ "$COUNTRY" != "CN" && -n "$IP4" ]]; then
+        unset GITHUB_PROXY
+    elif [[ "$COUNTRY" != "CN" && -z "$IP4" && -n "$IP6" ]]; then
+        ipv6_proxy
+    fi
 }
 
 # https://github.com/xjasonlyu/tun2socks/wiki/Load-TUN-Module
