@@ -35,6 +35,8 @@ GITHUB_PROXY='https://gh-proxy.com/'
 RANDOM_CHAR="$(head /dev/urandom 2>/dev/null | tr -dc 'A-Za-z0-9' | head -c 5)"
 TEMP_DIR="/tmp/tun2socks_$RANDOM_CHAR"
 UA_BROWSER='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36'
+# 备用 www.prologis.cn www.autodesk.com.cn www.keysight.com.cn
+CF_API="www.qualcomm.cn"
 
 # curl默认参数
 declare -a CURL_OPTS=(--max-time 5 --retry 2 --retry-max-time 10)
@@ -58,9 +60,7 @@ if [ "$(cd -P -- "$(dirname -- "$0")" && pwd -P)" != "$TEMP_DIR" ]; then
 fi
 
 check_cdn() {
-    local CF_API COUNTRY IP4 IP6
-    # 备用 www.prologis.cn www.autodesk.com.cn www.keysight.com.cn
-    CF_API="www.qualcomm.cn"
+    local COUNTRY IP4 IP6
 
     # https://danwin1210.de/github-ipv6-proxy.php
     ipv6_proxy() {
@@ -80,15 +80,22 @@ check_cdn() {
         done
     }
 
-    COUNTRY="$(curl "${CURL_OPTS[@]}" -fsL -4 "http://$CF_API/cdn-cgi/trace" | grep -i '^loc=' | cut -d'=' -f2 | grep . || echo "")"
-    IP4="$(curl "${CURL_OPTS[@]}" -fsL -4 "http://$CF_API/cdn-cgi/trace" | grep -i '^ip=' | cut -d'=' -f2 | grep . || echo "")"
-    IP6="$(curl "${CURL_OPTS[@]}" -fsL -6 "http://$CF_API/cdn-cgi/trace" | grep -i '^ip=' | cut -d'=' -f2 | grep . || echo "")"
+    COUNTRY="$(curl "${CURL_OPTS[@]}" -fsL -4 "https://$CF_API/cdn-cgi/trace" | grep -i '^loc=' | cut -d'=' -f2 | grep . || echo "")"
+    IP4="$(curl "${CURL_OPTS[@]}" -fsL -4 "https://$CF_API/cdn-cgi/trace" | grep -i '^ip=' | cut -d'=' -f2 | grep . || echo "")"
+    IP6="$(curl "${CURL_OPTS[@]}" -fsL -6 "https://$CF_API/cdn-cgi/trace" | grep -i '^ip=' | cut -d'=' -f2 | grep . || echo "")"
 
     if [[ "$COUNTRY" != "CN" && -n "$IP4" ]]; then
         unset GITHUB_PROXY
     elif [[ "$COUNTRY" != "CN" && -z "$IP4" && -n "$IP6" ]]; then
         ipv6_proxy
     fi
+}
+
+check_warp() {
+    local IP4_WARP IP6_WARP
+    IP4_WARP="$(curl "${CURL_OPTS[@]}" -fsL -4 "https://$CF_API/cdn-cgi/trace" | grep -i '^warp=' | cut -d'=' -f2 | grep .)"
+    IP6_WARP="$(curl "${CURL_OPTS[@]}" -fsL -6 "https://$CF_API/cdn-cgi/trace" | grep -i '^warp=' | cut -d'=' -f2 | grep .)"
+    [[ "$IP4_WARP" == on || "$IP6_WARP" == on ]] && die "Warp Enabled, Please close and try again."
 }
 
 # https://github.com/xjasonlyu/tun2socks/wiki/Load-TUN-Module
@@ -109,9 +116,10 @@ check_tun() {
 }
 
 install_tun2socks() {
-    local TUN2SOCKS_VER TUN2SOCKS_FRAMEWORK
+    local TUN2SOCKS_VER TUN2SOCKS_FRAMEWORK SERVICE_CONF
     TUN2SOCKS_VER="$(curl "${CURL_OPTS[@]}" -fsL "https://api.github.com/repos/xjasonlyu/tun2socks/releases/latest" | awk -F'"' '/"tag_name":/{print $4}')"
     TUN2SOCKS_VER="${TUN2SOCKS_VER:-v2.6.0}"
+    SERVICE_CONF="/etc/systemd/system/tun2socks.service"
 
     case "$(uname -m)" in
         i*86 ) TUN2SOCKS_FRAMEWORK="386" ;;
@@ -125,4 +133,36 @@ install_tun2socks() {
     esac
     curl -LO  --retry 2 "${GITHUB_PROXY}https://github.com/xjasonlyu/tun2socks/releases/download/${TUN2SOCKS_VER}/tun2socks-linux-${TUN2SOCKS_FRAMEWORK}.zip" || die "Download tun2socks failed."
     unzip "tun2socks-linux-$TUN2SOCKS_FRAMEWORK.zip"
+    mv "tun2socks-linux-$TUN2SOCKS_FRAMEWORK" /usr/local/bin/tun2socks
+    ( tun2socks -version >/dev/null 2>&1 && _suc_msg "$(_green "Tun2socks installed successfully!")" ) || die "Tun2socks installed failed."
+
+    cat > "$SERVICE_CONF" <<EOF
+[Unit]
+Description=Tun2Socks Service
+After=network.target network-online.target
+
+[Service]
+Type=simple
+ExecStartPre=/usr/bin/bash -c 'ip link show tun0 || /usr/sbin/ip tuntap add mode tun dev tun0'
+ExecStartPre=/usr/sbin/ip addr add 198.18.0.1/15 dev tun0
+ExecStartPre=/usr/sbin/ip link set dev tun0 up
+
+ExecStart=/usr/local/bin/tun2socks -device tun0 --proxy socks5://YOUR_PROXY_IP:YOUR_PROXY_PORT --fwmark 438
+
+ExecStartPost=/usr/sbin/ip rule add fwmark 438 lookup main pref 10
+ExecStartPost=/usr/sbin/ip -6 rule add fwmark 438 lookup main pref 10
+ExecStartPost=/usr/sbin/ip route add default dev tun0 table 20
+ExecStartPost=/usr/sbin/ip rule add lookup 20 pref 20
+
+ExecStop=/usr/sbin/ip rule del fwmark 438 lookup main pref 10
+ExecStop=/usr/sbin/ip -6 rule del fwmark 438 lookup main pref 10
+ExecStop=/usr/sbin/ip rule del lookup 20 pref 20
+ExecStop=/usr/sbin/ip route del default dev tun0 table 20
+ExecStopPost=/usr/sbin/ip link del dev tun0
+
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+EOF
 }
