@@ -3,11 +3,16 @@
 # Copyright (c) 2025 The p8 Ops Team
 # Copyright (c) 2025 honeok <honeok@disroot.org>
 #
+# References:
+# https://blog.csdn.net/flysnownet/article/details/109387705
+#
 # SPDX-License-Identifier: MIT
 
 FROM php:8.1.32-fpm-alpine3.21
 LABEL maintainer="honeok <honeok@disroot.org>"
 RUN set -ex \
+    && apk update \
+    && apk add --no-cache tzdata \
     && wget -qO /usr/local/bin/install-php-extensions "https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions" \
     && chmod +x /usr/local/bin/install-php-extensions \
     && /usr/local/bin/install-php-extensions \
@@ -33,7 +38,7 @@ RUN set -ex \
         xml \
         xmlrpc \
         xsl \
-    && cp -f /usr/local/etc/php/php.ini-production /usr/local/etc/php/php.ini \
-    && sed -i 's/^;\s*\(date\.timezone\s*=\).*/\1 Asia\/Shanghai/' /usr/local/etc/php/php.ini \
+    && printf '[PHP]\ndate.timezone = Asia/Shanghai\n' > /usr/local/etc/php/conf.d/timezone.ini \
     && rm -f /usr/local/bin/install-php-extensions \
     && rm -rf /var/cache/apk/*
+ENV TZ=Asia/Shanghai
