@@ -18,20 +18,12 @@ SINGBOX_LOGFILE="$SINGBOX_LOGDIR/access.log"
 
 command -v curl >/dev/null 2>&1 || apk add --no-cache curl
 
-echo "DEBUG: $TARGETARCH $(uname -m)"
-
 # Determine system arch based
 case "$TARGETOS/$TARGETARCH" in
     linux/386 ) OS_ARCH="386" ;;
     linux/amd64 ) OS_ARCH="amd64" ;;
     linux/arm64 | linux/arm64/v8 ) OS_ARCH="arm64" ;;
-    linux/arm* )
-        case "$(uname -m)" in
-            armv6* ) OS_ARCH="armv6" ;;
-            armv7* ) OS_ARCH="armv7" ;;
-            * ) printf "Error: unsupported arm architecture: %s\n" "$(uname -m)" >&2; exit 1 ;;
-        esac
-        ;;
+    linux/arm* ) case "$(uname -m)" in armv6* ) OS_ARCH="armv6" ;; armv7* ) OS_ARCH="armv7" ;; * ) printf "Error: unsupported arm architecture: %s\n" "$(uname -m)" >&2; exit 1 ;; esac ;;
     linux/ppc64le ) OS_ARCH="ppc64le" ;;
     linux/riscv64 ) OS_ARCH="riscv64" ;;
     linux/s390x ) OS_ARCH="s390x" ;;
