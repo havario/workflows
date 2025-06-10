@@ -18,6 +18,8 @@ SINGBOX_LOGFILE="$SINGBOX_LOGDIR/access.log"
 
 command -v curl >/dev/null 2>&1 || apk add --no-cache curl
 
+echo "DEBUG: Combined is '$TARGETOS/$TARGETARCH'"
+
 # Determine system arch based
 case "$TARGETOS/$TARGETARCH" in
     linux/386 ) OS_ARCH="386" ;;
