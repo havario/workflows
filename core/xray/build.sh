@@ -38,10 +38,10 @@ build_xray() {
     esac
     cd /tmp || { echo >&2 "Error: permission denied."; exit 1; }
     # Extract and install xray-core
-    curl -fsL -O "https://github.com/XTLS/Xray-core/releases/download/v${XRAY_LVER}/Xray-linux-${XRAY_FRAMEWORK}.zip" || {
+    curl -fsL -O "https://github.com/XTLS/Xray-core/releases/download/v${XRAY_LVER}/Xray-${TARGETOS}-${OS_ARCH}.zip" || {
         echo >&2 "Error: download xray failed, please check the network!"; exit 1;
     }
-    unzip -q "Xray-linux-$XRAY_FRAMEWORK.zip" -d ./xray
+    unzip -q "Xray-${TARGETOS}-$OS_ARCH.zip" -d ./xray
     if [ ! -x xray/xray ]; then
         chmod +x xray/xray
     fi
