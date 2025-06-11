@@ -16,6 +16,11 @@ XRAY_LOGDIR="/var/log/xray"
 XRAY_ACCESS_LOG="$XRAY_LOGDIR/access.log"
 XRAY_ERROR_LOG="$XRAY_LOGDIR/error.log"
 
+if [ "$#" -eq 0 ]; then
+    echo "Usage: $0 [--build <version>] [--before]"
+    exit 0
+fi
+
 build_xray() {
     if [ -z "$XRAY_LVER" ]; then
         echo >&2 "Error: Missing version. Use --build <version>"; exit 1
@@ -71,8 +76,3 @@ while [ "$#" -ge 1 ]; do
         ;;
     esac
 done
-
-if [ "$#" -eq 0 ]; then
-    echo "Usage: $0 [--build <version>] [--before]"
-    exit 0
-fi
