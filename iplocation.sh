@@ -57,7 +57,7 @@ iplocation() {
 }
 
 if [ "$#" -gt 1 ]; then
-    echo >&2 "There are multiple parameters."; exit 1
+    echo >&2 "Error: There are multiple parameters."; exit 1
 elif [ -n "$LOGIN_IP" ]; then
     iplocation "$LOGIN_IP"
 else
