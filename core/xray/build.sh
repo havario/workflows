@@ -41,7 +41,7 @@ build_xray() {
     curl -fsL -O "https://github.com/XTLS/Xray-core/releases/download/v${XRAY_LVER}/Xray-${TARGETOS}-${OS_ARCH}.zip" || {
         echo >&2 "Error: download xray failed, please check the network!"; exit 1;
     }
-    unzip -q "Xray-${TARGETOS}-$OS_ARCH.zip" -d ./xray
+    unzip -q "Xray-${TARGETOS}-${OS_ARCH}.zip" -d ./xray
     if [ ! -x xray/xray ]; then
         chmod +x xray/xray
     fi
