@@ -63,13 +63,9 @@ iplocation() {
 
 # main operation logic.
 clrscr
-if [ -z "$1" ] && [ -n "$(awk '{print $1}' <<< "$SSH_CONNECTION")" ]; then
-    LOGIN_IP="$(awk '{print $1}' <<< "$SSH_CONNECTION")"
-fi
 if [ "$#" -gt 1 ]; then
     die "There are multiple parameters."
-elif [ -n "$LOGIN_IP" ]; then
-    iplocation "$LOGIN_IP"
 else
-    iplocation "$1"
+    CHECK_IP="${1:-$(awk '{print $1}' <<< "$SSH_CONNECTION")}"
+    ( [ -n "$CHECK_IP" ] && iplocation "$CHECK_IP" ) || die "No valid IP provided."
 fi
