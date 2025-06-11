@@ -11,6 +11,10 @@ if locale -a 2>/dev/null | grep -qiE -m 1 "UTF-8|utf8"; then
     export LANG=en_US.UTF-8
 fi
 
+# 自定义彩色字体
+_red() { printf "\033[91m%b\033[0m\n" "$*"; }
+_err_msg() { printf "\033[41m\033[1mError\033[0m %b\n" "$*"; }
+
 # 各变量默认值
 UA_BROWSER='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36'
 
@@ -19,9 +23,10 @@ clrscr() {
     ( [ -t 1 ] && tput clear 2>/dev/null ) || echo -e "\033[2J\033[H" || clear
 }
 
-if [ -z "$1" ] && [ -n "$(awk '{print $1}' <<< "$SSH_CONNECTION")" ]; then
-    LOGIN_IP="$(awk '{print $1}' <<< "$SSH_CONNECTION")"
-fi
+# 打印错误信息并退出
+die() {
+    _err_msg "$(_red "$@")" >&2; exit 1
+}
 
 # https://www.nodeseek.com/post-344659-1
 bilibili_api() {
@@ -49,15 +54,20 @@ baidu_api() {
 }
 
 iplocation() {
-    local IP_ADDRESS="$1"
+    local IP="$1"
 
-    bilibili_api "$IP_ADDRESS" && return 0
-    baidu_api "$IP_ADDRESS" && return 0
-    echo >&2 "Error: Unknown IP information."; exit 1
+    bilibili_api "$IP" && return 0
+    baidu_api "$IP" && return 0
+    die "Unknown IP information."
 }
 
+# main operation logic.
+clrscr
+if [ -z "$1" ] && [ -n "$(awk '{print $1}' <<< "$SSH_CONNECTION")" ]; then
+    LOGIN_IP="$(awk '{print $1}' <<< "$SSH_CONNECTION")"
+fi
 if [ "$#" -gt 1 ]; then
-    echo >&2 "Error: There are multiple parameters."; exit 1
+    die "There are multiple parameters."
 elif [ -n "$LOGIN_IP" ]; then
     iplocation "$LOGIN_IP"
 else
