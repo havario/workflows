@@ -71,3 +71,8 @@ while [ "$#" -ge 1 ]; do
         ;;
     esac
 done
+
+if [ "$#" -eq 0 ]; then
+    echo "Usage: $0 [--build <version>] [--before]"
+    exit 0
+fi
