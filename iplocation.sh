@@ -28,6 +28,18 @@ die() {
     _err_msg "$(_red "$@")" >&2; exit 1
 }
 
+baidu_api() {
+    local IP_LOCATION="$1"
+    local IP_API IP PROVINCE CITY
+
+    IP_API="$(curl --user-agent "$UA_BROWSER" --max-time 5 -fsL "https://opendata.baidu.com/api.php?co=&resource_id=6006&oe=utf8&query=$IP_LOCATION")"
+    IP="$(sed -En 's/.*"origip":"([^"]+)".*/\1/p' <<< "$IP_API")"
+    PROVINCE="$(sed -En 's/.*"location":"([^省]+)省.*/\1/p' <<< "$IP_API")"
+    CITY="$(sed -En 's/.*"location":"[^省]+省([^市]+)市.*/\1/p' <<< "$IP_API")"
+
+    ( [[ -n "$IP" && -n "$PROVINCE" && -n "$CITY" ]] && echo "$IP $PROVINCE $CITY"; return 0 ) || return 1
+}
+
 # https://www.nodeseek.com/post-344659-1
 bilibili_api() {
     local IP_LOCATION="$1"
@@ -41,23 +53,11 @@ bilibili_api() {
     ( [[ -n "$IP" && -n "$PROVINCE" && -n "$CITY" ]] && echo "$IP $PROVINCE $CITY"; return 0 ) || return 1
 }
 
-baidu_api() {
-    local IP_LOCATION="$1"
-    local IP_API IP PROVINCE CITY
-
-    IP_API="$(curl --user-agent "$UA_BROWSER" --max-time 5 -fsL "https://opendata.baidu.com/api.php?co=&resource_id=6006&oe=utf8&query=$IP_LOCATION")"
-    IP="$(sed -En 's/.*"origip":"([^"]+)".*/\1/p' <<< "$IP_API")"
-    PROVINCE="$(sed -En 's/.*"location":"([^省]+)省.*/\1/p' <<< "$IP_API")"
-    CITY="$(sed -En 's/.*"location":"[^省]+省([^市]+)市.*/\1/p' <<< "$IP_API")"
-
-    ( [[ -n "$IP" && -n "$PROVINCE" && -n "$CITY" ]] && echo "$IP $PROVINCE $CITY"; return 0 ) || return 1
-}
-
 iplocation() {
     local IP="$1"
 
-    bilibili_api "$IP" && return 0
     baidu_api "$IP" && return 0
+    bilibili_api "$IP" && return 0
     die "Unknown IP information."
 }
 
