@@ -112,7 +112,7 @@ pkg_uninstall() {
     done
 }
 
-# 运行前校验
+# 运行前校验, 确保root用户运行和bash环境, 仅支持固定64位系统
 pre_check() {
     if [ "$EUID" -ne 0 ] || [ "$(id -ru)" -ne 0 ]; then
         die "This script must be run as root!"
@@ -125,8 +125,9 @@ pre_check() {
     fi
 }
 
+# 设置github代理, 海外服务器仅ipv4通过将代理设置为空
+# COUNTRY 和 GITHUB_PROXY 变量设置全局生效
 cdn_check() {
-    # country 和 github 代理全局生效
     # 备用 www.prologis.cn www.autodesk.com.cn www.keysight.com.cn
     COUNTRY="$(curl --user-agent "$UA_BROWSER" -sL -4 "${CURL_OPTS[@]}" "http://www.qualcomm.cn/cdn-cgi/trace" | grep -i '^loc=' | cut -d'=' -f2 | grep .)"
     if [ "$COUNTRY" != "CN" ]; then
@@ -155,6 +156,7 @@ os_reboot() {
     exit 0
 }
 
+# 多方式判断操作系统
 os_full() {
     local -a RELEASE_REGEX RELEASE_DISTROS
     RELEASE_REGEX=("almalinux" "centos" "debian" "fedora" "red hat|rhel" "rocky" "ubuntu")
@@ -206,6 +208,7 @@ kernel_version() {
     fi
 }
 
+# 虚拟化校验并设置支持的操作系统发行版最低版本
 os_check() {
     local VIRT MIN_VER
     local -a UNSUPPORTED=("docker" "lxc" "openvz")
@@ -246,14 +249,16 @@ add_swap() {
     _suc_msg "$(_green "Swap added: $NEW_SWAP MB")"
 }
 
+# 校验交换内存, 有些云厂商可能只有 ≈ 850 MB 都认为需要增加 1024 MB虚拟内存
 swap_check() {
     local MEM_TOTAL SWAP_TOTAL
     MEM_TOTAL="$(awk '/MemTotal/ {print $2}' /proc/meminfo)"
     SWAP_TOTAL="$(awk '/SwapTotal/ {print $2}' /proc/meminfo)"
     (( MEM_TOTAL /= 1024, SWAP_TOTAL /= 1024 ))
-    (( MEM_TOTAL <= 900 && SWAP_TOTAL == 0 )) && add_swap 1024
+    (( MEM_TOTAL <= 850 && SWAP_TOTAL == 0 )) && add_swap 1024
 }
 
+# 开启bbr+fq
 on_bbr() {
     if grep -qi '^net.core.default_qdisc' /etc/sysctl.conf; then
         grep -qi '^net.core.default_qdisc *= *fq' /etc/sysctl.conf || sed -i 's/^net.core.default_qdisc.*/net.core.default_qdisc = fq/' /etc/sysctl.conf
