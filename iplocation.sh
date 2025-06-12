@@ -34,8 +34,8 @@ baidu_api() {
 
     IP_API="$(curl --user-agent "$UA_BROWSER" --max-time 5 -fsL "https://opendata.baidu.com/api.php?co=&resource_id=6006&oe=utf8&query=$IP_LOCATION")"
     IP="$(sed -En 's/.*"origip":"([^"]+)".*/\1/p' <<< "$IP_API")"
-    PROVINCE="$(sed -En 's/.*"location":"(([^省]+)省|([^市]+)市|([^区]+)自治区|([^区]+)特别行政区).*/\1/p' <<< "$IP_API")"
-    CITY="$(sed -En 's/.*"location":"([^省市区]+省)?([^市区]+市)?([^区]+区)?.*/\2\3/p' <<< "$IP_API")"
+    PROVINCE="$(sed -En 's/.*"location":"([^省市自治区特别行政区"]+)(省|市|自治区|特别行政区).*/\1/p' <<< "$IP_API")"
+    CITY="$(sed -En 's/.*"location":"([^"]*?)(省|市|自治区|特别行政区)([^市"]+)市.*/\3/p' <<< "$IP_API")"
 
     ( [[ -n "$IP" && -n "$PROVINCE" && -n "$CITY" ]] && echo "$IP $PROVINCE $CITY"; return 0 ) || return 1
 }
@@ -46,8 +46,8 @@ baidubce_api() {
 
     IP_API="$(curl --user-agent "$UA_BROWSER" --max-time 5 -fsL "https://qifu-api.baidubce.com/ip/geo/v1/district?ip=$IP_LOCATION")"
     IP="$(sed -En 's/.*"ip":"([^"]+)".*/\1/p' <<< "$IP_API")"
-    PROVINCE="$(sed -En 's/.*"prov":"([^省市自治区特别行政区"]+)(省|市|自治区|特别行政区)".*/\1/p' <<< "$IP_API")"
-    CITY="$(sed -En 's/.*"city":"([^市"]*)市".*/\1/p' <<< "$IP_API")"
+    PROVINCE="$(sed -En 's/.*"prov":"([^"]+?)(省|市|自治区|特别行政区)".*/\1/p' <<< "$IP_API")"
+    CITY="$(sed -En 's/.*"city":"([^"]+?)市".*/\1/p' <<< "$IP_API")"
 
     ( [[ -n "$IP" && -n "$PROVINCE" && -n "$CITY" ]] && echo "$IP $PROVINCE $CITY"; return 0 ) || return 1
 }
