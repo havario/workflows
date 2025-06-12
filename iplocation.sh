@@ -126,5 +126,6 @@ if [ "$#" -gt 1 ]; then
 else
     CHECK_IP="${1:-$(awk '{print $1}' <<< "$SSH_CONNECTION")}"
     (check_legal_ipv4 "$CHECK_IP" && ! check_private_ipv4 "$CHECK_IP" && ! check_legal_ipv6 "$CHECK_IP") || die "must be a valid public ipv4 address."
+    [[ "$(curl --retry 2 -sL -4 "https://ipinfo.io/$CHECK_IP/country")" != CN ]] && die "The requesting ip does not belong to mainland china."
     ([ -n "$CHECK_IP" ] && iplocation "$CHECK_IP") || die "No valid ip provided."
 fi
