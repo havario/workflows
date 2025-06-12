@@ -14,10 +14,6 @@
 # 当前脚本版本号
 readonly VERSION='v1.1.1 (2025.06.13)'
 
-# https://www.graalvm.org/latest/reference-manual/ruby/UTF8Locale
-if locale -a 2>/dev/null | grep -qiE -m 1 "UTF-8|utf8"; then
-    export LANG=en_US.UTF-8
-fi
 # 环境变量用于在debian或ubuntu操作系统中设置非交互式 (noninteractive) 安装模式
 export DEBIAN_FRONTEND=noninteractive
 # 设置PATH环境变量
@@ -44,13 +40,6 @@ declare -a CURL_OPTS=(--max-time 5 --retry 2 --retry-max-time 10)
 # 分割符
 separator() { printf "%-25s\n" "-" | sed 's/\s/-/g'; }
 
-_exit() {
-    local ERR_CODE="$?"
-    rm -rf "$TEMP_DIR" >/dev/null 2>&1
-    [ -f /etc/apt/sources.list.d/xanmod-release.list ] && rm -f /etc/apt/sources.list.d/xanmod-release.list
-    exit "$ERR_CODE"
-}
-
 # 安全清屏函数
 clrscr() {
     ([ -t 1 ] && tput clear 2>/dev/null) || echo -e "\033[2J\033[H" || clear
@@ -61,6 +50,25 @@ die() {
     _err_msg >&2 "$(_red "$@")"; exit 1
 }
 
+# 检测系统UTF-8语言环境
+UTF8_LOCALE=$(locale -a 2>/dev/null | grep -iE -m 1 "UTF-8|utf8")
+if [ -z "$UTF8_LOCALE" ]; then
+    die "No UTF-8 locale found."
+else
+    export LC_ALL="$UTF8_LOCALE"
+    export LANG="$UTF8_LOCALE"
+    export LANGUAGE="$UTF8_LOCALE"
+fi
+
+# 终止信号捕获退出前清理操作
+_exit() {
+    local ERR_CODE="$?"
+    rm -rf "$TEMP_DIR" >/dev/null 2>&1
+    [ -f /etc/apt/sources.list.d/xanmod-release.list ] && rm -f /etc/apt/sources.list.d/xanmod-release.list
+    exit "$ERR_CODE"
+}
+
+# 终止信号捕获
 trap '_exit' SIGINT SIGQUIT SIGTERM EXIT
 
 # 工作临时目录
@@ -75,6 +83,7 @@ reading() {
     read -rep "$(_yellow "$PROMPT")" "$2"
 }
 
+# 用于判断命令是否存在
 _exists() {
     local _CMD="$1"
     if type "$_CMD" >/dev/null 2>&1; then return 0
@@ -84,7 +93,7 @@ _exists() {
     fi
 }
 
-# 判断当前系统是否为64位系统
+# 用于判断当前系统是否为64位系统
 _is_64bit() {
     if _exists getconf; then [[ "$(getconf WORD_BIT)" = 32 && "$(getconf LONG_BIT)" = 64 ]] && return 0
     else return 1
