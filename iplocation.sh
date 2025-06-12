@@ -77,6 +77,7 @@ bilibili_api() {
     ( [[ -n "$IP" && -n "$PROVINCE" && -n "$CITY" ]] && echo "$IP $PROVINCE $CITY"; return 0 ) || return 1
 }
 
+# runtime
 iplocation() {
     local IP="$1"
 
