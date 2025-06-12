@@ -25,12 +25,26 @@ UA_BROWSER='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML,
 
 # 清屏函数
 clrscr() {
-    ( [ -t 1 ] && tput clear 2>/dev/null ) || echo -e "\033[2J\033[H" || clear
+    ([ -t 1 ] && tput clear 2>/dev/null) || echo -e "\033[2J\033[H" || clear
 }
 
 # 打印错误信息并退出
 die() {
     _err_msg "$(_red "$@")" >&2; exit 1
+}
+
+# 验证是否为有效IPv4地址
+check_legal_ipv4() {
+    printf '%s' "$1" | tr -d '\n' | grep -Eq '^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$'
+}
+
+check_legal_ipv6() {
+    printf '%s' "$1" | tr -d '\n' | grep -Eq '^([0-9a-fA-F]{0,4}:){1,7}[0-9a-fA-F]{0,4}$|^([0-9a-fA-F]{0,4}:){1,5}:[0-9a-fA-F]{0,4}$|^([0-9a-fA-F]{0,4}:){1,4}:[0-9a-fA-F]{0,4}:[0-9a-fA-F]{0,4}$|^([0-9a-fA-F]{0,4}:){1,3}:[0-9a-fA-F]{0,4}:[0-9a-fA-F]{0,4}:[0-9a-fA-F]{0,4}$|^([0-9a-fA-F]{0,4}:){1,2}:[0-9a-fA-F]{0,4}:[0-9a-fA-F]{0,4}:[0-9a-fA-F]{0,4}:[0-9a-fA-F]{0,4}$|^[0-9a-fA-F]{0,4}::[0-9a-fA-F]{0,4}:[0-9a-fA-F]{0,4}:[0-9a-fA-F]{0,4}:[0-9a-fA-F]{0,4}$|^::[0-9a-fA-F]{0,4}:[0-9a-fA-F]{0,4}:[0-9a-fA-F]{0,4}:[0-9a-fA-F]{0,4}:[0-9a-fA-F]{0,4}$'
+}
+
+# 验证是否为私有IPv4地址
+check_private_ipv4() {
+    printf '%s' "$1" | tr -d '\n' | grep -Eq '^(10|127|172\.(1[6-9]|2[0-9]|3[0-1])|192\.168|169\.254)\.'
 }
 
 iqiyi_api() {
@@ -42,7 +56,7 @@ iqiyi_api() {
     PROVINCE="$(sed -En 's/.*"provinceCN":"([^"]+)".*/\1/p' <<< "$IP_API")"
     CITY="$(sed -En 's/.*"cityCN":"([^"]+)".*/\1/p' <<< "$IP_API")"
 
-    ( [[ -n "$IP" && -n "$PROVINCE" && -n "$CITY" ]] && echo "$IP $PROVINCE $CITY" && return 0 ) || return 1
+    ([[ -n "$IP" && -n "$PROVINCE" && -n "$CITY" ]] && echo "$IP $PROVINCE $CITY" && return 0) || return 1
 }
 
 baidu_api() {
@@ -54,7 +68,7 @@ baidu_api() {
     PROVINCE="$(sed -En 's/.*"location":"([^省市自治区特别行政区"]+)(省|市|自治区|特别行政区).*/\1/p' <<< "$IP_API")"
     CITY="$(sed -En 's/.*"location":"([^"]*?)(省|市|自治区|特别行政区)([^市"]+)市.*/\3/p' <<< "$IP_API")"
 
-    ( [[ -n "$IP" && -n "$PROVINCE" && -n "$CITY" ]] && echo "$IP $PROVINCE $CITY" && return 0 ) || return 1
+    ([[ -n "$IP" && -n "$PROVINCE" && -n "$CITY" ]] && echo "$IP $PROVINCE $CITY" && return 0) || return 1
 }
 
 baidubce_api() {
@@ -66,7 +80,7 @@ baidubce_api() {
     PROVINCE="$(sed -En 's/.*"prov":"([^"]+?)(省|市|自治区|特别行政区)".*/\1/p' <<< "$IP_API")"
     CITY="$(sed -En 's/.*"city":"([^"]+?)市".*/\1/p' <<< "$IP_API")"
 
-    ( [[ -n "$IP" && -n "$PROVINCE" && -n "$CITY" ]] && echo "$IP $PROVINCE $CITY" && return 0 ) || return 1
+    ([[ -n "$IP" && -n "$PROVINCE" && -n "$CITY" ]] && echo "$IP $PROVINCE $CITY" && return 0) || return 1
 }
 
 pconline_api() {
@@ -78,7 +92,7 @@ pconline_api() {
     PROVINCE="$(sed -En 's/.*"pro":"([^"]+?)(省|市|自治区|特别行政区)".*/\1/p' <<< "$IP_API")"
     CITY="$(sed -En 's/.*"city":"([^"]+?)市".*/\1/p' <<< "$IP_API")"
 
-    ( [[ -n "$IP" && -n "$PROVINCE" && -n "$CITY" ]] && echo "$IP $PROVINCE $CITY" && return 0 ) || return 1
+    ([[ -n "$IP" && -n "$PROVINCE" && -n "$CITY" ]] && echo "$IP $PROVINCE $CITY" && return 0) || return 1
 }
 
 bilibili_api() {
@@ -90,7 +104,7 @@ bilibili_api() {
     PROVINCE="$(sed -En 's/.*"province":"([^"]+)".*/\1/p' <<< "$IP_API")"
     CITY="$(sed -En 's/.*"city":"([^"]+)".*/\1/p' <<< "$IP_API")"
 
-    ( [[ -n "$IP" && -n "$PROVINCE" && -n "$CITY" ]] && echo "$IP $PROVINCE $CITY" && return 0 ) || return 1
+    ([[ -n "$IP" && -n "$PROVINCE" && -n "$CITY" ]] && echo "$IP $PROVINCE $CITY" && return 0) || return 1
 }
 
 # runtime
@@ -111,5 +125,6 @@ if [ "$#" -gt 1 ]; then
     die "There are multiple parameters."
 else
     CHECK_IP="${1:-$(awk '{print $1}' <<< "$SSH_CONNECTION")}"
-    ( [ -n "$CHECK_IP" ] && iplocation "$CHECK_IP" ) || die "No valid IP provided."
+    (check_legal_ipv4 "$CHECK_IP" && ! check_private_ipv4 "$CHECK_IP" && ! check_legal_ipv6 "$CHECK_IP") || die "must be a valid public ipv4 address."
+    ([ -n "$CHECK_IP" ] && iplocation "$CHECK_IP") || die "No valid ip provided."
 fi
