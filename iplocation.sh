@@ -4,7 +4,12 @@
 #
 # Copyright (c) 2025 honeok <honeok@disroot.org>
 #
-# SPDX-License-Identifier: MIT
+# References:
+# https://lanye.org/web/940.html
+# https://www.nodeseek.com/post-344659-1
+# https://github.com/ihmily/ip-info-api
+#
+# SPDX-License-Identifier: Apache-2.0
 
 # https://www.graalvm.org/latest/reference-manual/ruby/UTF8Locale
 if locale -a 2>/dev/null | grep -qiE -m 1 "UTF-8|utf8"; then
@@ -28,7 +33,6 @@ die() {
     _err_msg "$(_red "$@")" >&2; exit 1
 }
 
-# https://lanye.org/web/940.html
 # 高德地图
 amap_api() {
     local CHECK_IP="$1"
@@ -38,6 +42,18 @@ amap_api() {
     IP="$CHECK_IP"
     PROVINCE="$(sed -En 's/.*"province":"([^省]+)省".*/\1/p' <<< "$IP_API")"
     CITY="$(sed -En 's/.*"city":"([^市]+)市".*/\1/p' <<< "$IP_API")"
+
+    ( [[ -n "$IP" && -n "$PROVINCE" && -n "$CITY" ]] && echo "$IP $PROVINCE $CITY"; return 0 ) || return 1
+}
+
+iqiyi_api() {
+    local CHECK_IP="$1"
+    local IP_API IP PROVINCE CITY
+
+    IP_API="$(curl --user-agent "$UA_BROWSER" --max-time 5 -fsL "https://mesh.if.iqiyi.com/aid/ip/info?version=1.1.1&ip=$CHECK_IP")"
+    IP="$CHECK_IP"
+    PROVINCE="$(sed -En 's/.*"provinceCN":"([^"]+)".*/\1/p' <<< "$IP_API")"
+    CITY="$(sed -En 's/.*"cityCN":"([^"]+)".*/\1/p' <<< "$IP_API")"
 
     ( [[ -n "$IP" && -n "$PROVINCE" && -n "$CITY" ]] && echo "$IP $PROVINCE $CITY"; return 0 ) || return 1
 }
@@ -78,7 +94,6 @@ pconline_api() {
     ( [[ -n "$IP" && -n "$PROVINCE" && -n "$CITY" ]] && echo "$IP $PROVINCE $CITY"; return 0 ) || return 1
 }
 
-# https://www.nodeseek.com/post-344659-1
 bilibili_api() {
     local CHECK_IP="$1"
     local IP_API IP PROVINCE CITY
@@ -96,6 +111,7 @@ iplocation() {
     local IP="$1"
 
     amap_api "$IP" && return 0
+    iqiyi_api "$IP" && return 0
     baidu_api "$IP" && return 0
     baidubce_api "$IP" && return 0
     pconline_api "$IP" && return 0
