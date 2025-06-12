@@ -151,17 +151,13 @@ cdn_check() {
 
 os_reboot() {
     local CHOICE
-
-    if [ "$REBOOT" = 1 ]; then
-        (_exists reboot && reboot) || (_exists shutdown && shutdown -r now) || die "restart command not found."
-    else
-        _yellow "The system needs to reboot."
-        reading "Do you want to restart system? (y/n): " CHOICE
-        case "$CHOICE" in
-            [Yy] | "" ) (_exists reboot && reboot) || (_exists shutdown && shutdown -r now) || die "restart command not found." ;;
-            * ) _yellow "Reboot has been canceled"; exit 0 ;;
-        esac
-    fi
+    [ "$REBOOT" = 1 ] && { _exists reboot && reboot || (_exists shutdown && shutdown -r now) || die "restart command not found."; exit 0; }
+    _yellow "The system needs to reboot."
+    reading "Do you want to restart system? (y/n): " CHOICE
+    case "$CHOICE" in
+        [Yy] | "" ) { _exists reboot && reboot || (_exists shutdown && shutdown -r now) || die "restart command not found."; } ;;
+        * ) _yellow "Reboot has been canceled"; exit 0 ;;
+    esac
     exit 0
 }
 
@@ -204,9 +200,9 @@ show_logo() {
  /  '_// -_) / __/ / _ \/ -_) / / 
 /_/\_\ \__/ /_/   /_//_/\__/ /_/  
                                   "
-    _green "System   : $OS_INFO"
-    echo "$(_yellow "Version  : $VERSION") $(_cyan "\xF0\x9F\xAA\x90")"
-    _blue 'bash <(curl -sL https://github.com/honeok/Tools/raw/master/kernel.sh)'
+    _green " System version  : $OS_INFO"
+    echo "$(_yellow " Script version  : $VERSION") $(_cyan "\xF0\x9F\xAA\x90")"
+    echo "$(_blue " Usage: ")" 'bash <(curl -sL https://github.com/honeok/Tools/raw/master/kernel.sh)'
     echo
 }
 
@@ -286,17 +282,13 @@ on_bbr() {
 
 bbr_menu() {
     local CHOICE
-
-    if [ "$BBR" = 1 ]; then
-        (on_bbr && return 0)
-    else
-        reading "Whether to use bbr + fq ? (y/n): " CHOICE
-        case "$CHOICE" in
-            [Yy] | "" ) on_bbr ;;
-            [Nn] ) _yellow "Cancelled by user."; exit 0 ;;
-            * ) die "Invalid selection" ;;
-        esac
-    fi
+    [ "$BBR" = 1 ] && on_bbr && return 0
+    reading "Whether to use bbr + fq ? (y/n): " CHOICE
+    case "$CHOICE" in
+        [Yy] | "" ) on_bbr ;;
+        [Nn] ) _yellow "Cancelled by user."; exit 0 ;;
+        * ) die "Invalid selection" ;;
+    esac
 }
 
 # 并发执行 获取最低延迟的mirrors仓库, 用于替换红帽系发行版repo源
