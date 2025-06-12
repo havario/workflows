@@ -108,14 +108,14 @@ bilibili_api() {
 
 # runtime
 iplocation() {
-    local IP="$1"
+    local CHECK_IP="$1"
 
-    amap_api "$IP" && return 0
-    iqiyi_api "$IP" && return 0
-    baidu_api "$IP" && return 0
-    baidubce_api "$IP" && return 0
-    pconline_api "$IP" && return 0
-    bilibili_api "$IP" && return 0
+    amap_api "$CHECK_IP" && return 0
+    iqiyi_api "$CHECK_IP" && return 0
+    baidu_api "$CHECK_IP" && return 0
+    baidubce_api "$CHECK_IP" && return 0
+    pconline_api "$CHECK_IP" && return 0
+    bilibili_api "$CHECK_IP" && return 0
     die "Unknown IP information."
 }
 
