@@ -411,6 +411,7 @@ debian_xanmod_install() {
     # 添加xanmod存储库
     echo 'deb [signed-by=/usr/share/keyrings/xanmod-archive-keyring.gpg] http://deb.xanmod.org releases main' | tee /etc/apt/sources.list.d/xanmod-release.list
     # 切换到官方脚本判断架构, 国内也许拉不下来增加重试
+    # XANMOD_VERSION="$(curl -sL "${GITHUB_PROXY}github.com/kejilion/sh/raw/main/check_x86-64_psabi.sh" | awk -f - | awk -F 'x86-64-v' '{print $2+0}')"
     XANMOD_VERSION="$(curl --retry 2 -sL "https://dl.xanmod.org/check_x86-64_psabi.sh" | awk -f - | awk -F 'x86-64-v' '{print $2+0}')"
     ([[ -n "$XANMOD_VERSION" && "$XANMOD_VERSION" =~ ^[0-9]$ ]] && pkg_install "linux-xanmod-x64v$XANMOD_VERSION") || die "failed to obtain xanmod version."
     bbr_menu
