@@ -455,14 +455,7 @@ before_script() {
 # 主程序运行前操作 (1/3)
 before_script
 
-# 入参判断 (2/3)
-# 当没有任何参数时执行默认匹配逻辑
-if [ "$#" -eq 0 ]; then
-    [[ "$OS_NAME" =~ ^(almalinux|centos|fedora|rhel|rocky)$ ]] && rhel_menu
-    [[ "$OS_NAME" =~ ^(debian|ubuntu)$ ]] && debian_xanmod_menu
-fi
-
-# 解析命令行参数 (3/3)
+# 解析命令行参数 (2/3)
 # shellcheck disable=SC2317
 while [ "$#" -ge 1 ]; do
     case "$1" in
@@ -489,3 +482,10 @@ while [ "$#" -ge 1 ]; do
         ;;
     esac
 done
+
+# 入参判断 (3/3)
+# 当没有任何参数时执行默认匹配逻辑
+if [ "$#" -eq 0 ]; then
+    [[ "$OS_NAME" =~ ^(almalinux|centos|fedora|rhel|rocky)$ ]] && rhel_menu
+    [[ "$OS_NAME" =~ ^(debian|ubuntu)$ ]] && debian_xanmod_menu
+fi
