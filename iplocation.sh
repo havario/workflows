@@ -34,8 +34,20 @@ baidu_api() {
 
     IP_API="$(curl --user-agent "$UA_BROWSER" --max-time 5 -fsL "https://opendata.baidu.com/api.php?co=&resource_id=6006&oe=utf8&query=$IP_LOCATION")"
     IP="$(sed -En 's/.*"origip":"([^"]+)".*/\1/p' <<< "$IP_API")"
-    PROVINCE="$(sed -En 's/.*"location":"([^省]+)省.*/\1/p' <<< "$IP_API")"
-    CITY="$(sed -En 's/.*"location":"[^省]+省([^市]+)市.*/\1/p' <<< "$IP_API")"
+    PROVINCE="$(sed -En 's/.*"location":"(([^省]+)省|([^市]+)市|([^区]+)自治区|([^区]+)特别行政区).*/\1/p' <<< "$IP_API")"
+    CITY="$(sed -En 's/.*"location":"([^省市区]+省)?([^市区]+市)?([^区]+区)?.*/\2\3/p' <<< "$IP_API")"
+
+    ( [[ -n "$IP" && -n "$PROVINCE" && -n "$CITY" ]] && echo "$IP $PROVINCE $CITY"; return 0 ) || return 1
+}
+
+baidubce_api() {
+    local IP_LOCATION="$1"
+    local IP_API IP PROVINCE CITY
+
+    IP_API="$(curl --user-agent "$UA_BROWSER" --max-time 5 -fsL "https://qifu-api.baidubce.com/ip/geo/v1/district?ip=$IP_LOCATION")"
+    IP="$(sed -En 's/.*"ip":"([^"]+)".*/\1/p' <<< "$IP_API")"
+    PROVINCE="$(sed -En 's/.*"prov":"([^省市自治区特别行政区"]+)(省|市|自治区|特别行政区)".*/\1/p' <<< "$IP_API")"
+    CITY="$(sed -En 's/.*"city":"([^市"]*)市".*/\1/p' <<< "$IP_API")"
 
     ( [[ -n "$IP" && -n "$PROVINCE" && -n "$CITY" ]] && echo "$IP $PROVINCE $CITY"; return 0 ) || return 1
 }
@@ -46,9 +58,9 @@ bilibili_api() {
     local IP_API IP PROVINCE CITY
 
     IP_API="$(curl --user-agent "$UA_BROWSER" --max-time 5 -fsL "https://api.live.bilibili.com/ip_service/v1/ip_service/get_ip_addr?ip=$IP_LOCATION")"
-    IP="$(sed -nE 's/.*"addr":"([^"]+)".*/\1/p' <<< "$IP_API")"
-    PROVINCE="$(sed -nE 's/.*"province":"([^"]+)".*/\1/p' <<< "$IP_API")"
-    CITY="$(sed -nE 's/.*"city":"([^"]+)".*/\1/p' <<< "$IP_API")"
+    IP="$(sed -En 's/.*"addr":"([^"]+)".*/\1/p' <<< "$IP_API")"
+    PROVINCE="$(sed -En 's/.*"province":"([^"]+)".*/\1/p' <<< "$IP_API")"
+    CITY="$(sed -En 's/.*"city":"([^"]+)".*/\1/p' <<< "$IP_API")"
 
     ( [[ -n "$IP" && -n "$PROVINCE" && -n "$CITY" ]] && echo "$IP $PROVINCE $CITY"; return 0 ) || return 1
 }
@@ -57,6 +69,7 @@ iplocation() {
     local IP="$1"
 
     baidu_api "$IP" && return 0
+    baidubce_api "$IP" && return 0
     bilibili_api "$IP" && return 0
     die "Unknown IP information."
 }
