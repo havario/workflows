@@ -12,7 +12,7 @@
 # SPDX-License-Identifier: Apache-2.0
 
 # 当前脚本版本号
-readonly VERSION='v1.0.4 (2025.06.11)'
+readonly VERSION='v1.1.1 (2025.06.13)'
 
 # https://www.graalvm.org/latest/reference-manual/ruby/UTF8Locale
 if locale -a 2>/dev/null | grep -qiE -m 1 "UTF-8|utf8"; then
@@ -39,36 +39,40 @@ TEMP_DIR="/tmp/kernel_$RANDOM_CHAR"
 UA_BROWSER='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36'
 
 # curl默认参数
-declare -a CURL_OPTS=(--max-time 5 --retry 1 --retry-max-time 10)
+declare -a CURL_OPTS=(--max-time 5 --retry 2 --retry-max-time 10)
+
+# 分割符
+separator() { printf "%-25s\n" "-" | sed 's/\s/-/g'; }
 
 _exit() {
-    local RET_CODE="$?"
+    local ERR_CODE="$?"
     rm -rf "$TEMP_DIR" >/dev/null 2>&1
     [ -f /etc/apt/sources.list.d/xanmod-release.list ] && rm -f /etc/apt/sources.list.d/xanmod-release.list
-    exit "$RET_CODE"
+    exit "$ERR_CODE"
+}
+
+# 安全清屏函数
+clrscr() {
+    ([ -t 1 ] && tput clear 2>/dev/null) || echo -e "\033[2J\033[H" || clear
+}
+
+# 打印错误信息并退出
+die() {
+    _err_msg >&2 "$(_red "$@")"; exit 1
 }
 
 trap '_exit' SIGINT SIGQUIT SIGTERM EXIT
 
+# 工作临时目录
 mkdir -p "$TEMP_DIR" >/dev/null 2>&1
-
-# 分割符
-separator() { printf "%-25s\n" "-" | sed 's/\s/-/g'; }
+if [ "$(cd -P -- "$(dirname -- "$0")" && pwd -P)" != "$TEMP_DIR" ]; then
+    cd "$TEMP_DIR" >/dev/null 2>&1 || die "Can't access temporary working directory."
+fi
 
 reading() {
     local PROMPT
     PROMPT="$1"
     read -rep "$(_yellow "$PROMPT")" "$2"
-}
-
-# 安全清屏函数
-clrscr() {
-    ( [ -t 1 ] && tput clear 2>/dev/null ) || echo -e "\033[2J\033[H" || clear
-}
-
-# 打印错误信息并退出
-die() {
-    _err_msg "$(_red "$@")" >&2; exit 1
 }
 
 _exists() {
@@ -80,8 +84,9 @@ _exists() {
     fi
 }
 
+# 判断当前系统是否为64位系统
 _is_64bit() {
-    if [ "$(getconf WORD_BIT)" = '32' ] && [ "$(getconf LONG_BIT)" = '64' ]; then return 0
+    if _exists getconf; then [[ "$(getconf WORD_BIT)" = 32 && "$(getconf LONG_BIT)" = 64 ]] && return 0
     else return 1
     fi
 }
@@ -107,6 +112,7 @@ pkg_uninstall() {
     done
 }
 
+# 运行前校验
 pre_check() {
     if [ "$EUID" -ne 0 ] || [ "$(id -ru)" -ne 0 ]; then
         die "This script must be run as root!"
@@ -114,21 +120,20 @@ pre_check() {
     if [ -z "$BASH_VERSION" ]; then
         die "This script needs to be run with bash, not sh!"
     fi
-    if [ "$(cd -P -- "$(dirname -- "$0")" && pwd -P)" != "$TEMP_DIR" ]; then
-        cd "$TEMP_DIR" 2>/dev/null || die "Can't access temporary working directory. Check permissions and try again."
-    fi
     if ! _is_64bit; then
         die "Not a 64-bit system, not supported."
     fi
 }
 
 cdn_check() {
+    # country 和 github 代理全局生效
     # 备用 www.prologis.cn www.autodesk.com.cn www.keysight.com.cn
-    COUNTRY="$(curl --user-agent "$UA_BROWSER" -fsL "${CURL_OPTS[@]}" "http://www.qualcomm.cn/cdn-cgi/trace" | grep -i '^loc=' | cut -d'=' -f2 | grep .)"
+    COUNTRY="$(curl --user-agent "$UA_BROWSER" -sL -4 "${CURL_OPTS[@]}" "http://www.qualcomm.cn/cdn-cgi/trace" | grep -i '^loc=' | cut -d'=' -f2 | grep .)"
     if [ "$COUNTRY" != "CN" ]; then
         GITHUB_PROXY=""
     elif [ "$COUNTRY" = "CN" ]; then
-        curl -sL --retry 2 --connect-timeout 5 -w "%{http_code}" "https://files.m.daocloud.io/github.com/honeok/honeok/raw/master/README.md" -o /dev/null 2>/dev/null | grep -q "^200$" && GITHUB_PROXY='https://files.m.daocloud.io/' || GITHUB_PROXY='https://gh-proxy.com/'
+        (curl "${CURL_OPTS[@]}" --connect-timeout 5 -sL -w "%{http_code}" "https://files.m.daocloud.io/github.com/honeok/honeok/raw/master/README.md" -o /dev/null 2>/dev/null | grep -q "^200$" && GITHUB_PROXY='https://files.m.daocloud.io/') || \
+        GITHUB_PROXY='https://gh-proxy.com/'
     else
         GITHUB_PROXY='https://gh-proxy.com/'
     fi
@@ -136,12 +141,17 @@ cdn_check() {
 
 os_reboot() {
     local CHOICE
-    _yellow "The system needs to reboot."
-    reading "Do you want to restart system? (y/n): " CHOICE
-    case "$CHOICE" in
-        [Yy] | "" ) ( _exists reboot && reboot ) || shutdown -r now ;;
-        * ) _yellow "Reboot has been canceled"; exit 0 ;;
-    esac
+
+    if [ "$REBOOT" = 1 ]; then
+        (_exists reboot && reboot) || (_exists shutdown && shutdown -r now) || die "restart command not found."
+    else
+        _yellow "The system needs to reboot."
+        reading "Do you want to restart system? (y/n): " CHOICE
+        case "$CHOICE" in
+            [Yy] | "" ) (_exists reboot && reboot) || (_exists shutdown && shutdown -r now) || die "restart command not found." ;;
+            * ) _yellow "Reboot has been canceled"; exit 0 ;;
+        esac
+    fi
     exit 0
 }
 
@@ -167,7 +177,7 @@ os_full() {
     for release in "${!RELEASE_REGEX[@]}"; do
         [[ "${OS_INFO,,}" =~ ${RELEASE_REGEX[release]} ]] && OS_NAME="${RELEASE_DISTROS[release]}" && break
     done
-    [ -z "$OS_NAME" ] && die "This Linux distribution is not supported."
+    [ -z "$OS_NAME" ] && die "This linux distribution is not supported."
 }
 
 os_version() {
@@ -260,6 +270,22 @@ on_bbr() {
     fi
 }
 
+bbr_menu() {
+    local CHOICE
+
+    if [ "$BBR" = 1 ]; then
+        (on_bbr && return 0)
+    else
+        reading "Whether to use bbr + fq ? (y/n): " CHOICE
+        case "$CHOICE" in
+            [Yy] | "" ) on_bbr ;;
+            [Nn] ) _yellow "Cancelled by user."; exit 0 ;;
+            * ) die "Invalid selection" ;;
+        esac
+    fi
+}
+
+# 并发执行 获取最低延迟的mirrors仓库, 用于替换红帽系发行版repo源
 rhel_mirror() {
     local -a MIRRORS=(
         mirrors.aliyun.com
@@ -271,56 +297,64 @@ rhel_mirror() {
     {
         for MIRROR in "${MIRRORS[@]}"; do
             {
+                local AVG
                 AVG="$(ping -c3 -q "$MIRROR" | awk -F'/' '/rtt/ {printf "%.0f", $5}')"
                 [ -n "$AVG" ] && echo "$AVG $MIRROR"
             } 2>/dev/null &
         done
         wait
-    } | sort -n | head -n1 | awk '{print $2}'
+    } | sort -n | awk 'NR==1 {print $2}'
 }
 
 # http://developer.aliyun.com/mirror/elrepo?spm=a2c6h.13651102.0.0.b9361b11Q0alNh
 # https://www.rockylinux.cn/notes/rocky-linux-9-nei-he-sheng-ji-zhi-6.html
 rhel_install() {
+    local KERNEL_CHANNEL="$1"
     local ELREPO_URL LATEST_VERSION RPM_NAME BEST_MIRROR
 
+    # 设置默认值为长期支持版本
+    # 主线版本和长期支持版本
+    KERNEL_CHANNEL="${KERNEL_CHANNEL:-lt}"
     case "$MAJOR_VER" in
         7 )
             [[ ! "$(uname -m 2>/dev/null)" =~ ^(x86_64|amd64)$ ]] && die "Current architecture: $(uname -m) is not supported."
             ELREPO_URL="http://mirrors.coreix.net/elrepo-archive-archive/kernel/el7/x86_64/RPMS"
-            LATEST_VERSION="$(curl -fskL --retry 2 "$ELREPO_URL" | grep -oP 'kernel-ml(-devel)?-\K[0-9][^"]+(?=\.el7\.elrepo\.x86_64\.rpm)' | sort -V | uniq -d | tail -n1)"
+            LATEST_VERSION="$(curl -skL --retry 2 "$ELREPO_URL" | grep -oP "kernel-$KERNEL_CHANNEL(-devel)?-\K[0-9][^\"<]+(?=\\.el7\\.elrepo\\.x86_64\\.rpm)" | sort -V | uniq -d | tail -n1)"
             for suffix in "" "-devel"; do
-                RPM_NAME="kernel-ml$suffix-$LATEST_VERSION.el7.elrepo.x86_64.rpm"
-                curl -fLO "$ELREPO_URL/$RPM_NAME"
+                RPM_NAME="kernel-$KERNEL_CHANNEL$suffix-$LATEST_VERSION.el7.elrepo.x86_64.rpm"
+                curl --retry 2 -LO "$ELREPO_URL/$RPM_NAME"
             done
-            yum localinstall -y kernel-ml*
+            yum localinstall -y "kernel-$KERNEL_CHANNEL"*
             # 更改内核启动顺序
             grub2-set-default 0 && grub2-mkconfig -o /etc/grub2.cfg
             grubby --args="user_namespace.enable=1" --update-kernel="$(grubby --default-kernel)"
-            rm -f kernel-ml*
+            rm -f "kernel-$KERNEL_CHANNEL"*
         ;;
-        8 | 9 )
+        8 | 9 | 10 )
             dnf -y install epel-release
             rpm --import https://www.elrepo.org/RPM-GPG-KEY-elrepo.org # 导入ELRepo GPG公钥
-            ( rpm -q elrepo-release >/dev/null 2>&1 && [ ! -f /etc/yum.repos.d/elrepo.repo ] \
-                && dnf -y reinstall "https://www.elrepo.org/elrepo-release-$MAJOR_VER.el$MAJOR_VER.elrepo.noarch.rpm" ) \
+            # 考虑elrepo-release可能安装, 但是repo文件被移除, 尝试重装repo文件
+            (rpm -q elrepo-release >/dev/null 2>&1 && [ ! -f /etc/yum.repos.d/elrepo.repo ] \
+                && dnf -y reinstall "https://www.elrepo.org/elrepo-release-$MAJOR_VER.el$MAJOR_VER.elrepo.noarch.rpm") \
                 || dnf -y install "https://www.elrepo.org/elrepo-release-$MAJOR_VER.el$MAJOR_VER.elrepo.noarch.rpm"
+            dnf makecache
             if [[ "$COUNTRY" = "CN" && -f /etc/yum.repos.d/elrepo.repo ]]; then
+                # CN服务器从4个平台取一个延迟最低的mirror地址替换
                 BEST_MIRROR="$(rhel_mirror)"
                 sed -i 's/mirrorlist=/#mirrorlist=/g' /etc/yum.repos.d/elrepo.repo
                 sed -i "s#elrepo.org/linux#$BEST_MIRROR/elrepo#g" /etc/yum.repos.d/elrepo.repo
             fi
-            dnf -y install --nogpgcheck --enablerepo=elrepo-kernel kernel-ml kernel-ml-devel
+            dnf -y install --nogpgcheck --enablerepo=elrepo-kernel "kernel-$KERNEL_CHANNEL" "kernel-$KERNEL_CHANNEL-devel"
         ;;
         * )
             die "Unsupported system version."
         ;;
     esac
-    on_bbr
+    bbr_menu
     os_reboot
 }
 
-# 红帽系发行版交互菜单
+# 红帽系发行版内核安装交互菜单
 rhel_menu() {
     local CHOICE KERNELS
     if echo "$KERNEL_VERSION" | grep -qi 'elrepo'; then
@@ -335,8 +369,8 @@ rhel_menu() {
         reading "Enter your choice: " CHOICE
         KERNELS="$(rpm -qa | while read -r pkg; do [[ $pkg == *kernel* && $pkg == *elrepo* ]] && echo "$pkg"; done;)"
         case "$CHOICE" in
-            1 ) ( [ -n "$KERNELS" ] && rpm -ev --nodeps "$KERNELS" ); rhel_install ;;
-            2 ) ( [ -n "$KERNELS" ] && rpm -ev --nodeps "$KERNELS" )
+            1 ) ([ -n "$KERNELS" ] && rpm -ev --nodeps "$KERNELS"); rhel_install ;;
+            2 ) ([ -n "$KERNELS" ] && rpm -ev --nodeps "$KERNELS")
                 _suc_msg "$(_green "ELRepo kernel uninstalled. Takes effect after reboot.")"; os_reboot ;;
             * ) die "Invalid selection." ;;
         esac
@@ -358,19 +392,22 @@ debian_xanmod_install() {
     local XANMOD_VERSION
 
     pkg_install gnupg
-    curl -fsL "${GITHUB_PROXY}github.com/kejilion/sh/raw/main/archive.key" | gpg --dearmor -o /usr/share/keyrings/xanmod-archive-keyring.gpg --yes
-    # 添加存储库
+    # 使用kejilion仓库备份的key
+    curl --retry 2 -sL "${GITHUB_PROXY}github.com/kejilion/sh/raw/main/archive.key" | gpg --dearmor -vo /usr/share/keyrings/xanmod-archive-keyring.gpg --yes
+    # 添加xanmod存储库
     echo 'deb [signed-by=/usr/share/keyrings/xanmod-archive-keyring.gpg] http://deb.xanmod.org releases main' | tee /etc/apt/sources.list.d/xanmod-release.list
-    XANMOD_VERSION="$(curl -fsL "${GITHUB_PROXY}github.com/kejilion/sh/raw/main/check_x86-64_psabi.sh" | awk -f - | awk -F 'x86-64-v' '{print $2+0}')"
-    pkg_install "linux-xanmod-x64v$XANMOD_VERSION"
-    on_bbr
+    # 切换到官方脚本判断架构, 国内也许拉不下来增加重试
+    XANMOD_VERSION="$(curl --retry 2 -sL "https://dl.xanmod.org/check_x86-64_psabi.sh" | awk -f - | awk -F 'x86-64-v' '{print $2+0}')"
+    ([[ -n "$XANMOD_VERSION" && "$XANMOD_VERSION" =~ ^[0-9]$ ]] && pkg_install "linux-xanmod-x64v$XANMOD_VERSION") || die "failed to obtain xanmod version."
+    bbr_menu
     os_reboot
 }
 
+# Debian/Ubuntu Xanmod内核安装交互菜单
 debian_xanmod_menu() {
     local CHOICE
 
-    if dpkg -l | grep -q 'linux-xanmod'; then
+    if dpkg -l | grep -qiE '^ii\s+linux-xanmod'; then
         _green "XanMod BBRv3 kernel detected."
         echo "Current kernel: $KERNEL_VERSION"
         separator
@@ -379,8 +416,8 @@ debian_xanmod_menu() {
         separator
         reading "Enter your choice: " CHOICE
         case "$CHOICE" in
-            1 | "" ) pkg_uninstall 'linux-*xanmod1*'; update-grub; debian_xanmod_install ;;
-            2 ) pkg_uninstall 'linux-*xanmod1*'; update-grub; os_reboot ;;
+            1 | "" ) pkg_uninstall "linux-*xanmod1*"; update-grub; debian_xanmod_install ;;
+            2 ) pkg_uninstall "linux-*xanmod1*"; update-grub; os_reboot ;;
             * ) die "Invalid selection" ;;
         esac
     else
@@ -396,7 +433,7 @@ debian_xanmod_menu() {
     fi
 }
 
-before_run() {
+before_script() {
     clrscr
     pre_check
     cdn_check
@@ -408,10 +445,40 @@ before_run() {
     swap_check
 }
 
-kernel() {
-    before_run
+# 主程序运行前操作 (1/3)
+before_script
+
+# 入参判断 (2/3)
+# 当没有任何参数时执行默认匹配逻辑
+if [ "$#" -eq 0 ]; then
     [[ "$OS_NAME" =~ ^(almalinux|centos|fedora|rhel|rocky)$ ]] && rhel_menu
     [[ "$OS_NAME" =~ ^(debian|ubuntu)$ ]] && debian_xanmod_menu
-}
+fi
 
-kernel
+# 解析命令行参数 (3/3)
+# shellcheck disable=SC2317
+while [ "$#" -ge 1 ]; do
+    case "$1" in
+        --almalinux | --centos | --fedora | --rhel | --rocky )
+            shift
+            KERNEL_CHANNEL="$1"
+            rhel_install "$KERNEL_CHANNEL"
+            shift
+        ;;
+        --debian | --ubuntu )
+            debian_xanmod_install
+            shift
+        ;;
+        --bbr )
+            BBR=1
+            shift
+        ;;
+        --reboot )
+            REBOOT=1
+            shift
+        ;;
+        * )
+            die "Unknown parameter: $1"
+        ;;
+    esac
+done
