@@ -33,19 +33,6 @@ die() {
     _err_msg "$(_red "$@")" >&2; exit 1
 }
 
-# 高德地图
-amap_api() {
-    local CHECK_IP="$1"
-    local IP_API IP PROVINCE CITY
-
-    IP_API="$(curl --user-agent "$UA_BROWSER" --max-time 5 -fsL "https://restapi.amap.com/v3/ip?key=0113a13c88697dcea6a445584d535837&ip=$CHECK_IP")"
-    IP="$CHECK_IP"
-    PROVINCE="$(sed -En 's/.*"province":"([^省]+)省".*/\1/p' <<< "$IP_API")"
-    CITY="$(sed -En 's/.*"city":"([^市]+)市".*/\1/p' <<< "$IP_API")"
-
-    ( [[ -n "$IP" && -n "$PROVINCE" && -n "$CITY" ]] && echo "$IP $PROVINCE $CITY"; return 0 ) || return 1
-}
-
 iqiyi_api() {
     local CHECK_IP="$1"
     local IP_API IP PROVINCE CITY
@@ -110,7 +97,6 @@ bilibili_api() {
 iplocation() {
     local CHECK_IP="$1"
 
-    amap_api "$CHECK_IP" && return 0
     iqiyi_api "$CHECK_IP" && return 0
     baidu_api "$CHECK_IP" && return 0
     baidubce_api "$CHECK_IP" && return 0
