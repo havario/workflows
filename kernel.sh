@@ -142,8 +142,9 @@ cdn_check() {
     if [ "$COUNTRY" != "CN" ]; then
         GITHUB_PROXY=""
     elif [ "$COUNTRY" = "CN" ]; then
-        (curl "${CURL_OPTS[@]}" --connect-timeout 5 -sL -w "%{http_code}" "https://files.m.daocloud.io/github.com/honeok/honeok/raw/master/README.md" -o /dev/null 2>/dev/null | grep -q "^200$" && GITHUB_PROXY='https://files.m.daocloud.io/') || \
-        GITHUB_PROXY='https://gh-proxy.com/'
+        (curl "${CURL_OPTS[@]}" --connect-timeout 5 -sL -w "%{http_code}" "https://files.m.daocloud.io/github.com/honeok/honeok/raw/master/README.md" -o /dev/null 2>/dev/null | grep -q "^200$" \
+        && GITHUB_PROXY='https://files.m.daocloud.io/') \
+        || GITHUB_PROXY='https://gh-proxy.com/'
     else
         GITHUB_PROXY='https://gh-proxy.com/'
     fi
@@ -459,14 +460,8 @@ before_script
 # shellcheck disable=SC2317
 while [ "$#" -ge 1 ]; do
     case "$1" in
-        --almalinux | --centos | --fedora | --rhel | --rocky )
-            shift
-            KERNEL_CHANNEL="$1"
-            rhel_install "$KERNEL_CHANNEL"
-            shift
-        ;;
-        --debian | --ubuntu )
-            debian_xanmod_install
+        --debug )
+            set -x
             shift
         ;;
         --bbr )
@@ -475,6 +470,16 @@ while [ "$#" -ge 1 ]; do
         ;;
         --reboot )
             REBOOT=1
+            shift
+        ;;
+        --almalinux | --centos | --fedora | --rhel | --rocky )
+            shift
+            KERNEL_CHANNEL="$1"
+            rhel_install "$KERNEL_CHANNEL"
+            shift
+        ;;
+        --debian | --ubuntu )
+            debian_xanmod_install
             shift
         ;;
         * )
