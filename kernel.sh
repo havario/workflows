@@ -71,7 +71,7 @@ _exit() {
 # 终止信号捕获
 trap '_exit' SIGINT SIGQUIT SIGTERM EXIT
 
-# 工作临时目录
+# 临时工作目录
 mkdir -p "$TEMP_DIR" >/dev/null 2>&1
 if [ "$(cd -P -- "$(dirname -- "$0")" && pwd -P)" != "$TEMP_DIR" ]; then
     cd "$TEMP_DIR" >/dev/null 2>&1 || die "Can't access temporary working directory."
