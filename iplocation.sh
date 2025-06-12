@@ -42,7 +42,7 @@ iqiyi_api() {
     PROVINCE="$(sed -En 's/.*"provinceCN":"([^"]+)".*/\1/p' <<< "$IP_API")"
     CITY="$(sed -En 's/.*"cityCN":"([^"]+)".*/\1/p' <<< "$IP_API")"
 
-    ( [[ -n "$IP" && -n "$PROVINCE" && -n "$CITY" ]] && echo "$IP $PROVINCE $CITY"; return 0 ) || return 1
+    ( [[ -n "$IP" && -n "$PROVINCE" && -n "$CITY" ]] && echo "$IP $PROVINCE $CITY" && return 0 ) || return 1
 }
 
 baidu_api() {
@@ -54,7 +54,7 @@ baidu_api() {
     PROVINCE="$(sed -En 's/.*"location":"([^省市自治区特别行政区"]+)(省|市|自治区|特别行政区).*/\1/p' <<< "$IP_API")"
     CITY="$(sed -En 's/.*"location":"([^"]*?)(省|市|自治区|特别行政区)([^市"]+)市.*/\3/p' <<< "$IP_API")"
 
-    ( [[ -n "$IP" && -n "$PROVINCE" && -n "$CITY" ]] && echo "$IP $PROVINCE $CITY"; return 0 ) || return 1
+    ( [[ -n "$IP" && -n "$PROVINCE" && -n "$CITY" ]] && echo "$IP $PROVINCE $CITY" && return 0 ) || return 1
 }
 
 baidubce_api() {
@@ -66,7 +66,7 @@ baidubce_api() {
     PROVINCE="$(sed -En 's/.*"prov":"([^"]+?)(省|市|自治区|特别行政区)".*/\1/p' <<< "$IP_API")"
     CITY="$(sed -En 's/.*"city":"([^"]+?)市".*/\1/p' <<< "$IP_API")"
 
-    ( [[ -n "$IP" && -n "$PROVINCE" && -n "$CITY" ]] && echo "$IP $PROVINCE $CITY"; return 0 ) || return 1
+    ( [[ -n "$IP" && -n "$PROVINCE" && -n "$CITY" ]] && echo "$IP $PROVINCE $CITY" && return 0 ) || return 1
 }
 
 pconline_api() {
@@ -78,7 +78,7 @@ pconline_api() {
     PROVINCE="$(sed -En 's/.*"pro":"([^"]+?)(省|市|自治区|特别行政区)".*/\1/p' <<< "$IP_API")"
     CITY="$(sed -En 's/.*"city":"([^"]+?)市".*/\1/p' <<< "$IP_API")"
 
-    ( [[ -n "$IP" && -n "$PROVINCE" && -n "$CITY" ]] && echo "$IP $PROVINCE $CITY"; return 0 ) || return 1
+    ( [[ -n "$IP" && -n "$PROVINCE" && -n "$CITY" ]] && echo "$IP $PROVINCE $CITY" && return 0 ) || return 1
 }
 
 bilibili_api() {
@@ -90,7 +90,7 @@ bilibili_api() {
     PROVINCE="$(sed -En 's/.*"province":"([^"]+)".*/\1/p' <<< "$IP_API")"
     CITY="$(sed -En 's/.*"city":"([^"]+)".*/\1/p' <<< "$IP_API")"
 
-    ( [[ -n "$IP" && -n "$PROVINCE" && -n "$CITY" ]] && echo "$IP $PROVINCE $CITY"; return 0 ) || return 1
+    ( [[ -n "$IP" && -n "$PROVINCE" && -n "$CITY" ]] && echo "$IP $PROVINCE $CITY" && return 0 ) || return 1
 }
 
 # runtime
