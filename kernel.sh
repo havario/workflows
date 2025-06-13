@@ -192,7 +192,7 @@ os_full() {
 
 os_version() {
     local MAIN_VER
-    MAIN_VER="$(printf "%s" "$OS_INFO" | grep -oE "[0-9.]+")"
+    MAIN_VER="$(grep -oE "[0-9.]+" <<< "$OS_INFO")"
     MAJOR_VER="${MAIN_VER%%.*}"
 }
 
@@ -216,7 +216,7 @@ kernel_version() {
     fi
 }
 
-# 虚拟化校验并设置支持的操作系统发行版最低版本
+# 虚拟化校验并校验支持的操作系统发行版最低版本
 os_check() {
     local VIRT MIN_VER
     local -a UNSUPPORTED=("docker" "lxc" "openvz")
@@ -244,8 +244,11 @@ os_check() {
 add_swap() {
     local NEW_SWAP="$1"
     local FSTYPE
+    # 获取根分区 / 文件系统类型
     FSTYPE="$(df --output=fstype / | tail -1)"
 
+    # btrfs是高级文件系统, 支持写时复制在这种机制下使用fallocate创建的文件实际上可能不是真正连续分配的块
+    # swap 要求底层是物理连续分配的空间, 在btrfs上用fallocate创建swapfile, 启用swap时可能失败, 回退dd创建
     if _exists fallocate && [ "$FSTYPE" != "btrfs" ]; then fallocate -l "${NEW_SWAP}M" /swapfile
     elif _exists dd; then dd if=/dev/zero of=/swapfile bs=1M count="$NEW_SWAP" status=none
     else die "No fallocate or dd Command"
