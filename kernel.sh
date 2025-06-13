@@ -213,7 +213,7 @@ show_logo() {
 
 show_usage() {
     local SCRIPT_NAME
-    SCRIPT_NAME="${0:-kernel.sh}"
+    SCRIPT_NAME="kernel.sh"
 
     cat <<EOF
 Usage: bash $SCRIPT_NAME [OPTIONS] [BRANCH]
