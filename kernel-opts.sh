@@ -457,8 +457,13 @@ before_script() {
 before_script
 
 # 解析命令行参数 (2/3)
-# shellcheck disable=SC2317
-while [ "$#" -ge 1 ]; do
+# 处理全局选项
+LONG_OPTS=''
+LONG_OPTS="debug,bbr,reboot"
+OPTS="$(getopt -n "$0" --long "$LONG_OPTS" -- "$@")"
+
+eval set -- "$OPTS"
+while true; do
     case "$1" in
         --debug )
             set -x
@@ -472,6 +477,20 @@ while [ "$#" -ge 1 ]; do
             REBOOT=1
             shift
         ;;
+        -- )
+            shift
+            break
+        ;;
+        * )
+            die "Unexpected option: $1."
+        ;;
+    esac
+done
+
+# 处理发行版参数
+# shellcheck disable=SC2317
+while [ "$#" -ge 1 ]; do
+    case "$1" in
         --almalinux | --centos | --fedora | --rhel | --rocky )
             shift
             KERNEL_CHANNEL="$1"
@@ -483,7 +502,7 @@ while [ "$#" -ge 1 ]; do
             shift
         ;;
         * )
-            die "Unknown parameter: $1"
+            die "Unexpected option: $1."
         ;;
     esac
 done
