@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# Description: This script is used to automatically install the latest Linux kernel version.
+# Description: This script is used to automatically install the latest linux kernel version.
 #
 # Copyright (c) 2025 honeok <honeok@disroot.org>
 #
