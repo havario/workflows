@@ -296,17 +296,17 @@ bbr_menu() {
 rhel_mirror() {
     local -a MIRRORS=(
         mirrors.aliyun.com
+        mirrors.cloud.tencent.com
         mirrors.huaweicloud.com
         mirror.nju.edu.cn
+        mirrors.ustc.edu.cn
         mirrors.tuna.tsinghua.edu.cn
     )
 
     {
         for MIRROR in "${MIRRORS[@]}"; do
             {
-                local AVG
-                AVG="$(ping -c3 -q "$MIRROR" | awk -F'/' '/rtt/ {printf "%.0f", $5}')"
-                [ -n "$AVG" ] && echo "$AVG $MIRROR"
+                ping -c3 -W 1 -q "$MIRROR" | awk -F'/' '/rtt/ {printf "%.0f %s\n", $5, "'"$MIRROR"'"}'
             } 2>/dev/null &
         done
         wait
