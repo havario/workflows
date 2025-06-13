@@ -408,8 +408,9 @@ debian_xanmod_install() {
     local XANMOD_VERSION
 
     pkg_install gnupg
-    # 使用kejilion仓库备份的key
-    curl --retry 2 -sL "${GITHUB_PROXY}github.com/kejilion/sh/raw/main/archive.key" | gpg --dearmor -vo /usr/share/keyrings/xanmod-archive-keyring.gpg --yes
+    # 使用官方archive.key
+    # curl --retry 2 -sL "${GITHUB_PROXY}github.com/kejilion/sh/raw/main/archive.key" | gpg --dearmor -vo /usr/share/keyrings/xanmod-archive-keyring.gpg --yes
+    curl --retry 2 -sL https://dl.xanmod.org/archive.key | gpg --dearmor -vo /usr/share/keyrings/xanmod-archive-keyring.gpg --yes
     # 添加xanmod存储库
     echo 'deb [signed-by=/usr/share/keyrings/xanmod-archive-keyring.gpg] http://deb.xanmod.org releases main' | tee /etc/apt/sources.list.d/xanmod-release.list
     # 切换到官方脚本判断架构, 国内也许拉不下来增加重试
