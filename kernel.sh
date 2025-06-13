@@ -13,6 +13,8 @@
 
 # 当前脚本版本号
 readonly VERSION='v1.1.1 (2025.06.13)'
+# shellcheck disable=SC2034
+readonly SCRIPT_SHA='d811b29ed0b540970cdb44b3d0fc272de8eca13f'
 
 # 环境变量用于在debian或ubuntu操作系统中设置非交互式 (noninteractive) 安装模式
 export DEBIAN_FRONTEND=noninteractive
@@ -457,7 +459,10 @@ before_script() {
 before_script
 
 # 解析命令行参数 (2/3)
-# shellcheck disable=SC2317
+# 定义一个数组用于存储非全局参数的参数, 用于后续逻辑
+declare -a ARGS
+# 处理全局选项
+set -- "$@"
 while [ "$#" -ge 1 ]; do
     case "$1" in
         --debug )
@@ -472,6 +477,18 @@ while [ "$#" -ge 1 ]; do
             REBOOT=1
             shift
         ;;
+        * )
+            ARGS+=("$1")
+            shift
+        ;;
+    esac
+done
+
+# 处理发行版参数
+set -- "${ARGS[@]}"
+# shellcheck disable=SC2317
+while [ "$#" -ge 1 ]; do
+    case "$1" in
         --almalinux | --centos | --fedora | --rhel | --rocky )
             shift
             KERNEL_CHANNEL="$1"
@@ -483,7 +500,7 @@ while [ "$#" -ge 1 ]; do
             shift
         ;;
         * )
-            die "Unknown parameter: $1"
+            die "Unexpected option: $1."
         ;;
     esac
 done
