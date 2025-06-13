@@ -456,6 +456,8 @@ debian_xanmod_install() {
 debian_xanmod_menu() {
     local CHOICE
 
+    # Xanmod架构仅支持amd64,  aarch64可以使用 bash <(curl -sL jhb.ovh/jb/bbrv3arm.sh) 但不确保是否安全, 待新增功能
+    [ "$(dpkg --print-architecture 2>/dev/null)" != "amd64" ] && die "The system architecture is not supported."
     if dpkg -l | grep -qiE '^ii\s+linux-xanmod'; then
         _green "XanMod BBRv3 kernel detected."
         echo "Current kernel: $KERNEL_VERSION"
