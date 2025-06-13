@@ -363,7 +363,7 @@ rhel_install() {
     case "$MAJOR_VER" in
         7 )
             [[ ! "$(uname -m 2>/dev/null)" =~ ^(x86_64|amd64)$ ]] && die "Current architecture: $(uname -m) is not supported."
-            ELREPO_URL="http://mirrors.coreix.net/elrepo-archive-archive/kernel/el7/x86_64/RPMS"
+            ELREPO_URL="https://mirrors.coreix.net/elrepo-archive-archive/kernel/el7/x86_64/RPMS"
             LATEST_VERSION="$(curl -skL --retry 2 "$ELREPO_URL" | grep -oP "kernel-$KERNEL_CHANNEL(-devel)?-\K[0-9][^\"<]+(?=\\.el7\\.elrepo\\.x86_64\\.rpm)" | sort -V | uniq -d | tail -n1)"
             for suffix in "" "-devel"; do
                 RPM_NAME="kernel-$KERNEL_CHANNEL$suffix-$LATEST_VERSION.el7.elrepo.x86_64.rpm"
