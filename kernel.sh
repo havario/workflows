@@ -8,6 +8,7 @@
 # https://github.com/teddysun/across
 # https://gitlab.com/fscarmen/warp
 # https://github.com/kejilion/sh
+# https://github.com/bin456789/reinstall
 #
 # SPDX-License-Identifier: Apache-2.0
 
