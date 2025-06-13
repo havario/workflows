@@ -191,6 +191,7 @@ os_full() {
     [ -z "$OS_NAME" ] && die "This linux distribution is not supported."
 }
 
+# 提取主版本号 8 or 9
 os_version() {
     local MAIN_VER
     MAIN_VER="$(grep -oE "[0-9.]+" <<< "$OS_INFO")"
@@ -272,17 +273,17 @@ swap_check() {
 
 # 开启bbr+fq
 on_bbr() {
-    if grep -qi '^net.core.default_qdisc' /etc/sysctl.conf; then
-        grep -qi '^net.core.default_qdisc *= *fq' /etc/sysctl.conf || sed -i 's/^net.core.default_qdisc.*/net.core.default_qdisc = fq/' /etc/sysctl.conf
-    else
-        echo 'net.core.default_qdisc = fq' >> /etc/sysctl.conf
+    if ! grep -qi '^net.core.default_qdisc.*fq' /etc/sysctl.conf; then
+        grep -qi '^net.core.default_qdisc' /etc/sysctl.conf \
+        && sed -i 's/^net.core.default_qdisc.*/net.core.default_qdisc = fq/' /etc/sysctl.conf \
+        || echo 'net.core.default_qdisc = fq' >> /etc/sysctl.conf
     fi
-    if grep -qi '^net.ipv4.tcp_congestion_control' /etc/sysctl.conf; then
-        grep -qi '^net.ipv4.tcp_congestion_control *= *bbr' /etc/sysctl.conf || sed -i 's/^net.ipv4.tcp_congestion_control.*/net.ipv4.tcp_congestion_control = bbr/' /etc/sysctl.conf
-    else
-        echo 'net.ipv4.tcp_congestion_control = bbr' >> /etc/sysctl.conf
+    if ! grep -qi '^net.ipv4.tcp_congestion_control.*bbr' /etc/sysctl.conf; then
+        grep -qi '^net.ipv4.tcp_congestion_control' /etc/sysctl.conf \
+        && sed -i 's/^net.ipv4.tcp_congestion_control.*/net.ipv4.tcp_congestion_control = bbr/' /etc/sysctl.conf \
+        || echo 'net.ipv4.tcp_congestion_control = bbr' >> /etc/sysctl.conf
     fi
-    if [ "$(sysctl -n net.core.default_qdisc 2>/dev/null)" != "fq" ] || [ "$(sysctl -n net.ipv4.tcp_congestion_control 2>/dev/null)" != "bbr" ]; then
+    if [[ "$(sysctl -n net.core.default_qdisc 2>/dev/null)" != "fq" || "$(sysctl -n net.ipv4.tcp_congestion_control 2>/dev/null)" != "bbr" ]]; then
         sysctl -p >/dev/null 2>&1 && _suc_msg "$(_green "BBR enabled.")"
     fi
 }
@@ -405,18 +406,18 @@ rhel_menu() {
 
 ## Debian/Ubuntu 相关
 # Debian/Ubuntu Xanmod内核一把梭安装
+# https://github.com/yumaoss/My_tools
 debian_xanmod_install() {
     local XANMOD_VERSION
 
     pkg_install gnupg
-    # 使用官方archive.key
-    # curl --retry 2 -sL "${GITHUB_PROXY}github.com/kejilion/sh/raw/main/archive.key" | gpg --dearmor -vo /usr/share/keyrings/xanmod-archive-keyring.gpg --yes
-    curl --retry 2 -sL https://dl.xanmod.org/archive.key | gpg --dearmor -vo /usr/share/keyrings/xanmod-archive-keyring.gpg --yes
+    curl --retry 2 -sL https://dl.xanmod.org/archive.key | gpg --dearmor -vo /usr/share/keyrings/xanmod-archive-keyring.gpg --yes || \
+    curl --retry 2 -sL "${GITHUB_PROXY}github.com/yumaoss/My_tools/raw/main/archive.key" | gpg --dearmor -vo /usr/share/keyrings/xanmod-archive-keyring.gpg --yes
     # 添加xanmod存储库
     echo 'deb [signed-by=/usr/share/keyrings/xanmod-archive-keyring.gpg] http://deb.xanmod.org releases main' | tee /etc/apt/sources.list.d/xanmod-release.list
     # 切换到官方脚本判断架构, 国内也许拉不下来增加重试
-    # XANMOD_VERSION="$(curl -sL "${GITHUB_PROXY}github.com/kejilion/sh/raw/main/check_x86-64_psabi.sh" | awk -f - | awk -F 'x86-64-v' '{print $2+0}')"
-    XANMOD_VERSION="$(curl --retry 2 -sL "https://dl.xanmod.org/check_x86-64_psabi.sh" | awk -f - | awk -F 'x86-64-v' '{print $2+0}')"
+    XANMOD_VERSION="$(curl --retry 2 -sL "https://dl.xanmod.org/check_x86-64_psabi.sh" | awk -f - | awk -F 'x86-64-v' '{print $2+0}')" || \
+    XANMOD_VERSION="$(curl --retry 2 -sL "${GITHUB_PROXY}github.com/yumaoss/My_tools/raw/main/check_x86-64_psabi.sh" | awk -f - | awk -F 'x86-64-v' '{print $2+0}')"
     ([[ -n "$XANMOD_VERSION" && "$XANMOD_VERSION" =~ ^[0-9]$ ]] && pkg_install "linux-xanmod-x64v$XANMOD_VERSION") || die "failed to obtain xanmod version."
     bbr_menu
     os_reboot
