@@ -283,6 +283,7 @@ on_bbr() {
     fi
 }
 
+# 开启内核bbr+fq交互菜单
 bbr_menu() {
     local CHOICE
     [ "$BBR" = 1 ] && on_bbr && return 0
@@ -294,7 +295,8 @@ bbr_menu() {
     esac
 }
 
-# 并发执行 获取最低延迟的mirrors仓库, 用于替换红帽系发行版repo源
+## 红帽系发行版相关
+# 获取最低延迟的mirrors仓库, 用于替换红帽系发行版epel源
 rhel_mirror() {
     local -a MIRRORS=(
         mirrors.aliyun.com
@@ -348,7 +350,7 @@ rhel_install() {
                 || dnf -y install "https://www.elrepo.org/elrepo-release-$MAJOR_VER.el$MAJOR_VER.elrepo.noarch.rpm"
             dnf makecache
             if [[ "$COUNTRY" = "CN" && -f /etc/yum.repos.d/elrepo.repo ]]; then
-                # CN服务器从4个平台取一个延迟最低的mirror地址替换
+                # CN服务器取一个延迟最低的mirror地址替换
                 BEST_MIRROR="$(rhel_mirror)"
                 sed -i 's/mirrorlist=/#mirrorlist=/g' /etc/yum.repos.d/elrepo.repo
                 sed -i "s#elrepo.org/linux#$BEST_MIRROR/elrepo#g" /etc/yum.repos.d/elrepo.repo
@@ -397,6 +399,8 @@ rhel_menu() {
     fi
 }
 
+## Debian/Ubuntu 相关
+# Debian/Ubuntu Xanmod内核一把梭安装
 debian_xanmod_install() {
     local XANMOD_VERSION
 
@@ -505,9 +509,10 @@ while [ "$#" -ge 1 ]; do
     esac
 done
 
-# 入参判断 (3/3)
+# 默认交互逻辑 (3/3)
 # 当没有任何参数时执行默认匹配逻辑
-if [ "$#" -eq 0 ]; then
+# 如果有全局参数已经被前面两个循环消耗, 此时位置参数为空
+if [[ "$#" -eq 0 && "${#ARGS[@]}" -eq 0 ]]; then
     [[ "$OS_NAME" =~ ^(almalinux|centos|fedora|rhel|rocky)$ ]] && rhel_menu
     [[ "$OS_NAME" =~ ^(debian|ubuntu)$ ]] && debian_xanmod_menu
 fi
