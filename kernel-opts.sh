@@ -460,37 +460,33 @@ before_script
 
 # 解析命令行参数 (2/3)
 # 处理全局选项
-LONG_OPTS=''
-LONG_OPTS="debug,bbr,reboot"
-OPTS="$(getopt -n "$0" --long "$LONG_OPTS" -- "$@")"
-
-eval set -- "$OPTS"
-while true; do
+declare -a ARGS
+eval set -- "$@"
+# 处理全局选项
+while [ "$#" -ge 1 ]; do
     case "$1" in
-        --debug )
+        --debug)
             set -x
             shift
         ;;
-        --bbr )
+        --bbr)
             BBR=1
             shift
         ;;
-        --reboot )
+        --reboot)
             REBOOT=1
             shift
         ;;
-        -- )
+        *)
+            ARGS+=("$1")
             shift
-            break
-        ;;
-        * )
-            die "Unexpected option: $1."
         ;;
     esac
 done
 
 # 处理发行版参数
 # shellcheck disable=SC2317
+eval set -- "${ARGS[@]}"
 while [ "$#" -ge 1 ]; do
     case "$1" in
         --almalinux | --centos | --fedora | --rhel | --rocky )
