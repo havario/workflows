@@ -200,14 +200,14 @@ os_version() {
 
 show_logo() {
     _yellow "\
-   __                           __  \xF0\x9F\x92\x80
+   __                           __  \xF0\x9F\x90\xA7
   / /__ ___   ____  ___  ___   / /
  /  '_// -_) / __/ / _ \/ -_) / / 
 /_/\_\ \__/ /_/   /_//_/\__/ /_/  
                                   "
-    _green " System version  : $OS_INFO"
-    echo "$(_yellow " Script version  : $VERSION") $(_cyan "\xF0\x9F\xAA\x90")"
-    echo "$(_blue " Usage: ")" 'bash <(curl -sL https://github.com/honeok/Tools/raw/master/kernel.sh)'
+    _green "System version  : $OS_INFO"
+    echo "$(_yellow "Script version  : $VERSION") $(_cyan "\xF0\x9F\xAA\x90")"
+    echo "$(_blue "Usage: ")" 'bash <(curl -sL https://github.com/honeok/Tools/raw/master/kernel.sh)'
     echo
 }
 
@@ -216,7 +216,7 @@ show_usage() {
     SCRIPT_NAME="$(basename "${0:-kernel.sh}")"
 
     cat <<EOF
-Usage: bash "$SCRIPT_NAME" [OPTIONS] [BRANCH]
+Usage: bash $SCRIPT_NAME [OPTIONS] [BRANCH]
 
 Available options:
         lt: Long-Term Support (LTS) branch
@@ -235,7 +235,7 @@ Available options:
         --reboot       Reboot automatically after upgrade
 
 Example:
-        bash "$SCRIPT_NAME" --almalinux lt --bbr --reboot
+        bash $SCRIPT_NAME --almalinux lt --bbr --reboot
 EOF
     exit 1
 }
