@@ -263,8 +263,8 @@ os_check() {
     done
     case "$OS_NAME" in
         almalinux | centos | fedora | rhel | rocky ) MIN_VER=7 ;;
-        debian ) MIN_VER=8 ;;
-        ubuntu ) MIN_VER=16 ;;
+        debian ) MIN_VER=10 ;;
+        ubuntu ) MIN_VER=18 ;;
         *) die "Not supported OS." ;;
     esac
     if [[ -n "$MAJOR_VER" && "$MAJOR_VER" -lt "$MIN_VER" ]]; then
