@@ -15,7 +15,7 @@
 # 当前脚本版本号
 readonly VERSION='v1.1.2 (2025.06.14)'
 # shellcheck disable=SC2034
-readonly SCRIPT_ID='ae52ef86-b2c0-486a-a9e7-b23b5d6fc50d'
+readonly SCRIPT_ID='6f50d37d-8fb5-4ec9-9ebd-a7e17048e6aa'
 
 # 环境变量用于在debian或ubuntu操作系统中设置非交互式 (noninteractive) 安装模式
 export DEBIAN_FRONTEND=noninteractive
