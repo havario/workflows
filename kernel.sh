@@ -502,6 +502,7 @@ before_script
 declare -a ARGS
 # 处理全局选项
 set -- "$@"
+# shellcheck disable=SC2317
 while [ "$#" -ge 1 ]; do
     case "$1" in
         -h | --help )
