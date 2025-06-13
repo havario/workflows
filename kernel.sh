@@ -13,7 +13,7 @@
 # SPDX-License-Identifier: Apache-2.0
 
 # 当前脚本版本号
-readonly VERSION='v1.1.1 (2025.06.13)'
+readonly VERSION='v1.1.2 (2025.06.14)'
 # shellcheck disable=SC2034
 readonly SCRIPT_ID='ae52ef86-b2c0-486a-a9e7-b23b5d6fc50d'
 
@@ -206,14 +206,14 @@ show_logo() {
 /_/\_\ \__/ /_/   /_//_/\__/ /_/  
                                   "
     _green "System version  : $OS_INFO"
-    echo "$(_yellow "Script version  : $VERSION") $(_cyan "\xF0\x9F\xAA\x90")"
+    echo "$(_yellow "Script version  : $VERSION") $(_cyan "\xE2\x9B\xB1\xEF\xB8\x8F")"
     echo "$(_blue "Usage: ")" 'bash <(curl -sL https://github.com/honeok/Tools/raw/master/kernel.sh)'
     echo
 }
 
 show_usage() {
     local SCRIPT_NAME
-    SCRIPT_NAME="$(basename "${0:-kernel.sh}")"
+    SCRIPT_NAME="${0:-kernel.sh}"
 
     cat <<EOF
 Usage: bash $SCRIPT_NAME [OPTIONS] [BRANCH]
