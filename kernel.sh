@@ -211,6 +211,35 @@ show_logo() {
     echo
 }
 
+show_usage() {
+    local SCRIPT_NAME
+    SCRIPT_NAME="$(basename "${0:-kernel.sh}")"
+
+    cat <<EOF
+Usage: bash "$SCRIPT_NAME" [OPTIONS] [BRANCH]
+
+Available options:
+        lt: Long-Term Support (LTS) branch
+        ml: Mainline branch (latest stable)
+
+        --almalinux    lt | ml
+        --centos       lt | ml
+        --fedora       lt | ml
+        --rhel         lt | ml
+        --rocky        lt | ml
+
+        --debian
+        --ubuntu
+
+        --bbr          Enable BBR + FQ after upgrade
+        --reboot       Reboot automatically after upgrade
+
+Example:
+        bash "$SCRIPT_NAME" --almalinux lt --bbr --reboot
+EOF
+    exit 1
+}
+
 kernel_version() {
     if _exists uname; then KERNEL_VERSION="$(uname -r)"
     elif _exists hostnamectl; then KERNEL_VERSION="$(hostnamectl | sed -n 's/^.*Kernel: Linux //p')"
@@ -475,6 +504,10 @@ declare -a ARGS
 set -- "$@"
 while [ "$#" -ge 1 ]; do
     case "$1" in
+        -h | --help )
+            show_usage
+            shift
+        ;;
         --debug )
             set -x
             shift
