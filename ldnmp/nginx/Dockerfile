@@ -10,6 +10,7 @@
 ARG NGX_LVER
 
 FROM alpine:latest AS builder
+LABEL maintainer="honeok <honeok@disroot.org>"
 ARG NGX_LVER
 ARG ZSTD_LVER
 
@@ -66,6 +67,7 @@ RUN set -ex \
     && rm -rf /var/cache/apk/*
 
 FROM nginx:${NGX_LVER}-alpine AS dist
+LABEL maintainer="honeok <honeok@disroot.org>"
 ARG NGX_LVER
 ARG CORERULESET_LVER
 
