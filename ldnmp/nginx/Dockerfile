@@ -62,7 +62,7 @@ RUN set -ex \
         && rm -rf /var/cache/apk/*
 
 ARG NGX_LVER ALPINE_VER
-FROM nginx:${NGX_LVER}-alpine${ALPINE_VER}
+FROM nginx:${NGX_LVER}-alpine${ALPINE_VER} AS dist
 ARG NGX_LVER CORERULESET_LVER
 
 COPY --from=builder /tmp/nginx-${NGX_LVER}/objs/*.so /etc/nginx/modules/
