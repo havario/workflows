@@ -6,8 +6,13 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
+# Second stage image name
+ARG NGX_LVER
+ARG ALPINE_VER
+
 FROM alpine:latest AS builder
-ARG NGX_LVER ZSTD_LVER
+ARG NGX_LVER
+ARG ZSTD_LVER
 
 RUN set -ex \
         && apk update && apk upgrade \
@@ -61,9 +66,9 @@ RUN set -ex \
         && apk del .build-deps \
         && rm -rf /var/cache/apk/*
 
-ARG NGX_LVER ALPINE_VER
 FROM nginx:${NGX_LVER}-alpine${ALPINE_VER} AS dist
-ARG NGX_LVER CORERULESET_LVER
+ARG NGX_LVER
+ARG CORERULESET_LVER
 
 COPY --from=builder /tmp/nginx-${NGX_LVER}/objs/*.so /etc/nginx/modules/
 COPY --from=builder /usr/local/modsecurity/lib/* /usr/lib/
