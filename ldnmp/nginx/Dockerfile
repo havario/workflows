@@ -106,4 +106,4 @@ RUN set -ex \
         && ldconfig /usr/lib \
         && curl -Ls "https://github.com/owasp-modsecurity/ModSecurity/raw/v3/master/unicode.mapping" -o /etc/nginx/modsec/unicode.mapping \
         && curl -Ls "https://cdn.skyimg.net/up/2025/5/29/d655ae75.webp" -o /usr/share/nginx/html/favicon.ico \
-        && rm -rf /var/cache/apk/* /tmp/*
+        && rm -rf /var/cache/apk/*
