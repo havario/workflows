@@ -8,7 +8,6 @@
 
 # Second stage image name
 ARG NGX_LVER
-ARG ALPINE_VER
 
 FROM alpine:latest AS builder
 ARG NGX_LVER
@@ -66,7 +65,7 @@ RUN set -ex \
         && apk del .build-deps \
         && rm -rf /var/cache/apk/*
 
-FROM nginx:${NGX_LVER}-alpine${ALPINE_VER} AS dist
+FROM nginx:${NGX_LVER}-alpine AS dist
 ARG NGX_LVER
 ARG CORERULESET_LVER
 
