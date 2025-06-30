@@ -36,7 +36,7 @@ RUN set -ex \
     && apk del .build-deps \
     && rm -rf /var/cache/apk/*
 
-FROM openresty/openresty:${RESTY_LVER}-alpine
+FROM openresty/openresty:${RESTY_LVER}-alpine AS dist
 LABEL maintainer="honeok <honeok@disroot.org>"
 ARG RESTY_LVER
 COPY --from=builder /tmp/openresty-${RESTY_LVER}/build/nginx-*/objs/*.so /usr/local/openresty/nginx/modules/
