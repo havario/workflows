@@ -23,10 +23,10 @@ jobs:
       - name: 'Fetch Versions and Determine Build'
         run: |
           RESTY_CVER="$(wget -qO- --tries=50 https://hub.docker.com/v2/repositories/honeok/openresty/tags 2>/dev/null | jq -r ".results // [] | .[].name" | grep -v '^alpine$' | sort -Vr | head -n1 | cut -d'-' -f1 || echo "")"
-          RESTY_LVER="$(wget -qO- --tries=50 https://api.github.com/repos/openresty/openresty/tags | grep '"name":' | sed -E 's/.*"name": *"([^"]+)".*/\1/' | sort -Vr | head -n1 | sed 's/v//')"
-          ZSTD_LVER="$(wget -qO- --tries=50 https://api.github.com/repos/facebook/zstd/releases/latest | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/' | sed 's/v//')"
-          RESTY_ALPINE_LVER="$(docker run --rm nginx:"${RESTY_LVER}-alpine" sh -c "nginx -v 2>&1 | awk -F'/' '{print \$NF}'")"
-          RESTY_ALPINE_TAG="$(docker run --rm nginx:"${RESTY_LVER}-alpine" sh -c 'cat /etc/alpine-release | cut -d "." -f 1-2')"
+          RESTY_LVER="$(wget -qO- --tries=50 --header="Authorization: token ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/repos/openresty/openresty/tags | grep '"name":' | sed -E 's/.*"name": *"([^"]+)".*/\1/' | sort -Vr | head -n1 | sed 's/v//')"
+          ZSTD_LVER="$(wget -qO- --tries=50 --header="Authorization: token ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/repos/facebook/zstd/releases/latest | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/' | sed 's/v//')"
+          RESTY_ALPINE_LVER="$(docker run --rm openresty/openresty:${RESTY_LVER}-alpine sh -c "nginx -v 2>&1 | awk -F'/' '{print \$NF}'")"
+          RESTY_ALPINE_TAG="$(docker run --rm openresty/openresty:${RESTY_LVER}-alpine sh -c "cat /etc/alpine-release | cut -d "." -f 1-2")"
           echo "RESTY_CVER=$RESTY_CVER" >> $GITHUB_ENV
           echo "RESTY_LVER=$RESTY_LVER" >> $GITHUB_ENV
           echo "ZSTD_LVER=$ZSTD_LVER" >> $GITHUB_ENV
@@ -57,12 +57,11 @@ jobs:
         with:
           context: ${{ github.workspace }}/ldnmp/openresty
           file: ${{ github.workspace }}/ldnmp/openresty/Dockerfile
-          platforms: linux/386, linux/amd64, linux/arm/v6, linux/arm/v7, linux/arm64/v8, linux/ppc64le, linux/riscv64, linux/s390x
+          platforms: linux/amd64, linux/arm64/v8
           build-args: |
             RESTY_LVER=${{ env.RESTY_LVER }}
             ZSTD_LVER=${{ env.ZSTD_LVER }}
           tags: |
-            ${{ env.DOCKER_USERNAME }}/openresty:alpine
             ${{ env.DOCKER_USERNAME }}/openresty:${{ env.RESTY_LVER }}-alpine
             ${{ env.DOCKER_USERNAME }}/openresty:${{ env.RESTY_LVER }}-alpine${{ env.RESTY_ALPINE_TAG }}
           push: true
