@@ -8,10 +8,9 @@
 # Second stage image name
 ARG RESTY_LVER
 
-FROM alpine:latest AS builder
+FROM public.ecr.aws/docker/library/alpine:latest AS builder
 LABEL maintainer="honeok <honeok@disroot.org>"
 ARG RESTY_LVER ZSTD_LVER
-ARG RESTY_J=4
 
 RUN set -ex \
     && apk add --update --no-cache --virtual .build-deps \
@@ -24,15 +23,14 @@ RUN set -ex \
     && tar zxf "zstd-${ZSTD_LVER}.tar.gz" \
     && cd "zstd-${ZSTD_LVER}" \
     && make clean \
-    && CFLAGS="-fPIC" make -j${RESTY_J} \
-    && make -j${RESTY_J} install \
+    && CFLAGS="-fPIC" make && make install \
     && cd /tmp \
     && git clone --depth=10 https://github.com/tokers/zstd-nginx-module.git \
     && cd "openresty-${RESTY_LVER}" \
     && ./configure --with-compat \
         --add-dynamic-module=../ngx_brotli \
         --add-dynamic-module=../zstd-nginx-module \
-    && make -j${RESTY_J} \
+    && make \
     && apk del .build-deps \
     && rm -rf /var/cache/apk/*
 
