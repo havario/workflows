@@ -8,7 +8,7 @@
 # Second stage image name
 ARG RESTY_LVER
 
-FROM public.ecr.aws/docker/library/alpine:latest AS builder
+FROM alpine:latest AS builder
 LABEL maintainer="honeok <honeok@disroot.org>"
 ARG RESTY_LVER ZSTD_LVER
 
