@@ -114,6 +114,7 @@ RUN set -ex \
     && make -j$(getconf _NPROCESSORS_ONLN) \
     && make install \
     && rm -rf /etc/nginx/html/ \
+    && rm -f /etc/nginx/*.default \
     && mkdir /etc/nginx/conf.d/ \
     && mkdir -p /var/cache/nginx \
     && mkdir -p /usr/share/nginx/html/ \
