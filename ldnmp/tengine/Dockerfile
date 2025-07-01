@@ -88,7 +88,6 @@ RUN set -ex \
     && tempDir="$(mktemp -d)" \
     && apk add --update --no-cache --virtual .build-deps \
         brotli-dev \
-        curl \
         gcc \
         gd-dev \
         geoip-dev \
@@ -100,6 +99,9 @@ RUN set -ex \
         openssl-dev \
         pcre-dev \
         zlib-dev \
+    && apk add --no-cache \
+        ca-certificates \
+        curl \
     && cd $tempDir \
     && curl -Ls https://tengine.taobao.org/download/tengine-${TENG_LVER}.tar.gz -o tengine-${TENG_LVER}.tar.gz \
     && tar fxz tengine-${TENG_LVER}.tar.gz \
@@ -140,7 +142,7 @@ RUN set -ex \
     && apk add --no-cache gettext-envsubst \
 # Bring in tzdata so users could set the timezones through the environment
 # variables
-    && apk add --no-cache curl tzdata \
+    && apk add --no-cache tzdata \
 # if we have leftovers from building, let's purge them (including extra, unnecessary build deps)
     && if [ -n "$tempDir" ]; then rm -rf "$tempDir"; fi \
     && rm -rf /var/cache/apk/* \
