@@ -156,7 +156,7 @@ ENV TZ="UTC"
 
 COPY nginx.conf /etc/nginx/
 COPY conf.d/default.conf /etc/nginx/conf.d/
-ENTRYPOINT [ "/docker-entrypoint.sh" ]
+ENTRYPOINT ["/docker-entrypoint.sh"]
 
 EXPOSE 80 443
 # Use SIGQUIT instead of default SIGTERM to cleanly drain requests
