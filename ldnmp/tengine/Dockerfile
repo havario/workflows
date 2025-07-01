@@ -124,6 +124,7 @@ RUN set -ex \
     && chmod +x /docker-entrypoint.sh /docker-entrypoint.d/* \
     && install -m 644 html/index.html /usr/share/nginx/html/ \
     && install -m 644 html/50x.html /usr/share/nginx/html/ \
+    && curl -Ls https://github.com/alibaba/tengine/raw/master/docs/image/tengine-logo.png -o /usr/share/nginx/html/favicon.ico \
     && ln -s /usr/lib/nginx/modules /etc/nginx/modules \
     && strip /usr/sbin/nginx* \
     && strip /usr/lib/nginx/modules/*.so \
