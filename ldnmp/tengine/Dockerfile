@@ -6,6 +6,7 @@
 # References:
 # https://github.com/alibaba/tengine
 # https://github.com/Axizdkr/tengine
+# https://github.com/TouTooNet/Tengine
 # https://github.com/nginx/docker-nginx
 # https://developer.aliyun.com/article/1078661
 #
@@ -35,14 +36,17 @@ ARG TENG_BASE_CONFIG="\
 
 ARG TENG_CONFIG_OPTIONS="\
     --with-compat \
+    --with-ipv6 \
     --with-file-aio \
     --with-threads \
     --with-http_addition_module \
     --with-http_auth_request_module \
     --with-http_dav_module \
+    --with-http_degradation_module \
     --with-http_flv_module \
     --with-http_gunzip_module \
     --with-http_gzip_static_module \
+    --with-http_image_filter_module=dynamic \
     --with-http_mp4_module \
     --with-http_random_index_module \
     --with-http_realip_module \
@@ -53,20 +57,19 @@ ARG TENG_CONFIG_OPTIONS="\
     --with-http_sub_module \
     --with-http_v2_module \
     --with-openssl-opt=enable-tls1_3 \
+    --with-http_xslt_module \
+    --with-http_geoip_module=dynamic \
     --with-mail \
     --with-mail_ssl_module \
     --with-stream \
     --with-stream_realip_module \
     --with-stream_ssl_module \
     --with-stream_ssl_preread_module \
-    --with-http_xslt_module=dynamic \
-    --with-http_image_filter_module=dynamic \
-    --with-http_geoip_module=dynamic \
     --with-stream_geoip_module=dynamic \
     --add-module=modules/ngx_http_upstream_consistent_hash_module \
     --add-module=modules/ngx_http_upstream_check_module \
-    --add-module=modules/headers-more-nginx-module-${MORE_LVER} \
     --add-module=modules/ngx_http_upstream_session_sticky_module \
+    --add-module=modules/headers-more-nginx-module-${MORE_LVER} \
     "
 
 ARG TENG_OPT_FLAGS="\
