@@ -1,0 +1,16 @@
+#!/bin/bash
+#
+# Description: This script is used to builds and publishes the latest version of the tengine image.
+#
+# Copyright (c) 2025 honeok <honeok@disroot.org>
+#                           <i@honeok.com>
+#
+# SPDX-License-Identifier: Apache-2.0
+
+TENGINE_LVER="$(wget -qO- --tries=50 https://api.github.com/repos/alibaba/tengine/releases | sed -n 's/.*"tag_name": *"\(tengine-\|\)\([^"]*\)".*/\2/p' | sort -Vr | head -n1)"
+HEADERSMORE_LVER="$(wget -qO- --tries=50 https://api.github.com/repos/openresty/headers-more-nginx-module/tags | sed -n 's/.*"name": *"v\{0,1\}\([^"]*\)".*/\1/p' | grep -v 'rc' | sort -Vr | head -n1)"
+
+docker build --no-cache \
+    --build-arg TENG_LVER="$TENGINE_LVER" \
+    --build-arg MORE_LVER="$HEADERSMORE_LVER" \
+    -t honeok/tengine:"$TENGINE_LVER" .
