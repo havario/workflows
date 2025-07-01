@@ -94,11 +94,11 @@ RUN set -ex \
         pcre-dev \
         zlib-dev \
     && cd $tempDir \
-    && curl -LO https://tengine.taobao.org/download/tengine-${TENG_LVER}.tar.gz \
-    && tar zxf tengine-${TENG_LVER}.tar.gz \
+    && curl -Ls https://tengine.taobao.org/download/tengine-${TENG_LVER}.tar.gz -o tengine-${TENG_LVER}.tar.gz \
+    && tar fxz tengine-${TENG_LVER}.tar.gz \
     && cd tengine-${TENG_LVER} \
-    && curl -LO https://github.com/openresty/headers-more-nginx-module/archive/v${MORE_LVER}.tar.gz \
-    && tar zxf v${MORE_LVER}.tar.gz -C modules/ \
+    && curl -Ls https://github.com/openresty/headers-more-nginx-module/archive/v${MORE_LVER}.tar.gz -o v${MORE_LVER}.tar.gz \
+    && tar fxz v${MORE_LVER}.tar.gz -C modules/ \
     && eval ./configure ${TENG_BASE_CONFIG} ${TENG_CONFIG_OPTIONS} ${TENG_OPT_FLAGS} \
     && make -j$(getconf _NPROCESSORS_ONLN) \
     && make install \
