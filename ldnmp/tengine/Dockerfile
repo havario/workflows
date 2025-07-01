@@ -135,6 +135,9 @@ RUN set -ex \
     && ln -sf /dev/stdout /var/log/nginx/access.log \
     && ln -sf /dev/stderr /var/log/nginx/error.log
 
+COPY nginx.conf /etc/nginx/nginx.conf
+COPY conf.d/default.conf /etc/nginx/conf.d/default.conf
+
 EXPOSE 80 443
 # Use SIGQUIT instead of default SIGTERM to cleanly drain requests
 # See https://github.com/openresty/docker-openresty/blob/master/README.md#tips--pitfalls
