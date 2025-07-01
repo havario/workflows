@@ -95,7 +95,7 @@ RUN set -ex \
         openssl-dev \
         pcre-dev \
         zlib-dev \
-    && cd $tempDir
+    && cd $tempDir \
     && curl -LO https://tengine.taobao.org/download/tengine-${TENG_LVER}.tar.gz \
     && tar zxf tengine-${TENG_LVER}.tar.gz \
     && cd tengine-${TENG_LVER} \
