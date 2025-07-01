@@ -69,6 +69,11 @@ ARG TENG_CONFIG_OPTIONS="\
     --add-module=modules/ngx_http_upstream_session_sticky_module \
     "
 
+ARG TENG_OPT_FLAGS="\
+    --with-cc-opt='-Os -fstack-clash-protection -Wformat -Werror=format-security -fno-plt -g' \
+    --with-ld-opt='-Wl,--as-needed,-O1,--sort-common -Wl,-z,pack-relative-relocs' \
+    "
+
 RUN set -ex \
 # create nginx user/group first, to be consistent throughout docker variants
     && addgroup -g 101 -S nginx \
@@ -94,7 +99,7 @@ RUN set -ex \
     && cd tengine-${TENG_LVER} \
     && curl -LO https://github.com/openresty/headers-more-nginx-module/archive/v${MORE_LVER}.tar.gz \
     && tar zxf v${MORE_LVER}.tar.gz -C modules/ \
-    && eval ./configure ${TENG_BASE_CONFIG} ${TENG_CONFIG_OPTIONS} \
+    && eval ./configure ${TENG_BASE_CONFIG} ${TENG_CONFIG_OPTIONS} ${TENG_OPT_FLAGS} \
     && make -j$(getconf _NPROCESSORS_ONLN) \
     && make install \
     && rm -rf /etc/nginx/html/ \
