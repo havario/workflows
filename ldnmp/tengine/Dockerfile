@@ -37,6 +37,8 @@ ARG TENG_BASE_CONFIG="\
 ARG TENG_CONFIG_OPTIONS="\
     --with-compat \
     --with-ipv6 \
+    --with-pcre \
+    --with-pcre-jit \
     --with-file-aio \
     --with-threads \
     --with-http_addition_module \
