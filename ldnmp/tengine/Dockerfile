@@ -114,8 +114,8 @@ RUN set -ex \
     && mkdir /etc/nginx/conf.d/ \
     && mkdir -p /var/cache/nginx \
     && mkdir -p /usr/share/nginx/html/ \
-    && install -m644 html/index.html /usr/share/nginx/html/ \
-    && install -m644 html/50x.html /usr/share/nginx/html/ \
+    && install -m 644 html/index.html /usr/share/nginx/html/ \
+    && install -m 644 html/50x.html /usr/share/nginx/html/ \
     && ln -s /usr/lib/nginx/modules /etc/nginx/modules \
     && strip /usr/sbin/nginx* \
     && strip /usr/lib/nginx/modules/*.so \
