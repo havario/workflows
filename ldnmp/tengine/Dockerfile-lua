@@ -63,10 +63,16 @@ ARG TENG_CONFIG_OPTIONS="\
     --with-http_image_filter_module=dynamic \
     --with-http_geoip_module=dynamic \
     --with-stream_geoip_module=dynamic \
+    --add-module=modules/ngx_http_lua_module \
     --add-module=modules/ngx_http_upstream_consistent_hash_module \
     --add-module=modules/ngx_http_upstream_check_module \
     --add-module=modules/headers-more-nginx-module-${MORE_LVER} \
     --add-module=modules/ngx_http_upstream_session_sticky_module \
+    "
+
+ARG TENG_LUAJIT_OPTIONS="\
+    --with-luajit-inc=/usr/include/luajit-2.1 \
+    --with-luajit-lib=/usr/lib \
     "
 
 RUN set -ex \
@@ -84,6 +90,7 @@ RUN set -ex \
         libc-dev \
         libxslt-dev \
         linux-headers \
+        luajit-dev \
         make \
         openssl-dev \
         pcre-dev \
@@ -94,12 +101,11 @@ RUN set -ex \
     && cd tengine-${TENG_LVER} \
     && curl -LO https://github.com/openresty/headers-more-nginx-module/archive/v${MORE_LVER}.tar.gz \
     && tar zxf v${MORE_LVER}.tar.gz -C modules/ \
-    && eval ./configure ${TENG_BASE_CONFIG} ${TENG_CONFIG_OPTIONS} \
+    && eval ./configure ${TENG_BASE_CONFIG} ${TENG_CONFIG_OPTIONS} ${TENG_LUAJIT_OPTIONS} \
     && make -j$(getconf _NPROCESSORS_ONLN) \
     && make install \
     && rm -rf /etc/nginx/html/ \
     && mkdir /etc/nginx/conf.d/ \
-    && mkdir -p /var/cache/nginx \
     && mkdir -p /usr/share/nginx/html/ \
     && install -m644 html/index.html /usr/share/nginx/html/ \
     && install -m644 html/50x.html /usr/share/nginx/html/ \
