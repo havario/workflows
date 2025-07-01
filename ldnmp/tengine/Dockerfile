@@ -6,7 +6,7 @@
 # References:
 # https://github.com/alibaba/tengine
 # https://github.com/Axizdkr/tengine
-# https://github.com/nginx/docker-nginx/blob/master/mainline/alpine-slim/Dockerfile
+# https://github.com/nginx/docker-nginx
 # https://developer.aliyun.com/article/1078661
 #
 # SPDX-License-Identifier: Apache-2.0
@@ -129,5 +129,7 @@ RUN set -ex \
     && ln -sf /dev/stderr /var/log/nginx/error.log
 
 EXPOSE 80 443
+# Use SIGQUIT instead of default SIGTERM to cleanly drain requests
+# See https://github.com/openresty/docker-openresty/blob/master/README.md#tips--pitfalls
 STOPSIGNAL SIGQUIT
 CMD ["nginx", "-g", "daemon off;"]
