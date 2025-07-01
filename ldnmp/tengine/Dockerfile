@@ -1,4 +1,4 @@
-# Description: 
+# Description: This dockerfile builds a tengine containerized image for production, inheriting all compilation parameters of nginx and adding extra modules.
 #
 # Copyright (c) 2025 honeok <honeok@disroot.org>
 #                           <i@honeok.com>
