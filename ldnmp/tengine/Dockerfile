@@ -127,7 +127,9 @@ RUN set -ex \
     )" \
     && apk add --no-cache $runDeps \
 # Add `envsubst` for templating environment variables
-    && apk add --no-cache ca-certificates curl gettext-envsubst \
+    && apk add --no-cache gettext-envsubst \
+# Runtime dependencies
+    && apk add --no-cache ca-certificates curl \
     && apk del --no-network .build-deps \
 # if we have leftovers from building, let's purge them (including extra, unnecessary build deps)
     && if [ -n "$tempDir" ]; then rm -rf "$tempDir"; fi \
