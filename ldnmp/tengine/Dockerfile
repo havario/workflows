@@ -69,6 +69,7 @@ ARG TENG_CONFIG_OPTIONS="\
     --add-module=modules/ngx_http_upstream_consistent_hash_module \
     --add-module=modules/ngx_http_upstream_check_module \
     --add-module=modules/ngx_http_upstream_session_sticky_module \
+    --add-module=modules/ngx_brotli \
     --add-module=modules/headers-more-nginx-module-${MORE_LVER} \
     "
 
@@ -84,11 +85,12 @@ RUN set -ex \
 # let's build binaries from the published packaging sources
     && tempDir="$(mktemp -d)" \
     && apk add --update --no-cache --virtual .build-deps \
+        brotli-dev \
         curl \
-        findutils \
         gcc \
-        geoip-dev \
         gd-dev \
+        geoip-dev \
+        git \
         libc-dev \
         libxslt-dev \
         linux-headers \
@@ -102,6 +104,7 @@ RUN set -ex \
     && cd tengine-${TENG_LVER} \
     && curl -Ls https://github.com/openresty/headers-more-nginx-module/archive/v${MORE_LVER}.tar.gz -o v${MORE_LVER}.tar.gz \
     && tar fxz v${MORE_LVER}.tar.gz -C modules/ \
+    && git clone --recurse-submodules -j8 https://github.com/google/ngx_brotli modules/ngx_brotli \
     && eval ./configure ${TENG_BASE_CONFIG} ${TENG_CONFIG_OPTIONS} ${TENG_OPT_FLAGS} \
     && make -j$(getconf _NPROCESSORS_ONLN) \
     && make install \
