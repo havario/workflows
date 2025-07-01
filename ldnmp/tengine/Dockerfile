@@ -114,11 +114,20 @@ RUN set -ex \
     && mkdir /etc/nginx/conf.d/ \
     && mkdir -p /var/cache/nginx \
     && mkdir -p /usr/share/nginx/html/ \
+# create a docker-entrypoint.d directory
+    && mkdir /docker-entrypoint.d \
+    && curl -Ls https://github.com/nginx/docker-nginx/raw/master/entrypoint/docker-entrypoint.sh -o /docker-entrypoint.sh \
+    && curl -Ls https://github.com/nginx/docker-nginx/raw/master/entrypoint/10-listen-on-ipv6-by-default.sh -o /docker-entrypoint.d/10-listen-on-ipv6-by-default.sh \
+    && curl -Ls https://github.com/nginx/docker-nginx/raw/master/entrypoint/15-local-resolvers.envsh -o /docker-entrypoint.d/15-local-resolvers.envsh \
+    && curl -Ls https://github.com/nginx/docker-nginx/raw/master/entrypoint/20-envsubst-on-templates.sh -o /docker-entrypoint.d/20-envsubst-on-templates.sh \
+    && curl -Ls https://github.com/nginx/docker-nginx/raw/master/entrypoint/30-tune-worker-processes.sh -o /docker-entrypoint.d/30-tune-worker-processes.sh \
+    && chmod +x /docker-entrypoint.sh /docker-entrypoint.d/* \
     && install -m 644 html/index.html /usr/share/nginx/html/ \
     && install -m 644 html/50x.html /usr/share/nginx/html/ \
     && ln -s /usr/lib/nginx/modules /etc/nginx/modules \
     && strip /usr/sbin/nginx* \
     && strip /usr/lib/nginx/modules/*.so \
+    && apk del --no-network .build-deps \
     && runDeps="$( \
         scanelf --needed --nobanner --format '%n#p' /usr/sbin/nginx /usr/lib/nginx/modules/*.so \
             | tr ',' '\n' \
@@ -128,20 +137,25 @@ RUN set -ex \
     && apk add --no-cache $runDeps \
 # Add `envsubst` for templating environment variables
     && apk add --no-cache gettext-envsubst \
-# Runtime dependencies
-    && apk add --no-cache ca-certificates curl \
-    && apk del --no-network .build-deps \
+# Bring in tzdata so users could set the timezones through the environment
+# variables
+    && apk add --no-cache curl tzdata \
 # if we have leftovers from building, let's purge them (including extra, unnecessary build deps)
     && if [ -n "$tempDir" ]; then rm -rf "$tempDir"; fi \
+    && rm -rf /var/cache/apk/* \
 # forward request and error logs to docker log collector
     && ln -sf /dev/stdout /var/log/nginx/access.log \
     && ln -sf /dev/stderr /var/log/nginx/error.log
 
+ENV TZ="UTC"
+
 COPY nginx.conf /etc/nginx/
 COPY conf.d/default.conf /etc/nginx/conf.d/
+ENTRYPOINT [ "/docker-entrypoint.sh" ]
 
 EXPOSE 80 443
 # Use SIGQUIT instead of default SIGTERM to cleanly drain requests
 # See https://github.com/openresty/docker-openresty/blob/master/README.md#tips--pitfalls
 STOPSIGNAL SIGQUIT
+
 CMD ["nginx", "-g", "daemon off;"]
