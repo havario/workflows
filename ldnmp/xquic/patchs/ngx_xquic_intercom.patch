@@ -7,4 +7,4 @@
 -               &ctx->addr[worker_num], ctx->addrlen[worker_num]);
 +               (struct sockaddr *)&ctx->addr[worker_num], ctx->addrlen[worker_num]);
 
-     ngx_xquic_stat_send_cnt++;
+     ngx_xquic_stat_send_cnt++;1
