@@ -220,7 +220,7 @@ COPY nginx.conf /etc/nginx/
 COPY conf.d/default.conf /etc/nginx/conf.d/
 ENTRYPOINT ["/docker-entrypoint.sh"]
 
-EXPOSE 80 443
+EXPOSE 80
 
 # Use SIGQUIT instead of default SIGTERM to cleanly drain requests
 # See https://github.com/openresty/docker-openresty/blob/master/README.md#tips--pitfalls
