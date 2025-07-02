@@ -13,6 +13,7 @@ TONGSUO_LVER="$(wget -qO- --tries=50 https://api.github.com/repos/Tongsuo-Projec
 XQUIC_LVER="$(wget -qO- --tries=50 https://api.github.com/repos/alibaba/xquic/releases | sed -n 's/.*"tag_name": *"\(v[^"]*\)".*/\1/p' | sort -Vr | head -n1 | sed 's/^v//')"
 
 docker build --no-cache \
+    --progress=plain \
     --build-arg TENG_LVER="$TENGINE_LVER" \
     --build-arg MORE_LVER="$HEADERSMORE_LVER" \
     --build-arg TONGSUO_LVER="$TONGSUO_LVER" \
