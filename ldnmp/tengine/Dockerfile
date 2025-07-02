@@ -5,15 +5,50 @@
 #
 # References:
 # https://github.com/alibaba/tengine
+# https://github.com/alibaba/xquic
 # https://github.com/Axizdkr/tengine
 # https://github.com/TouTooNet/Tengine
 # https://github.com/BoringCat/tengine-docker
-# https://github.com/alibaba/xquic
+# https://github.com/google/ngx_brotli
+# https://github.com/facebook/zstd
 # https://github.com/nginx/docker-nginx
 # https://github.com/openresty/docker-openresty
 # https://developer.aliyun.com/article/1078661
 #
 # SPDX-License-Identifier: Apache-2.0
+
+FROM alpine:latest AS builder
+LABEL maintainer="honeok <honeok@disroot.org>"
+
+# Docker Build Arguments
+ARG TENG_LVER ZSTD_LVER
+
+RUN set -ex \
+    && apk add --update --no-cache --virtual .build-deps \
+        build-base \
+        curl \
+        git \
+        openssl-dev \
+        pcre-dev \
+        zlib-dev \
+    && cd /tmp \
+    && curl -Ls https://tengine.taobao.org/download/tengine-${TENG_LVER}.tar.gz -o tengine-${TENG_LVER}.tar.gz \
+    && tar fxz tengine-${TENG_LVER}.tar.gz \
+    && curl -Ls https://github.com/facebook/zstd/releases/download/v${ZSTD_LVER}/zstd-${ZSTD_LVER}.tar.gz -o zstd-${ZSTD_LVER}.tar.gz \
+    && tar fxz zstd-${ZSTD_LVER}.tar.gz \
+    && cd zstd-${ZSTD_LVER} \
+    && make clean \
+    && CFLAGS="-fPIC" make -j$(getconf _NPROCESSORS_ONLN) \
+    && make install \
+    && cd /tmp \
+    && git clone --depth=10 https://github.com/tokers/zstd-nginx-module.git \
+    && cd tengine-${TENG_LVER} \
+    && ./configure \
+        --with-compat \
+        --add-dynamic-module=../zstd-nginx-module \
+    && make \
+    && apk del --no-network .build-deps \
+    && rm -rf /var/cache/apk/*
 
 FROM alpine:latest AS dist
 LABEL maintainer="honeok <honeok@disroot.org>"
@@ -22,6 +57,9 @@ LABEL maintainer="honeok <honeok@disroot.org>"
 ARG TONGSUO_LVER=8.3.2
 ARG XQUIC_LVER=1.6.0
 ARG TENG_LVER MORE_LVER
+
+# Copy the dynamic library file of the zstd compression module.
+COPY --from=builder /tmp/tengine-${TENG_LVER}/objs/*.so /usr/lib/nginx/modules/
 
 # https://github.com/alibaba/xquic
 ARG XQUIC_CONFIG_OPTIONS="\
@@ -193,7 +231,7 @@ RUN set -ex \
     && curl -Ls https://github.com/alibaba/tengine/raw/master/docs/image/tengine-logo.png -o /usr/share/nginx/html/favicon.ico \
     && ln -s /usr/lib/nginx/modules /etc/nginx/modules \
     && strip /usr/sbin/nginx* \
-    && strip /usr/lib/nginx/modules/*.so || true \
+    && strip /usr/lib/nginx/modules/*.so \
     && strip /usr/local/lib/*.so \
     && apk del --no-network .build-deps \
     && runDeps="$( \
