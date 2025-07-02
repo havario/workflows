@@ -80,7 +80,6 @@ ARG TENG_CONFIG_OPTIONS="\
     --with-http_sub_module \
     --with-http_v2_module \
     --with-openssl-opt=enable-tls1_3 \
-    --without-http_rewrite_module \
     --with-openssl-async \
     --with-http_xslt_module \
     --with-http_geoip_module \
@@ -124,9 +123,6 @@ ARG BUILD_OPT_FLAGS="\
     --with-cc-opt='-Os -fstack-clash-protection -Wformat -Werror=format-security -fno-plt -g' \
     --with-ld-opt='-Wl,--as-needed,-O1,--sort-common -Wl,-z,pack-relative-relocs' \
     "
-
-# Add fix patch file
-COPY patchs /tmp/patchs
 
 RUN set -ex \
 # create nginx user/group first, to be consistent throughout docker variants
@@ -174,7 +170,7 @@ RUN set -ex \
     && curl -Ls https://github.com/openresty/headers-more-nginx-module/archive/v${MORE_LVER}.tar.gz -o v${MORE_LVER}.tar.gz \
     && tar fxz v${MORE_LVER}.tar.gz -C modules/ \
     && git clone --recurse-submodules -j8 https://github.com/google/ngx_brotli modules/ngx_brotli \
-    && patch -p0 < /tmp/patchs/ngx_xquic_intercom.patch \
+    && curl -Ls https://github.com/BoringCat/tengine-docker/raw/master/patchs/3.0.0/ngx_http_xquic_module.diff | patch -p0 \
     && eval ./configure ${TENG_BASE_CONFIG} ${TENG_CONFIG_OPTIONS} ${TENG_XQUIC_OPTIONS} ${BUILD_OPT_FLAGS} \
     && make -j$(getconf _NPROCESSORS_ONLN) \
     && make install \
@@ -200,7 +196,7 @@ RUN set -ex \
     && strip /usr/local/lib/*.so \
     && apk del --no-network .build-deps \
     && runDeps="$( \
-        scanelf --needed --nobanner --format '%n#p' /usr/sbin/nginx /usr/lib/nginx/modules/*.so \
+        scanelf --needed --nobanner --format '%n#p' /usr/sbin/nginx /usr/lib/nginx/modules/*.so /usr/local/lib/*.so \
             | tr ',' '\n' \
             | sort -u \
             | awk 'system("[ -e /usr/local/lib/" $1 " ]") == 0 { next } { print "so:" $1 }' \
@@ -213,7 +209,6 @@ RUN set -ex \
     && apk add --no-cache tzdata \
 # if we have leftovers from building, let's purge them (including extra, unnecessary build deps)
     && if [ -n "$tempDir" ]; then rm -rf "$tempDir"; fi \
-    && if [ -d /tmp/patchs ]; then rm -rf /tmp/patchs; fi \
     && rm -rf /var/cache/apk/* \
 # forward request and error logs to docker log collector
     && ln -sf /dev/stdout /var/log/nginx/access.log \
