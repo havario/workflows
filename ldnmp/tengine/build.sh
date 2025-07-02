@@ -12,6 +12,14 @@ HEADERSMORE_LVER="$(wget -qO- --tries=50 https://api.github.com/repos/openresty/
 # TONGSUO_LVER="$(wget -qO- --tries=50 https://api.github.com/repos/Tongsuo-Project/Tongsuo/tags | sed -n 's/.*"name": *"\([^"]*\)".*/\1/p' | grep -v 'pre' | sort -Vr | head -n1)"
 # XQUIC_LVER="$(wget -qO- --tries=50 https://api.github.com/repos/alibaba/xquic/releases | sed -n 's/.*"tag_name": *"\(v[^"]*\)".*/\1/p' | sort -Vr | head -n1 | sed 's/^v//')"
 
+_exit() {
+    local ERR_CODE="$?"
+    docker system prune -af --volumes 2>/dev/null
+    exit "$ERR_CODE"
+}
+
+trap '_exit' SIGINT SIGQUIT SIGTERM EXIT
+
 # docker build --no-cache \
 #     --progress=plain \
 #     --build-arg TENG_LVER="$TENGINE_LVER" \
@@ -28,5 +36,3 @@ docker build --no-cache \
     -t honeok/tengine:"$TENGINE_LVER" .
 
 docker push honeok/tengine:"$TENGINE_LVER"
-
-docker system prune -af --volumes
