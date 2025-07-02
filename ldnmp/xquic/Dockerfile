@@ -124,6 +124,9 @@ ARG TENG_XQUIC_OPTIONS="\
     --with-openssl="../Tongsuo-tags-${TONGSUO_LVER}" \
     "
 
+# Add fix patch file
+COPY patchs /tmp/patchs
+
 RUN set -ex \
 # create nginx user/group first, to be consistent throughout docker variants
     && addgroup -g 101 -S nginx \
@@ -170,6 +173,7 @@ RUN set -ex \
     && curl -Ls https://github.com/openresty/headers-more-nginx-module/archive/v${MORE_LVER}.tar.gz -o v${MORE_LVER}.tar.gz \
     && tar fxz v${MORE_LVER}.tar.gz -C modules/ \
     && git clone --recurse-submodules -j8 https://github.com/google/ngx_brotli modules/ngx_brotli \
+    && patch -p0 < /tmp/patchs/ngx_xquic_intercom.patch \
     && eval ./configure ${TENG_BASE_CONFIG} ${TENG_CONFIG_OPTIONS} ${TENG_OPT_FLAGS} ${TENG_XQUIC_OPTIONS} \
     && make -j$(getconf _NPROCESSORS_ONLN) \
     && make install \
@@ -208,6 +212,7 @@ RUN set -ex \
     && apk add --no-cache tzdata \
 # if we have leftovers from building, let's purge them (including extra, unnecessary build deps)
     && if [ -n "$tempDir" ]; then rm -rf "$tempDir"; fi \
+    && if [ -d /tmp/patchs ]; then rm -rf /tmp/patchs; fi \
     && rm -rf /var/cache/apk/* \
 # forward request and error logs to docker log collector
     && ln -sf /dev/stdout /var/log/nginx/access.log \
