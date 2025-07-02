@@ -8,6 +8,7 @@
 # https://github.com/Axizdkr/tengine
 # https://github.com/TouTooNet/Tengine
 # https://github.com/BoringCat/tengine-docker
+# https://github.com/alibaba/xquic
 # https://github.com/nginx/docker-nginx
 # https://github.com/openresty/docker-openresty
 # https://developer.aliyun.com/article/1078661
@@ -19,6 +20,19 @@ LABEL maintainer="honeok <honeok@disroot.org>"
 
 # Docker Build Arguments
 ARG TONGSUO_LVER XQUIC_LVER TENG_LVER MORE_LVER
+
+# https://github.com/alibaba/xquic
+ARG XQUIC_CONFIG_OPTIONS="\
+    -DXQC_ENABLE_TESTING=1 \
+    -DXQC_SUPPORT_SENDMMSG_BUILD=1 \
+    -DXQC_ENABLE_EVENT_LOG=1
+    -DXQC_ENABLE_BBR2=1 \
+    -DXQC_ENABLE_RENO=1
+    -DSSL_TYPE=babassl \
+    -DSSL_PATH=/usr/local/babassl \
+    -DSSL_INC_PATH=/usr/local/babassl/include \
+    -DSSL_LIB_PATH=/usr/local/babassl/lib64/libssl.a;/usr/local/babassl/lib64/libcrypto.a \
+    "
 
 ARG TENG_BASE_CONFIG="\
     --prefix=/etc/nginx \
@@ -40,9 +54,10 @@ ARG TENG_BASE_CONFIG="\
 
 ARG TENG_CONFIG_OPTIONS="\
     --with-compat \
-    --with-ipv6 \
     --with-pcre \
     --with-pcre-jit \
+    --with-select_module \
+    --with-poll_module \
     --with-file-aio \
     --with-threads \
     --with-http_addition_module \
@@ -63,18 +78,35 @@ ARG TENG_CONFIG_OPTIONS="\
     --with-http_sub_module \
     --with-http_v2_module \
     --with-openssl-opt=enable-tls1_3 \
+    --without-http_rewrite_module \
+    --with-openssl-async \
     --with-http_xslt_module \
-    --with-http_geoip_module=dynamic \
+    --with-http_geoip_module \
     --with-mail \
     --with-mail_ssl_module \
     --with-stream \
     --with-stream_realip_module \
     --with-stream_ssl_module \
     --with-stream_ssl_preread_module \
-    --with-stream_geoip_module=dynamic \
+    --with-stream_sni \
+    --with-stream_geoip_module \
+    --add-module=modules/ngx_http_concat_module \
+    --add-module=modules/ngx_http_footer_filter_module \
+    --add-module=modules/ngx_http_proxy_connect_module \
+    --add-module=modules/ngx_http_reqstat_module \
+    --add-module=modules/ngx_http_slice_module \
+    --add-module=modules/ngx_http_sysguard_module \
+    --add-module=modules/ngx_http_trim_filter_module \
     --add-module=modules/ngx_http_upstream_consistent_hash_module \
+    --add-module=modules/ngx_http_upstream_dynamic_module \
+    --add-module=modules/ngx_http_upstream_dyups_module \
     --add-module=modules/ngx_http_upstream_check_module \
     --add-module=modules/ngx_http_upstream_session_sticky_module \
+    --add-module=modules/ngx_http_upstream_vnswrr_module \
+    --add-module=modules/ngx_http_user_agent_module \
+    --add-module=modules/ngx_http_xquic_module \
+    --add-module=modules/ngx_multi_upstream_module \
+    --add-module=modules/ngx_slab_stat \
     --add-module=modules/ngx_brotli \
     --add-module=modules/headers-more-nginx-module-${MORE_LVER} \
     "
@@ -82,6 +114,12 @@ ARG TENG_CONFIG_OPTIONS="\
 ARG TENG_OPT_FLAGS="\
     --with-cc-opt='-Os -fstack-clash-protection -Wformat -Werror=format-security -fno-plt -g' \
     --with-ld-opt='-Wl,--as-needed,-O1,--sort-common -Wl,-z,pack-relative-relocs' \
+    "
+
+ARG TENG_XQUIC_OPTIONS="\
+    --with-xquic-inc="../xquic-${XQUIC_LVER}/include"
+    --with-xquic-lib="../xquic-${XQUIC_LVER}/build"
+    --with-openssl="../Tongsuo-tags-${TONGSUO_LVER}"
     "
 
 RUN set -ex \
@@ -92,14 +130,15 @@ RUN set -ex \
     && tempDir="$(mktemp -d)" \
     && apk add --update --no-cache --virtual .build-deps \
         brotli-dev \
-        gcc \
+        build-base \
+        cmake \
         gd-dev \
         geoip-dev \
         git \
         libc-dev \
+        libevent-dev \
         libxslt-dev \
         linux-headers \
-        make \
         openssl-dev \
         pcre-dev \
         zlib-dev \
@@ -107,13 +146,29 @@ RUN set -ex \
         ca-certificates \
         curl \
     && cd $tempDir \
+# See https://github.com/alibaba/tengine/blob/master/modules/ngx_http_xquic_module/README.md#%E7%BC%96%E8%AF%91
+    && curl -Ls https://github.com/Tongsuo-Project/Tongsuo/archive/tags/${TONGSUO_LVER}.tar.gz -o ${TONGSUO_LVER}.tar.gz \
+    && tar fxz ${TONGSUO_LVER}.tar.gz \
+    && cd Tongsuo-tags-${TONGSUO_LVER} \
+    && ./config --prefix=/usr/local/babassl \
+    && make -j$(getconf _NPROCESSORS_ONLN) \
+    && make install_sw \
+    && cd $tempDir \
+    && curl -Ls https://github.com/alibaba/xquic/archive/tags/v${XQUIC_LVER}.tar.gz -o v${XQUIC_LVER}.tar.gz \
+    && tar fxz v${XQUIC_LVER}.tar.gz \
+    && cd xquic-${XQUIC_LVER} \
+    && mkdir -p build; cd build \
+    && cmake ${XQUIC_CONFIG_OPTIONS} -DCMAKE_C_FLAGS="-Wno-error=deprecated-declarations -Wno-error=dangling-pointer" .. \
+    && make -j$(getconf _NPROCESSORS_ONLN) \
+    && cp libxquic.so /usr/local/lib/ \
+    && cd $tempDir \
     && curl -Ls https://tengine.taobao.org/download/tengine-${TENG_LVER}.tar.gz -o tengine-${TENG_LVER}.tar.gz \
     && tar fxz tengine-${TENG_LVER}.tar.gz \
     && cd tengine-${TENG_LVER} \
     && curl -Ls https://github.com/openresty/headers-more-nginx-module/archive/v${MORE_LVER}.tar.gz -o v${MORE_LVER}.tar.gz \
     && tar fxz v${MORE_LVER}.tar.gz -C modules/ \
     && git clone --recurse-submodules -j8 https://github.com/google/ngx_brotli modules/ngx_brotli \
-    && eval ./configure ${TENG_BASE_CONFIG} ${TENG_CONFIG_OPTIONS} ${TENG_OPT_FLAGS} \
+    && eval ./configure ${TENG_BASE_CONFIG} ${TENG_CONFIG_OPTIONS} ${TENG_OPT_FLAGS} ${TENG_XQUIC_OPTIONS} \
     && make -j$(getconf _NPROCESSORS_ONLN) \
     && make install \
     && rm -rf /etc/nginx/html/ \
@@ -135,6 +190,7 @@ RUN set -ex \
     && ln -s /usr/lib/nginx/modules /etc/nginx/modules \
     && strip /usr/sbin/nginx* \
     && strip /usr/lib/nginx/modules/*.so \
+    && strip /usr/local/lib/*.so \
     && apk del --no-network .build-deps \
     && runDeps="$( \
         scanelf --needed --nobanner --format '%n#p' /usr/sbin/nginx /usr/lib/nginx/modules/*.so \
