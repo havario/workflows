@@ -14,27 +14,38 @@ ARG RESTY_LVER ZSTD_LVER
 
 RUN set -ex \
     && apk add --update --no-cache --virtual .build-deps \
-        brotli-dev build-base git openssl-dev pcre-dev perl zlib-dev \
+        brotli-dev \
+        build-base \
+        curl \
+        git \
+        openssl-dev \
+        pcre-dev \
+        perl \
+        zlib-dev \
     && cd /tmp \
-    && wget -qO "openresty-${RESTY_LVER}.tar.gz" "https://openresty.org/download/openresty-${RESTY_LVER}.tar.gz" \
-    && tar zxf "openresty-${RESTY_LVER}.tar.gz" \
+    && curl -Ls https://openresty.org/download/openresty-${RESTY_LVER}.tar.gz -o openresty-${RESTY_LVER}.tar.gz  \
+    && tar fxz openresty-${RESTY_LVER}.tar.gz \
     && git clone --recurse-submodules -j8 https://github.com/google/ngx_brotli \
-    && wget -qO "zstd-${ZSTD_LVER}.tar.gz" "https://github.com/facebook/zstd/releases/download/v${ZSTD_LVER}/zstd-${ZSTD_LVER}.tar.gz" \
-    && tar zxf "zstd-${ZSTD_LVER}.tar.gz" \
-    && cd "zstd-${ZSTD_LVER}" \
+    && curl -Ls https://github.com/facebook/zstd/releases/download/v${ZSTD_LVER}/zstd-${ZSTD_LVER}.tar.gz -o zstd-${ZSTD_LVER}.tar.gz \
+    && tar fxz zstd-${ZSTD_LVER}.tar.gz \
+    && cd zstd-${ZSTD_LVER} \
     && make clean \
-    && CFLAGS="-fPIC" make && make install \
+    && CFLAGS="-fPIC" make \
+    && make install \
     && cd /tmp \
     && git clone --depth=10 https://github.com/tokers/zstd-nginx-module.git \
-    && cd "openresty-${RESTY_LVER}" \
-    && ./configure --with-compat \
+    && cd openresty-${RESTY_LVER} \
+    && ./configure \
+        --with-compat \
         --add-dynamic-module=../ngx_brotli \
         --add-dynamic-module=../zstd-nginx-module \
     && make \
-    && apk del .build-deps \
+    && apk del --no-network .build-deps \
     && rm -rf /var/cache/apk/*
 
 FROM openresty/openresty:${RESTY_LVER}-alpine AS dist
 LABEL maintainer="honeok <honeok@disroot.org>"
 ARG RESTY_LVER
 COPY --from=builder /tmp/openresty-${RESTY_LVER}/build/nginx-*/objs/*.so /usr/local/openresty/nginx/modules/
+RUN set -ex \
+    && strip /usr/local/openresty/nginx/modules/*.so
