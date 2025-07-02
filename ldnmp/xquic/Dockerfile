@@ -119,10 +119,12 @@ ARG TENG_XQUIC_OPTIONS="\
     --with-openssl="../Tongsuo-tags-${TONGSUO_LVER}" \
     "
 
+# Inherited from nginx
 ARG BUILD_OPT_FLAGS="\
     --with-cc-opt='-Os -fstack-clash-protection -Wformat -Werror=format-security -fno-plt -g' \
     --with-ld-opt='-Wl,--as-needed,-O1,--sort-common -Wl,-z,pack-relative-relocs' \
     "
+
 # Add fix patch file
 COPY patchs /tmp/patchs
 
