@@ -113,17 +113,16 @@ ARG TENG_CONFIG_OPTIONS="\
     --add-module=modules/headers-more-nginx-module-${MORE_LVER} \
     "
 
-ARG TENG_OPT_FLAGS="\
-    --with-cc-opt='-Os -fstack-clash-protection -Wformat -Werror=format-security -fno-plt -g' \
-    --with-ld-opt='-Wl,--as-needed,-O1,--sort-common -Wl,-z,pack-relative-relocs' \
-    "
-
 ARG TENG_XQUIC_OPTIONS="\
     --with-xquic-inc="../xquic-tags-v${XQUIC_LVER}/include" \
     --with-xquic-lib="../xquic-tags-v${XQUIC_LVER}/build" \
     --with-openssl="../Tongsuo-tags-${TONGSUO_LVER}" \
     "
 
+ARG BUILD_OPT_FLAGS="\
+    --with-cc-opt='-Os -fstack-clash-protection -Wformat -Werror=format-security -fno-plt -g' \
+    --with-ld-opt='-Wl,--as-needed,-O1,--sort-common -Wl,-z,pack-relative-relocs' \
+    "
 # Add fix patch file
 COPY patchs /tmp/patchs
 
@@ -174,7 +173,7 @@ RUN set -ex \
     && tar fxz v${MORE_LVER}.tar.gz -C modules/ \
     && git clone --recurse-submodules -j8 https://github.com/google/ngx_brotli modules/ngx_brotli \
     && patch -p0 < /tmp/patchs/ngx_xquic_intercom.patch \
-    && eval ./configure ${TENG_BASE_CONFIG} ${TENG_CONFIG_OPTIONS} ${TENG_XQUIC_OPTIONS} ${TENG_OPT_FLAGS} \
+    && eval ./configure ${TENG_BASE_CONFIG} ${TENG_CONFIG_OPTIONS} ${TENG_XQUIC_OPTIONS} ${BUILD_OPT_FLAGS} \
     && make -j$(getconf _NPROCESSORS_ONLN) \
     && make install \
     && rm -rf /etc/nginx/html/ \
