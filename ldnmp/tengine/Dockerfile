@@ -144,6 +144,7 @@ RUN set -ex \
         openssl-dev \
         pcre-dev \
         zlib-dev \
+# Bring in curl and ca-certificates to make registering on DNS SD easier
     && apk add --no-cache \
         ca-certificates \
         curl \
