@@ -171,7 +171,7 @@ RUN set -ex \
     && curl -Ls https://github.com/openresty/headers-more-nginx-module/archive/v${MORE_LVER}.tar.gz -o v${MORE_LVER}.tar.gz \
     && tar fxz v${MORE_LVER}.tar.gz -C modules/ \
     && git clone --recurse-submodules -j8 https://github.com/google/ngx_brotli modules/ngx_brotli \
-    && curl -Ls https://github.com/BoringCat/tengine-docker/raw/master/patchs/3.0.0/ngx_http_xquic_module.diff | patch -p0 \
+    && curl -Ls https://github.com/honeok/tools/raw/master/ldnmp/tengine/patchs/ngx_xquic_intercom.patch | patch -p0 \
     && eval ./configure ${TENG_BASE_CONFIG} ${TENG_CONFIG_OPTIONS} ${TENG_XQUIC_OPTIONS} ${BUILD_OPT_FLAGS} \
     && make -j$(getconf _NPROCESSORS_ONLN) \
     && make install \
