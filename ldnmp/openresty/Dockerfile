@@ -50,6 +50,8 @@ COPY --from=builder /tmp/openresty-${RESTY_LVER}/build/nginx-*/objs/*.so /usr/lo
 RUN set -ex \
     && apk add --update --no-cache --virtual .build-deps \
         binutils \
+    && apk add --no-cache \
+        curl \
     && strip /usr/local/openresty/nginx/modules/*.so \
     && apk del --no-network .build-deps \
     && rm -rf /var/cache/apk/*
