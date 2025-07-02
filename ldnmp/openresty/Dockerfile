@@ -48,4 +48,8 @@ LABEL maintainer="honeok <honeok@disroot.org>"
 ARG RESTY_LVER
 COPY --from=builder /tmp/openresty-${RESTY_LVER}/build/nginx-*/objs/*.so /usr/local/openresty/nginx/modules/
 RUN set -ex \
-    && strip /usr/local/openresty/nginx/modules/*.so
+    && apk add --update --no-cache --virtual .build-deps \
+        binutils \
+    && strip /usr/local/openresty/nginx/modules/*.so \
+    && apk del --no-network .build-deps \
+    && rm -rf /var/cache/apk/*
