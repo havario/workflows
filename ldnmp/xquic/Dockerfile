@@ -119,8 +119,8 @@ ARG TENG_OPT_FLAGS="\
     "
 
 ARG TENG_XQUIC_OPTIONS="\
-    --with-xquic-inc="../xquic-${XQUIC_LVER}/include" \
-    --with-xquic-lib="../xquic-${XQUIC_LVER}/build" \
+    --with-xquic-inc="../xquic-tags-v${XQUIC_LVER}/include" \
+    --with-xquic-lib="../xquic-tags-v${XQUIC_LVER}/build" \
     --with-openssl="../Tongsuo-tags-${TONGSUO_LVER}" \
     "
 
