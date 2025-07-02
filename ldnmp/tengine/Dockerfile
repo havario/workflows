@@ -193,7 +193,7 @@ RUN set -ex \
     && curl -Ls https://github.com/alibaba/tengine/raw/master/docs/image/tengine-logo.png -o /usr/share/nginx/html/favicon.ico \
     && ln -s /usr/lib/nginx/modules /etc/nginx/modules \
     && strip /usr/sbin/nginx* \
-    && strip /usr/lib/nginx/modules/*.so \
+    && strip /usr/lib/nginx/modules/*.so || true \
     && strip /usr/local/lib/*.so \
     && apk del --no-network .build-deps \
     && runDeps="$( \
