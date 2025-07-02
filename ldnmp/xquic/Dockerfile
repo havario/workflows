@@ -19,7 +19,9 @@ FROM alpine:latest AS dist
 LABEL maintainer="honeok <honeok@disroot.org>"
 
 # Docker Build Arguments
-ARG TONGSUO_LVER XQUIC_LVER TENG_LVER MORE_LVER
+ARG TONGSUO_LVER=8.3.2
+ARG XQUIC_LVER=1.6.0
+ARG TENG_LVER MORE_LVER
 
 # https://github.com/alibaba/xquic
 ARG XQUIC_CONFIG_OPTIONS="\
