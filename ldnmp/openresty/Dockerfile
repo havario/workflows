@@ -30,7 +30,7 @@ RUN set -ex \
     && tar fxz zstd-${ZSTD_LVER}.tar.gz \
     && cd zstd-${ZSTD_LVER} \
     && make clean \
-    && CFLAGS="-fPIC" make \
+    && CFLAGS="-fPIC" make -j$(getconf _NPROCESSORS_ONLN) \
     && make install \
     && cd /tmp \
     && git clone --depth=10 https://github.com/tokers/zstd-nginx-module.git \
