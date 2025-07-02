@@ -18,7 +18,7 @@ FROM alpine:latest AS dist
 LABEL maintainer="honeok <honeok@disroot.org>"
 
 # Docker Build Arguments
-ARG TENG_LVER MORE_LVER
+ARG TENG_LVER MORE_LVER TONGSUO_LVER
 
 ARG TENG_BASE_CONFIG="\
     --prefix=/etc/nginx \
