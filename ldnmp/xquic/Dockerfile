@@ -158,7 +158,7 @@ RUN set -ex \
     && cd $tempDir \
     && curl -Ls https://github.com/alibaba/xquic/archive/tags/v${XQUIC_LVER}.tar.gz -o v${XQUIC_LVER}.tar.gz \
     && tar fxz v${XQUIC_LVER}.tar.gz \
-    && cd xquic-${XQUIC_LVER} \
+    && cd xquic-tags-v${XQUIC_LVER} \
     && mkdir -p build; cd build \
     && cmake ${XQUIC_CONFIG_OPTIONS} -DCMAKE_C_FLAGS="-Wno-error=deprecated-declarations -Wno-error=dangling-pointer" .. \
     && make -j$(getconf _NPROCESSORS_ONLN) \
