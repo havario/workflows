@@ -33,7 +33,7 @@ ARG XQUIC_CONFIG_OPTIONS="\
     -DSSL_TYPE=babassl \
     -DSSL_PATH=/usr/local/babassl \
     -DSSL_INC_PATH=/usr/local/babassl/include \
-    -DSSL_LIB_PATH=/usr/local/babassl/lib64/libssl.a;/usr/local/babassl/lib64/libcrypto.a \
+    -DSSL_LIB_PATH=/usr/local/babassl/lib/libssl.a;/usr/local/babassl/lib/libcrypto.a \
     "
 
 ARG TENG_BASE_CONFIG="\
