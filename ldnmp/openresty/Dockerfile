@@ -1,4 +1,4 @@
-# Description: 
+# Description: This dockerfile creates an openresty production image on alpine, integrating nginx with optimized configurations for high-performance web serving.
 #
 # Copyright (c) 2025 honeok <honeok@disroot.org>
 #                           <i@honeok.com>
