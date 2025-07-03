@@ -61,7 +61,7 @@ ARG TENG_LVER MORE_LVER
 # Copy the dynamic library file of the zstd compression module.
 COPY --from=builder /tmp/tengine-${TENG_LVER}/objs/*.so /usr/lib/nginx/modules/
 
-# https://github.com/alibaba/xquic
+# https://github.com/alibaba/xquic/blob/main/xqc_build.sh
 ARG XQUIC_CONFIG_OPTIONS="\
     -DGCOV=on \
     -DXQC_ENABLE_TESTING=1 \
