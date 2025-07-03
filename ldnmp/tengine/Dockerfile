@@ -61,7 +61,7 @@ ARG TENG_LVER MORE_LVER
 # Copy the dynamic library file of the zstd compression module.
 COPY --from=builder /tmp/tengine-${TENG_LVER}/objs/*.so /usr/lib/nginx/modules/
 
-# https://github.com/alibaba/xquic/blob/main/xqc_build.sh
+# See CMakeLists.txt
 ARG XQUIC_CONFIG_OPTIONS="\
     -DCMAKE_BUILD_TYPE=Release \
     -DGCOV=off \
@@ -69,7 +69,7 @@ ARG XQUIC_CONFIG_OPTIONS="\
     -DXQC_SUPPORT_SENDMMSG_BUILD=1 \
     -DXQC_ENABLE_EVENT_LOG=0 \
     -DXQC_ENABLE_BBR2=1 \
-    -DXQC_ENABLE_RENO=0 \
+    -DXQC_DISABLE_RENO=1 \
     -DSSL_TYPE=babassl \
     -DSSL_PATH=/usr/local/babassl \
     -DSSL_INC_PATH=/usr/local/babassl/include \
