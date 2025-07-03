@@ -144,11 +144,14 @@ RUN set -ex \
     && adduser -S -D -H -u 101 -h /var/cache/nginx -s /sbin/nologin -G nginx -g nginx nginx \
 # let's build binaries from the published packaging sources
     && apk add --update --no-cache --virtual .build-deps \
-        alpine-sdk \
+        build-base \
+        binutils \
+        coreutils \
         gd-dev \
         geoip-dev \
         libxslt-dev \
         linux-headers \
+        make \
         perl-dev \
         readline-dev \
         zlib-dev \
