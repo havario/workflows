@@ -173,11 +173,13 @@ RUN set -ex \
         && find /usr/local/openresty/luajit -type f -perm -u+x -exec strip --strip-unneeded '{}' \; \
         && find /usr/local/openresty/nginx -type f -perm -u+x -exec strip --strip-unneeded '{}' \; ; \
     fi \
+    && rm -f /usr/local/openresty/nginx/conf/*.default \
+    && rm -rf /tmp/* \
     && apk del --no-network .build-deps \
     && mkdir -p /var/cache/openresty \
     && ln -sf /dev/stdout /usr/local/openresty/nginx/logs/access.log \
     && ln -sf /dev/stderr /usr/local/openresty/nginx/logs/error.log \
-    && rm -rf /var/cache/apk/* /tmp/*
+    && rm -rf /var/cache/apk/*
 
 ENV TZ="UTC"
 # Add additional binaries into PATH for convenience
