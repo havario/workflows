@@ -41,11 +41,6 @@ ARG RESTY_PCRE_BUILD_OPTIONS="--enable-jit --enable-pcre2grep-jit --disable-bsr-
 
 # https://github.com/openresty/openresty-packaging/blob/master/alpine/openresty/APKBUILD
 ARG RESTY_CONFIG_OPTIONS="\
-    --prefix=/etc/nginx \
-    --sbin-path=/usr/sbin/nginx \
-    --modules-path=/usr/lib/nginx/modules \
-    --conf-path=/etc/nginx/nginx.conf \
-    --error-log-path=/var/log/nginx/error.log \
     --pid-path=/var/run/nginx.pid \
     --lock-path=/var/run/nginx.lock \
     --user=nginx \
@@ -73,12 +68,11 @@ ARG RESTY_CONFIG_OPTIONS="\
     --with-http_degradation_module \
     --with-http_slice_module \
     --with-http_stub_status_module \
-    --http-log-path=/var/log/nginx/access.log \
-    --http-client-body-temp-path=/var/cache/nginx/client_temp \
-    --http-proxy-temp-path=/var/cache/nginx/proxy_temp \
-    --http-fastcgi-temp-path=/var/cache/nginx/fastcgi_temp \
-    --http-uwsgi-temp-path=/var/cache/nginx/uwsgi_temp \
-    --http-scgi-temp-path=/var/cache/nginx/scgi_temp \
+    --http-client-body-temp-path=/var/cache/openresty/client_temp \
+    --http-proxy-temp-path=/var/cache/openresty/proxy_temp \
+    --http-fastcgi-temp-path=/var/cache/openresty/fastcgi_temp \
+    --http-uwsgi-temp-path=/var/cache/openresty/uwsgi_temp \
+    --http-scgi-temp-path=/var/cache/openresty/scgi_temp \
     --with-mail \
     --with-mail_ssl_module \
     --with-stream \
@@ -182,5 +176,6 @@ RUN set -ex \
         && find /usr/local/openresty/luajit -type f -perm -u+x -exec strip --strip-unneeded '{}' \; \
         && find /usr/local/openresty/nginx -type f -perm -u+x -exec strip --strip-unneeded '{}' \; ; \ 
     fi \
+    && mkdir /var/cache/openresty \
     && apk del --no-network .build-deps \
     && rm -rf /var/cache/apk/*
