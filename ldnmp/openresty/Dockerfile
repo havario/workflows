@@ -194,7 +194,7 @@ RUN set -ex \
     && curl -Ls https://openresty.org/download/openresty-${RESTY_VERSION}.tar.gz -o openresty-${RESTY_VERSION}.tar.gz \
     && tar fxz openresty-${RESTY_VERSION}.tar.gz \
     && cd openresty-${RESTY_VERSION} \
-    && eval ./configure -j$(getconf _NPROCESSORS_ONLN) ${RESTY_CONFIG_OPTIONS} ${RESTY_CONFIG_OPTIONS_MORE} ${RESTY_LUAJIT_OPTIONS} ${RESTY_PCRE_OPTIONS} ${RESTY_CONFIG_DEPS} \
+    && eval ./configure -j$(getconf _NPROCESSORS_ONLN) ${RESTY_CONFIG_DEPS} ${RESTY_CONFIG_OPTIONS} ${RESTY_CONFIG_OPTIONS_MORE} ${RESTY_LUAJIT_OPTIONS} ${RESTY_PCRE_OPTIONS} \
     && make -j$(getconf _NPROCESSORS_ONLN) \
     && make -j$(getconf _NPROCESSORS_ONLN) install \
     && if [ -n "${RESTY_STRIP_BINARIES}" ]; then \
