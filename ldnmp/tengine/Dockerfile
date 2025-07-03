@@ -63,6 +63,7 @@ COPY --from=builder /tmp/tengine-${TENG_LVER}/objs/*.so /usr/lib/nginx/modules/
 
 # https://github.com/alibaba/xquic
 ARG XQUIC_CONFIG_OPTIONS="\
+    -DGCOV=on
     -DXQC_ENABLE_TESTING=1 \
     -DXQC_SUPPORT_SENDMMSG_BUILD=1 \
     -DXQC_ENABLE_EVENT_LOG=1 \
@@ -74,7 +75,7 @@ ARG XQUIC_CONFIG_OPTIONS="\
     -DSSL_LIB_PATH=/usr/local/babassl/lib/libssl.a;/usr/local/babassl/lib/libcrypto.a \
     "
 
-ARG TENG_BASE_CONFIG="\
+ARG TENG_CONFIG_OPTIONS="\
     --prefix=/etc/nginx \
     --sbin-path=/usr/sbin/nginx \
     --modules-path=/usr/lib/nginx/modules \
@@ -90,9 +91,6 @@ ARG TENG_BASE_CONFIG="\
     --http-scgi-temp-path=/var/cache/nginx/scgi_temp \
     --user=nginx \
     --group=nginx \
-    "
-
-ARG TENG_CONFIG_OPTIONS="\
     --with-compat \
     --with-pcre \
     --with-pcre-jit \
@@ -198,8 +196,10 @@ RUN set -ex \
     && curl -Ls https://github.com/alibaba/xquic/archive/tags/v${XQUIC_LVER}.tar.gz -o v${XQUIC_LVER}.tar.gz \
     && tar fxz v${XQUIC_LVER}.tar.gz \
     && cd xquic-tags-v${XQUIC_LVER} \
+# Copy tp to local buffer to fix dangling-pointer warning.
+    && curl -Ls https://github.com/havario/workflows/raw/master/ldnmp/tengine/patchs/ngx_xquic_peer_tp_dangling.patch | patch -p0 \
     && mkdir -p build; cd build \
-    && cmake ${XQUIC_CONFIG_OPTIONS} -DCMAKE_C_FLAGS="-Wno-error=deprecated-declarations -Wno-error=dangling-pointer" .. \
+    && cmake ${XQUIC_CONFIG_OPTIONS} .. \
     && make -j$(getconf _NPROCESSORS_ONLN) \
     && cp libxquic.so /usr/local/lib/ \
     && cd $tempDir \
@@ -210,7 +210,7 @@ RUN set -ex \
     && tar fxz v${MORE_LVER}.tar.gz -C modules/ \
     && git clone --recurse-submodules -j8 https://github.com/google/ngx_brotli modules/ngx_brotli \
     && curl -Ls https://github.com/honeok/tools/raw/master/ldnmp/tengine/patchs/ngx_xquic_intercom.patch | patch -p0 \
-    && eval ./configure ${TENG_BASE_CONFIG} ${TENG_CONFIG_OPTIONS} ${TENG_XQUIC_OPTIONS} ${BUILD_OPT_FLAGS} \
+    && eval ./configure ${TENG_CONFIG_OPTIONS} ${TENG_XQUIC_OPTIONS} ${BUILD_OPT_FLAGS} \
     && make -j$(getconf _NPROCESSORS_ONLN) \
     && make install \
     && rm -rf /etc/nginx/html/ \
