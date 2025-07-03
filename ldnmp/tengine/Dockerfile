@@ -63,7 +63,7 @@ COPY --from=builder /tmp/tengine-${TENG_LVER}/objs/*.so /usr/lib/nginx/modules/
 
 # https://github.com/alibaba/xquic
 ARG XQUIC_CONFIG_OPTIONS="\
-    -DGCOV=on
+    -DGCOV=on \
     -DXQC_ENABLE_TESTING=1 \
     -DXQC_SUPPORT_SENDMMSG_BUILD=1 \
     -DXQC_ENABLE_EVENT_LOG=1 \
