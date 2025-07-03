@@ -29,7 +29,7 @@ RUN set -ex \
         curl \
         git \
         openssl-dev \
-        pcre-dev \
+        pcre2-dev \
         zlib-dev \
     && cd /tmp \
     && curl -Ls https://tengine.taobao.org/download/tengine-${TENG_LVER}.tar.gz -o tengine-${TENG_LVER}.tar.gz \
@@ -92,8 +92,6 @@ ARG TENG_CONFIG_OPTIONS="\
     --user=nginx \
     --group=nginx \
     --with-compat \
-    --with-pcre \
-    --with-pcre-jit \
     --with-select_module \
     --with-poll_module \
     --with-file-aio \
@@ -178,7 +176,7 @@ RUN set -ex \
         libxslt-dev \
         linux-headers \
         openssl-dev \
-        pcre-dev \
+        pcre2-dev \
         zlib-dev \
 # Bring in curl and ca-certificates to make registering on DNS SD easier
     && apk add --no-cache \
