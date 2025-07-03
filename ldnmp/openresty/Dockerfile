@@ -6,7 +6,7 @@
 # References:
 # https://github.com/openresty/docker-openresty
 # 
-# Thanks: Yichun Zhang <admin@openresty.com>
+# Thanks: YichunZhang <admin@openresty.com>
 #
 # SPDX-License-Identifier: Apache-2.0
 
