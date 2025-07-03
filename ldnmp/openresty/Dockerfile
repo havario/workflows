@@ -123,6 +123,7 @@ RUN set -ex \
         coreutils \
         gd-dev \
         geoip-dev \
+        git \
         libxslt-dev \
         linux-headers \
         make \
