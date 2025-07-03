@@ -10,10 +10,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-ARG RESTY_IMAGE_BASE="alpine"
-ARG RESTY_IMAGE_TAG="3.22.0"
-
-FROM ${RESTY_IMAGE_BASE}:${RESTY_IMAGE_TAG}
+FROM alpine:latest AS dist
 
 LABEL maintainer="Evan Wies <evan@neomantra.net>"
 LABEL maintainer="honeok <honeok@disroot.org>"
