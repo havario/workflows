@@ -26,18 +26,8 @@ ARG RESTY_OPENSSL_VERSION="3.4.1"
 ARG RESTY_OPENSSL_PATCH_VERSION="3.4.1"
 ARG RESTY_OPENSSL_URL_BASE="https://github.com/openssl/openssl/releases/download/openssl-${RESTY_OPENSSL_VERSION}"
 # legacy: https://www.openssl.org/source/old/1.1.1
-ARG RESTY_OPENSSL_BUILD_OPTIONS="\
-    enable-camellia \
-    enable-cms \
-    enable-fips \
-    enable-ktls \
-    enable-md2 \
-    enable-rc5 \
-    enable-rfc3779 \
-    enable-seed \
-    enable-ssl3 \
-    enable-ssl3-method \
-    enable-weak-ssl-ciphers \
+ARG RESTY_OPENSSL_BUILD_OPTIONS="enable-camellia enable-cms enable-fips enable-ktls enable-md2 enable-rc5 \
+    enable-rfc3779 enable-seed enable-ssl3 enable-ssl3-method enable-weak-ssl-ciphers \
     "
 
 # https://github.com/openresty/openresty-packaging/blob/master/alpine/openresty-pcre2/APKBUILD
@@ -101,22 +91,6 @@ ARG RESTY_CONFIG_OPTIONS="\
     --without-http_rds_json_module \
     --without-http_rds_csv_module \
     --without-lua_rds_parser \
-    --add-module=bundle/ngx_devel_kit-0.3.3 \
-    --add-module=bundle/echo-nginx-module-0.63 \
-    --add-module=bundle/xss-nginx-module-0.06 \
-    --add-module=bundle/ngx_coolkit-0.2 \
-    --add-module=bundle/set-misc-nginx-module-0.33 \
-    --add-module=bundle/form-input-nginx-module-0.12 \
-    --add-module=bundle/encrypted-session-nginx-module-0.09 \
-    --add-module=bundle/srcache-nginx-module-0.33 \
-    --add-module=bundle/ngx_lua-0.10.28 \
-    --add-module=bundle/ngx_lua_upstream-0.07 \
-    --add-module=bundle/headers-more-nginx-module-0.37 \
-    --add-module=bundle/array-var-nginx-module-0.06 \
-    --add-module=bundle/memc-nginx-module-0.20 \
-    --add-module=bundle/redis2-nginx-module-0.15 \
-    --add-module=bundle/redis-nginx-module-0.3.9 \
-    --add-module=bundle/ngx_stream_lua-0.0.16 \
     "
 
 ARG RESTY_CONFIG_OPTIONS_MORE=""
