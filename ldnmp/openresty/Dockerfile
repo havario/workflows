@@ -80,6 +80,8 @@ ARG RESTY_CONFIG_OPTIONS="\
     --with-stream_ssl_preread_module \
     --with-compat \
     --with-http_iconv_module \
+    --with-md5-asm \
+    --with-sha1-asm \
     --without-http_rds_json_module \
     --without-http_rds_csv_module \
     --without-lua_rds_parser \
