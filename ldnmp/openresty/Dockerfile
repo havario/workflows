@@ -88,8 +88,8 @@ ARG RESTY_CONFIG_OPTIONS="\
     "
 
 ARG RESTY_CONFIG_OPTIONS_MORE=""
-ARG RESTY_LUAJIT_OPTIONS="--with-luajit-xcflags='-DLUAJIT_NUMMODE=2 -DLUAJIT_ENABLE_LUA52COMPAT'"
 ARG RESTY_PCRE_OPTIONS="--with-pcre-jit"
+ARG RESTY_LUAJIT_OPTIONS="--with-luajit-xcflags='-DLUAJIT_NUMMODE=2 -DLUAJIT_ENABLE_LUA52COMPAT'"
 
 ARG RESTY_ADD_PACKAGE_BUILDDEPS=""
 ARG RESTY_ADD_PACKAGE_RUNDEPS=""
@@ -102,8 +102,8 @@ ARG RESTY_STRIP_BINARIES=""
 
 # These are not intended to be user-specified
 ARG RESTY_CONFIG_DEPS="--with-pcre \
-    --with-cc-opt='-DNGX_LUA_ABORT_AT_PANIC -I/usr/local/pcre2/include -I/usr/local/openssl3/include' \
-    --with-ld-opt='-L/usr/local/pcre2/lib -L/usr/local/openssl3/lib -Wl,-rpath,/usr/local/pcre2/lib:/usr/local/openssl3/lib' \
+    --with-cc-opt='-DNGX_LUA_ABORT_AT_PANIC -I/usr/local/openresty/pcre2/include -I/usr/local/openresty/openssl3/include' \
+    --with-ld-opt='-L/usr/local/openresty/pcre2/lib -L/usr/local/openresty/openssl3/lib -Wl,-rpath,/usr/local/openresty/pcre2/lib:/usr/local/openresty/openssl3/lib' \
     "
 
 RUN set -ex \
@@ -142,9 +142,9 @@ RUN set -ex \
     && curl -Ls https://github.com/openresty/openresty/raw/master/patches/openssl-${RESTY_OPENSSL_PATCH_VERSION}-sess_set_get_cb_yield.patch | patch -p1 \
     && ./config \
         shared zlib -g \
-        --prefix=/usr/local/openssl3 \
+        --prefix=/usr/local/openresty/openssl3 \
         --libdir=lib \
-        -Wl,-rpath,/usr/local/openssl3/lib \
+        -Wl,-rpath,/usr/local/openresty/openssl3/lib \
         ${RESTY_OPENSSL_BUILD_OPTIONS} \
     && make -j$(getconf _NPROCESSORS_ONLN) \
     && make -j$(getconf _NPROCESSORS_ONLN) install_sw \
@@ -154,8 +154,8 @@ RUN set -ex \
     && tar fxz pcre2-${RESTY_PCRE_VERSION}.tar.gz \
     && cd pcre2-${RESTY_PCRE_VERSION} \
     && CFLAGS="-g -O3" ./configure \
-        --prefix=/usr/local/pcre2 \
-        --libdir=/usr/local/pcre2/lib \
+        --prefix=/usr/local/openresty/pcre2 \
+        --libdir=/usr/local/openresty/pcre2/lib \
         ${RESTY_PCRE_BUILD_OPTIONS} \
     && CFLAGS="-g -O3" make -j$(getconf _NPROCESSORS_ONLN) \
     && CFLAGS="-g -O3" make -j$(getconf _NPROCESSORS_ONLN) install \
@@ -163,11 +163,10 @@ RUN set -ex \
     && curl -Ls https://openresty.org/download/openresty-${RESTY_VERSION}.tar.gz -o openresty-${RESTY_VERSION}.tar.gz \
     && tar fxz openresty-${RESTY_VERSION}.tar.gz \
     && cd openresty-${RESTY_VERSION} \
-    && eval ./configure -j$(getconf _NPROCESSORS_ONLN) ${RESTY_CONFIG_DEPS} ${RESTY_CONFIG_OPTIONS} ${RESTY_CONFIG_OPTIONS_MORE} ${RESTY_LUAJIT_OPTIONS} ${RESTY_PCRE_OPTIONS} \
+    && eval ./configure -j$(getconf _NPROCESSORS_ONLN) ${RESTY_CONFIG_OPTIONS} ${RESTY_CONFIG_OPTIONS_MORE} ${RESTY_CONFIG_DEPS} ${RESTY_PCRE_OPTIONS} ${RESTY_LUAJIT_OPTIONS} \
     && make -j$(getconf _NPROCESSORS_ONLN) \
     && make -j$(getconf _NPROCESSORS_ONLN) install \
     && if [ -n "${RESTY_STRIP_BINARIES}" ]; then \
-    \
         && rm -Rf /usr/local/openresty/openssl3/bin/c_rehash /usr/local/openresty/openssl3/lib/*.a /usr/local/openresty/openssl3/include \
         && find /usr/local/openresty/openssl3 -type f -perm -u+x -exec strip --strip-unneeded '{}' \; \
         && rm -Rf /usr/local/openresty/pcre2/bin /usr/local/openresty/pcre2/share \
@@ -176,6 +175,25 @@ RUN set -ex \
         && find /usr/local/openresty/luajit -type f -perm -u+x -exec strip --strip-unneeded '{}' \; \
         && find /usr/local/openresty/nginx -type f -perm -u+x -exec strip --strip-unneeded '{}' \; ; \ 
     fi \
-    && mkdir /var/cache/openresty \
     && apk del --no-network .build-deps \
+    && mkdir -p /var/cache/openresty \
+    && ln -sf /dev/stdout /usr/local/openresty/nginx/logs/access.log \
+    && ln -sf /dev/stderr /usr/local/openresty/nginx/logs/error.log \
     && rm -rf /var/cache/apk/*
+
+ENV TZ="UTC"
+# Add additional binaries into PATH for convenience
+ENV PATH=$PATH:/usr/local/openresty/luajit/bin:/usr/local/openresty/nginx/sbin:/usr/local/openresty/bin
+
+# Copy nginx configuration files
+COPY nginx.conf /usr/local/openresty/nginx/conf/nginx.conf
+COPY nginx.vh.default.conf /etc/nginx/conf.d/default.conf
+
+EXPOSE 80
+
+# Use SIGQUIT instead of default SIGTERM to cleanly drain requests
+# See https://github.com/openresty/docker-openresty/blob/master/README.md#tips--pitfalls
+# See https://github.com/nginx/docker-nginx/issues/377
+STOPSIGNAL SIGQUIT
+
+CMD ["/usr/local/openresty/bin/openresty", "-g", "daemon off;"]
