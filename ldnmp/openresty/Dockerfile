@@ -19,7 +19,7 @@ RUN set -ex \
         curl \
         git \
         openssl-dev \
-        pcre-dev \
+        pcre2-dev \
         perl \
         zlib-dev \
     && cd /tmp \
