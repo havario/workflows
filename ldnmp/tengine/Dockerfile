@@ -63,12 +63,13 @@ COPY --from=builder /tmp/tengine-${TENG_LVER}/objs/*.so /usr/lib/nginx/modules/
 
 # https://github.com/alibaba/xquic/blob/main/xqc_build.sh
 ARG XQUIC_CONFIG_OPTIONS="\
-    -DGCOV=on \
-    -DXQC_ENABLE_TESTING=1 \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DGCOV=off \
+    -DXQC_ENABLE_TESTING=0 \
     -DXQC_SUPPORT_SENDMMSG_BUILD=1 \
-    -DXQC_ENABLE_EVENT_LOG=1 \
+    -DXQC_ENABLE_EVENT_LOG=0 \
     -DXQC_ENABLE_BBR2=1 \
-    -DXQC_ENABLE_RENO=1 \
+    -DXQC_ENABLE_RENO=0 \
     -DSSL_TYPE=babassl \
     -DSSL_PATH=/usr/local/babassl \
     -DSSL_INC_PATH=/usr/local/babassl/include \
@@ -183,7 +184,7 @@ RUN set -ex \
         ca-certificates \
         curl \
     && cd $tempDir \
-# See https://github.com/alibaba/tengine/blob/master/modules/ngx_http_xquic_module/README.md#%E7%BC%96%E8%AF%91
+# See https://github.com/alibaba/tengine/blob/master/modules/ngx_http_xquic_module/README.md
     && curl -Ls https://github.com/Tongsuo-Project/Tongsuo/archive/tags/${TONGSUO_LVER}.tar.gz -o ${TONGSUO_LVER}.tar.gz \
     && tar fxz ${TONGSUO_LVER}.tar.gz \
     && cd Tongsuo-tags-${TONGSUO_LVER} \
