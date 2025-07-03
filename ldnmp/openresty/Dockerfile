@@ -101,7 +101,6 @@ ARG RESTY_CONFIG_OPTIONS="\
     --with-md5-asm \
     --with-sha1-asm \
     --with-http_iconv_module \
-    --with-http_drizzle_module \
     --with-http_postgres_module \
     --without-http_rds_json_module \
     --without-http_rds_csv_module \
