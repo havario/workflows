@@ -97,9 +97,6 @@ ARG RESTY_CONFIG_OPTIONS="\
     --with-stream_geoip_module \
     --with-stream_ssl_preread_module \
     --with-compat \
-    --with-ipv6 \
-    --with-md5-asm \
-    --with-sha1-asm \
     --with-http_iconv_module \
     --without-http_rds_json_module \
     --without-http_rds_csv_module \
