@@ -153,6 +153,7 @@ RUN set -ex \
         gd-dev \
         geoip-dev \
         libxslt-dev \
+        linux-headers \
         perl-dev \
         readline-dev \
         zlib-dev \
