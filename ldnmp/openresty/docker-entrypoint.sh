@@ -14,7 +14,7 @@ if [ "$1" = "nginx" ] || [ "$1" = "nginx-debug" ]; then
         entrypoint_log "$0: /docker-entrypoint.d/ is not empty, will attempt to perform configuration"
 
         entrypoint_log "$0: Looking for shell scripts in /docker-entrypoint.d/"
-        find "/docker-entrypoint.d/" -follow -type f -print | sort -V | while read -r SCRIPT; do
+        /usr/bin/find "/docker-entrypoint.d/" -follow -type f -print | sort -V | while read -r SCRIPT; do
             case "$SCRIPT" in
                 *.envsh )
                     if [ -x "$SCRIPT" ]; then
