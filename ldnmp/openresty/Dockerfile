@@ -190,7 +190,9 @@ RUN set -ex \
     && rm -rf /var/cache/apk/* \
 # forward request and error logs to docker log collector.
     && ln -sf /dev/stdout /usr/local/openresty/nginx/logs/access.log \
-    && ln -sf /dev/stderr /usr/local/openresty/nginx/logs/error.log
+    && ln -sf /dev/stderr /usr/local/openresty/nginx/logs/error.log \
+# create a docker-entrypoint.d directory
+    && mkdir /docker-entrypoint.d
 
 ENV TZ="UTC"
 # Add additional binaries into PATH for convenience.
@@ -199,6 +201,8 @@ ENV PATH=$PATH:/usr/local/openresty/luajit/bin:/usr/local/openresty/nginx/sbin:/
 # Copy nginx configuration files.
 COPY nginx.conf /usr/local/openresty/nginx/conf/nginx.conf
 COPY nginx.vh.default.conf /etc/nginx/conf.d/default.conf
+COPY docker-entrypoint.sh /
+ENTRYPOINT ["/docker-entrypoint.sh"]
 
 EXPOSE 80
 
