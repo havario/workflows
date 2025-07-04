@@ -8,7 +8,7 @@
 # 
 # Thanks: YichunZhang <admin@openresty.com>
 #
-# SPDX-License-Identifier: Apache-2.0
+# SPDX-License-Identifier: BSD-2-Clause
 
 FROM alpine:latest AS dist
 
