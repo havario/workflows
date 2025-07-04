@@ -4,7 +4,7 @@
 set -e
 
 entrypoint_log() {
-    if [ -z "${NGINX_ENTRYPOINT_QUIET_LOGS:-}" ]; then
+    if [ -z "${RESTY_QUIET_LOGS:-}" ]; then
         echo "$@"
     fi
 }
