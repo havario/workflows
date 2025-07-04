@@ -179,9 +179,13 @@ RUN set -ex \
     && rm -rf /tmp/* \
     && apk del --no-network .build-deps \
     && mkdir -p /var/cache/openresty \
-    && ln -sf /dev/stdout /usr/local/openresty/nginx/logs/access.log \
-    && ln -sf /dev/stderr /usr/local/openresty/nginx/logs/error.log \
+# Add `envsubst` for templating environment variables
+    && apk add --no-cache gettext-envsubst \
+# if we have leftovers from building, let's purge them (including extra, unnecessary build deps)
     && rm -rf /var/cache/apk/*
+# forward request and error logs to docker log collector
+    && ln -sf /dev/stdout /usr/local/openresty/nginx/logs/access.log \
+    && ln -sf /dev/stderr /usr/local/openresty/nginx/logs/error.log
 
 ENV TZ="UTC"
 # Add additional binaries into PATH for convenience
