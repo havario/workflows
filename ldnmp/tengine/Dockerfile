@@ -85,50 +85,50 @@ ARG TENGINE_CONFIG_OPTIONS="\
     --modules-path=/usr/lib/nginx/modules \
     --conf-path=/etc/nginx/nginx.conf \
     --error-log-path=/var/log/nginx/error.log \
-    --http-log-path=/var/log/nginx/access.log \
     --pid-path=/var/run/nginx.pid \
     --lock-path=/var/run/nginx.lock \
+    --user=nginx \
+    --group=nginx \
+    --with-select_module \
+    --with-poll_module \
+    --with-threads \
+    --with-file-aio \
+    --with-http_ssl_module \
+    --with-http_v2_module \
+    --with-http_realip_module \
+    --with-http_addition_module \
+    --with-http_xslt_module=dynamic \
+    --with-http_image_filter_module=dynamic \
+    --with-http_geoip_module=dynamic \
+    --with-http_sub_module \
+    --with-http_dav_module \
+    --with-http_flv_module \
+    --with-http_mp4_module \
+    --with-http_gunzip_module \
+    --with-http_gzip_static_module \
+    --with-http_auth_request_module \
+    --with-http_random_index_module \
+    --with-http_secure_link_module \
+    --with-http_degradation_module \
+    --with-http_slice_module \
+    --with-http_stub_status_module \
+    --http-log-path=/var/log/nginx/access.log \
     --http-client-body-temp-path=/var/cache/nginx/client_temp \
     --http-proxy-temp-path=/var/cache/nginx/proxy_temp \
     --http-fastcgi-temp-path=/var/cache/nginx/fastcgi_temp \
     --http-uwsgi-temp-path=/var/cache/nginx/uwsgi_temp \
     --http-scgi-temp-path=/var/cache/nginx/scgi_temp \
-    --user=nginx \
-    --group=nginx \
-    --with-compat \
-    --with-select_module \
-    --with-poll_module \
-    --with-file-aio \
-    --with-threads \
-    --with-http_addition_module \
-    --with-http_auth_request_module \
-    --with-http_dav_module \
-    --with-http_degradation_module \
-    --with-http_flv_module \
-    --with-http_gunzip_module \
-    --with-http_gzip_static_module \
-    --with-http_image_filter_module \
-    --with-http_mp4_module \
-    --with-http_random_index_module \
-    --with-http_realip_module \
-    --with-http_secure_link_module \
-    --with-http_slice_module \
-    --with-http_ssl_module \
-    --with-http_stub_status_module \
-    --with-http_sub_module \
-    --with-http_v2_module \
-    --with-openssl-opt=enable-tls1_3 \
-    --with-openssl-async \
-    --with-http_xslt_module \
-    --with-http_geoip_module \
     --with-mail \
     --with-mail_ssl_module \
     --with-stream \
-    --with-stream_realip_module \
     --with-stream_ssl_module \
+    --with-stream_realip_module \
+    --with-stream_geoip_module \
     --with-stream_ssl_preread_module \
     --with-stream_sni \
-    --with-stream_geoip_module \
+    --with-compat \
+    --with-openssl-opt=enable-tls1_3 \
+    --with-openssl-async \
     --add-module=modules/ngx_http_concat_module \
     --add-module=modules/ngx_http_footer_filter_module \
     --add-module=modules/ngx_http_proxy_connect_module \
@@ -136,10 +136,11 @@ ARG TENGINE_CONFIG_OPTIONS="\
     --add-module=modules/ngx_http_slice_module \
     --add-module=modules/ngx_http_sysguard_module \
     --add-module=modules/ngx_http_trim_filter_module \
+    --add-module=modules/ngx_http_upstream_check_module \
     --add-module=modules/ngx_http_upstream_consistent_hash_module \
     --add-module=modules/ngx_http_upstream_dynamic_module \
     --add-module=modules/ngx_http_upstream_dyups_module \
-    --add-module=modules/ngx_http_upstream_check_module \
+    --add-module=modules/ngx_http_upstream_keepalive_module \
     --add-module=modules/ngx_http_upstream_session_sticky_module \
     --add-module=modules/ngx_http_upstream_vnswrr_module \
     --add-module=modules/ngx_http_user_agent_module \
