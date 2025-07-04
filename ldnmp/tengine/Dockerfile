@@ -79,7 +79,7 @@ ARG XQUIC_CONFIG_OPTIONS="\
     -DSSL_LIB_PATH=/usr/local/babassl/lib/libssl.a;/usr/local/babassl/lib/libcrypto.a \
     "
 
-ARG TENG_CONFIG_OPTIONS="\
+ARG TENGINE_CONFIG_OPTIONS="\
     --prefix=/etc/nginx \
     --sbin-path=/usr/sbin/nginx \
     --modules-path=/usr/lib/nginx/modules \
@@ -150,7 +150,7 @@ ARG TENG_CONFIG_OPTIONS="\
     --add-module=modules/headers-more-nginx-module-${HEADERSMORE_VERSION} \
     "
 
-ARG TENG_XQUIC_OPTIONS="\
+ARG TENGINE_XQUIC_OPTIONS="\
     --with-xquic-inc="../xquic-tags-v${XQUIC_VERSION}/include" \
     --with-xquic-lib="../xquic-tags-v${XQUIC_VERSION}/build" \
     --with-openssl="../Tongsuo-tags-${TONGSUO_VERSION}" \
@@ -212,7 +212,7 @@ RUN set -ex \
     && tar fxz v${HEADERSMORE_VERSION}.tar.gz -C modules/ \
     && git clone --recurse-submodules -j8 https://github.com/google/ngx_brotli modules/ngx_brotli \
     && curl -Ls https://github.com/honeok/tools/raw/master/ldnmp/tengine/patchs/ngx_xquic_intercom.patch | patch -p0 \
-    && eval ./configure ${TENG_CONFIG_OPTIONS} ${TENG_XQUIC_OPTIONS} ${BUILD_OPT_FLAGS} \
+    && eval ./configure ${TENGINE_CONFIG_OPTIONS} ${TENGINE_XQUIC_OPTIONS} ${BUILD_OPT_FLAGS} \
     && make -j$(getconf _NPROCESSORS_ONLN) \
     && make install \
     && rm -rf /etc/nginx/html/ \
