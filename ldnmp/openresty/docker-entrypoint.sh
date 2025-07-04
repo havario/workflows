@@ -14,29 +14,29 @@ if [ "$1" = "nginx" ] || [ "$1" = "nginx-debug" ]; then
         entrypoint_log "$0: /docker-entrypoint.d/ is not empty, will attempt to perform configuration"
 
         entrypoint_log "$0: Looking for shell scripts in /docker-entrypoint.d/"
-        find "/docker-entrypoint.d/" -follow -type f -print | sort -V | while read -r f; do
-            case "$f" in
+        find "/docker-entrypoint.d/" -follow -type f -print | sort -V | while read -r SCRIPT; do
+            case "$SCRIPT" in
                 *.envsh )
-                    if [ -x "$f" ]; then
-                        entrypoint_log "$0: Sourcing $f";
+                    if [ -x "$SCRIPT" ]; then
+                        entrypoint_log "$0: Sourcing $SCRIPT";
                         # shellcheck source=/dev/null
-                        . "$f"
+                        . "$SCRIPT"
                     else
                         # warn on shell scripts without exec bit
-                        entrypoint_log "$0: Ignoring $f, not executable";
+                        entrypoint_log "$0: Ignoring $SCRIPT, not executable";
                     fi
                 ;;
                 *.sh )
-                    if [ -x "$f" ]; then
-                        entrypoint_log "$0: Launching $f";
-                        "$f"
+                    if [ -x "$SCRIPT" ]; then
+                        entrypoint_log "$0: Launching $SCRIPT";
+                        "$SCRIPT"
                     else
                         # warn on shell scripts without exec bit
-                        entrypoint_log "$0: Ignoring $f, not executable";
+                        entrypoint_log "$0: Ignoring $SCRIPT, not executable";
                     fi
                 ;;
                 * )
-                    entrypoint_log "$0: Ignoring $f"
+                    entrypoint_log "$0: Ignoring $SCRIPT"
                 ;;
             esac
         done
