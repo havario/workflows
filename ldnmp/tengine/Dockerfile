@@ -254,7 +254,7 @@ RUN set -ex \
 ENV TZ="UTC"
 
 COPY nginx.conf /etc/nginx/
-COPY conf.d/default.conf /etc/nginx/conf.d/
+COPY default.conf /etc/nginx/conf.d/
 ENTRYPOINT ["/docker-entrypoint.sh"]
 
 EXPOSE 80
