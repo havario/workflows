@@ -7,28 +7,34 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-set -e
+set -eE
 
-TENGINE_LVER="$(wget -qO- --tries=50 https://api.github.com/repos/alibaba/tengine/releases | sed -n 's/.*"tag_name": *"\(tengine-\|\)\([^"]*\)".*/\2/p' | sort -Vr | head -n1)"
-ZSTD_LVER="$(wget -qO- --tries=50 https://api.github.com/repos/facebook/zstd/releases/latest | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/' | sed 's/v//')"
-HEADERSMORE_LVER="$(wget -qO- --tries=50 https://api.github.com/repos/openresty/headers-more-nginx-module/tags | sed -n 's/.*"name": *"v\{0,1\}\([^"]*\)".*/\1/p' | grep -v 'rc' | sort -Vr | head -n1)"
-# TONGSUO_LVER="$(wget -qO- --tries=50 https://api.github.com/repos/Tongsuo-Project/Tongsuo/tags | sed -n 's/.*"name": *"\([^"]*\)".*/\1/p' | grep -v 'pre' | sort -Vr | head -n1)"
-# XQUIC_LVER="$(wget -qO- --tries=50 https://api.github.com/repos/alibaba/xquic/releases | sed -n 's/.*"tag_name": *"\(v[^"]*\)".*/\1/p' | sort -Vr | head -n1 | sed 's/^v//')"
+START_TIME="$(date +%s)"
+
+TENGINE_VERSION="$(wget -qO- --tries=50 https://api.github.com/repos/alibaba/tengine/releases | sed -n 's/.*"tag_name": *"\(tengine-\|\)\([^"]*\)".*/\2/p' | sort -Vr | head -n1)"
+ZSTD_VERSION="$(wget -qO- --tries=50 https://api.github.com/repos/facebook/zstd/releases/latest | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/' | sed 's/v//')"
+HEADERSMORE_VERSION="$(wget -qO- --tries=50 https://api.github.com/repos/openresty/headers-more-nginx-module/tags | sed -n 's/.*"name": *"v\{0,1\}\([^"]*\)".*/\1/p' | grep -v 'rc' | sort -Vr | head -n1)"
 
 _exit() {
-    local ERR_CODE="$?"
+    local ET_CODE="$?"
     docker system prune -af --volumes 2>/dev/null
-    exit "$ERR_CODE"
+    echo 2>&1 "Total execution time: $MINUTES m $SECONDS s"
+    exit "$ET_CODE"
 }
 
 trap '_exit' SIGINT SIGQUIT SIGTERM EXIT
 
-# stable tongsuo and xquic version
 docker build --no-cache \
     --progress=plain \
-    --build-arg TENG_LVER="$TENGINE_LVER" \
-    --build-arg ZSTD_LVER="$ZSTD_LVER" \
-    --build-arg MORE_LVER="$HEADERSMORE_LVER" \
-    -t honeok/tengine:"$TENGINE_LVER" .
+    --build-arg TENGINE_VERSION="$TENGINE_VERSION" \
+    --build-arg ZSTD_VERSION="$ZSTD_VERSION" \
+    --build-arg HEADERSMORE_VERSION="$HEADERSMORE_VERSION" \
+    --tag honeok/tengine:"$TENGINE_VERSION" \
+    . && echo 2>&1 "build complete!"
 
-docker push honeok/tengine:"$TENGINE_LVER"
+docker push honeok/tengine:"$TENGINE_VERSION"
+
+END_TIME="$(date +%s)"
+DURATION=$(( END_TIME - START_TIME ))
+MINUTES=$(( DURATION / 60 ))
+SECONDS=$(( DURATION % 60 ))
