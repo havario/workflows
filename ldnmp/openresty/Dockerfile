@@ -85,6 +85,7 @@ ARG RESTY_CONFIG_OPTIONS="\
     --without-http_rds_json_module \
     --without-http_rds_csv_module \
     --without-lua_rds_parser \
+    --add-module=modules/ngx_brotli \
     "
 
 ARG RESTY_CONFIG_OPTIONS_MORE=""
@@ -163,6 +164,7 @@ RUN set -ex \
     && curl -Ls https://openresty.org/download/openresty-${RESTY_VERSION}.tar.gz -o openresty-${RESTY_VERSION}.tar.gz \
     && tar fxz openresty-${RESTY_VERSION}.tar.gz \
     && cd openresty-${RESTY_VERSION} \
+    && git clone --recurse-submodules -j8 https://github.com/google/ngx_brotli modules/ngx_brotli \
     && eval ./configure -j$(getconf _NPROCESSORS_ONLN) ${RESTY_CONFIG_DEPS} ${RESTY_CONFIG_OPTIONS} ${RESTY_CONFIG_OPTIONS_MORE} ${RESTY_LUAJIT_OPTIONS} ${RESTY_PCRE_OPTIONS} \
     && make -j$(getconf _NPROCESSORS_ONLN) \
     && make -j$(getconf _NPROCESSORS_ONLN) install \
