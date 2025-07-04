@@ -5,6 +5,7 @@
 #
 # References:
 # https://github.com/openresty/docker-openresty
+# https://github.com/nginx/docker-nginx
 # 
 # Thanks: YichunZhang <admin@openresty.com>
 #
