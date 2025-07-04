@@ -127,6 +127,7 @@ ARG TENGINE_CONFIG_OPTIONS="\
     --with-stream_ssl_preread_module \
     --with-stream_sni \
     --with-compat \
+    --with-jemalloc \
     --with-openssl-opt=enable-tls1_3 \
     --with-openssl-async \
     --add-module=modules/ngx_http_concat_module \
@@ -176,6 +177,7 @@ RUN set -ex \
         gd-dev \
         geoip-dev \
         git \
+        jemalloc-dev \
         libc-dev \
         libevent-dev \
         libxslt-dev \
