@@ -7,19 +7,29 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
+set -eE
+
 RESTY_VERSION="$(wget -qO- --tries=50 https://api.github.com/repos/openresty/openresty/tags | grep '"name":' | sed -E 's/.*"name": *"([^"]+)".*/\1/' | sort -Vr | head -n1 | sed 's/v//')"
-LUAROCKS_VERSION="$(wget -qO- --tries=5 "https://api.github.com/repos/luarocks/luarocks/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/' | sed 's/v//')"
 
 _exit() {
     local ERR_CODE="$?"
+    docker buildx prune --all --force 2>/dev/null
     docker system prune -af --volumes 2>/dev/null
+    docker buildx rm -f builder 2>/dev/null
     exit "$ERR_CODE"
 }
 
-docker build --no-cache \
-    --progress=plain \
-    --build-arg RESTY_VERSION="$RESTY_VERSION" \
-    --build-arg LUAROCKS_VERSION="$LUAROCKS_VERSION" \
-    -t honeok/openresty:"$RESTY_VERSION" .
+docker buildx create --name builder --use
+docker buildx inspect --bootstrap
 
-docker push honeok/openresty:"$RESTY_VERSION"
+# If the docker-entrypoint script does not have permissions.
+find ./ -type f -name "*.sh" -exec dos2unix {} \; -exec chmod +x {} \;
+
+docker buildx build \
+    --no-cache \
+    --progress=plain \
+    --platform linux/amd64,linux/arm64/v8 \
+    -t "honeok/openresty:$RESTY_VERSION-alpine" \
+    -t "honeok/openresty:alpine" \
+    --push \
+    .
