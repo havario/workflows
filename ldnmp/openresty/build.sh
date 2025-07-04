@@ -9,15 +9,18 @@
 
 set -eE
 
+START_TIME="$(date +%s)"
+
 RESTY_VERSION="$(wget -qO- --tries=50 https://api.github.com/repos/openresty/openresty/tags | grep '"name":' | sed -E 's/.*"name": *"([^"]+)".*/\1/' | sort -Vr | head -n1 | sed 's/v//')"
 ZSTD_VERSION="$(wget -qO- --tries=50 https://api.github.com/repos/facebook/zstd/releases/latest | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/' | sed 's/v//')"
 
 _exit() {
-    local ERR_CODE="$?"
+    local ET_CODE="$?"
     docker buildx prune --all --force 2>/dev/null
     docker system prune -af --volumes 2>/dev/null
     docker buildx rm -f builder 2>/dev/null
-    exit "$ERR_CODE"
+    echo 2>&1 "Total execution time: $MINUTES m $SECONDS s"
+    exit "$ET_CODE"
 }
 
 trap '_exit' SIGINT SIGQUIT SIGTERM EXIT
@@ -37,4 +40,9 @@ docker buildx build \
     --tag honeok/openresty:"$RESTY_VERSION-alpine" \
     --tag honeok/openresty:alpine \
     --push \
-    .
+    . && echo 2>&1 "build complete!"
+
+END_TIME="$(date +%s)"
+DURATION=$(( END_TIME - START_TIME ))
+MINUTES=$(( DURATION / 60 ))
+SECONDS=$(( DURATION % 60 ))
