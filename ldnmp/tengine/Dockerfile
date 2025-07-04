@@ -18,10 +18,12 @@
 # SPDX-License-Identifier: Apache-2.0
 
 FROM alpine:latest AS builder
+
 LABEL maintainer="honeok <honeok@disroot.org>"
 
 # Docker Build Arguments
-ARG TENG_LVER ZSTD_LVER
+ARG TENGINE_VERSION
+ARG ZSTD_VERSION
 
 RUN set -ex \
     && apk add --update --no-cache --virtual .build-deps \
@@ -32,17 +34,17 @@ RUN set -ex \
         pcre2-dev \
         zlib-dev \
     && cd /tmp \
-    && curl -Ls https://tengine.taobao.org/download/tengine-${TENG_LVER}.tar.gz -o tengine-${TENG_LVER}.tar.gz \
-    && tar fxz tengine-${TENG_LVER}.tar.gz \
-    && curl -Ls https://github.com/facebook/zstd/releases/download/v${ZSTD_LVER}/zstd-${ZSTD_LVER}.tar.gz -o zstd-${ZSTD_LVER}.tar.gz \
-    && tar fxz zstd-${ZSTD_LVER}.tar.gz \
-    && cd zstd-${ZSTD_LVER} \
+    && curl -Ls https://tengine.taobao.org/download/tengine-${TENGINE_VERSION}.tar.gz -o tengine-${TENGINE_VERSION}.tar.gz \
+    && tar fxz tengine-${TENGINE_VERSION}.tar.gz \
+    && curl -Ls https://github.com/facebook/zstd/releases/download/v${ZSTD_VERSION}/zstd-${ZSTD_VERSION}.tar.gz -o zstd-${ZSTD_VERSION}.tar.gz \
+    && tar fxz zstd-${ZSTD_VERSION}.tar.gz \
+    && cd zstd-${ZSTD_VERSION} \
     && make clean \
     && CFLAGS="-fPIC" make -j$(getconf _NPROCESSORS_ONLN) \
     && make install \
     && cd /tmp \
     && git clone --depth=10 https://github.com/tokers/zstd-nginx-module.git \
-    && cd tengine-${TENG_LVER} \
+    && cd tengine-${TENGINE_VERSION} \
     && ./configure \
         --with-compat \
         --add-dynamic-module=../zstd-nginx-module \
@@ -51,15 +53,17 @@ RUN set -ex \
     && rm -rf /var/cache/apk/*
 
 FROM alpine:latest AS dist
+
 LABEL maintainer="honeok <honeok@disroot.org>"
 
 # Docker Build Arguments
-ARG TONGSUO_LVER=8.3.2
-ARG XQUIC_LVER=1.6.0
-ARG TENG_LVER MORE_LVER
+ARG TONGSUO_VERSION=8.3.2
+ARG XQUIC_VERSION=1.6.0
+ARG TENGINE_VERSION
+ARG HEADERSMORE_VERSION
 
 # Copy the dynamic library file of the zstd compression module.
-COPY --from=builder /tmp/tengine-${TENG_LVER}/objs/*.so /usr/lib/nginx/modules/
+COPY --from=builder /tmp/tengine-${TENGINE_VERSION}/objs/*.so /usr/lib/nginx/modules/
 
 # See CMakeLists.txt
 ARG XQUIC_CONFIG_OPTIONS="\
@@ -143,13 +147,13 @@ ARG TENG_CONFIG_OPTIONS="\
     --add-module=modules/ngx_multi_upstream_module \
     --add-module=modules/ngx_slab_stat \
     --add-module=modules/ngx_brotli \
-    --add-module=modules/headers-more-nginx-module-${MORE_LVER} \
+    --add-module=modules/headers-more-nginx-module-${HEADERSMORE_VERSION} \
     "
 
 ARG TENG_XQUIC_OPTIONS="\
-    --with-xquic-inc="../xquic-tags-v${XQUIC_LVER}/include" \
-    --with-xquic-lib="../xquic-tags-v${XQUIC_LVER}/build" \
-    --with-openssl="../Tongsuo-tags-${TONGSUO_LVER}" \
+    --with-xquic-inc="../xquic-tags-v${XQUIC_VERSION}/include" \
+    --with-xquic-lib="../xquic-tags-v${XQUIC_VERSION}/build" \
+    --with-openssl="../Tongsuo-tags-${TONGSUO_VERSION}" \
     "
 
 # Inherited from nginx
@@ -184,16 +188,16 @@ RUN set -ex \
         curl \
     && cd $tempDir \
 # See https://github.com/alibaba/tengine/blob/master/modules/ngx_http_xquic_module/README.md
-    && curl -Ls https://github.com/Tongsuo-Project/Tongsuo/archive/tags/${TONGSUO_LVER}.tar.gz -o ${TONGSUO_LVER}.tar.gz \
-    && tar fxz ${TONGSUO_LVER}.tar.gz \
-    && cd Tongsuo-tags-${TONGSUO_LVER} \
+    && curl -Ls https://github.com/Tongsuo-Project/Tongsuo/archive/tags/${TONGSUO_VERSION}.tar.gz -o ${TONGSUO_VERSION}.tar.gz \
+    && tar fxz ${TONGSUO_VERSION}.tar.gz \
+    && cd Tongsuo-tags-${TONGSUO_VERSION} \
     && ./config --prefix=/usr/local/babassl \
     && make -j$(getconf _NPROCESSORS_ONLN) \
     && make install_sw \
     && cd $tempDir \
-    && curl -Ls https://github.com/alibaba/xquic/archive/tags/v${XQUIC_LVER}.tar.gz -o v${XQUIC_LVER}.tar.gz \
-    && tar fxz v${XQUIC_LVER}.tar.gz \
-    && cd xquic-tags-v${XQUIC_LVER} \
+    && curl -Ls https://github.com/alibaba/xquic/archive/tags/v${XQUIC_VERSION}.tar.gz -o v${XQUIC_VERSION}.tar.gz \
+    && tar fxz v${XQUIC_VERSION}.tar.gz \
+    && cd xquic-tags-v${XQUIC_VERSION} \
 # Copy tp to local buffer to fix dangling-pointer warning.
     && curl -Ls https://github.com/havario/workflows/raw/master/ldnmp/tengine/patchs/ngx_xquic_peer_tp_dangling.patch | patch -p0 \
     && mkdir -p build; cd build \
@@ -201,11 +205,11 @@ RUN set -ex \
     && make -j$(getconf _NPROCESSORS_ONLN) \
     && cp libxquic.so /usr/local/lib/ \
     && cd $tempDir \
-    && curl -Ls https://tengine.taobao.org/download/tengine-${TENG_LVER}.tar.gz -o tengine-${TENG_LVER}.tar.gz \
-    && tar fxz tengine-${TENG_LVER}.tar.gz \
-    && cd tengine-${TENG_LVER} \
-    && curl -Ls https://github.com/openresty/headers-more-nginx-module/archive/v${MORE_LVER}.tar.gz -o v${MORE_LVER}.tar.gz \
-    && tar fxz v${MORE_LVER}.tar.gz -C modules/ \
+    && curl -Ls https://tengine.taobao.org/download/tengine-${TENGINE_VERSION}.tar.gz -o tengine-${TENGINE_VERSION}.tar.gz \
+    && tar fxz tengine-${TENGINE_VERSION}.tar.gz \
+    && cd tengine-${TENGINE_VERSION} \
+    && curl -Ls https://github.com/openresty/headers-more-nginx-module/archive/v${HEADERSMORE_VERSION}.tar.gz -o v${HEADERSMORE_VERSION}.tar.gz \
+    && tar fxz v${HEADERSMORE_VERSION}.tar.gz -C modules/ \
     && git clone --recurse-submodules -j8 https://github.com/google/ngx_brotli modules/ngx_brotli \
     && curl -Ls https://github.com/honeok/tools/raw/master/ldnmp/tengine/patchs/ngx_xquic_intercom.patch | patch -p0 \
     && eval ./configure ${TENG_CONFIG_OPTIONS} ${TENG_XQUIC_OPTIONS} ${BUILD_OPT_FLAGS} \
@@ -251,7 +255,7 @@ RUN set -ex \
     && ln -sf /dev/stdout /var/log/nginx/access.log \
     && ln -sf /dev/stderr /var/log/nginx/error.log
 
-ENV TZ="UTC"
+ENV TZ=UTC
 
 COPY nginx.conf /etc/nginx/
 COPY default.conf /etc/nginx/conf.d/
