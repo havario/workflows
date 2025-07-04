@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # Description: This script is used to builds and publishes the latest version of the openresty image.
 #
