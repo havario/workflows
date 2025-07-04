@@ -19,6 +19,8 @@ _exit() {
     exit "$ERR_CODE"
 }
 
+trap '_exit' SIGINT SIGQUIT SIGTERM EXIT
+
 docker buildx create --name builder --use
 docker buildx inspect --bootstrap
 
