@@ -11,6 +11,42 @@
 #
 # SPDX-License-Identifier: BSD-2-Clause
 
+FROM alpine:latest AS builder
+
+LABEL maintainer="honeok <honeok@disroot.org>"
+
+# Docker Build Arguments
+ARG RESTY_VERSION="1.27.1.2"
+ARG ZSTD_VERSION
+
+RUN set -ex \
+    && apk add --update --no-cache --virtual .build-deps \
+        build-base \
+        curl \
+        git \
+        openssl-dev \
+        pcre2-dev \
+        perl \
+        zlib-dev \
+    && cd /tmp \
+    && curl -Ls https://openresty.org/download/openresty-${RESTY_VERSION}.tar.gz -o openresty-${RESTY_VERSION}.tar.gz  \
+    && tar fxz openresty-${RESTY_VERSION}.tar.gz \
+    && curl -Ls https://github.com/facebook/zstd/releases/download/v${ZSTD_VERSION}/zstd-${ZSTD_VERSION}.tar.gz -o zstd-${ZSTD_VERSION}.tar.gz \
+    && tar fxz zstd-${ZSTD_VERSION}.tar.gz \
+    && cd zstd-${ZSTD_VERSION} \
+    && make clean \
+    && CFLAGS="-fPIC" make -j$(getconf _NPROCESSORS_ONLN) \
+    && make install \
+    && cd /tmp \
+    && git clone --depth=10 https://github.com/tokers/zstd-nginx-module.git \
+    && cd openresty-${RESTY_VERSION} \
+    && ./configure \
+        --with-compat \
+        --add-dynamic-module=../zstd-nginx-module \
+    && make \
+    && apk del --no-network .build-deps \
+    && rm -rf /var/cache/apk/*
+
 FROM alpine:latest AS dist
 
 LABEL maintainer="Evan Wies <evan@neomantra.net>"
@@ -107,6 +143,8 @@ ARG RESTY_CONFIG_DEPS="--with-pcre \
     --with-cc-opt='-DNGX_LUA_ABORT_AT_PANIC -I/usr/local/openresty/pcre2/include -I/usr/local/openresty/openssl3/include' \
     --with-ld-opt='-L/usr/local/openresty/pcre2/lib -L/usr/local/openresty/openssl3/lib -Wl,-rpath,/usr/local/openresty/pcre2/lib:/usr/local/openresty/openssl3/lib' \
     "
+
+COPY --from=builder /tmp/openresty-${RESTY_VERSION}/build/nginx-*/objs/*.so /usr/local/openresty/nginx/modules/
 
 RUN set -ex \
 # create nginx user/group first, to be consistent throughout docker variants
