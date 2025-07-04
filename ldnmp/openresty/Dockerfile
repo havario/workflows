@@ -203,6 +203,7 @@ COPY nginx.conf /usr/local/openresty/nginx/conf/nginx.conf
 COPY conf.d/nginx.vh.default.conf /etc/nginx/conf.d/default.conf
 COPY docker-entrypoint.sh /
 COPY docker-entrypoint.d/10-listen-on-ipv6-by-default.sh /docker-entrypoint.d
+COPY docker-entrypoint.d/15-local-resolvers.envsh /docker-entrypoint.d
 ENTRYPOINT ["/docker-entrypoint.sh"]
 
 EXPOSE 80
