@@ -194,7 +194,7 @@ RUN set -ex \
 # create a docker-entrypoint.d directory
     && mkdir /docker-entrypoint.d
 
-ENV TZ="UTC"
+ENV TZ=UTC
 # Add additional binaries into PATH for convenience.
 ENV PATH=$PATH:/usr/local/openresty/luajit/bin:/usr/local/openresty/nginx/sbin:/usr/local/openresty/bin
 
