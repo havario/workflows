@@ -112,6 +112,7 @@ ARG TENGINE_CONFIG_OPTIONS="\
     --with-http_degradation_module \
     --with-http_slice_module \
     --with-http_stub_status_module \
+    --without-http_upstream_keepalive_module \
     --http-log-path=/var/log/nginx/access.log \
     --http-client-body-temp-path=/var/cache/nginx/client_temp \
     --http-proxy-temp-path=/var/cache/nginx/proxy_temp \
