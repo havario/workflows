@@ -207,4 +207,4 @@ EXPOSE 80
 # See https://github.com/nginx/docker-nginx/issues/377
 STOPSIGNAL SIGQUIT
 
-CMD ["/usr/local/openresty/nginx/sbin/nginx", "-g", "daemon off;"]
+CMD ["nginx", "-g", "daemon off;"]
