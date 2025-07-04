@@ -10,6 +10,7 @@
 set -eE
 
 RESTY_VERSION="$(wget -qO- --tries=50 https://api.github.com/repos/openresty/openresty/tags | grep '"name":' | sed -E 's/.*"name": *"([^"]+)".*/\1/' | sort -Vr | head -n1 | sed 's/v//')"
+ZSTD_VERSION="$(wget -qO- --tries=50 https://api.github.com/repos/facebook/zstd/releases/latest | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/' | sed 's/v//')"
 
 _exit() {
     local ERR_CODE="$?"
@@ -31,7 +32,9 @@ docker buildx build \
     --no-cache \
     --progress=plain \
     --platform linux/amd64,linux/arm64/v8 \
-    -t "honeok/openresty:$RESTY_VERSION-alpine" \
-    -t "honeok/openresty:alpine" \
+    --build-arg RESTY_VERSION="$RESTY_VERSION" \
+    --build-arg ZSTD_VERSION="$ZSTD_VERSION" \
+    --tag honeok/openresty:"$RESTY_VERSION-alpine" \
+    --tag honeok/openresty:alpine \
     --push \
     .
