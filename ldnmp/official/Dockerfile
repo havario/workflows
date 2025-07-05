@@ -49,9 +49,6 @@ ARG XQUIC_VERSION=1.6.0
 ARG TENGINE_VERSION
 ARG HEADERSMORE_VERSION
 
-# Copy the dynamic library file of the zstd compression module.
-COPY --from=builder /tmp/tengine-${TENGINE_VERSION}/objs/*.so /usr/lib/nginx/modules/
-
 # See CMakeLists.txt
 ARG XQUIC_CONFIG_OPTIONS="\
     -DCMAKE_BUILD_TYPE=Release \
@@ -154,6 +151,9 @@ ARG BUILD_OPT_FLAGS="\
     --with-cc-opt='-Os -fstack-clash-protection -Wformat -Werror=format-security -fno-plt -g' \
     --with-ld-opt='-Wl,--as-needed,-O1,--sort-common -Wl,-z,pack-relative-relocs' \
     "
+
+# Copy the dynamic library file of the zstd compression module.
+COPY --from=builder /tmp/tengine-${TENGINE_VERSION}/objs/*.so /usr/lib/nginx/modules/
 
 RUN set -ex \
 # create nginx user/group first, to be consistent throughout docker variants
