@@ -87,12 +87,12 @@ ARG TENGINE_CONFIG_OPTIONS="\
     --modules-path=/usr/lib/nginx/modules \
     --conf-path=/etc/nginx/nginx.conf \
     --error-log-path=/var/log/nginx/error.log \
-    --pid-path=/var/run/nginx.pid \
-    --lock-path=/var/run/nginx.lock \
+    --pid-path=/run/nginx.pid \
+    --lock-path=/var/lock/nginx.lock \
     --user=nginx \
     --group=nginx \
-    --with-select_module \
-    --with-poll_module \
+    --without-select_module \
+    --without-poll_module \
     --with-threads \
     --with-file-aio \
     --with-http_ssl_module \
@@ -123,6 +123,9 @@ ARG TENGINE_CONFIG_OPTIONS="\
     --http-scgi-temp-path=/var/cache/nginx/scgi_temp \
     --with-mail \
     --with-mail_ssl_module \
+    --without-mail_pop3_module \
+    --without-mail_imap_module \
+    --without-mail_smtp_module \
     --with-stream \
     --with-stream_ssl_module \
     --with-stream_realip_module \
