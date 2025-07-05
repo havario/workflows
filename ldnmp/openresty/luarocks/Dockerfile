@@ -20,6 +20,7 @@ ARG RESTY_FAT_IMAGE_BASE="honeok/openresty"
 ARG RESTY_FAT_IMAGE_TAG="alpine"
 
 ARG RESTY_LUAROCKS_VERSION="3.12.0"
+ARG RESTY_LUAROCKS_URL_BASE="https://github.com/luarocks/luarocks/releases/download/v${RESTY_LUAROCKS_VERSION}"
 
 LABEL maintainer="Evan Wies <evan@neomantra.net>"
 LABEL maintainer="honeok <honeok@disroot.org>"
@@ -42,7 +43,7 @@ RUN set -ex \
         unzip \
         wget \
     && cd /tmp \
-    && curl -Ls https://luarocks.github.io/luarocks/releases/luarocks-${RESTY_LUAROCKS_VERSION}.tar.gz -o luarocks-${RESTY_LUAROCKS_VERSION}.tar.gz \
+    && curl -Ls ${RESTY_LUAROCKS_URL_BASE}/luarocks-${RESTY_LUAROCKS_VERSION}.tar.gz -o luarocks-${RESTY_LUAROCKS_VERSION}.tar.gz \
     && tar fxz luarocks-${RESTY_LUAROCKS_VERSION}.tar.gz \
     && cd luarocks-${RESTY_LUAROCKS_VERSION} \
     && ./configure \
