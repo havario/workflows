@@ -4,6 +4,8 @@ set -eE
 
 START_TIME="$(date +%s)"
 
+RESTY_VERSION="$(wget -qO- --tries=50 https://api.github.com/repos/openresty/openresty/tags | grep '"name":' | sed -E 's/.*"name": *"([^"]+)".*/\1/' | sort -Vr | head -n1 | sed 's/v//')"
+
 _exit() {
     local ET_CODE="$?"
     docker buildx prune --all --force 2>/dev/null
