@@ -29,7 +29,7 @@ docker build --no-cache \
     --build-arg TENGINE_VERSION="$TENGINE_VERSION" \
     --build-arg ZSTD_VERSION="$ZSTD_VERSION" \
     --build-arg HEADERSMORE_VERSION="$HEADERSMORE_VERSION" \
-    --tag honeok/tengine:"$TENGINE_VERSION" \
+    --tag honeok/tengine:"$TENGINE_VERSION-alpine" \
     . && echo 2>&1 "build complete!"
 
 docker push honeok/tengine:"$TENGINE_VERSION"
