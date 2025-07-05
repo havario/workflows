@@ -75,6 +75,10 @@ ARG RESTY_PCRE_BUILD_OPTIONS="--enable-jit --enable-pcre2grep-jit --disable-bsr-
 
 # https://github.com/openresty/openresty-packaging/blob/master/alpine/openresty/APKBUILD
 ARG RESTY_CONFIG_OPTIONS="\
+    --without-http_rds_json_module \
+    --without-http_rds_csv_module \
+    --with-http_iconv_module \
+    --without-lua_rds_parser \
     --pid-path=/var/run/nginx.pid \
     --lock-path=/var/run/nginx.lock \
     --user=nginx \
@@ -95,14 +99,16 @@ ARG RESTY_CONFIG_OPTIONS="\
     --with-http_dav_module \
     --with-http_flv_module \
     --with-http_mp4_module \
-    --with-http_gzip_static_module \
     --with-http_gunzip_module \
+    --with-http_gzip_static_module \
     --with-http_auth_request_module \
     --with-http_random_index_module \
     --with-http_secure_link_module \
     --with-http_degradation_module \
     --with-http_slice_module \
     --with-http_stub_status_module \
+    --with-md5-asm \
+    --with-sha1-asm \
     --http-client-body-temp-path=/var/cache/openresty/client_temp \
     --http-proxy-temp-path=/var/cache/openresty/proxy_temp \
     --http-fastcgi-temp-path=/var/cache/openresty/fastcgi_temp \
@@ -116,12 +122,6 @@ ARG RESTY_CONFIG_OPTIONS="\
     --with-stream_geoip_module \
     --with-stream_ssl_preread_module \
     --with-compat \
-    --with-http_iconv_module \
-    --with-md5-asm \
-    --with-sha1-asm \
-    --without-http_rds_json_module \
-    --without-http_rds_csv_module \
-    --without-lua_rds_parser \
     --add-module=modules/ngx_brotli \
     "
 
