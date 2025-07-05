@@ -131,6 +131,8 @@ ARG TENGINE_CONFIG_OPTIONS="\
     --with-jemalloc \
     --with-openssl-opt=enable-tls1_3 \
     --with-openssl-async \
+    --add-module=modules/mod_config \
+    --add-module=modules/mod_dubbo \
     --add-module=modules/ngx_http_concat_module \
     --add-module=modules/ngx_http_footer_filter_module \
     --add-module=modules/ngx_http_proxy_connect_module \
@@ -147,8 +149,10 @@ ARG TENGINE_CONFIG_OPTIONS="\
     --add-module=modules/ngx_http_upstream_vnswrr_module \
     --add-module=modules/ngx_http_user_agent_module \
     --add-module=modules/ngx_http_xquic_module \
+    --add-module=modules/ngx_ingress_module \
     --add-module=modules/ngx_multi_upstream_module \
     --add-module=modules/ngx_slab_stat \
+    --add-module=modules/ngx_tongsuo_ntls \
     --add-module=modules/ngx_brotli \
     --add-module=modules/headers-more-nginx-module-${HEADERSMORE_VERSION} \
     "
