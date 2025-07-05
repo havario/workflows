@@ -73,6 +73,7 @@ ARG XQUIC_CONFIG_OPTIONS="\
     -DXQC_SUPPORT_SENDMMSG_BUILD=1 \
     -DXQC_ENABLE_EVENT_LOG=0 \
     -DXQC_ENABLE_BBR2=1 \
+    -DXQC_DISABLE_RENO=0 \
     -DSSL_TYPE=babassl \
     -DSSL_PATH=/usr/local/babassl \
     -DSSL_INC_PATH=/usr/local/babassl/include \
@@ -205,10 +206,8 @@ RUN set -ex \
     && curl -Ls https://github.com/alibaba/xquic/archive/tags/v${XQUIC_VERSION}.tar.gz -o v${XQUIC_VERSION}.tar.gz \
     && tar fxz v${XQUIC_VERSION}.tar.gz \
     && cd xquic-tags-v${XQUIC_VERSION} \
-# Copy tp to local buffer to fix dangling-pointer warning.
-    && curl -Ls https://github.com/havario/workflows/raw/master/ldnmp/tengine/patchs/ngx_xquic_peer_tp_dangling.patch | patch -p0 \
     && mkdir -p build; cd build \
-    && cmake ${XQUIC_CONFIG_OPTIONS} .. \
+    && cmake ${XQUIC_CONFIG_OPTIONS} -DCMAKE_C_FLAGS="-Wno-dangling-pointer" .. \
     && make -j$(getconf _NPROCESSORS_ONLN) \
     && cp libxquic.so /usr/local/lib/ \
     && cd $tempDir \
