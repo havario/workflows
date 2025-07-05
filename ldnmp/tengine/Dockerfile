@@ -79,6 +79,7 @@ ARG XQUIC_CONFIG_OPTIONS="\
     -DSSL_LIB_PATH=/usr/local/babassl/lib/libssl.a;/usr/local/babassl/lib/libcrypto.a \
     "
 
+# https://github.com/alibaba/tengine-ingress/blob/master/images/tengine/rootfs/build.sh
 ARG TENGINE_CONFIG_OPTIONS="\
     --prefix=/etc/nginx \
     --sbin-path=/usr/sbin/nginx \
@@ -149,10 +150,8 @@ ARG TENGINE_CONFIG_OPTIONS="\
     --add-module=modules/ngx_http_upstream_vnswrr_module \
     --add-module=modules/ngx_http_user_agent_module \
     --add-module=modules/ngx_http_xquic_module \
-    --add-module=modules/ngx_ingress_module \
     --add-module=modules/ngx_multi_upstream_module \
     --add-module=modules/ngx_slab_stat \
-    --add-module=modules/ngx_tongsuo_ntls \
     --add-module=modules/ngx_brotli \
     --add-module=modules/headers-more-nginx-module-${HEADERSMORE_VERSION} \
     "
