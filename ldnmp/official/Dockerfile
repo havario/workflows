@@ -2,19 +2,6 @@
 #
 # Copyright (c) 2025 honeok <honeok@disroot.org>
 #                           <i@honeok.com>
-#
-# References:
-# https://github.com/alibaba/tengine
-# https://github.com/alibaba/xquic
-# https://github.com/Axizdkr/tengine
-# https://github.com/TouTooNet/Tengine
-# https://github.com/BoringCat/tengine-docker
-# https://github.com/google/ngx_brotli
-# https://github.com/facebook/zstd
-# https://github.com/nginx/docker-nginx
-# https://github.com/openresty/docker-openresty
-# https://developer.aliyun.com/article/1078661
-#
 # SPDX-License-Identifier: Apache-2.0
 
 FROM alpine:latest AS builder
