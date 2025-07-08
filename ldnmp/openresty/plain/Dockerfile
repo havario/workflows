@@ -79,8 +79,8 @@ ARG RESTY_CONFIG_OPTIONS="\
     --without-http_rds_csv_module \
     --with-http_iconv_module \
     --without-lua_rds_parser \
-    --pid-path=/var/run/nginx.pid \
-    --lock-path=/var/run/nginx.lock \
+    --pid-path=/run/nginx.pid \
+    --lock-path=/run/nginx.lock \
     --user=nginx \
     --group=nginx \
     --with-select_module \
@@ -139,7 +139,8 @@ ARG RESTY_EVAL_POST_MAKE=""
 ARG RESTY_STRIP_BINARIES=""
 
 # These are not intended to be user-specified
-ARG RESTY_CONFIG_DEPS="--with-pcre \
+ARG RESTY_CONFIG_DEPS="\
+    --with-pcre \
     --with-cc-opt='-DNGX_LUA_ABORT_AT_PANIC -I/usr/local/openresty/pcre2/include -I/usr/local/openresty/openssl3/include' \
     --with-ld-opt='-L/usr/local/openresty/pcre2/lib -L/usr/local/openresty/openssl3/lib -Wl,-rpath,/usr/local/openresty/pcre2/lib:/usr/local/openresty/openssl3/lib' \
     "
