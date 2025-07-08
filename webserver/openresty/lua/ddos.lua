@@ -36,3 +36,4 @@ if delay > 0 then
 end
 
 -- 请求合法，继续后续处理流程
+return ngx.exec('@proxy')
