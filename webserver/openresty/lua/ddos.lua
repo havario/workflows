@@ -10,7 +10,7 @@ local burst = 10
 -- 使用配置中定义的共享内存limit_req_store
 local lim, err = limit_req.new("limit_req_store", rate, burst)
 if not lim then
-    ngx.log(ngx.ERR, "ddos_guard: failed to instantiate resty.limit.req: ", err)
+    ngx.log(ngx.ERR, "ddos: failed to instantiate resty.limit.req: ", err)
     -- 如果库初始化失败，为防止服务不可用，返回500错误
     return ngx.exit(ngx.HTTP_INTERNAL_SERVER_ERROR)
 end
