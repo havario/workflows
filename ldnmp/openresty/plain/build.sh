@@ -13,6 +13,7 @@ START_TIME="$(date +%s)"
 
 RESTY_VERSION="$(wget -qO- --tries=50 https://api.github.com/repos/openresty/openresty/tags | grep '"name":' | sed -E 's/.*"name": *"([^"]+)".*/\1/' | sort -Vr | head -n1 | sed 's/v//')"
 ZSTD_VERSION="$(wget -qO- --tries=50 https://api.github.com/repos/facebook/zstd/releases/latest | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/' | sed 's/v//')"
+HEADERSMORE_VERSION="$(wget -qO- --tries=50 https://api.github.com/repos/openresty/headers-more-nginx-module/tags | sed -n 's/.*"name": *"v\{0,1\}\([^"]*\)".*/\1/p' | grep -v 'rc' | sort -Vr | head -n1)"
 
 _exit() {
     local ET_CODE="$?"
@@ -37,6 +38,7 @@ docker buildx build \
     --platform linux/amd64,linux/arm64/v8 \
     --build-arg RESTY_VERSION="$RESTY_VERSION" \
     --build-arg ZSTD_VERSION="$ZSTD_VERSION" \
+    --build-arg HEADERSMORE_VERSION="$HEADERSMORE_VERSION" \
     --tag honeok/openresty:"$RESTY_VERSION-alpine" \
     --tag honeok/openresty:alpine \
     --push \
