@@ -15,7 +15,6 @@ services:
       - $PWD/certs:/etc/nginx/certs
       - $PWD/html:/usr/local/openresty/nginx/html
       - $PWD/log:/usr/local/openresty/nginx/logs
-      - $PWD/lua:/etc/nginx/lua
     tmpfs:
       - /var/cache/openresty:rw,noexec,nosuid,size=256m
     network_mode: bridge
