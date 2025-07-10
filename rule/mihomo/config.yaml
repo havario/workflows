@@ -8,32 +8,32 @@
 # SPDX-License-Identifier: GPL-2.0-only
 
 # 全局配置
-port: 7890 # HTTP代理端口
-socks-port: 7891 # SOCKS5代理端口
-redir-port: 7892 # 透明代理(redirect)端口
-mixed-port: 7893 # 混合代理端口, 同时支持HTTP和SOCKS5协议
-tproxy-port: 7894 # TProxy(透明代理)端口
-allow-lan: true # 允许局域网内的其他设备连接到mihomo代理服务
-bind-address: "*" # 监听的网络接口地址允许所有
-ipv6: false # 禁用IPv6支持
-unified-delay: true # 启用统一的延迟测试方法
-tcp-concurrent: true # 启用TCP并发连接
-log-level: warning # 日志输出级别warning
-find-process-mode: 'off' # 禁用基于进程的流量匹配
-# interface-name: en0 # 绑定网卡名
+port: 7890                        # HTTP代理端口
+socks-port: 7891                  # SOCKS5代理端口
+redir-port: 7892                  # 透明代理(redirect)端口
+mixed-port: 7893                  # 混合代理端口, 同时支持HTTP和SOCKS5协议
+tproxy-port: 7894                 # TProxy(透明代理)端口
+allow-lan: true                   # 允许局域网内的其他设备连接到mihomo代理服务
+bind-address: "*"                 # 监听的网络接口地址允许所有
+ipv6: false                       # 禁用IPv6支持
+unified-delay: true               # 启用统一的延迟测试方法
+tcp-concurrent: true              # 启用TCP并发连接
+log-level: warning                # 日志输出级别warning
+find-process-mode: 'off'          # 禁用基于进程的流量匹配
+# interface-name: en0              # 绑定网卡名
 global-client-fingerprint: chrome # 设置全局客户端指纹为Chrome浏览器
-keep-alive-idle: 600 # 设置TCP连接的空闲超时时间为600秒
-keep-alive-interval: 15 # 设置TCP保活探测的间隔时间为15秒
-disable-keep-alive: false # 不禁用TCP保活机制
+keep-alive-idle: 600              # 设置TCP连接的空闲超时时间为600秒
+keep-alive-interval: 15           # 设置TCP保活探测的间隔时间为15秒
+disable-keep-alive: false         # 不禁用TCP保活机制
 profile:
-  store-selected: true  # 启用保存用户手动选择的代理节点
-  store-fake-ip: true # 启用缓存Fake-IP映射
+  store-selected: true            # 启用保存用户手动选择的代理节点
+  store-fake-ip: true             # 启用缓存Fake-IP映射
 
 # DNS模块
 dns:
-  enable: true                             # 启用 mihomo 的 DNS 模块，接管 DNS 解析
-  enhanced-mode: fake-ip                   # 启用 Fake-IP 模式，为非直连域名分配虚拟 IP（如 28.0.0.1/8 范围内的 IP），避免直接暴露真实目标 IP。
-  listen: 0.0.0.0:1053
+  enable: true                    # 启用mihomo的DNS模块, 接管系统DNS解析
+  enhanced-mode: fake-ip          # 启用Fake-IP模式, 为非直连域名分配虚拟IP (如28.0.0.1/8范围内的IP) 避免直接暴露真实目标IP
+  listen: 0.0.0.0:53
   ipv6: false
   respect-rules: true                      # DNS 解析结果遵循 rules 部分的代理规则（如 cn_domain 走直连，google_domain 走代理）
   fake-ip-range: 28.0.0.1/8                # 指定 Fake-IP 模式的虚拟 IP 地址范围
