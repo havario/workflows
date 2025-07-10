@@ -1,0 +1,144 @@
+# Copyright (c) 2025 honeok <honeok@disroot.org>
+#                           <i@honeok.com>
+# Thanks:
+# https://github.com/qichiyuhub/rule
+# https://github.com/Kook-9527/Plugin-backup
+# https://github.com/zzwsec
+#
+# SPDX-License-Identifier: GPL-2.0-only
+
+# 全局配置
+port: 7890 # HTTP代理端口
+socks-port: 7891 # SOCKS5代理端口
+redir-port: 7892 # 透明代理(redirect)端口
+mixed-port: 7893 # 混合代理端口, 同时支持HTTP和SOCKS5协议
+tproxy-port: 7894 # TProxy(透明代理)端口
+allow-lan: true # 允许局域网内的其他设备连接到mihomo代理服务
+bind-address: "*" # 监听的网络接口地址允许所有
+ipv6: false # 禁用IPv6支持
+unified-delay: true # 启用统一的延迟测试方法
+tcp-concurrent: true # 启用TCP并发连接
+log-level: warning # 日志输出级别warning
+find-process-mode: 'off' # 禁用基于进程的流量匹配
+# interface-name: en0 # 绑定网卡名
+global-client-fingerprint: chrome # 设置全局客户端指纹为Chrome浏览器
+keep-alive-idle: 600 # 设置TCP连接的空闲超时时间为600秒
+keep-alive-interval: 15 # 设置TCP保活探测的间隔时间为15秒
+disable-keep-alive: false # 不禁用TCP保活机制
+profile:
+  store-selected: true  # 启用保存用户手动选择的代理节点
+  store-fake-ip: true # 启用缓存Fake-IP映射
+
+# DNS模块
+dns:
+  enable: true                             # 启用 mihomo 的 DNS 模块，接管 DNS 解析
+  enhanced-mode: fake-ip                   # 启用 Fake-IP 模式，为非直连域名分配虚拟 IP（如 28.0.0.1/8 范围内的 IP），避免直接暴露真实目标 IP。
+  listen: 0.0.0.0:1053
+  ipv6: false
+  respect-rules: true                      # DNS 解析结果遵循 rules 部分的代理规则（如 cn_domain 走直连，google_domain 走代理）
+  fake-ip-range: 28.0.0.1/8                # 指定 Fake-IP 模式的虚拟 IP 地址范围
+  fake-ip-filter-mode: blacklist           # 设置 Fake-IP 过滤模式为黑名单模式，fake-ip-filter 列表中的域名不会分配 Fake-IP
+  fake-ip-filter:
+    - "rule-set:private_domain"
+    - "rule-set:cn_domain"
+    - "rule-set:ntp_domain"
+    - "+.msftconnecttest.com"
+    - "+.msftncsi.com"
+    - "+.kuwo.cn"
+    - "+.migu.cn"
+    - "+.battlenet.com.cn"
+  default-nameserver: [223.5.5.5, 119.29.29.29] # 指定初始 DNS 解析服务器，用于解析 mihomo 自身需要的域名（如订阅地址、规则集地址）
+  proxy-server-nameserver: ['https://dns.google/dns-query','https://dns.alidns.com/dns-query'] # 代理服务器使用的 DNS 解析服务器
+  nameserver: ['https://dns.alidns.com/dns-query', 'https://doh.pub/dns-query'] # 指定常规 DNS 解析服务器
+
+# 机场订阅
+proxy-providers:
+  Airport:
+    url: "机场通用订阅"
+    type: http
+    interval: 86400 # 自动更新时间(秒)
+    health-check: # 节点自动检测延时
+      enable: true
+      url: https://www.google.com/generate_204
+      interval: 300
+    proxy: 直连 # 通过直连拉取机场订阅, 该名字是指策略组或某个代理节点的名字
+
+# 节点信息
+proxies:
+  - {name: 直连, type: direct}
+
+# 出站策略
+proxy-groups:
+  - {name: 🚀 代理, type: select, proxies: [JP 日本节点, TW 台湾节点, NL 荷兰节点, US 美国节点, MYS 马来西亚节点, 🌐 全部节点]}
+  - {name: 📹 YouTube, type: select, proxies: [JP 日本节点, TW 台湾节点, NL 荷兰节点, US 美国节点, 🌐 全部节点]}
+  - {name: 🍀 Google, type: select, proxies: [JP 日本节点, TW 台湾节点, NL 荷兰节点, US 美国节点, MYS 马来西亚节点, 🌐 全部节点]}
+  - {name: 🤖 AI, type: select, proxies: [JP 日本节点, TW 台湾节点, NL 荷兰节点, US 美国节点, MYS 马来西亚节点, 🌐 全部节点]}
+  - {name: 👨🏿‍💻 GitHub, type: select, proxies: [JP 日本节点, TW 台湾节点, NL 荷兰节点, US 美国节点, MYS 马来西亚节点, 🌐 全部节点]}
+  - {name: 🪟 Microsoft, type: select, proxies: [JP 日本节点, TW 台湾节点, NL 荷兰节点, US 美国节点, MYS 马来西亚节点, 🌐 全部节点, 直连]}
+  - {name: 🎵 TikTok, type: select, proxies: [JP 日本节点, TW 台湾节点, NL 荷兰节点, US 美国节点, MYS 马来西亚节点, 🌐 全部节点]}
+  - {name: 📲 Telegram, type: select, proxies: [JP 日本节点, TW 台湾节点, NL 荷兰节点, US 美国节点, MYS 马来西亚节点, 🌐 全部节点]}
+  - {name: 🎥 NETFLIX, type: select, proxies: [JP 日本节点, TW 台湾节点, NL 荷兰节点, US 美国节点, MYS 马来西亚节点, 🌐 全部节点]}
+  - {name: ✈️ Speedtest, type: select, proxies: [JP 日本节点, TW 台湾节点, NL 荷兰节点, US 美国节点, MYS 马来西亚节点, 🌐 全部节点, 直连]}
+  - {name: 💶 PayPal, type: select, proxies: [JP 日本节点, TW 台湾节点, NL 荷兰节点, US 美国节点, MYS 马来西亚节点, 🌐 全部节点, 直连]}
+  - {name: 🍎 Apple, type: select, proxies: [直连, 🚀 代理]}
+  - {name: 🎯 直连, type: select, proxies: [直连]}
+  - {name: 🐟 漏网之鱼, type: select, proxies: [JP 日本节点, TW 台湾节点, NL 荷兰节点, US 美国节点, MYS 马来西亚节点,🌐 全部节点, 直连]}
+  - {name: JP 日本节点, type: select, include-all: true, filter: "(?i)日|JP|japan|Tokyo|Osaka"}
+  - {name: TW 台湾节点, type: select, include-all: true, filter: "(?i)台|TW"}
+  - {name: NL 荷兰节点, type: select, include-all: true, filter: "(?i)荷兰|NL"}
+  - {name: US 美国节点, type: select, include-all: true, filter: "(?i)美|US|unitedstates|united states|LAX|MAGA"}
+  - {name: MYS 马来西亚节点, type: select, include-all: true, filter: "(?i)马|MYS"}
+  - {name: 🌐 全部节点, type: select, include-all: true}
+
+# 规则匹配
+rules:
+  - RULE-SET,private_domain,直连
+  - RULE-SET,apple_domain,🍎 Apple
+  - RULE-SET,ai,🤖 AI
+  - RULE-SET,github_domain,👨🏿‍💻 GitHub
+  - RULE-SET,youtube_domain,📹 YouTube
+  - RULE-SET,google_domain,🍀 Google
+  - RULE-SET,microsoft_domain,🪟 Microsoft
+  - RULE-SET,tiktok_domain,🎵 TikTok
+  - RULE-SET,speedtest_domain,✈️ Speedtest
+  - RULE-SET,telegram_domain,📲 Telegram
+  - RULE-SET,netflix_domain,🎥 NETFLIX
+  - RULE-SET,paypal_domain,💶 PayPal
+  - RULE-SET,gfw_domain,🚀 代理
+  - RULE-SET,geolocation-!cn,🚀 代理
+  - DOMAIN-SUFFIX,gitlab.com,🚀 代理
+  - RULE-SET,google_ip,🍀 Google,no-resolve
+  - RULE-SET,netflix_ip,🎥 NETFLIX,no-resolve
+  - RULE-SET,telegram_ip,📲 Telegram,no-resolve
+  - RULE-SET,cn_ip,🎯 直连
+  - RULE-SET,cn_domain,🎯 直连
+  - RULE-SET,ntp_domain,🎯 直连
+  - MATCH,🐟 漏网之鱼
+
+# 规则集
+rule-anchor:
+  ip: &ip {type: http, interval: 86400, behavior: ipcidr, format: mrs}
+  domain: &domain {type: http, interval: 86400, behavior: domain, format: mrs}
+  class: &class {type: http, interval: 86400, behavior: classical, format: text}
+rule-providers: 
+  private_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/private.mrs"}
+  ai: {  <<: *domain, url: "https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/category-ai-!cn.mrs" }
+  youtube_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/youtube.mrs"}
+  google_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/google.mrs"}
+  github_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/github.mrs"}
+  telegram_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/telegram.mrs"}
+  netflix_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/netflix.mrs"}
+  paypal_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/paypal.mrs"}
+  microsoft_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/microsoft.mrs"}
+  apple_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/apple-cn.mrs"}
+  speedtest_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/ookla-speedtest.mrs"}
+  tiktok_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/tiktok.mrs"}
+  gfw_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/gfw.mrs"}
+  geolocation-!cn: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/geolocation-!cn.mrs"}
+  cn_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/cn.mrs"}
+  ntp_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-ntp.mrs"}
+
+  cn_ip: { <<: *ip, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/cn.mrs"}
+  google_ip: { <<: *ip, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/google.mrs"}
+  telegram_ip: { <<: *ip, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/telegram.mrs"}
+  netflix_ip: { <<: *ip, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/netflix.mrs"}
