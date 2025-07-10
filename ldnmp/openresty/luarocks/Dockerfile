@@ -20,13 +20,9 @@ ARG RESTY_FAT_IMAGE_BASE="honeok/openresty"
 ARG RESTY_FAT_IMAGE_TAG="1.27.1.2-alpine"
 
 ARG RESTY_LUAROCKS_VERSION="3.12.0"
-ARG RESTY_LUAROCKS_URL_BASE="https://github.com/luarocks/luarocks/releases/download/v${RESTY_LUAROCKS_VERSION}"
 
 LABEL maintainer="Evan Wies <evan@neomantra.net>"
 LABEL maintainer="honeok <honeok@disroot.org>"
-LABEL resty_fat_image_base="${RESTY_FAT_IMAGE_BASE}"
-LABEL resty_fat_image_tag="${RESTY_FAT_IMAGE_TAG}"
-LABEL resty_luarocks_version="${RESTY_LUAROCKS_VERSION}"
 
 RUN set -ex \
     && apk add --update --no-cache --virtual .build-deps \
@@ -40,10 +36,8 @@ RUN set -ex \
         musl \
         outils-md5 \
         perl \
-        unzip \
-        wget \
     && cd /tmp \
-    && curl -Ls ${RESTY_LUAROCKS_URL_BASE}/luarocks-${RESTY_LUAROCKS_VERSION}.tar.gz -o luarocks-${RESTY_LUAROCKS_VERSION}.tar.gz \
+    && curl -Ls https://luarocks.github.io/luarocks/releases/luarocks-${RESTY_LUAROCKS_VERSION}.tar.gz -o luarocks-${RESTY_LUAROCKS_VERSION}.tar.gz \
     && tar fxz luarocks-${RESTY_LUAROCKS_VERSION}.tar.gz \
     && cd luarocks-${RESTY_LUAROCKS_VERSION} \
     && ./configure \
