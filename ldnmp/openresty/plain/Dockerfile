@@ -116,6 +116,9 @@ ARG RESTY_CONFIG_OPTIONS="\
     --http-scgi-temp-path=/var/cache/openresty/scgi_temp \
     --with-mail \
     --with-mail_ssl_module \
+    --without-mail_pop3_module \
+    --without-mail_imap_module \
+    --without-mail_smtp_module \
     --with-stream \
     --with-stream_ssl_module \
     --with-stream_realip_module \
