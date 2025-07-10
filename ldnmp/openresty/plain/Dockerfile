@@ -83,8 +83,8 @@ ARG RESTY_CONFIG_OPTIONS="\
     --lock-path=/run/nginx.lock \
     --user=nginx \
     --group=nginx \
-    --with-select_module \
-    --with-poll_module \
+    --without-select_module \
+    --without-poll_module \
     --with-threads \
     --with-file-aio \
     --with-http_ssl_module \
