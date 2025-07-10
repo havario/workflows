@@ -40,23 +40,33 @@ dns:
   fake-ip-range: 28.0.0.1/8       # 指定Fake-IP模式的虚拟IP地址范围
   fake-ip-filter-mode: blacklist  # 设置Fake-IP过滤模式为黑名单模式, fake-ip-filter列表中的域名不会分配Fake-IP
   fake-ip-filter:
-    - "rule-set:private_domain"
-    - "rule-set:cn_domain"
-    - "rule-set:ntp_domain"
+    - "rule-set:private_domain,cn_domain,ntp_domain"
+    - "*.lan"
+    - "+.local"
     - "+.msftconnecttest.com"
     - "+.msftncsi.com"
+    - "+.xboxlive.com"
+    - "xbox.*.microsoft.com"
+    - "+.battlenet.com.cn"
+    - "+.battlenet.com"
+    - "+.blzstatic.cn"
+    - "+.battle.net"
+    - "+.srv.nintendo.net"
+    - "+.stun.playstation.net"
     - "+.kuwo.cn"
     - "+.migu.cn"
-    - "+.battlenet.com.cn"
+    - "+.market.xiaomi.com"
+    - "localhost.ptlogin2.qq.com"
+    - "time.*.com"
   default-nameserver:             # 指定初始DNS解析服务器, 用于解析mihomo自身需要的域名(如订阅地址、规则集地址)
-    - 119.29.29.29
     - 223.5.5.5
-  nameserver:                     # 指定常规DNS解析服务器
-    - https://dns.alidns.com/dns-query
-    - https://doh.pub/dns-query
+    - 119.29.29.29
   proxy-server-nameserver:        # 代理服务器使用的DNS解析服务器
     - https://dns.google/dns-query
     - https://dns.alidns.com/dns-query
+  nameserver:                     # 指定常规DNS解析服务器
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
 
 # 机场订阅
 proxy-providers:
