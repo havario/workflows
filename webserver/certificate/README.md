@@ -9,7 +9,7 @@ curl -Ls https://get.acme.sh | bash -s email=nginx@gmail.com
 - 或者使用letsencrypt证书，添加参数 `--server letsencrypt`
 
 ```shell
-~/.acme.sh/acme.sh --issue --dns dns_cf -d x.com -d '*.x.com'
+~/.acme.sh/acme.sh --issue --dns dns_cf -d honeok.com -d '*.honeok.com'
 ```
 
 ## 部署
