@@ -18,7 +18,7 @@ LABEL maintainer="honeok <honeok@disroot.org>"
 
 # Docker Build Arguments
 ARG RESTY_VERSION="1.27.1.2"
-ARG ZSTD_VERSION
+ARG ZSTD_VERSION=""
 
 RUN set -ex \
     && apk add --update --no-cache --virtual .build-deps \
