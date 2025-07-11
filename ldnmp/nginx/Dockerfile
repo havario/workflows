@@ -41,7 +41,7 @@ RUN set -ex \
         zlib-dev \
     && cd /tmp \
     && curl -Ls https://nginx.org/download/nginx-${NGX_VERSION}.tar.gz -o nginx-${NGX_VERSION}.tar.gz \
-    && tar -zxf nginx-${NGX_VERSION}.tar.gz \
+    && tar fxz nginx-${NGX_VERSION}.tar.gz \
     && git clone --recurse-submodules -j8 https://github.com/google/ngx_brotli \
     && git clone --depth 1 https://github.com/owasp-modsecurity/ModSecurity \
     && cd ModSecurity \
@@ -53,7 +53,7 @@ RUN set -ex \
     && cd /tmp \
     && git clone https://github.com/owasp-modsecurity/ModSecurity-nginx \
     && curl -Ls https://github.com/facebook/zstd/releases/download/v${ZSTD_VERSION}/zstd-${ZSTD_VERSION}.tar.gz -o zstd-${ZSTD_VERSION}.tar.gz \
-    && tar -xzf zstd-${ZSTD_VERSION}.tar.gz \
+    && tar fxz zstd-${ZSTD_VERSION}.tar.gz \
     && cd zstd-${ZSTD_VERSION} \
     && make clean \
     && CFLAGS="-fPIC" make && make install \
@@ -90,7 +90,7 @@ RUN set -ex \
         yajl-dev \
     && mkdir -p /etc/nginx/modsec/plugins \
     && curl -Ls -O https://github.com/coreruleset/coreruleset/archive/v${CORERULESET_VERSION}.tar.gz \
-    && tar -xzf v${CORERULESET_VERSION}.tar.gz --strip-components=1 -C /etc/nginx/modsec \
+    && tar fxz v${CORERULESET_VERSION}.tar.gz --strip-components=1 -C /etc/nginx/modsec \
     && rm -f v${CORERULESET_VERSION}.tar.gz \
     && curl -Ls https://github.com/coreruleset/wordpress-rule-exclusions-plugin/raw/master/plugins/wordpress-rule-exclusions-before.conf -o /etc/nginx/modsec/plugins/wordpress-rule-exclusions-before.conf \
     && curl -Ls https://github.com/coreruleset/wordpress-rule-exclusions-plugin/raw/master/plugins/wordpress-rule-exclusions-config.conf -o /etc/nginx/modsec/plugins/wordpress-rule-exclusions-config.conf \
