@@ -7,7 +7,8 @@
 # https://github.com/openresty/docker-openresty
 # https://github.com/nginx/docker-nginx
 # 
-# Thanks: YichunZhang <admin@openresty.com>
+# Thanks: YichunZhang <agentzh@gmail.com>
+#                     <admin@openresty.com>
 #
 # SPDX-License-Identifier: BSD-2-Clause
 
