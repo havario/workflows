@@ -14,7 +14,7 @@
 
 FROM alpine:latest AS builder
 
-LABEL maintainer="honeok <honeok@disroot.org>"
+LABEL maintainer="honeok <i@honeok.com>"
 
 # Docker Build Arguments
 ARG RESTY_VERSION="1.27.1.2"
@@ -51,7 +51,7 @@ RUN set -ex \
 FROM alpine:latest AS dist
 
 LABEL maintainer="Evan Wies <evan@neomantra.net>"
-LABEL maintainer="honeok <honeok@disroot.org>"
+LABEL maintainer="honeok <i@honeok.com>"
 
 # Docker Build Arguments
 ARG RESTY_VERSION="1.27.1.2"

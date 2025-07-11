@@ -22,20 +22,12 @@ ARG RESTY_FAT_IMAGE_TAG="1.27.1.2-alpine"
 ARG RESTY_LUAROCKS_VERSION="3.12.0"
 
 LABEL maintainer="Evan Wies <evan@neomantra.net>"
-LABEL maintainer="honeok <honeok@disroot.org>"
+LABEL maintainer="honeok <i@honeok.com>"
 
 RUN set -ex \
     && apk add --update --no-cache --virtual .build-deps \
-        perl-dev \
-    && apk add --no-cache \
-        bash \
-        build-base \
-        libintl \ 
-        linux-headers \
         make \
-        musl \
-        outils-md5 \
-        perl \
+        perl-dev \
     && cd /tmp \
     && curl -Ls https://luarocks.github.io/luarocks/releases/luarocks-${RESTY_LUAROCKS_VERSION}.tar.gz -o luarocks-${RESTY_LUAROCKS_VERSION}.tar.gz \
     && tar fxz luarocks-${RESTY_LUAROCKS_VERSION}.tar.gz \
