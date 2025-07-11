@@ -11,7 +11,7 @@ ARG NGX_VERSION=""
 
 FROM alpine:latest AS builder
 
-LABEL maintainer="honeok <honeok@disroot.org>"
+LABEL maintainer="honeok <i@honeok.com>"
 
 ARG NGX_VERSION=""
 ARG ZSTD_VERSION=""
