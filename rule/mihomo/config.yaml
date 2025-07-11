@@ -36,7 +36,6 @@ dns:
   listen: 0.0.0.0:53
   ipv6: false
   respect-rules: true             # DNS解析结果遵循rules部分的代理规则 (如cn_domain走直连 google_domain走代理)
-  enhanced-mode: fake-ip
   fake-ip-range: 28.0.0.1/8       # 指定Fake-IP模式的虚拟IP地址范围
   fake-ip-filter-mode: blacklist  # 设置Fake-IP过滤模式为黑名单模式, fake-ip-filter列表中的域名不会分配Fake-IP
   fake-ip-filter:
@@ -87,21 +86,21 @@ proxies:
 
 # 出站策略
 proxy-groups:
-  - {name: 🚀 默认代理, type: select, proxies: [🇭🇰 香港节点, 🇯🇵 日本节点, 🇸🇬 新加坡节点, 🇲🇾 马来西亚节点, 🇺🇲 美国节点, 🇳🇱 荷兰节点 🌐 全部节点, 直连]}
-  - {name: 📹 YouTube, type: select, proxies: [🇭🇰 香港节点, 🇯🇵 日本节点, 🇸🇬 新加坡节点, 🇲🇾 马来西亚节点, 🇺🇲 美国节点, 🇳🇱 荷兰节点 🌐 全部节点, 直连]}
-  - {name: 🍀 Google, type: select, proxies: [🇭🇰 香港节点, 🇯🇵 日本节点, 🇸🇬 新加坡节点, 🇲🇾 马来西亚节点, 🇺🇲 美国节点, 🇳🇱 荷兰节点 🌐 全部节点, 直连]}
-  - {name: 🤖 AI, type: select, proxies: [🇯🇵 日本节点, 🇸🇬 新加坡节点, 🇲🇾 马来西亚节点, 🇺🇲 美国节点, 🇳🇱 荷兰节点 🌐 全部节点, 直连]}
-  - {name: 👨🏿‍💻 GitHub, type: select, proxies: [🇭🇰 香港节点, 🇯🇵 日本节点, 🇸🇬 新加坡节点, 🇲🇾 马来西亚节点, 🇺🇲 美国节点, 🇳🇱 荷兰节点 🌐 全部节点, 直连]}
-  - {name: 🐬 OneDrive, type: select, proxies: [🇭🇰 香港节点, 🇯🇵 日本节点, 🇸🇬 新加坡节点, 🇲🇾 马来西亚节点, 🇺🇲 美国节点, 🇳🇱 荷兰节点 🌐 全部节点, 直连]}
-  - {name: 🪟 Microsoft, type: select, proxies: [🇭🇰 香港节点, 🇯🇵 日本节点, 🇸🇬 新加坡节点, 🇲🇾 马来西亚节点, 🇺🇲 美国节点, 🇳🇱 荷兰节点 🌐 全部节点, 直连]}
-  - {name: 🎵 TikTok, type: select, proxies: [🇯🇵 日本节点, 🇸🇬 新加坡节点, 🇲🇾 马来西亚节点, 🇺🇲 美国节点, 🇳🇱 荷兰节点 🌐 全部节点, 直连]}
-  - {name: 📲 Telegram, type: select, proxies: [🇭🇰 香港节点, 🇯🇵 日本节点, 🇸🇬 新加坡节点, 🇲🇾 马来西亚节点, 🇺🇲 美国节点, 🇳🇱 荷兰节点 🌐 全部节点, 直连]}
-  - {name: 🎥 NETFLIX, type: select, proxies: [🇸🇬 新加坡节点, 🇺🇲 美国节点, 🇳🇱 荷兰节点 🌐 全部节点, 直连]}
-  - {name: ✈️ Speedtest, type: select, proxies: [🇭🇰 香港节点, 🇯🇵 日本节点, 🇸🇬 新加坡节点, 🇲🇾 马来西亚节点, 🇺🇲 美国节点, 🇳🇱 荷兰节点 🌐 全部节点, 直连]}
-  - {name: 💶 PayPal, type: select, proxies: [🇭🇰 香港节点, 🇯🇵 日本节点, 🇸🇬 新加坡节点, 🇲🇾 马来西亚节点, 🇺🇲 美国节点, 🇳🇱 荷兰节点 🌐 全部节点, 直连]}
+  - {name: 🚀 默认代理, type: select, proxies: [🇭🇰 香港节点, 🇯🇵 日本节点, 🇸🇬 新加坡节点, 🇲🇾 马来西亚节点, 🇺🇲 美国节点, 🇳🇱 荷兰节点, 🌐 全部节点, 直连]}
+  - {name: 📹 YouTube, type: select, proxies: [🇭🇰 香港节点, 🇯🇵 日本节点, 🇸🇬 新加坡节点, 🇲🇾 马来西亚节点, 🇺🇲 美国节点, 🇳🇱 荷兰节点, 🌐 全部节点, 直连]}
+  - {name: 🍀 Google, type: select, proxies: [🇭🇰 香港节点, 🇯🇵 日本节点, 🇸🇬 新加坡节点, 🇲🇾 马来西亚节点, 🇺🇲 美国节点, 🇳🇱 荷兰节点, 🌐 全部节点, 直连]}
+  - {name: 🤖 AI, type: select, proxies: [🇯🇵 日本节点, 🇸🇬 新加坡节点, 🇲🇾 马来西亚节点, 🇺🇲 美国节点, 🇳🇱 荷兰节点, 🌐 全部节点, 直连]}
+  - {name: 👨🏿‍💻 GitHub, type: select, proxies: [🇭🇰 香港节点, 🇯🇵 日本节点, 🇸🇬 新加坡节点, 🇲🇾 马来西亚节点, 🇺🇲 美国节点, 🇳🇱 荷兰节点, 🌐 全部节点, 直连]}
+  - {name: 🐬 OneDrive, type: select, proxies: [🇭🇰 香港节点, 🇯🇵 日本节点, 🇸🇬 新加坡节点, 🇲🇾 马来西亚节点, 🇺🇲 美国节点, 🇳🇱 荷兰节点, 🌐 全部节点, 直连]}
+  - {name: 🪟 Microsoft, type: select, proxies: [🇭🇰 香港节点, 🇯🇵 日本节点, 🇸🇬 新加坡节点, 🇲🇾 马来西亚节点, 🇺🇲 美国节点, 🇳🇱 荷兰节点, 🌐 全部节点, 直连]}
+  - {name: 🎵 TikTok, type: select, proxies: [🇯🇵 日本节点, 🇸🇬 新加坡节点, 🇲🇾 马来西亚节点, 🇺🇲 美国节点, 🇳🇱 荷兰节点, 🌐 全部节点, 直连]}
+  - {name: 📲 Telegram, type: select, proxies: [🇭🇰 香港节点, 🇯🇵 日本节点, 🇸🇬 新加坡节点, 🇲🇾 马来西亚节点, 🇺🇲 美国节点, 🇳🇱 荷兰节点, 🌐 全部节点, 直连]}
+  - {name: 🎥 NETFLIX, type: select, proxies: [🇸🇬 新加坡节点, 🇺🇲 美国节点, 🇳🇱 荷兰节点, 🌐 全部节点, 直连]}
+  - {name: ✈️ Speedtest, type: select, proxies: [🇭🇰 香港节点, 🇯🇵 日本节点, 🇸🇬 新加坡节点, 🇲🇾 马来西亚节点, 🇺🇲 美国节点, 🇳🇱 荷兰节点, 🌐 全部节点, 直连]}
+  - {name: 💶 PayPal, type: select, proxies: [🇭🇰 香港节点, 🇯🇵 日本节点, 🇸🇬 新加坡节点, 🇲🇾 马来西亚节点, 🇺🇲 美国节点, 🇳🇱 荷兰节点, 🌐 全部节点, 直连]}
   - {name: 🍎 Apple, type: select, proxies: [直连, 🚀 默认代理]}
   - {name: 🎯 直连, type: select, proxies: [直连]}
-  - {name: 🐟 漏网之鱼, type: select, proxies: [🇭🇰 香港节点, 🇯🇵 日本节点, 🇸🇬 新加坡节点, 🇲🇾 马来西亚节点, 🇺🇲 美国节点, 🇳🇱 荷兰节点 🌐 全部节点, 直连]}
+  - {name: 🐟 漏网之鱼, type: select, proxies: [🇭🇰 香港节点, 🇯🇵 日本节点, 🇸🇬 新加坡节点, 🇲🇾 马来西亚节点, 🇺🇲 美国节点, 🇳🇱 荷兰节点, 🌐 全部节点, 直连]}
   - {name: 🇭🇰 香港节点, type: select, include-all: true, filter: "(?i)港|hk|hkg|hongkong|hong kong"}
   - {name: 🇯🇵 日本节点, type: select, include-all: true, filter: "(?i)日|jp|jpn|japan"}
   - {name: 🇸🇬 新加坡节点, type: select, include-all: true, filter: "(?i)新加坡|坡|狮城|sg|sgp|singapore"}
