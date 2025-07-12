@@ -15,9 +15,6 @@ ARG RESTY_FAT_IMAGE_TAG="1.27.1.2-alpine"
 
 FROM ${RESTY_FAT_IMAGE_BASE}:${RESTY_FAT_IMAGE_TAG} AS dist
 
-ARG RESTY_FAT_IMAGE_BASE="honeok/openresty"
-ARG RESTY_FAT_IMAGE_TAG="1.27.1.2-alpine"
-
 ARG RESTY_LUAROCKS_VERSION="3.12.0"
 
 LABEL maintainer="Evan Wies <evan@neomantra.net>"
