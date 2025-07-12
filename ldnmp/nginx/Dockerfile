@@ -1,4 +1,4 @@
-# Description: This dockerfile is used to custom-compile nginx with brotli, zstandard compression, and modsecurity waf.
+# Description: This dockerfile is used to custom compile nginx with brotli and zstandard compression
 #
 # Copyright (c) 2024-2025 honeok <i@honeok.com>
 #
