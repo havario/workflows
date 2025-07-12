@@ -54,4 +54,10 @@ COPY --from=builder /tmp/nginx-${NGX_VERSION}/objs/*.so /usr/lib/nginx/modules
 COPY html /usr/share/nginx/html
 
 RUN set -ex \
-    && curl -Ls https://cdn.skyimg.net/up/2025/5/29/d655ae75.webp -o /usr/share/nginx/html/favicon.ico
+    && apk add --update --no-cache --virtual .run-deps \
+        binutils \
+    && strip /usr/lib/nginx/modules/ngx_http_brotli_*.so \
+    && strip /usr/lib/nginx/modules/ngx_http_zstd_*.so \
+    && apk del --no-network .run-deps \
+    && curl -Ls https://cdn.skyimg.net/up/2025/5/29/d655ae75.webp -o /usr/share/nginx/html/favicon.ico \
+    && rm -rf /var/cache/apk/*
