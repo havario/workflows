@@ -1,4 +1,4 @@
-# Description: 
+# Description: This dockerfile is used to integrate openresty with the luarocks package manager.
 #
 # Copyright (c) 2025 honeok <i@honeok.com>
 #

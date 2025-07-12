@@ -1,6 +1,12 @@
 #!/usr/bin/env bash
+#
+# Description: This script is used to build and publish the latest version of openresty integrated luarocks image.
+#
+# Copyright (c) 2025 honeok <i@honeok.com>
+#
+# SPDX-License-Identifier: Apache-2.0
 
-set -eE
+set -Ee
 
 START_TIME="$(date +%s)"
 
