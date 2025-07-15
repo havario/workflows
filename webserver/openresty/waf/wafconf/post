@@ -13,12 +13,13 @@ group\s+by.+\(
 (--|#|/\*|--\s)\s*(select|update|insert|delete|union|from|where)
 (if|case|when|ifnull|ascii|ord|char|substring|mid|elt)\s*\(
 0x[0-9a-f]{10,}
-\s(and|or)\s+[\'\"\d]+\s*=\s*[\'\"\d]+
+\s(and|or)\s+[^=]+(=|<|>| like )
 
 \:\$
 \$\{
 base64_decode\(
 xwork.MethodAccessor
+\s(rm|wget|curl|bash|sh|nc|netcat|tftp|ftpget)\s
 (?:define|eval|file_get_contents|include|require|require_once|shell_exec|phpinfo|system|passthru|preg_\w+|execute|echo|print|print_r|var_dump|(fp)open|alert|showmodaldialog)\(
 \$_(GET|post|cookie|files|session|env|phplib|GLOBALS|SERVER)\[
 java\.lang
