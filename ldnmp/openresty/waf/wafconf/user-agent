@@ -1,0 +1,23 @@
+# 拦截最常见的Web漏洞扫描器和攻击工具
+(audit|dirbuster|pangolin|nmap|sqln|-scan|hydra|w3af|owasp|Nikto|fimap|havij|netsparker|SF)
+
+# 拦截sql注入工具
+sqlmap
+
+# 拦截扫描器Arachni和商业扫描器Burp Suite
+(arachni|burp)
+
+# 拦截各种脚本和程序在发起HTTP请求时默认的User-Agent
+#(libwww|PycURL|python-requests|go-http-client|java/|curl/)
+(libwww|PycURL)
+
+# 拦截用于离线下载整个网站的工具
+(HTTrack|harvest|BBBike)
+
+# 防止压力测试工具对网站发起应用层CC攻击
+(httperf|bench|jmeter|apachebench)
+
+# 拦截已知恶意爬虫或被用于恶意目的的工具
+(zmeu|BabyKrokodil|Parser)
+
+\$\{jndi:(ldap|dns|rmi|corba)
