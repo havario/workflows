@@ -1,5 +1,5 @@
 -- 规则路径
-RulePath = "/usr/local/openresty/nginx/wafconf/"
+RulePath = "/etc/nginx/waf/wafconf/"
 -- 攻击日志
 attacklog = "on"
 logdir = "/usr/local/openresty/nginx/logs"
