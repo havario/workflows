@@ -1,7 +1,7 @@
 \.\./
 (?:etc\/\W*passwd)
 
-# SQL注入
+# sql注入
 select.+(from|limit)
 (?:(union(.*?)select))
 having|rongjitest
@@ -27,7 +27,7 @@ java\.lang
 (\{\{.*\}\}|\{\%.*\%\}|\<#.*\#\>|\<\%.*\%>|\$\{.*\})
 (__class__|__init__|__globals__|__mro__|__subclasses__)
 
-# NoSQL注入
+# nosql注入
 (\$ne|\$gt|\$lt|\$regex|\$where|\$in|\$nin)
 
 # 跨站脚本
@@ -41,4 +41,4 @@ data\s*:\s*text\/(html|javascript)
 (gopher|doc|php|glob|file|phar|zlib|ftp|ldap|dict|ogg|data)\:\/
 
 # 高危漏洞
-\$\{jndi:(ldap|dns|rmi|corba) # 拦截Log4Shell
+\$\{jndi:(ldap|dns|rmi|corba) # 拦截log4shell
