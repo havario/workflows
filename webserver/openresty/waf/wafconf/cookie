@@ -13,6 +13,7 @@ group\s+by.+\(
 (--|#|/\*|--\s)\s*(select|update|insert|delete|union|from|where)
 (if|case|when|ifnull|ascii|ord|char|substring|mid|elt)\s*\(
 0x[0-9a-f]{10,}
+\s(and|or)\s+[\'\"\d]+\s*=\s*[\'\"\d]+
 
 \:\$
 \$\{
