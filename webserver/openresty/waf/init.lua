@@ -260,10 +260,11 @@ end
 -- IP白名单检查
 function whiteip()
     if next(ipWhitelist) ~= nil then
-        for _, ip in pairs(ipWhitelist) do
-            local ok, err = ngx.re.match(getClientIp(), "^"..ip, "jo")
+        for _, ip_rule in pairs(ipWhitelist) do
+            local pattern = "^" .. ip_rule:gsub("/", "\\/")
+            local ok, err = ngx.re.match(getClientIp(), pattern, "jo")
             if err then
-                ngx.log(ngx.ERR, "invalid ip cidr while checking whiteip: ", ip, " err: ", err)
+                ngx.log(ngx.ERR, "Invalid IP/CIDR in whitelist: ", ip_rule, " | Error: ", err)
             elseif ok then
                 return true
             end
@@ -275,10 +276,11 @@ end
 -- IP黑名单检查
 function blockip()
     if next(ipBlocklist) ~= nil then
-        for _, ip in pairs(ipBlocklist) do
-            local ok, err = ngx.re.match(getClientIp(), "^"..ip, "jo")
+        for _, ip_rule in pairs(ipBlocklist) do
+            local pattern = "^" .. ip_rule:gsub("/", "\\/")
+            local ok, err = ngx.re.match(getClientIp(), "^"..pattern, "jo")
             if err then
-                ngx.log(ngx.ERR, "invalid ip cidr while checking blockip: ", ip, " err: ", err)
+                ngx.log(ngx.ERR, "Invalid IP/CIDR in blocklist: ", ip_rule, " | Error: ", err)
             elseif ok then
                 ngx.exit(403)
                 return true
