@@ -74,7 +74,7 @@ proxy-providers:
     interval: 86400 # 自动更新时间(秒)
     health-check: # 节点自动检测延时
       enable: true
-      url: "http://www.apple.com/library/test/success.html"
+      url: "http://connectivitycheck.platform.hicloud.com/generate_204"
       interval: 300
     proxy: 直连 # 通过直连拉取机场订阅, 该名字是指策略组或某个代理节点的名字
 
@@ -119,10 +119,10 @@ proxy-groups:
 # 规则匹配
 rules:
   - DOMAIN-SUFFIX,gitlab.com,🚀 默认代理
-  - IP-CIDR,10.0.0.0/8,🎯 直连
-  - IP-CIDR,172.16.0.0/12,🎯 直连
-  - IP-CIDR,192.168.0.0/16,🎯 直连
-  - RULE-SET,private_domain,🎯 直连
+  - IP-CIDR,10.0.0.0/8,直连
+  - IP-CIDR,172.16.0.0/12,直连
+  - IP-CIDR,192.168.0.0/16,直连
+  - RULE-SET,private_domain,直连
   - RULE-SET,apple_domain,🍎 Apple
   - RULE-SET,proxylite,🚀 默认代理
   - RULE-SET,ai,🤖 AI
@@ -152,6 +152,7 @@ rule-anchor:
   ip: &ip {type: http, interval: 86400, behavior: ipcidr, format: mrs}
   domain: &domain {type: http, interval: 86400, behavior: domain, format: mrs}
   class: &class {type: http, interval: 86400, behavior: classical, format: text}
+
 rule-providers: 
   private_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/private.mrs"}
   ai: { <<: *domain, url: "https://github.com/MetaCubeX/meta-rules-dat/raw/meta/geo/geosite/category-ai-!cn.mrs" }
