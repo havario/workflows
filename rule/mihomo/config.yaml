@@ -129,6 +129,7 @@ dns:
 proxies:
   - name: 直连
     type: direct
+    udp: true
   # 链式代理流量走向机制 丨 Mihomo本机 <-> 前置节点 <-> 落地节点 <-> Internet互联网
   - name: ⛓️ 链式代理
     dialer-proxy: "🇸🇬 狮城节点"
@@ -137,6 +138,7 @@ proxies:
     port: 1080
     username: "12345"
     password: "12345"
+    udp: true
 
 ## 机场订阅
 proxy-providers:
@@ -150,6 +152,9 @@ proxy-providers:
       interval: 300
       url: "http://connectivitycheck.platform.hicloud.com/generate_204"
       # expected-status: 204 # 当健康检查返回状态码与期望值不符时, 认为节点不可用
+    override: # 覆写节点加载时的一些配置项
+      skip-cert-verify: true
+      udp: true
 
 ## 出站策略
 proxy-groups:
