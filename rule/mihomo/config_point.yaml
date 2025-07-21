@@ -138,7 +138,7 @@ proxies:
     password: "12345"
     udp: true
 
-## 机场订阅
+## 订阅合集
 proxy-providers:
   Airport1:
     type: http
@@ -216,6 +216,7 @@ rule-anchor:
   domain: &domain {type: http, interval: 86400, behavior: domain, format: mrs}
   class: &class {type: http, interval: 86400, behavior: classical, format: text}
 
+## 订阅规则
 rule-providers:
   proxylite: { <<: *class, url: "https://raw.githubusercontent.com/qichiyuhub/rule/main/proxy.list"}
 
