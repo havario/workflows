@@ -3,6 +3,8 @@
 # Description: This configuration file is used to define custom rules for the Mihomo GUI.
 #
 # Thanks:
+# https://github.com/MetaCubeX/mihomo
+# https://github.com/yyhhyyyyyy/selfproxy
 # https://github.com/qichiyuhub/rule
 # https://github.com/Kook-9527/Plugin-backup
 # https://github.com/zzwsec
@@ -13,37 +15,37 @@
 port: 7890 # HTTP(S)代理服务器端口
 socks-port: 7891 # SOCKS5代理端口
 mixed-port: 10801 # HTTP(S)和SOCKS代理混合端口
-redir-port: 7892 # 透明代理端口，用于Linux和MacOS
+redir-port: 7892 # 透明代理端口, 用于Linux和MacOS
 
 tproxy-port: 7893 # Linux透明代理服务器端口
 
 allow-lan: true # 允许局域网连接
-bind-address: "*" # 绑定IP地址，仅作用于allow-lan为true，'*'表示所有地址
-skip-auth-prefixes: # 设置跳过验证的 IP 段
+bind-address: "*" # 绑定IP地址, 仅作用于allow-lan为true, '*'表示所有地址
+skip-auth-prefixes: # 设置跳过验证的IP段
   - 127.0.0.1/8
   - ::1/128
-lan-allowed-ips: # 允许连接的IP地址段，仅作用于allow-lan为true, 默认值为0.0.0.0/0和::/0
+lan-allowed-ips: # 允许连接的IP地址段, 仅作用于allow-lan为true, 默认值为0.0.0.0/0和::/0
   - 0.0.0.0/0
   - ::/0
 
-#  find-process-mode has 3 values:always, strict, off
-#  - always: 开启，强制匹配所有进程
-#  - strict: 默认，由 mihomo 判断是否开启
-#  - off: 不匹配进程，推荐在路由器上使用此模式
+#  find-process-mode has 3 values: always strict off
+#  - always: 开启, 强制匹配所有进程
+#  - strict: 默认, 由mihomo判断是否开启
+#  - off: 不匹配进程, 推荐在路由器上使用此模式
 find-process-mode: strict
 
 mode: rule
 
 log-level: warning # 日志等级silent/error/warning/info/debug
 
-ipv6: false # IPv6总开关，关闭阻断所有IPv6链接和屏蔽DNS请求AAAA记录
+ipv6: false # IPv6总开关, 关闭阻断所有IPv6链接和屏蔽DNS请求AAAA记录
 
 tcp-concurrent: true # TCP并发连接所有IP, 将使用最快握手的TCP
 
 # interface-name: en0 # 设置出口网卡
 
-# 全局TLS指纹，优先低于proxy内的client-fingerprint
-# 可选： "chrome","firefox","safari","ios","random","none" options.
+# 全局TLS指纹, 优先低于proxy内的client-fingerprint
+# 可选： "chrome" "firefox" "safari" "ios" "random" "none" options.
 # Utls is currently support TLS transport in TCP/grpc/WS/HTTP for VLESS/Vmess and trojan.
 global-client-fingerprint: chrome
 
@@ -60,11 +62,11 @@ profile:
 dns:
   cache-algorithm: arc
   enable: true # 关闭将使用系统DNS
-  prefer-h3: false # 是否开启DoH支持HTTP/3，将并发尝试
+  prefer-h3: false # 是否开启DoH支持HTTP/3, 将并发尝试
   listen: 0.0.0.0:53 # 开启DNS服务器监听
   ipv6: false # false将返回AAAA的空结果
-  # ipv6-timeout: 300 # 单位：ms，内部双栈并发时，向上游查询AAAA时，等待AAAA的时间，默认100ms
-  default-nameserver:             # 指定初始DNS解析服务器, 用于解析mihomo自身需要的域名(如订阅地址、规则集地址), 只能使用纯IP地址
+  # ipv6-timeout: 300 # 单位：ms 内部双栈并发时, 向上游查询AAAA时, 等待AAAA的时间, 默认100ms
+  default-nameserver:             # 指定初始DNS解析服务器, 用于解析mihomo自身需要的域名 (如订阅地址、规则集地址), 只能使用纯IP地址
     - 223.5.5.5
     - 119.29.29.29
   enhanced-mode: fake-ip # 启用Fake-IP模式 or redir-host
@@ -92,7 +94,7 @@ dns:
 
   # 配置后面的nameserver fallback和nameserver-policy向dns服务器的连接过程是否遵守遵守rules规则
   # 如果为false(默认值) 则这三部分的dns服务器在未特别指定的情况下会直连
-  # 如果为true，将会按照rules的规则匹配链接方式 (走代理或直连), 如果有特别指定则任然以指定值为准
+  # 如果为true, 将会按照rules的规则匹配链接方式 (走代理或直连), 如果有特别指定则任然以指定值为准
   # 仅当proxy-server-nameserver非空时可以开启此选项, 强烈不建议和prefer-h3一起使用
   # 此外, 这三者配置中的dns服务器如果出现域名会采用default-nameserver配置项解析, 也请确保正确配置default-nameserver
   respect-rules: true
