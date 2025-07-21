@@ -2,8 +2,10 @@
 #
 # Description: This configuration file is used to define custom rules for the Mihomo GUI.
 #
+# References:
+# https://github.com/MetaCubeX/mihomo/blob/Meta/docs/config.yaml
+#
 # Thanks:
-# https://github.com/MetaCubeX/mihomo
 # https://github.com/yyhhyyyyyy/selfproxy
 # https://github.com/qichiyuhub/rule
 # https://github.com/Kook-9527/Plugin-backup
