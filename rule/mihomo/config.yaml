@@ -99,7 +99,8 @@ dns:
   # 此外, 这三者配置中的dns服务器如果出现域名会采用default-nameserver配置项解析, 也请确保正确配置default-nameserver
   respect-rules: true
 
-  nameserver:                     # DNS主要域名配置, 这部分为主要DNS配置, 影响所有直连确保使用对大陆解析精准的DNS
+  # DNS主要域名配置, 这部分为主要DNS配置, 影响所有直连确保使用对大陆解析精准的DNS
+  nameserver:
     - https://223.5.5.5/dns-query
     - https://120.53.53.53/dns-query
 
