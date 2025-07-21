@@ -9,29 +9,54 @@
 #
 # SPDX-License-Identifier: GPL-2.0-only
 
-# 全局配置
-port: 7890                        # HTTP代理端口
-socks-port: 7891                  # SOCKS5代理端口
-redir-port: 7892                  # 透明代理(redirect)端口
-mixed-port: 7893                  # 混合代理端口, 同时支持HTTP和SOCKS5协议
-tproxy-port: 7894                 # TProxy(透明代理)端口
-allow-lan: true                   # 允许局域网内的其他设备连接到mihomo代理服务
-bind-address: "*"                 # 监听的网络接口地址允许所有
-ipv6: false                       # 禁用IPv6支持
-unified-delay: true               # 启用统一的延迟测试方法
-tcp-concurrent: true              # 启用TCP并发连接
-log-level: warning                # 日志输出级别warning
-find-process-mode: 'off'          # 禁用基于进程的流量匹配
-# interface-name: en0              # 绑定网卡名
-global-client-fingerprint: chrome # 设置全局客户端指纹为Chrome浏览器
-keep-alive-idle: 600              # 设置TCP连接的空闲超时时间为600秒
-keep-alive-interval: 15           # 设置TCP保活探测的间隔时间为15秒
-disable-keep-alive: false         # 不禁用TCP保活机制
-profile:
-  store-selected: true            # 启用保存用户手动选择的代理节点
-  store-fake-ip: true             # 启用缓存Fake-IP映射
+## 全局配置
+port: 7890 # HTTP(S)代理服务器端口
+socks-port: 7891 # SOCKS5代理端口
+mixed-port: 10801 # HTTP(S)和SOCKS代理混合端口
+redir-port: 7892 # 透明代理端口，用于Linux和MacOS
 
-# DNS模块
+tproxy-port: 7893 # Linux透明代理服务器端口
+
+allow-lan: true # 允许局域网连接
+bind-address: "*" # 绑定IP地址，仅作用于allow-lan为true，'*'表示所有地址
+skip-auth-prefixes: # 设置跳过验证的 IP 段
+  - 127.0.0.1/8
+  - ::1/128
+lan-allowed-ips: # 允许连接的IP地址段，仅作用于allow-lan为true, 默认值为0.0.0.0/0和::/0
+  - 0.0.0.0/0
+  - ::/0
+
+#  find-process-mode has 3 values:always, strict, off
+#  - always: 开启，强制匹配所有进程
+#  - strict: 默认，由 mihomo 判断是否开启
+#  - off: 不匹配进程，推荐在路由器上使用此模式
+find-process-mode: strict
+
+mode: rule
+
+log-level: warning # 日志等级silent/error/warning/info/debug
+
+ipv6: false # IPv6总开关，关闭阻断所有IPv6链接和屏蔽DNS请求AAAA记录
+
+tcp-concurrent: true # TCP并发连接所有IP, 将使用最快握手的TCP
+
+# interface-name: en0 # 设置出口网卡
+
+# 全局TLS指纹，优先低于proxy内的client-fingerprint
+# 可选： "chrome","firefox","safari","ios","random","none" options.
+# Utls is currently support TLS transport in TCP/grpc/WS/HTTP for VLESS/Vmess and trojan.
+global-client-fingerprint: chrome
+
+# TCP保持活动间隔
+disable-keep-alive: false # 目前在android端强制为true
+keep-alive-idle: 600 # 设置TCP连接的空闲超时时间为600秒
+keep-alive-interval: 15 # 设置TCP保活探测的间隔时间为15秒
+
+profile:
+  store-selected: true # 存储select选择记录
+  store-fake-ip: true # 持久化fake-ip
+
+## DNS模块
 dns:
   enable: true                    # 启用mihomo的DNS模块, 接管系统DNS解析
   enhanced-mode: fake-ip          # 启用Fake-IP模式, 为非直连域名分配虚拟IP (如28.0.0.1/8范围内的IP) 避免直接暴露真实目标IP
