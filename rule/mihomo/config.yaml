@@ -175,7 +175,7 @@ proxy-groups:
   - {name: 📹 YouTube, <<: *main}
   - {name: 🍀 Google, <<: *main}
   - {name: 🤖 AI, <<: *exclusive}
-  - {name: 👨🏿‍💻 GitHub, <<: *main}
+  - {name: 👨‍💻 GitHub, <<: *main}
   - {name: 🦊 GitLab, <<: *main}
   - {name: 🐳 Docker, <<: *main}
   - {name: 🐬 OneDrive, <<: *main}
@@ -214,7 +214,7 @@ rules:
   - RULE-SET,apple_domain,🍎 Apple
   - RULE-SET,proxylite,🚀 默认代理
   - RULE-SET,ai_domain,🤖 AI
-  - RULE-SET,github_domain,👨🏿‍💻 GitHub
+  - RULE-SET,github_domain,👨‍💻 GitHub
   - RULE-SET,gitlab_domain,🦊 GitLab
   - RULE-SET,docker_domain, 🐳 Docker
   - RULE-SET,youtube_domain,📹 YouTube
