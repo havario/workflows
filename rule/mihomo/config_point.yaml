@@ -175,6 +175,7 @@ proxy-groups:
   - {name: 🍀 Google, <<: *main}
   - {name: 🤖 AI, <<: *exclusive}
   - {name: 👨🏿‍💻 GitHub, <<: *main}
+  - {name: 🦊 GitLab, <<: *main}
   - {name: 🐳 Docker, <<: *main}
   - {name: 🐬 OneDrive, <<: *main}
   - {name: 🪟 Microsoft, <<: *main}
@@ -208,14 +209,12 @@ rules:
   - DOMAIN-SUFFIX,localhost,🟢 直连
   - RULE-SET,private_domain,🟢 直连
 
-  # 自定义规则
-  - DOMAIN-SUFFIX,gitlab.com,🚀 默认代理
-
   # 应用分流
   - RULE-SET,apple_domain,🍎 Apple
   - RULE-SET,proxylite,🚀 默认代理
   - RULE-SET,ai_domain,🤖 AI
   - RULE-SET,github_domain,👨🏿‍💻 GitHub
+  - RULE-SET,gitlab_domain,🦊 GitLab
   - RULE-SET,docker_domain, 🐳 Docker
   - RULE-SET,youtube_domain,📹 YouTube
   - RULE-SET,google_domain,🍀 Google
@@ -255,6 +254,7 @@ rule-providers:
   youtube_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/youtube.mrs"}
   google_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/google.mrs"}
   github_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/github.mrs"}
+  gitlab_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/gitlab.mrs"}
   docker_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/docker.mrs"}
   telegram_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/telegram.mrs"}
   netflix_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/netflix.mrs"}
