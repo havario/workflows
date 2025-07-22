@@ -125,7 +125,7 @@ dns:
 
 ## 节点信息
 proxies:
-  - name: 直连
+  - name: "🟢 直连"
     type: direct
     udp: true
   # 链式代理流量走向机制 丨 Mihomo本机 <-> 前置节点 <-> 落地节点 <-> Internet互联网
@@ -138,58 +138,84 @@ proxies:
     password: "12345"
     udp: true
 
-## 机场订阅
+## 订阅合集
 proxy-providers:
   Airport1:
     type: http
     url: "url"
     interval: 3600 # 自动更新时间(秒)
-    proxy: 直连 # 通过直连拉取机场订阅, 该名字是指策略组或某个代理节点的名字
+    proxy: 🟢 直连 # 通过直连拉取机场订阅, 该名字是指策略组或某个代理节点的名字
     health-check: # 节点自动检测延时
       enable: true
       interval: 300
-      url: "http://connectivitycheck.platform.hicloud.com/generate_204"
+      url: "https://cp.cloudflare.com/generate_204"
       # expected-status: 204 # 当健康检查返回状态码与期望值不符时, 认为节点不可用
     override: # 覆写节点加载时的一些配置项
       skip-cert-verify: true
       udp: true
 
-## 出站策略
+## 锚点
+main: &main {type: select, proxies: [⛓️ 链式代理, 🚀 默认代理, ♻️ 自动选择, 🔯 故障转移, 🔮 负载均衡, 🇭🇰 香港节点, 🇹🇼 台湾节点, 🇸🇬 狮城节点, 🇯🇵 日本节点, 🇰🇷 韩国节点, 🇲🇾 马来节点, 🇺🇲 美国节点, 🇬🇧 英国节点, 🇳🇱 荷兰节点, 🇩🇪 德国节点, 🟢 直连]}
+exclusive: &exclusive {type: select, proxies: [⛓️ 链式代理, 🇸🇬 狮城节点, 🇯🇵 日本节点, 🇰🇷 韩国节点, 🇲🇾 马来节点, 🇺🇲 美国节点, 🇬🇧 英国节点, 🇳🇱 荷兰节点, 🇩🇪 德国节点]}
+
+## 代理分组
+# include-all-providers: true 自动引入proxy-providers所有代理集合, 顺序将按照名称排序
 proxy-groups:
-  - {name: 🚀 默认代理, type: select, proxies: [⛓️ 链式代理, 🇭🇰 香港节点, 🇯🇵 日本节点, 🇸🇬 狮城节点, 🇲🇾 马来西亚节点, 🇺🇲 美国节点, 🇳🇱 荷兰节点, 🌐 全部节点]}
-  - {name: 📹 YouTube, type: select, proxies: [⛓️ 链式代理, 🇭🇰 香港节点, 🇯🇵 日本节点, 🇸🇬 狮城节点, 🇲🇾 马来西亚节点, 🇺🇲 美国节点, 🇳🇱 荷兰节点, 🌐 全部节点]}
-  - {name: 🍀 Google, type: select, proxies: [⛓️ 链式代理, 🇭🇰 香港节点, 🇯🇵 日本节点, 🇸🇬 狮城节点, 🇲🇾 马来西亚节点, 🇺🇲 美国节点, 🇳🇱 荷兰节点, 🌐 全部节点]}
-  - {name: 🤖 AI, type: select, proxies: [⛓️ 链式代理, 🇯🇵 日本节点, 🇸🇬 狮城节点, 🇲🇾 马来西亚节点, 🇺🇲 美国节点, 🇳🇱 荷兰节点, 🌐 全部节点]}
-  - {name: 👨🏿‍💻 GitHub, type: select, proxies: [⛓️ 链式代理, 🇭🇰 香港节点, 🇯🇵 日本节点, 🇸🇬 狮城节点, 🇲🇾 马来西亚节点, 🇺🇲 美国节点, 🇳🇱 荷兰节点, 🌐 全部节点]}
-  - {name: 🐬 OneDrive, type: select, proxies: [⛓️ 链式代理, 🇭🇰 香港节点, 🇯🇵 日本节点, 🇸🇬 狮城节点, 🇲🇾 马来西亚节点, 🇺🇲 美国节点, 🇳🇱 荷兰节点, 🌐 全部节点]}
-  - {name: 🪟 Microsoft, type: select, proxies: [⛓️ 链式代理, 🇭🇰 香港节点, 🇯🇵 日本节点, 🇸🇬 狮城节点, 🇲🇾 马来西亚节点, 🇺🇲 美国节点, 🇳🇱 荷兰节点, 🌐 全部节点, 直连]}
-  - {name: 🎵 TikTok, type: select, proxies: [⛓️ 链式代理, 🇯🇵 日本节点, 🇸🇬 狮城节点, 🇲🇾 马来西亚节点, 🇺🇲 美国节点, 🇳🇱 荷兰节点, 🌐 全部节点]}
-  - {name: 📲 Telegram, type: select, proxies: [⛓️ 链式代理, 🇭🇰 香港节点, 🇯🇵 日本节点, 🇸🇬 狮城节点, 🇲🇾 马来西亚节点, 🇺🇲 美国节点, 🇳🇱 荷兰节点, 🌐 全部节点]}
-  - {name: 🎥 NETFLIX, type: select, proxies: [⛓️ 链式代理, 🇸🇬 狮城节点, 🇺🇲 美国节点, 🇳🇱 荷兰节点, 🌐 全部节点]}
-  - {name: ✈️ Speedtest, type: select, proxies: [⛓️ 链式代理, 🇭🇰 香港节点, 🇯🇵 日本节点, 🇸🇬 狮城节点, 🇲🇾 马来西亚节点, 🇺🇲 美国节点, 🇳🇱 荷兰节点, 🌐 全部节点, 直连]}
-  - {name: 💶 PayPal, type: select, proxies: [⛓️ 链式代理, 🇭🇰 香港节点, 🇯🇵 日本节点, 🇸🇬 狮城节点, 🇲🇾 马来西亚节点, 🇺🇲 美国节点, 🇳🇱 荷兰节点, 🌐 全部节点, 直连]}
-  - {name: 🍎 Apple, type: select, proxies: [直连, 🚀 默认代理]}
-  - {name: 🎯 直连, type: select, proxies: [直连]}
-  - {name: 🐟 漏网之鱼, type: select, proxies: [⛓️ 链式代理, 🇭🇰 香港节点, 🇯🇵 日本节点, 🇸🇬 狮城节点, 🇲🇾 马来西亚节点, 🇺🇲 美国节点, 🇳🇱 荷兰节点, 🌐 全部节点, 直连]}
-  - {name: 🇭🇰 香港节点, type: select, include-all: true, filter: "(?i)港|hk|hongkong|hong kong"}
-  - {name: 🇯🇵 日本节点, type: select, include-all: true, filter: "(?i)日|jp|japan"}
-  - {name: 🇸🇬 狮城节点, type: select, include-all: true, filter: "(?i)新加坡|坡|狮城|SG|Singapore"}
-  - {name: 🇲🇾 马来西亚节点, type: select, include-all: true, filter: "(?i)马来|my|mys|malay|malaysia"}
-  - {name: 🇺🇲 美国节点, type: select, include-all: true, filter: "(?i)美|us|unitedstates|united states"}
-  - {name: 🇳🇱 荷兰节点, type: select, include-all: true, filter: "(?i)荷兰|nl|netherlands"}
-  - {name: 🌐 全部节点, type: select, include-all: true}
+  #------------------------基础分组------------------------#
+  - {name: 🚀 默认代理, type: select, proxies: [♻️ 自动选择, 🔯 故障转移, 🔮 负载均衡, ⛓️ 链式代理, 🇭🇰 香港节点, 🇹🇼 台湾节点, 🇸🇬 狮城节点, 🇯🇵 日本节点, 🇰🇷 韩国节点, 🇲🇾 马来节点, 🇺🇲 美国节点, 🇬🇧 英国节点, 🇳🇱 荷兰节点, 🇩🇪 德国节点, 🟢 直连]}
+  # url-test将按照url测试结果使用延迟最低节点
+  - {name: ♻️ 自动选择, type: url-test, include-all-providers: true, tolerance: 100, url: "https://cp.cloudflare.com/generate_204", interval: 300}
+  # fallback将按照url测试结果按照节点顺序选择
+  - {name: 🔯 故障转移, type: fallback, include-all-providers: true, url: "https://cp.cloudflare.com/generate_204", interval: 300}
+  # load-balance将按照算法随机选择节点
+  - {name: 🔮 负载均衡, type: load-balance, include-all-providers: true, url: "https://cp.cloudflare.com/generate_204", interval: 300, strategy: consistent-hashing}
+
+  #------------------------场景分组------------------------#
+  - {name: 📹 YouTube, <<: *main}
+  - {name: 🍀 Google, <<: *main}
+  - {name: 🤖 AI, <<: *exclusive}
+  - {name: 👨🏿‍💻 GitHub, <<: *main}
+  - {name: 🦊 GitLab, <<: *main}
+  - {name: 🐳 Docker, <<: *main}
+  - {name: 🐬 OneDrive, <<: *main}
+  - {name: 🪟 Microsoft, <<: *main}
+  - {name: 🎵 TikTok, <<: *exclusive}
+  - {name: 📲 Telegram, <<: *main}
+  - {name: 🎥 NETFLIX, <<: *exclusive}
+  - {name: ✈️ Speedtest, <<: *main}
+  - {name: 💶 PayPal, <<: *main}
+  - {name: 🍎 Apple, type: select, proxies: [🟢 直连, 🚀 默认代理]}
+
+  #------------------------地区分组------------------------#
+  - {name: 🇭🇰 香港节点, type: url-test, include-all-providers: true, tolerance: 100, filter: "(?i)港|hk|hongkong|hong kong", url: "https://cp.cloudflare.com/generate_204", interval: 300}
+  - {name: 🇹🇼 台湾节点, type: url-test, include-all-providers: true, tolerance: 100, filter: "(?i)台|tw|taiwan|taipei", url: "https://cp.cloudflare.com/generate_204", interval: 300}
+  - {name: 🇸🇬 狮城节点, type: url-test, include-all-providers: true, tolerance: 100, filter: "(?i)新加坡|坡|狮城|SG|Singapore", url: "https://cp.cloudflare.com/generate_204", interval: 300}
+  - {name: 🇯🇵 日本节点, type: url-test, include-all-providers: true, tolerance: 100, filter: "(?i)日本|jp|japan|tokyo|osaka", url: "https://cp.cloudflare.com/generate_204", interval: 300}
+  - {name: 🇰🇷 韩国节点, type: url-test, include-all-providers: true, tolerance: 100, filter: "(?i)韩|kr|korea|seoul", url: "https://cp.cloudflare.com/generate_204", interval: 300}
+  - {name: 🇲🇾 马来节点, type: url-test, include-all-providers: true, tolerance: 100, filter: "(?i)马来|马来西亚|my|mys|malay|malaysia", url: "https://cp.cloudflare.com/generate_204", interval: 300}
+  - {name: 🇺🇲 美国节点, type: url-test, include-all-providers: true, tolerance: 100, filter: "(?i)美|us|united states|america|los angeles|san jose|silicon valley", url: "https://cp.cloudflare.com/generate_204", interval: 300}
+  - {name: 🇬🇧 英国节点, type: url-test, include-all-providers: true, tolerance: 100, filter: "(?i)英|uk|united kingdom|london", url: "https://cp.cloudflare.com/generate_204", interval: 300}
+  - {name: 🇳🇱 荷兰节点, type: url-test, include-all-providers: true, tolerance: 100, filter: "(?i)荷兰|nl|netherlands", url: "https://cp.cloudflare.com/generate_204", interval: 300}
+  - {name: 🇩🇪 德国节点, type: url-test, include-all-providers: true, tolerance: 100, filter: "(?i)德|de|germany|frankfurt", url: "https://cp.cloudflare.com/generate_204", interval: 300}
+
+  #------------------------特殊分组------------------------#
+  - {name: 🎯 全球直连, type: select, proxies: [🟢 直连, 🚀 默认代理]}
+  - {name: 🐟 漏网之鱼, <<: *main}
 
 ## 规则匹配
 rules:
-  - DOMAIN-SUFFIX,gitlab.com,🚀 默认代理
-  - IP-CIDR,10.0.0.0/8,直连
-  - IP-CIDR,172.16.0.0/12,直连
-  - IP-CIDR,192.168.0.0/16,直连
-  - RULE-SET,private_domain,直连
+  # 本地局域网
+  - DOMAIN-SUFFIX,local,🟢 直连
+  - DOMAIN-SUFFIX,localhost,🟢 直连
+  - RULE-SET,private_domain,🟢 直连
+
+  # 应用分流
   - RULE-SET,apple_domain,🍎 Apple
   - RULE-SET,proxylite,🚀 默认代理
   - RULE-SET,ai_domain,🤖 AI
   - RULE-SET,github_domain,👨🏿‍💻 GitHub
+  - RULE-SET,gitlab_domain,🦊 GitLab
+  - RULE-SET,docker_domain, 🐳 Docker
   - RULE-SET,youtube_domain,📹 YouTube
   - RULE-SET,google_domain,🍀 Google
   - RULE-SET,onedrive_domain,🐬 OneDrive
@@ -204,9 +230,12 @@ rules:
   - RULE-SET,google_ip,🍀 Google,no-resolve
   - RULE-SET,netflix_ip,🎥 NETFLIX,no-resolve
   - RULE-SET,telegram_ip,📲 Telegram,no-resolve
-  - RULE-SET,cn_ip,🎯 直连
-  - RULE-SET,cn_domain,🎯 直连
-  - RULE-SET,ntp_domain,🎯 直连
+
+  - RULE-SET,cn_ip,🎯 全球直连
+  - RULE-SET,cn_domain,🎯 全球直连
+  - RULE-SET,ntp_domain,🎯 全球直连
+
+  # 兜底规则
   - MATCH,🐟 漏网之鱼
 
 ## 规则集
@@ -216,6 +245,7 @@ rule-anchor:
   domain: &domain {type: http, interval: 86400, behavior: domain, format: mrs}
   class: &class {type: http, interval: 86400, behavior: classical, format: text}
 
+## 订阅规则
 rule-providers:
   proxylite: { <<: *class, url: "https://raw.githubusercontent.com/qichiyuhub/rule/main/proxy.list"}
 
@@ -224,6 +254,8 @@ rule-providers:
   youtube_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/youtube.mrs"}
   google_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/google.mrs"}
   github_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/github.mrs"}
+  gitlab_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/gitlab.mrs"}
+  docker_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/docker.mrs"}
   telegram_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/telegram.mrs"}
   netflix_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/netflix.mrs"}
   paypal_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/paypal.mrs"}
