@@ -11,6 +11,7 @@ jobs:
     name: 'Build and Publish nezha-dashboard'
     runs-on: ubuntu-latest
     env:
+      IPINFO_TOKEN: ${{ secrets.IPINFO_TOKEN }}
       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
       DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
 
