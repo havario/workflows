@@ -1,5 +1,10 @@
+# Description: This dockerfile is builds nezha dashboard with a new geoip database to fix correct country flag display.
 #
 # Copyright (c) 2025 honeok <i@honeok.com>
+#
+# References:
+# https://github.com/nezhahq/nezha
+#
 # SPDX-License-Identifier: Apache-2.0
 
 ARG NEZHA_VERSION=""
