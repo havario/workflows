@@ -41,8 +41,8 @@ jobs:
       - name: 'Build and Push nezha-dashboard image'
         uses: docker/build-push-action@v6.18.0
         with:
-          context: ${{ github.workspace }}/nezha-dashboard
-          file: ${{ github.workspace }}/nezha-dashboard/Dockerfile
+          context: ${{ github.workspace }}/forge/nezha-dashboard
+          file: ${{ github.workspace }}/forge/nezha-dashboard/Dockerfile
           platforms: linux/amd64, linux/arm64/v8
           build-args: NEZHA_VERSION=v0.18.6
           tags: "${{ env.DOCKER_USERNAME }}/nezha-dashboard:v0.18.6"
