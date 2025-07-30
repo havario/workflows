@@ -20,7 +20,11 @@ RUN set -ex \
     && git clone --depth=1 --branch ${NEZHA_VERSION} https://github.com/nezhahq/nezha.git .
 COPY geoip.db /go/src/github.com/nezhahq/nezha/pkg/geoip/geoip.db
 RUN set -ex \
-    && go build -v -trimpath -ldflags="-s -w -buildid= -extldflags '-static -fpic'" -o /go/bin/dashboard ./cmd/dashboard
+    && go build -v -trimpath -ldflags="\
+    -s -w -buildid= \
+    -X 'github.com/naiba/nezha/service/singleton.Version=${NEZHA_VERSION#v}' \
+    -extldflags '-static -fpic' \
+    " -o /go/bin/dashboard ./cmd/dashboard
 
 FROM ghcr.io/naiba/nezha-dashboard:${NEZHA_VERSION} AS dist
 LABEL maintainer="honeok <i@honeok.com>"
