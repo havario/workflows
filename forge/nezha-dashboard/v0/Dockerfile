@@ -3,7 +3,7 @@
 # Copyright (c) 2025 honeok <i@honeok.com>
 #
 # References:
-# http://github.com/naiba/nezha
+# https://github.com/naiba/nezha
 #
 # SPDX-License-Identifier: Apache-2.0
 
