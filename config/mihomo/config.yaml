@@ -175,6 +175,7 @@ proxy-groups:
   - {name: 📹 YouTube, <<: *main}
   - {name: 🍀 Google, <<: *main}
   - {name: 🤖 AI, <<: *exclusive}
+  - {name: 📺 BiliBili, type: select, proxies: [🚀 默认代理, 🇭🇰 香港节点, 🇹🇼 台湾节点, 🟢 直连]}
   - {name: 👨‍💻 GitHub, <<: *main}
   - {name: 🦊 GitLab, <<: *main}
   - {name: 🐳 Docker, <<: *main}
@@ -185,7 +186,7 @@ proxy-groups:
   - {name: 🎥 NETFLIX, <<: *exclusive}
   - {name: ✈️ Speedtest, <<: *main}
   - {name: 💶 PayPal, <<: *main}
-  - {name: 🍎 Apple, type: select, proxies: [🟢 直连, 🚀 默认代理]}
+  - {name: 🍎 Apple, <<: *main}
 
   #------------------------地区分组------------------------#
   - {name: 🇭🇰 香港节点, type: url-test, include-all-providers: true, tolerance: 100, filter: "(?i)港|hk|hongkong|hong kong", url: "https://cp.cloudflare.com/generate_204", interval: 300}
@@ -214,6 +215,7 @@ rules:
   - RULE-SET,apple_domain,🍎 Apple
   - RULE-SET,proxylite,🚀 默认代理
   - RULE-SET,ai_domain,🤖 AI
+  - RULE-SET,bilibili_domain,📺 BiliBili
   - RULE-SET,github_domain,👨‍💻 GitHub
   - RULE-SET,gitlab_domain,🦊 GitLab
   - RULE-SET,docker_domain, 🐳 Docker
@@ -253,6 +255,7 @@ rule-providers:
 
   private_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/private.mrs"}
   ai_domain: { <<: *domain, url: "https://github.com/MetaCubeX/meta-rules-dat/raw/meta/geo/geosite/category-ai-!cn.mrs" }
+  bilibili_domain: { <<: *domain, url: "https://github.com/MetaCubeX/meta-rules-dat/raw/meta/geo/geosite/bilibili.mrs" }
   youtube_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/youtube.mrs"}
   google_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/google.mrs"}
   github_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/github.mrs"}
