@@ -1,1 +1,3 @@
-upstream.sh
+.idea/
+.vscode/
+upstream.*
