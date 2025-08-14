@@ -59,7 +59,7 @@ jobs:
           file: ${{ github.workspace }}/forge/nezha-dashboard/Dockerfile
           platforms: linux/amd64, linux/arm64/v8
           build-args: |
-            NEZHA_VERSION=${{ matrix.NEZHA_VERSION }}
             BUILD_DATE=${{ env.BUILD_DATE }}
+            NEZHA_VERSION=${{ matrix.NEZHA_VERSION }}
           tags: "${{ env.DOCKER_USERNAME }}/nezha-dashboard:${{ matrix.NEZHA_VERSION }}"
           push: true

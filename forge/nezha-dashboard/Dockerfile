@@ -7,8 +7,8 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-ARG NEZHA_VERSION=""
 ARG BUILD_DATE=""
+ARG NEZHA_VERSION=""
 
 FROM golang:1.21-alpine AS builder
 LABEL org.opencontainers.image.authors="honeok <i@honeok.com>" \
