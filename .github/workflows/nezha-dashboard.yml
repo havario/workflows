@@ -31,13 +31,11 @@ jobs:
           fetch-depth: 0
 
       - name: 'Download geoip db file'
-        shell: bash
         run: |
           cd ${{ github.workspace }}/forge/nezha-dashboard
           wget --tries=50 -qO geoip.db https://ipinfo.io/data/free/country.mmdb?token=${IPINFO_TOKEN}
 
       - name: 'Generate build time'
-        shell: bash
         run: BUILD_DATE="$(TZ=Asia/Shanghai date "+%Y-%m-%dT%H:%M:%S")" >> $GITHUB_ENV
 
       - name: 'Set up Docker QEMU'
