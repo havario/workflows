@@ -27,6 +27,13 @@
     "rules": [
       {
         "type": "field",
+        "protocol": [
+          "bittorrent"
+        ],
+        "outboundTag": "block"
+      },
+      {
+        "type": "field",
         "ip": [
           "geoip:private"
         ],
@@ -36,13 +43,6 @@
         "type": "field",
         "ip": [
           "geoip:cn"
-        ],
-        "outboundTag": "block"
-      },
-      {
-        "type": "field",
-        "protocol": [
-          "bittorrent"
         ],
         "outboundTag": "block"
       },
