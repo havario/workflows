@@ -11,6 +11,9 @@
 
 set -eE
 
+# 设置PATH环境变量
+export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:$PATH
+
 # 各变量默认值
 RANDOM_CHAR="$(head /dev/urandom | tr -dc 'A-Za-z0-9' | head -c 5)"
 TEMP_DIR="/tmp/geodat_$RANDOM_CHAR"
