@@ -21,7 +21,7 @@ bash <(curl -Ls https://github.com/honeok/cross/raw/master/config/xray-core/geod
 Automatic updates based on crontab
 
 ```shell
-(crontab -l 2>/dev/null; echo "0 0 * * * /bin/bash -c 'bash <(curl -Ls https://github.com/honeok/cross/raw/master/config/xray-core/geodat.sh)'") | crontab -
+(crontab -l 2>/dev/null; echo "0 7 * * * /bin/bash -c 'bash <(curl -Ls https://github.com/honeok/cross/raw/master/config/xray-core/geodat.sh)'") | crontab -
 ```
 
 [1]: https://github.com/XTLS
