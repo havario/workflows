@@ -6,11 +6,11 @@
 
 This repository uses [233boy's script][1] to install Xray-core and then applies a custom configuration.
 
-**Install**
-
 ```shell
 bash <(curl -Ls https://github.com/233boy/Xray/raw/main/install.sh)
 ```
+
+This script is used to fetches and updates the latest geo data file automatically.
 
 ```shell
 (crontab -l 2>/dev/null; echo "0 0 * * * /bin/bash -c 'bash <(curl -Ls https://github.com/havario/workflows/raw/master/config/xray-core/geodat.sh)'") | crontab -
