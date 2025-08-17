@@ -12,13 +12,13 @@ bash <(curl -Ls https://github.com/233boy/Xray/raw/main/install.sh)
 
 This script is used to fetches and updates the latest geo data file automatically.
 
-Manual update
+Manual update.
 
 ```shell
 bash <(curl -Ls https://github.com/honeok/cross/raw/master/config/xray-core/geodat.sh)
 ```
 
-Automatic updates based on crontab
+Automatic update on crontab.
 
 ```shell
 (crontab -l 2>/dev/null; echo "0 7 * * * /bin/bash -c 'bash <(curl -Ls https://github.com/honeok/cross/raw/master/config/xray-core/geodat.sh)'") | crontab -
