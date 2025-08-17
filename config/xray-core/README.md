@@ -4,6 +4,10 @@
 
 <img src="https://raw2.seadn.io/ethereum/0x5ee362866001613093361eb8569d59c4141b76d1/7fa9ce900fb39b44226348db330e32/8b7fa9ce900fb39b44226348db330e32.svg" alt="Project X NFT" width="150"/>
 
+This repository uses [233boy's script][1] to install Xray-core and then applies a custom configuration.
+
+**Install**
+
 ```shell
 bash <(curl -Ls https://github.com/233boy/Xray/raw/main/install.sh)
 ```
@@ -11,3 +15,5 @@ bash <(curl -Ls https://github.com/233boy/Xray/raw/main/install.sh)
 ```shell
 (crontab -l 2>/dev/null; echo "0 0 * * * /bin/bash -c 'bash <(curl -Ls https://github.com/havario/workflows/raw/master/config/xray-core/geodat.sh)'") | crontab -
 ```
+
+[1]: https://github.com/233boy/Xray
