@@ -41,5 +41,5 @@ for GEO_FILE in "${GEO_FILES[@]}"; do
     sha256sum -c "$GEO_FILE.dat.sha256sum"
 done
 
-mv -f ./*.dat "$XRAY_BINDIR"/
+[ -d "$XRAY_BINDIR" ] && mv -f ./*.dat "$XRAY_BINDIR"/
 systemctl restart xray.service --quiet
