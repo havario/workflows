@@ -14,6 +14,11 @@ set -eE
 # 各变量默认值
 RANDOM_CHAR="$(head /dev/urandom | tr -dc 'A-Za-z0-9' | head -c 5)"
 TEMP_DIR="/tmp/geodat_$RANDOM_CHAR"
+XRAY_WORKDIR="/etc/xray"
+XRAY_BINDIR="$XRAY_WORKDIR/bin"
+
+# 定义下载文件列表
+declare -a GEO_FILES=("geoip" "geosite")
 
 # 终止信号捕获退出前清理操作
 _exit() {
@@ -27,16 +32,14 @@ trap '_exit' SIGINT SIGQUIT SIGTERM EXIT
 
 # 临时工作目录
 mkdir -p "$TEMP_DIR" >/dev/null 2>&1
-if [ "$(cd -P -- "$(dirname -- "$0")" && pwd -P)" != "$TEMP_DIR" ]; then
-    cd "$TEMP_DIR" >/dev/null 2>&1
-fi
+cd "$TEMP_DIR" >/dev/null 2>&1
 
-curl --retry 2 -LsO https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geoip.dat
-curl --retry 2 -LsO https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geoip.dat.sha256sum
-sha256sum -c geoip.dat.sha256sum
-curl --retry 2 -LsO https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geosite.dat
-curl --retry 2 -LsO https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geosite.dat.sha256sum
-sha256sum -c geosite.dat.sha256sum
+# 下载数据文件和校验文件
+for GEO_FILE in "${GEO_FILES[@]}"; do
+    curl --retry 2 -LsO "https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/$GEO_FILE.dat"
+    curl --retry 2 -LsO "https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/$GEO_FILE.dat.sha256sum"
+    sha256sum -c "$GEO_FILE.dat.sha256sum"
+done
 
-mv -f *.dat /etc/xray/bin
+mv -f ./*.dat "$XRAY_BINDIR"/
 systemctl restart xray.service --quiet
