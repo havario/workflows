@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 #
 # Description: This script is used to fetches and updates the latest geo data file automatically.
 #
