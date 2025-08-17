@@ -41,7 +41,7 @@ cd "$TEMP_DIR" >/dev/null 2>&1
 for GEO_FILE in "${GEO_FILES[@]}"; do
     curl --retry 2 -LsO "https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/$GEO_FILE.dat"
     curl --retry 2 -LsO "https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/$GEO_FILE.dat.sha256sum"
-    sha256sum -c "$GEO_FILE.dat.sha256sum"
+    sha256sum -c "$GEO_FILE.dat.sha256sum" >/dev/null 2>&1
 done
 
 [ -d "$XRAY_BINDIR" ] && mv -f ./*.dat "$XRAY_BINDIR"/
