@@ -18,7 +18,7 @@ Manual update.
 bash <(curl -Ls https://github.com/honeok/cross/raw/master/config/xray-core/geodat.sh)
 ```
 
-Automatic update on crontab.
+Automatic update.
 
 ```shell
 (crontab -l 2>/dev/null; echo "0 7 * * * /bin/bash -c 'bash <(curl -Ls https://github.com/honeok/cross/raw/master/config/xray-core/geodat.sh)'") | crontab -
