@@ -16,10 +16,14 @@ WORKDIR /go/src/github.com/nezhahq/nezha
 ENV CGO_ENABLED=1
 ENV CGO_CFLAGS="-D_LARGEFILE64_SOURCE=1"
 RUN set -ex \
-    && apk add --update --no-cache git gcc musl-dev \
+    && apk add --update --no-cache bash curl git gcc musl-dev yq \
     && git clone --depth=1 --branch ${NEZHA_VERSION} https://github.com/nezhahq/nezha.git .
 COPY geoip.db /go/src/github.com/nezhahq/nezha/pkg/geoip/geoip.db
 RUN set -ex \
+    && chmod +x ./script/fetch-frontends.sh && ./script/fetch-frontends.sh \
+    && go install github.com/swaggo/swag/cmd/swag@latest \
+    && swag init --pd -d . -g ./cmd/dashboard/main.go -o ./cmd/dashboard/docs --parseGoList=false \
+    && go mod tidy -v \
     && go build -v -trimpath -ldflags="\
     -s -w -buildid= \
     -X 'github.com/nezhahq/nezha/service/singleton.Version=${NEZHA_VERSION#v}' \
