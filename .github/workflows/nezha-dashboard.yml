@@ -32,7 +32,7 @@ jobs:
 
       - name: 'Download geoip db file'
         run: |
-          cd ${{ github.workspace }}/forge/nezha-dashboard/v0
+          cd ${{ github.workspace }}/forge/nezha-dashboard
           wget --tries=50 -qO geoip.db https://ipinfo.io/data/free/country.mmdb?token=${IPINFO_TOKEN}
 
       - name: 'Set up Docker QEMU'
@@ -50,15 +50,15 @@ jobs:
       - name: 'Build and Push nezha-dashboard image'
         uses: docker/build-push-action@v6.18.0
         with:
-          context: ${{ github.workspace }}/forge/nezha-dashboard/v0
-          file: ${{ github.workspace }}/forge/nezha-dashboard/v0/Dockerfile
+          context: ${{ github.workspace }}/forge/nezha-dashboard
+          file: ${{ github.workspace }}/forge/nezha-dashboard/Dockerfile.v0
           platforms: linux/amd64, linux/arm64/v8
           build-args: NEZHA_VERSION=${{ matrix.NEZHA_VERSION }}
           tags: "${{ env.DOCKER_USERNAME }}/nezha-dashboard:${{ matrix.NEZHA_VERSION }}"
           push: true
 
   build_v1:
-    name: 'Build and Publish nezha-dashboard'
+    name: 'Build and Publish nezha-dashboard v1'
     runs-on: ubuntu-latest
 
     steps:
@@ -74,7 +74,7 @@ jobs:
 
       - name: 'Download geoip db file'
         run: |
-          cd ${{ github.workspace }}/forge/nezha-dashboard/v1
+          cd ${{ github.workspace }}/forge/nezha-dashboard
           wget --tries=50 -qO geoip.db https://ipinfo.io/data/free/country.mmdb?token=${IPINFO_TOKEN}
 
       - name: 'Set up Docker QEMU'
@@ -92,8 +92,8 @@ jobs:
       - name: 'Build and Push nezha-dashboard image'
         uses: docker/build-push-action@v6.18.0
         with:
-          context: ${{ github.workspace }}/forge/nezha-dashboard/v1
-          file: ${{ github.workspace }}/forge/nezha-dashboard/v1/Dockerfile
+          context: ${{ github.workspace }}/forge/nezha-dashboard
+          file: ${{ github.workspace }}/forge/nezha-dashboard/Dockerfile.v1
           platforms: linux/amd64, linux/arm64/v8
           build-args: NEZHA_VERSION=${{ env.NEZHA_VERSION }}
           tags: "${{ env.DOCKER_USERNAME }}/nezha-dashboard:${{ env.NEZHA_VERSION }}"
