@@ -83,7 +83,7 @@ dns:
     - "+.localdomain"
     - "+.msftconnecttest.com"
     - "+.msftncsi.com"
-    - localhost.ptlogin2.qq.com
+    - "localhost.ptlogin2.qq.com"
   fake-ip-filter-mode: blacklist  # 配置fake-ip-filter的匹配模式, 默认为blacklist, 即如果匹配成功不返回fake-ip
 
   # use-hosts: true # 查询hosts
