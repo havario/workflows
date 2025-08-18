@@ -31,6 +31,6 @@ RUN set -ex \
     -extldflags '-static -fpic' \
     " -o /go/bin/dashboard ./cmd/dashboard
 
-FROM ghcr.io/naiba/nezha-dashboard:${NEZHA_VERSION} AS dist
+FROM ghcr.io/nezhahq/nezha:${NEZHA_VERSION} AS dist
 LABEL maintainer="honeok <i@honeok.com>"
 COPY --from=builder /go/bin/dashboard /dashboard/app
