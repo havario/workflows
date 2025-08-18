@@ -16,7 +16,7 @@ WORKDIR /go/src/github.com/nezhahq/nezha
 ENV CGO_ENABLED=1
 ENV CGO_CFLAGS="-D_LARGEFILE64_SOURCE=1"
 RUN set -ex \
-    && apk add --update --no-cache bash curl git gcc musl-dev yq \
+    && apk add --update --no-cache bash curl git gcc musl-dev yq-go \
     && git clone --depth=1 --branch ${NEZHA_VERSION} https://github.com/nezhahq/nezha.git .
 COPY geoip.db /go/src/github.com/nezhahq/nezha/pkg/geoip/geoip.db
 RUN set -ex \
