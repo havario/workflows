@@ -1,4 +1,4 @@
-# Description: This dockerfile is builds nezha dashboard with a new geoip database to fix correct country flag display.
+# Description: This dockerfile is used to build nezha dashboard v0 with the new geoip database to fix the correct national flag display.
 #
 # Copyright (c) 2025 honeok <i@honeok.com>
 #
