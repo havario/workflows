@@ -20,7 +20,8 @@ RUN set -ex \
     && git clone --depth=1 --branch ${NEZHA_VERSION} https://github.com/nezhahq/nezha.git .
 COPY geoip.db /go/src/github.com/nezhahq/nezha/pkg/geoip/geoip.db
 RUN set -ex \
-    && chmod +x ./script/fetch-frontends.sh && ./script/fetch-frontends.sh \
+    && chmod +x ./script/fetch-frontends.sh \
+    && ./script/fetch-frontends.sh \
     && go install github.com/swaggo/swag/cmd/swag@latest \
     && swag init --pd -d . -g ./cmd/dashboard/main.go -o ./cmd/dashboard/docs --parseGoList=false \
     && go mod tidy -v \
