@@ -30,10 +30,6 @@ docker pull honeok/nezha-dashboard
 
 It can be found at [Docker Hub][1] and view the build records on [GitHub][2].
 
-## Special Thanks
-
-- [IPInfo](https://ipinfo.io) for providing an accurate GeoIP Database.
-
 ## Acknowledgements
 
 - All developers of the Nezha Probe project.
@@ -100,6 +96,10 @@ It can be found at [Docker Hub][1] and view the build records on [GitHub][2].
 <a href="https://github.com/Es-dese" title="Esdese"><img src="https://avatars.githubusercontent.com/u/71542548?v=4" width="50;" alt="Esdese"/></a>
 <a href="https://github.com/wwng2333" title=":D"><img src="https://avatars.githubusercontent.com/u/17147265?v=4" width="50;" alt=":D"/></a>
 <a href="https://github.com/wellcoming" title="Coming"><img src="https://avatars.githubusercontent.com/u/74850890?v=4" width="50;" alt="Coming"/></a><!--GAMFC_DELIMITER_END-->
+
+## Special Thanks
+
+- [IPInfo](https://ipinfo.io) for providing an accurate GeoIP Database.
 
 [1]: https://hub.docker.com/r/honeok/nezha-dashboard
 [2]: https://github.com/honeok/tools/tree/master/forge/nezha-dashboard
