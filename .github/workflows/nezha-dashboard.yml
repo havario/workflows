@@ -31,7 +31,9 @@ jobs:
           fetch-depth: 0
 
       - name: 'Download geoip db file'
-        run: wget --tries=50 -qO geoip.db https://ipinfo.io/data/free/country.mmdb?token=${IPINFO_TOKEN}
+        run: |
+          cd ${{ github.workspace }}
+          wget --tries=50 -qO geoip.db https://ipinfo.io/data/free/country.mmdb?token=${IPINFO_TOKEN}
 
       - name: 'Set up Docker QEMU'
         uses: docker/setup-qemu-action@v3.6.0
@@ -48,8 +50,8 @@ jobs:
       - name: 'Build and Push nezha-dashboard image'
         uses: docker/build-push-action@v6.18.0
         with:
-          context: ./v0
-          file: Dockerfile
+          context: ${{ github.workspace }}/v0
+          file: ${{ github.workspace }}/v0/Dockerfile
           platforms: linux/amd64, linux/arm64/v8
           build-args: NEZHA_VERSION=${{ matrix.NEZHA_VERSION }}
           tags: "${{ env.DOCKER_USERNAME }}/nezha-dashboard:${{ matrix.NEZHA_VERSION }}"
@@ -71,7 +73,9 @@ jobs:
           echo "NEZHA_VERSION=$NEZHA_VERSION" >> $GITHUB_ENV
 
       - name: 'Download geoip db file'
-        run: wget --tries=50 -qO geoip.db https://ipinfo.io/data/free/country.mmdb?token=${IPINFO_TOKEN}
+        run: |
+          cd ${{ github.workspace }}
+          wget --tries=50 -qO geoip.db https://ipinfo.io/data/free/country.mmdb?token=${IPINFO_TOKEN}
 
       - name: 'Set up Docker QEMU'
         uses: docker/setup-qemu-action@v3.6.0
@@ -88,8 +92,8 @@ jobs:
       - name: 'Build and Push nezha-dashboard image'
         uses: docker/build-push-action@v6.18.0
         with:
-          context: ./v1
-          file: Dockerfile
+          context: ${{ github.workspace }}/v1
+          file: ${{ github.workspace }}/v1/Dockerfile
           platforms: linux/amd64, linux/arm64/v8
           build-args: NEZHA_VERSION=${{ env.NEZHA_VERSION }}
           tags: "${{ env.DOCKER_USERNAME }}/nezha-dashboard:${{ env.NEZHA_VERSION }}"
