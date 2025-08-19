@@ -32,7 +32,7 @@ It can be found at [Docker Hub][1] and view the build records on [GitHub][2].
 
 ## Acknowledgements
 
-- All developers of the Nezha Probe project.
+All developers of the Nezha Probe project.
 
 <!--GAMFC_DELIMITER--><a href="https://github.com/naiba" title="naiba"><img src="https://avatars.githubusercontent.com/u/29243953?v=4" width="50;" alt="naiba"/></a>
 <a href="https://github.com/uubulb" title="UUBulb"><img src="https://avatars.githubusercontent.com/u/35923940?v=4" width="50;" alt="UUBulb"/></a>
