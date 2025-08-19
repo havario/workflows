@@ -7,3 +7,18 @@
   <p>:trollface: <b>Nezha Monitoring: Self-hostable, lightweight, servers and websites monitoring and O&M tool.</b></p>
   <p>Supports <b>monitoring</b> system status, HTTP (SSL certificate change, upcoming expiration, expired), TCP, Ping and supports <b>push alerts</b>, run scheduled tasks and <b>web terminal</b>.</p>
 </div>
+
+The sole purpose is to update the GeoIP database to correct the country flag display.
+
+```shell
+docker pull honeok/nezha-dashboard
+```
+
+This pulls the latest release of Nezha-dashboard.
+
+It can be found at [Docker Hub][1].
+
+You can find the build records on [GitHub][2].
+
+[1]: https://hub.docker.com/r/honeok/nezha-dashboard
+[2]: https://github.com/honeok/tools/tree/master/forge/nezha-dashboard
