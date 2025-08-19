@@ -14,8 +14,6 @@
   <a href="https://hub.docker.com/r/honeok/nezha-dashboard"><img src="https://img.shields.io/docker/v/honeok/nezha-dashboard.svg?style=flat-square" alt="Docker Image Version"></a>
 </div>
 
-![image](https://cdn.skyimg.net/up/2025/8/19/8e036a4d.webp)
-
 ## Purpose
 
 The sole purpose of this Docker image is to update the GeoIP database to correct the country flag display in Nezha Dashboard.
