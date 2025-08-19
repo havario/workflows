@@ -9,9 +9,9 @@
 </div>
 
 <div align="center">
-  [![Docker Pulls](https://img.shields.io/docker/pulls/honeok/nezha-dashboard.svg?style=flat-square)](https://hub.docker.com/r/honeok/nezha-dashboard)
-  [![Docker Image Size](https://img.shields.io/docker/image-size/honeok/nezha-dashboard.svg?style=flat-square)](https://hub.docker.com/r/honeok/nezha-dashboard)
-  [![Docker Image Version](https://img.shields.io/docker/v/honeok/nezha-dashboard.svg?style=flat-square)](https://hub.docker.com/r/honeok/nezha-dashboard)
+  <a href="https://hub.docker.com/r/honeok/nezha-dashboard"><img src="https://img.shields.io/docker/pulls/honeok/nezha-dashboard.svg?style=flat-square" alt="Docker Pulls"></a>
+  <a href="https://hub.docker.com/r/honeok/nezha-dashboard"><img src="https://img.shields.io/docker/image-size/honeok/nezha-dashboard.svg?style=flat-square" alt="Docker Image Size"></a>
+  <a href="https://hub.docker.com/r/honeok/nezha-dashboard"><img src="https://img.shields.io/docker/v/honeok/nezha-dashboard.svg?style=flat-square" alt="Docker Image Version"></a>
 </div>
 
 ## Purpose
