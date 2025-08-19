@@ -8,7 +8,7 @@
   <p>Supports <b>monitoring</b> system status, HTTP (SSL certificate change, upcoming expiration, expired), TCP, Ping and supports <b>push alerts</b>, run scheduled tasks and <b>web terminal</b>.</p>
 </div>
 
-***
+## Pull the image
 
 The sole purpose is to update the GeoIP database to correct the country flag display.
 
