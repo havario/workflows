@@ -8,9 +8,15 @@
   <p>Supports <b>monitoring</b> system status, HTTP (SSL certificate change, upcoming expiration, expired), TCP, Ping and supports <b>push alerts</b>, run scheduled tasks and <b>web terminal</b>.</p>
 </div>
 
-## Pull the image
+[![Docker Pulls](https://img.shields.io/docker/pulls/honeok/nezha-dashboard.svg?style=flat-square)](https://hub.docker.com/r/honeok/nezha-dashboard)
+[![Docker Image Size](https://img.shields.io/docker/image-size/honeok/nezha-dashboard.svg?style=flat-square)](https://hub.docker.com/r/honeok/nezha-dashboard)
+[![Docker Image Version](https://img.shields.io/docker/v/honeok/nezha-dashboard.svg?style=flat-square)](https://hub.docker.com/r/honeok/nezha-dashboard)
+
+## Purpose
 
 The sole purpose is to update the GeoIP database to correct the country flag display.
+
+## Pull the image
 
 ```shell
 docker pull honeok/nezha-dashboard
@@ -21,6 +27,10 @@ This pulls the latest release of Nezha-dashboard.
 It can be found at [Docker Hub][1].
 
 You can find the build records on [GitHub][2].
+
+## Special Thanks
+
+- [IPInfo](https://ipinfo.io) for providing an accurate GeoIP Database.
 
 [1]: https://hub.docker.com/r/honeok/nezha-dashboard
 [2]: https://github.com/honeok/tools/tree/master/forge/nezha-dashboard
