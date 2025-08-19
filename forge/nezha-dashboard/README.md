@@ -8,9 +8,11 @@
   <p>Supports <b>monitoring</b> system status, HTTP (SSL certificate change, upcoming expiration, expired), TCP, Ping and supports <b>push alerts</b>, run scheduled tasks and <b>web terminal</b>.</p>
 </div>
 
-[![Docker Pulls](https://img.shields.io/docker/pulls/honeok/nezha-dashboard.svg?style=flat-square)](https://hub.docker.com/r/honeok/nezha-dashboard)
-[![Docker Image Size](https://img.shields.io/docker/image-size/honeok/nezha-dashboard.svg?style=flat-square)](https://hub.docker.com/r/honeok/nezha-dashboard)
-[![Docker Image Version](https://img.shields.io/docker/v/honeok/nezha-dashboard.svg?style=flat-square)](https://hub.docker.com/r/honeok/nezha-dashboard)
+<div align="center">
+  [![Docker Pulls](https://img.shields.io/docker/pulls/honeok/nezha-dashboard.svg?style=flat-square)](https://hub.docker.com/r/honeok/nezha-dashboard)
+  [![Docker Image Size](https://img.shields.io/docker/image-size/honeok/nezha-dashboard.svg?style=flat-square)](https://hub.docker.com/r/honeok/nezha-dashboard)
+  [![Docker Image Version](https://img.shields.io/docker/v/honeok/nezha-dashboard.svg?style=flat-square)](https://hub.docker.com/r/honeok/nezha-dashboard)
+</div>
 
 ## Purpose
 
