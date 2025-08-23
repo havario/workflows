@@ -1,0 +1,57 @@
+---
+name: 'Build and Publish nezha-dashboard'
+
+on:
+  schedule:
+    - cron: '0 16 1 * *'
+  workflow_dispatch:
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  build_v0:
+    name: 'Build and Publish nezha-dashboard v0'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 'Check out repository'
+        uses: actions/checkout@v5.0.0
+        with:
+          fetch-depth: 0
+
+      - name: 'Sleep'
+        run: |
+          sleep 30s
+
+  build_v1:
+    name: 'Build and Publish nezha-dashboard v1'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 'Check out repository'
+        uses: actions/checkout@v5.0.0
+        with:
+          fetch-depth: 0
+
+      - name: 'Sleep'
+        run: |
+          sleep 30s
+
+  cleaning_workflow:
+    needs:
+      - build_v0
+      - build_v1
+    name: 'Cleaning up old workflows'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Delete old workflow runs
+        uses: Mattraks/delete-workflow-runs@v2.0.6
+        with:
+          token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          retain_days: 0
+          keep_minimum_runs: 0
+          delete_run_by_conclusion_pattern: "cancelled, skipped, success"
