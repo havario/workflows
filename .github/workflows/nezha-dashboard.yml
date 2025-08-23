@@ -40,10 +40,10 @@ jobs:
           sleep 30s
 
   cleaning_workflow:
+    name: 'Cleaning up old workflows'
     needs:
       - build_v0
       - build_v1
-    name: 'Cleaning up old workflows'
     runs-on: ubuntu-latest
 
     steps:
