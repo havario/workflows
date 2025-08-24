@@ -1,0 +1,24 @@
+---
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "saturday"
+      time: "16:00"
+    target-branch: "master"
+    open-pull-requests-limit: 10
+    commit-message:
+      prefix: "chore"
+
+  - package-ecosystem: "docker"
+    directory: "/v1"
+    schedule:
+      interval: "weekly"
+      day: "saturday"
+      time: "16:00"
+    target-branch: "master"
+    open-pull-requests-limit: 10
+    commit-message:
+      prefix: "chore"
