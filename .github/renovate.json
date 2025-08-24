@@ -1,0 +1,31 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:base"
+  ],
+  "baseBranches": [
+    "master"
+  ],
+  "prConcurrentLimit": 10,
+  "packageRules": [
+    {
+      "matchManagers": [
+        "github-actions",
+        "dockerfile"
+      ],
+      "commitMessagePrefix": "chore",
+      "schedule": [
+        "at 16:00 on Saturday"
+      ]
+    },
+    {
+      "matchManagers": [
+        "dockerfile"
+      ],
+      "excludeFileNames": [
+        "v1/Dockerfile"
+      ],
+      "enabled": false
+    }
+  ]
+}
