@@ -9,7 +9,7 @@
 
 ARG NEZHA_VERSION=""
 
-FROM golang:1.23-alpine AS builder
+FROM golang:1.25-alpine AS builder
 LABEL maintainer="honeok <i@honeok.com>"
 ARG NEZHA_VERSION=""
 WORKDIR /go/src/github.com/nezhahq/nezha
