@@ -8,7 +8,7 @@ As the project's core, it functions as a high-performance superset of v2fly-core
 
 ## Prepare the host
 
-If you need to install docker by yourself, follow the [official installation guide][4].
+If you need to install docker by yourself, follow the [official][4] installation guide.
 
 ## Pull the image
 
