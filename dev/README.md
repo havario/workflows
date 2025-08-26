@@ -32,13 +32,10 @@ touch "$PWD/config.json"
 
 Next, create `docker-compose.yaml`.
 
-```shell
-vim docker-compose.yaml
-```
-
 Add the following content to the `docker-compose.yaml`  file.
 
-```yaml
+```shell
+cat <<'EOF' | tee docker-compose.yaml >/dev/null
 services:
   xray:
     image: honeok/xray
@@ -48,6 +45,7 @@ services:
       - $PWD/config.json:/etc/xray/config.json
       - $PWD/conf:/etc/xray/conf
     network_mode: host
+EOF
 ```
 
 Finally, run the following command to start the container.
