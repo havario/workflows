@@ -1,4 +1,4 @@
-## Xray
+# Xray
 
 [Project X][1] originates from XTLS protocol, providing a set of network tools such as [Xray-core][2] and [REALITY][3].
 
