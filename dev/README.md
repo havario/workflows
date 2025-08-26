@@ -35,7 +35,7 @@ Next, create `docker-compose.yaml`.
 Add the following content to the `docker-compose.yaml`  file.
 
 ```shell
-cat <<'EOF' | tee docker-compose.yaml >/dev/null
+tee docker-compose.yaml >/dev/null <<'EOF'
 services:
   xray:
     image: honeok/xray
