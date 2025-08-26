@@ -57,7 +57,7 @@ docker compose up -d
 Get the randomly generated `REALITY` configuration by viewing the container log.
 
 ```shell
-docker logs -f sing-box
+docker logs -f xray
 ```
 
 For reference, you can check the [Configuration][6] for Xray-core.
