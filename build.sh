@@ -15,8 +15,9 @@ sed -i 's#https://unpkg.com/semantic-ui@2.4.0/dist/semantic.min.css#https://cdnj
 sed -i 's#https://unpkg.com/font-logos@0.17.0/assets/font-logos.css#https://registry.npmmirror.com/font-logos/0.17.0/files/assets/font-logos.css#g' resource/template/common/header.html
 
 ## dashboard-default
-sed -i 's#https://unpkg.com/mdui@2/mdui.css#https://cdnjs.cloudflare.com/ajax/libs/mdui/2.1.4/mdui.min.css#g' resource/template/dashboard-default/file.html
-sed -i 's#https://unpkg.com/mdui@2/mdui.global.js#https://cdnjs.cloudflare.com/ajax/libs/mdui/2.1.4/mdui.global.min.js#g' resource/template/dashboard-default/file.html
+MDUI_VERSION="$(wget -qO- https://api.cdnjs.com/libraries/mdui | sed -n 's/.*"version"[ \t]*:[ \t]*"\([^"]*\)".*/\1/p')"
+sed -i "s#https://unpkg.com/mdui@2/mdui.css#https://cdnjs.cloudflare.com/ajax/libs/mdui/$MDUI_VERSION/mdui.min.css#g" resource/template/dashboard-default/file.html
+sed -i "s#https://unpkg.com/mdui@2/mdui.global.js#https://cdnjs.cloudflare.com/ajax/libs/mdui/$MDUI_VERSION/mdui.global.min.js#g" resource/template/dashboard-default/file.html
 
 sed -i 's#https://unpkg.com/clipboard@2.0.11/dist/clipboard.min.js#https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js#g' resource/template/dashboard-default/server.html
 
