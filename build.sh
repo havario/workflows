@@ -1,6 +1,6 @@
-#!/usr/bin/env sh -ex
+#!/usr/bin/env sh
 #
-# Description:
+# Description: This script is used to replace the unpkg and bytedance static resource public library address.
 #
 # Copyright (c) 2025 honeok <i@honeok.com>
 #
