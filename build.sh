@@ -37,4 +37,21 @@ sed -i 's#https://lf6-cdn-tos.bytecdntp.com/cdn/expire-1-y/bootstrap-icons/1.8.1
 
 sed -i 's#https://lf6-cdn-tos.bytecdntp.com/cdn/expire-1-y/flag-icon-css/4.1.5/flags/1x1/#https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/4.1.5/flags/1x1/#g' resource/template/theme-angel-kanade/home.html
 
-# theme-angel-kanade
+# theme-daynight
+sed -i 's#https://lf6-cdn-tos.bytecdntp.com/cdn/expire-1-y/font-awesome/6.0.0/css/all.min.css#https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css#g' resource/template/theme-daynight/home.html
+sed -i 's#https://lf6-cdn-tos.bytecdntp.com/cdn/expire-1-y/jquery/3.6.0/jquery.min.js#https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js#g' resource/template/theme-daynight/home.html
+sed -i 's#https://lf6-cdn-tos.bytecdntp.com/cdn/expire-1-y/vue/2.6.14/vue.min.js#https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.14/vue.min.js#g' resource/template/theme-daynight/home.html
+sed -i 's#https://lf6-cdn-tos.bytecdntp.com/cdn/expire-1-y/limonte-sweetalert2/11.4.4/sweetalert2.all.min.js#https://registry.npmmirror.com/sweetalert2/11.4.4/files/dist/sweetalert2.all.min.js#g' resource/template/theme-daynight/home.html
+
+sed -i 's#https://lf6-cdn-tos.bytecdntp.com/cdn/expire-1-y/font-awesome/6.0.0/css/all.min.css#https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css#g' resource/template/theme-daynight/network.html
+sed -i 's#https://lf6-cdn-tos.bytecdntp.com/cdn/expire-1-y/jquery/3.6.0/jquery.min.js#https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js#g' resource/template/theme-daynight/network.html
+sed -i 's#https://lf26-cdn-tos.bytecdntp.com/cdn/expire-1-M/echarts/5.3.0-rc.1/echarts.min.js#https://cdnjs.cloudflare.com/ajax/libs/echarts/5.3.0-rc.1/echarts.min.js#g' resource/template/theme-daynight/network.html
+sed -i 's#https://lf6-cdn-tos.bytecdntp.com/cdn/expire-1-y/vue/2.6.14/vue.min.js#https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.14/vue.min.js#g' resource/template/theme-daynight/network.html
+sed -i 's#https://lf6-cdn-tos.bytecdntp.com/cdn/expire-1-y/limonte-sweetalert2/11.4.4/sweetalert2.all.min.js#https://registry.npmmirror.com/sweetalert2/11.4.4/files/dist/sweetalert2.all.min.js#g' resource/template/theme-daynight/network.html
+
+sed -i 's#https://lf6-cdn-tos.bytecdntp.com/cdn/expire-1-y/mdui/1.0.2/css/mdui.min.css#https://cdnjs.cloudflare.com/ajax/libs/mdui/1.0.2/css/mdui.min.css#g' resource/template/theme-daynight/service.html
+sed -i 's#https://lf6-cdn-tos.bytecdntp.com/cdn/expire-1-y/font-awesome/6.0.0/css/all.min.css#https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css#g' resource/template/theme-daynight/service.html
+sed -i 's#https://lf6-cdn-tos.bytecdntp.com/cdn/expire-1-y/jquery/3.6.0/jquery.min.js#https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js#g' resource/template/theme-daynight/service.html
+
+# theme-default
+
