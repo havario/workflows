@@ -64,3 +64,10 @@ sed -i 's#https://unpkg.com/vue@2.6.14/dist/vue.min.js#https://cdnjs.cloudflare.
 sed -i 's#https://unpkg.com/echarts@5.5.0/dist/echarts.min.js#https://cdnjs.cloudflare.com/ajax/libs/echarts/5.5.0/echarts.min.js#g' resource/template/theme-default/header.html
 
 # theme-hotaru
+sed -i 's#https://lf6-cdn-tos.bytecdntp.com/cdn/expire-1-y/semantic-ui/2.4.1/semantic.min.css#https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css#g' resource/template/theme-hotaru/home.html
+sed -i 's#https://lf6-cdn-tos.bytecdntp.com/cdn/expire-1-y/font-awesome/6.0.0/css/all.min.css#https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css#g' resource/template/theme-hotaru/home.html
+sed -i 's#https://lf6-cdn-tos.bytecdntp.com/cdn/expire-1-y/jquery/3.6.0/jquery.min.js#https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js#g' resource/template/theme-hotaru/home.html
+sed -i 's#https://lf6-cdn-tos.bytecdntp.com/cdn/expire-1-y/semantic-ui/2.4.1/semantic.min.js#https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js#g' resource/template/theme-hotaru/home.html
+sed -i 's#https://lf6-cdn-tos.bytecdntp.com/cdn/expire-1-y/vue/2.6.14/vue.min.js#https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.14/vue.min.js#g' resource/template/theme-hotaru/home.html
+
+# theme-mdui
