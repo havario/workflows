@@ -54,4 +54,13 @@ sed -i 's#https://lf6-cdn-tos.bytecdntp.com/cdn/expire-1-y/font-awesome/6.0.0/cs
 sed -i 's#https://lf6-cdn-tos.bytecdntp.com/cdn/expire-1-y/jquery/3.6.0/jquery.min.js#https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js#g' resource/template/theme-daynight/service.html
 
 # theme-default
+sed -i 's#https://unpkg.com/semantic-ui@2.4.0/dist/semantic.min.css#https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.0/semantic.min.css#g' resource/template/theme-default/header.html
+sed -i 's#https://unpkg.com/font-logos@0.17.0/assets/font-logos.css#https://cdn.jsdelivr.net/npm/font-logos@0.17.0/assets/font-logos.css#g' resource/template/theme-default/header.html
+sed -i 's#https://unpkg.com/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css#https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css#g' resource/template/theme-default/header.html
+sed -i 's#https://unpkg.com/flag-icons@7.2.3/css/flag-icons.min.css#https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/7.2.3/css/flag-icons.min.css#g' resource/template/theme-default/header.html
+sed -i 's#https://unpkg.com/jquery@3.7.1/dist/jquery.min.js#https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js#g' resource/template/theme-default/header.html
+sed -i 's#https://unpkg.com/semantic-ui@2.4.0/dist/semantic.min.js#https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.0/semantic.min.js#g' resource/template/theme-default/header.html
+sed -i 's#https://unpkg.com/vue@2.6.14/dist/vue.min.js#https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.14/vue.min.js#g' resource/template/theme-default/header.html
+sed -i 's#https://unpkg.com/echarts@5.5.0/dist/echarts.min.js#https://cdnjs.cloudflare.com/ajax/libs/echarts/5.5.0/echarts.min.js#g' resource/template/theme-default/header.html
 
+# theme-hotaru
