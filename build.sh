@@ -15,16 +15,20 @@ sed -i 's#https://unpkg.com/semantic-ui@2.4.0/dist/semantic.min.css#https://cdnj
 sed -i 's#https://unpkg.com/font-logos@0.17.0/assets/font-logos.css#https://registry.npmmirror.com/font-logos/0.17.0/files/assets/font-logos.css#g' resource/template/common/header.html
 
 ## dashboard-default
-MDUI_VERSION="$(wget -qO- https://api.cdnjs.com/libraries/mdui | sed -n 's/.*"version"[ \t]*:[ \t]*"\([^"]*\)".*/\1/p')"
-sed -i "s#https://unpkg.com/mdui@2/mdui.css#https://cdnjs.cloudflare.com/ajax/libs/mdui/$MDUI_VERSION/mdui.min.css#g" resource/template/dashboard-default/file.html
-sed -i "s#https://unpkg.com/mdui@2/mdui.global.js#https://cdnjs.cloudflare.com/ajax/libs/mdui/$MDUI_VERSION/mdui.global.min.js#g" resource/template/dashboard-default/file.html
+if [ -f resource/template/dashboard-default/file.html ]; then
+    MDUI_VERSION="$(wget -qO- https://api.cdnjs.com/libraries/mdui | sed -n 's/.*"version"[ \t]*:[ \t]*"\([^"]*\)".*/\1/p')"
+    sed -i "s#https://unpkg.com/mdui@2/mdui.css#https://cdnjs.cloudflare.com/ajax/libs/mdui/$MDUI_VERSION/mdui.min.css#g" resource/template/dashboard-default/file.html
+    sed -i "s#https://unpkg.com/mdui@2/mdui.global.js#https://cdnjs.cloudflare.com/ajax/libs/mdui/$MDUI_VERSION/mdui.global.min.js#g" resource/template/dashboard-default/file.html
+fi
 
 sed -i 's#https://unpkg.com/clipboard@2.0.11/dist/clipboard.min.js#https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js#g' resource/template/dashboard-default/server.html
 
 sed -i 's#https://unpkg.com/xterm@5.3.0/css/xterm.css#https://registry.npmmirror.com/xterm/5.3.0/files/css/xterm.css#g' resource/template/dashboard-default/terminal.html
 sed -i 's#https://unpkg.com/xterm@5.3.0/lib/xterm.js#https://registry.npmmirror.com/xterm/5.3.0/files/lib/xterm.js#g' resource/template/dashboard-default/terminal.html
 sed -i 's#https://unpkg.com/@xterm/addon-fit@0.10.0/lib/addon-fit.js#https://registry.npmmirror.com/@xterm/addon-fit/0.10.0/files/lib/addon-fit.js#g' resource/template/dashboard-default/terminal.html
-sed -i 's#https://unpkg.com/@xterm/addon-web-links@0.11.0/lib/addon-web-links.js#https://registry.npmmirror.com/@xterm/addon-web-links/0.11.0/files/lib/addon-web-links.js#g' resource/template/dashboard-default/terminal.html
+if [ -f resource/template/dashboard-default/terminal.html ]; then
+    sed -i 's#https://unpkg.com/@xterm/addon-web-links@0.11.0/lib/addon-web-links.js#https://registry.npmmirror.com/@xterm/addon-web-links/0.11.0/files/lib/addon-web-links.js#g' resource/template/dashboard-default/terminal.html
+fi
 sed -i 's#https://unpkg.com/@xterm/addon-attach@0.11.0/lib/addon-attach.js#https://registry.npmmirror.com/@xterm/addon-attach/0.11.0/files/lib/addon-attach.js#g' resource/template/dashboard-default/terminal.html
 
 ## theme-angel-kanade
