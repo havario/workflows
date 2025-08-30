@@ -26,7 +26,7 @@ sed -i 's#https://unpkg.com/clipboard@2.0.11/dist/clipboard.min.js#https://cdnjs
 sed -i 's#https://unpkg.com/xterm@5.3.0/css/xterm.css#https://registry.npmmirror.com/xterm/5.3.0/files/css/xterm.css#g' resource/template/dashboard-default/terminal.html
 sed -i 's#https://unpkg.com/xterm@5.3.0/lib/xterm.js#https://registry.npmmirror.com/xterm/5.3.0/files/lib/xterm.js#g' resource/template/dashboard-default/terminal.html
 sed -i 's#https://unpkg.com/@xterm/addon-fit@0.10.0/lib/addon-fit.js#https://registry.npmmirror.com/@xterm/addon-fit/0.10.0/files/lib/addon-fit.js#g' resource/template/dashboard-default/terminal.html
-if [ -f resource/template/dashboard-default/terminal.html ]; then
+if grep -Fq "https://unpkg.com/@xterm/addon-web-links@0.11.0/lib/addon-web-links.js" resource/template/dashboard-default/terminal.html; then
     sed -i 's#https://unpkg.com/@xterm/addon-web-links@0.11.0/lib/addon-web-links.js#https://registry.npmmirror.com/@xterm/addon-web-links/0.11.0/files/lib/addon-web-links.js#g' resource/template/dashboard-default/terminal.html
 fi
 sed -i 's#https://unpkg.com/@xterm/addon-attach@0.11.0/lib/addon-attach.js#https://registry.npmmirror.com/@xterm/addon-attach/0.11.0/files/lib/addon-attach.js#g' resource/template/dashboard-default/terminal.html
@@ -100,6 +100,9 @@ sed -i 's#https://lf6-cdn-tos.bytecdntp.com/cdn/expire-1-y/jquery/3.6.0/jquery.m
 
 ## theme-server-status
 sed -i 's#https://unpkg.com/bootstrap@3.4.1/dist/css/bootstrap.min.css#https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css#g' resource/template/theme-server-status/header.html
+if grep -Fq "https://unpkg.com/bootstrap@3.4.1/dist/css/bootstrap-theme.min.css" resource/template/theme-server-status/header.html; then
+    sed -i 's#https://unpkg.com/bootstrap@3.4.1/dist/css/bootstrap-theme.min.css#https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap-theme.min.css#g' resource/template/theme-server-status/header.html
+fi
 sed -i 's#https://unpkg.com/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css#https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css#g' resource/template/theme-server-status/header.html
 sed -i 's#https://unpkg.com/font-logos@0.17.0/assets/font-logos.css#https://registry.npmmirror.com/font-logos/0.17.0/files/assets/font-logos.css#g' resource/template/theme-server-status/header.html
 sed -i 's#https://unpkg.com/flag-icons@7.2.3/css/flag-icons.min.css#https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/7.2.3/css/flag-icons.min.css#g' resource/template/theme-server-status/header.html
