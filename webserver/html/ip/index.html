@@ -208,13 +208,13 @@
             addr: d => d.data ? `${d.data.country} ${d.data.prov} ${d.data.city} ${d.data.district} ${d.data.isp} ${d.data.zipcode}` : '未知'
         }, {
             region: '国外',
-            apiserver: 'ipbase',
+            apiserver: 'ipbase.com',
             url: 'https://api.ipbase.com/v1/json/',
             ip: d => d.ip || '未知',
             addr: d => d.country_name ? `${d.country_name} ${d.city || ''}`.trim() : '未知'
         }, {
             region: '国外',
-            apiserver: 'ipwhois',
+            apiserver: 'ipwhois.app',
             url: 'https://ipwhois.app/json/',
             ip: d => d.ip || '未知',
             addr: d => d.country ? `${d.country} ${d.city || ''} ${d.isp || ''}`.trim() : '未知'
