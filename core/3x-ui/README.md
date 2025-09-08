@@ -42,7 +42,8 @@ services:
     volumes:
       - $PWD/db/:/etc/x-ui
       - $PWD/cert/:/root/cert
-    # environment:
+    environment:
+      TZ: Asia/Shanghai
     #   USER_NAME: admin
     #   USER_PASSWORD: admin
     #   BASE_PATH: admin
