@@ -29,7 +29,7 @@ jobs:
         run: |
           XRAY_LVER="$(wget -qO- --tries=50 --header="Authorization: token ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/repos/XTLS/Xray-core/releases | sed -n 's/.*"tag_name": *"v\([^"]*\)".*/\1/p' | sort -Vr | head -n1)"
           XRAY_CVER="$(wget -qO- --tries=50 https://hub.docker.com/v2/repositories/honeok/xray/tags 2>/dev/null | grep -o '"name": *"[^"]*"' | cut -d '"' -f 4 | grep -v "^latest$" | sort -Vr | head -n1 | cut -d'-' -f1 || true)"
-          echo "version=${XRAY_LVER}" >> $GITHUB_OUTPUT
+          echo "version=${XRAY_LVER}" >> "$GITHUB_OUTPUT"
           if [[ "$(printf '%s\n%s\n' "$XRAY_LVER" "$XRAY_CVER" | sort -V | head -n1)" != "$XRAY_LVER" || (-z "$XRAY_CVER" && -n "$XRAY_LVER") ]]; then
             echo "IS_RENEW=1" >> "$GITHUB_ENV"
           fi

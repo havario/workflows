@@ -31,9 +31,9 @@ jobs:
           XUI_LTAG="$(wget -qO- --tries=50 --header="Authorization: token ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/repos/MHSanaei/3x-ui/releases/latest | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')"
           XUI_LVER="${XUI_LTAG#v}"
           XUI_CVER="$(wget -qO- --tries=50 https://hub.docker.com/v2/repositories/honeok/3x-ui/tags 2>/dev/null | grep -o '"name": *"[^"]*"' | cut -d '"' -f 4 | grep -v "^latest$" | sort -Vr | head -n1 | cut -d'-' -f1 || true)"
-          echo "xray_version=${XRAY_LVER}" >> $GITHUB_OUTPUT
-          echo "xui_tag=${XUI_LTAG}" >> $GITHUB_OUTPUT
-          echo "xui_version=${XUI_LVER}" >> $GITHUB_OUTPUT
+          echo "xray_version=${XRAY_LVER}" >> "$GITHUB_OUTPUT"
+          echo "xui_tag=${XUI_LTAG}" >> "$GITHUB_OUTPUT"
+          echo "xui_version=${XUI_LVER}" >> "$GITHUB_OUTPUT"
           if [[ "$(printf '%s\n%s\n' "$XUI_LVER" "$XUI_CVER" | sort -V | head -n1)" != "$XUI_LVER" || (-z "$XUI_CVER" && -n "$XRAY_LVER" && -n "$XUI_LVER") ]]; then
             echo "IS_RENEW=1" >> "$GITHUB_ENV"
           fi
