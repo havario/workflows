@@ -18,7 +18,7 @@ env:
 
 jobs:
   release:
-    name: 'Release nezha-dashboard'
+    name: 'Release ${{ matrix.NEZHA_VERSION }} of nezha-dashboard'
     runs-on: ubuntu-latest
 
     strategy:
@@ -28,14 +28,23 @@ jobs:
           - 'v0.20.13'
 
     steps:
-      - name: 'Clone source code and fetch ipinfo geoip db'
+      - name: 'Clone source code for ${{ matrix.NEZHA_VERSION }}'
         run: |
-          cd ${{ github.workspace }}/v0
-          git clone --depth=1 --branch ${{ matrix.NEZHA_VERSION }} https://github.com/nezhahq/nezha.git ./${{ matrix.NEZHA_VERSION }}
-          cd ${{ matrix.NEZHA_VERSION }} || exit 1
+          mkdir -p ${{ GITHUB.WORKSPACE }}/source
+          cd ${{ GITHUB.WORKSPACE }}/source
+          git clone --depth=1 --branch ${{ matrix.NEZHA_VERSION }} https://github.com/nezhahq/nezha.git .
+
+      - name: 'Fetch ipinfo geoip db'
+        working-directory: ${{ GITHUB.WORKSPACE }}/source
+        run: |
           rm -f pkg/geoip/geoip.db
-          wget --tries=50 -qO pkg/geoip/geoip.db https://ipinfo.io/data/free/country.mmdb?token=${IPINFO_TOKEN}
-      
+          wget --tries=10 -qO pkg/geoip/geoip.db "https://ipinfo.io/data/free/country.mmdb?token=${IPINFO_TOKEN}"
+
+      - name: 'Prepare version tag'
+        id: bump_version
+        run: |
+          echo "version=${{ matrix.NEZHA_VERSION }} | sed 's/^v//'" >> $GITHUB_OUTPUT
+
       - name: 'Build binaries with xgo'
         uses: crazy-max/ghaction-xgo@v2
         with:
@@ -49,27 +58,38 @@ jobs:
           x: false
           race: false
           tags: timetzdata
-          ldflags: -s -w --extldflags '-static -fpic' -X github.com/naiba/nezha/service/singleton.Version=${{ matrix.NEZHA_VERSION }}
+          ldflags: -s -w --extldflags '-static -fpic' -X github.com/naiba/nezha/service/singleton.Version=${{ steps.bump_version.outputs.version }}
           buildmode: default
           trimpath: true
+          working_dir: ${{ GITHUB.WORKSPACE }}/source
 
-      - name: Fix dist artifact name
+      - name: 'Compress release assets'
+        working-directory: ${{ GITHUB.WORKSPACE }}/source
+        env:
+          VERSION_TAG: ${{ matrix.NEZHA_VERSION }}
         run: |
-          ls -al dist/
-          mv dist/dashboard-linux-arm-7 dist/dashboard-linux-arm
-
-      - name: Compress release assets
-        run: |
-          cd dist
-          for file in *; do
-            if [ -f "$file" ]; then
-              zip "${file}.zip" "$file"
+          # Process each binary file
+          VERSION=${VERSION_TAG#v}
+          cd build
+          for FILE in *; do
+            if [ -f "$FILE" ]; then
+              PLATFORM=${FILE#dashboard-}
+              PACKAGE_NAME="dashboard-${VERSION}-${PLATFORM}"
+              mkdir "$PACKAGE_NAME"
+              cp "$FILE" "${PACKAGE_NAME}/dashboard"
+              cp ${{ GITHUB.WORKSPACE }}/README.md "${PACKAGE_NAME}"/
+              cp ${{ GITHUB.WORKSPACE }}/LICENSE "${PACKAGE_NAME}"/
+              tar cfz "${PACKAGE_NAME}.tar.gz" "$PACKAGE_NAME"
+              rm -rf "$PACKAGE_NAME"
             fi
           done
-          cd ..
 
-      - name: Create Release and Upload Assets
+      - name: 'Create Release and Upload Assets'
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "dist/*.zip"
-          generateReleaseNotes: true
+          tag: "nezha-${{ matrix.NEZHA_VERSION }}"
+          name: "Release nezha-dashboard ${{ matrix.NEZHA_VERSION }}"
+          artifacts: "source/build/*.tar.gz"
+          allowUpdates: true
+          body: "Automated release of nezha-dashboard version ${{ matrix.NEZHA_VERSION }}. Binaries are built from the external repository."
+          generateReleaseNotes: false
