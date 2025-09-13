@@ -206,3 +206,21 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           push: true
+
+  cleaning_workflow:
+    name: 'Cleaning up old workflows'
+    needs:
+      - release_v0
+      - build_v0
+      - build_v1
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 'Cleaning up old workflows'
+        uses: Mattraks/delete-workflow-runs@v2
+        with:
+          token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          retain_days: 0
+          keep_minimum_runs: 0
+          delete_run_by_conclusion_pattern: "cancelled, skipped, success"
