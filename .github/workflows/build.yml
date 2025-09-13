@@ -79,7 +79,7 @@ jobs:
           x: false
           race: false
           tags: timetzdata
-          ldflags: -s -w --extldflags '-static -fpic' -X github.com/naiba/nezha/service/singleton.Version=${{ steps.bump_version.outputs.version }}
+          ldflags: -s -w -buildid= --extldflags '-static -fpic' -X github.com/naiba/nezha/service/singleton.Version=${{ steps.bump_version.outputs.version }}
           buildmode: default
           trimpath: true
           working_dir: ${{ GITHUB.WORKSPACE }}/v0/source
