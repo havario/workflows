@@ -67,7 +67,6 @@ jobs:
         working-directory: ${{ GITHUB.WORKSPACE }}/source
         run: |
           # Process each binary file
-          VERSION=${VERSION_TAG#v}
           cd build
           for FILE in *; do
             if [ -f "$FILE" ]; then
@@ -76,6 +75,7 @@ jobs:
               mkdir "$PACKAGE_NAME"
               cp "$FILE" "${PACKAGE_NAME}/dashboard"
               cp ${{ GITHUB.WORKSPACE }}/LICENSE "${PACKAGE_NAME}"/
+              sha256sum "${PACKAGE_NAME}/dashboard" > "${PACKAGE_NAME}/dashboard.sha256sum"
               tar cfz "${PACKAGE_NAME}.tar.gz" "$PACKAGE_NAME"
               rm -rf "$PACKAGE_NAME"
             fi
