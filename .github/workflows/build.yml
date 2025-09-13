@@ -63,7 +63,7 @@ jobs:
 
       - name: 'Extract version number'
         id: bump_version
-        run: echo "version=$(sed 's/^v//' <<< ${{ matrix.NEZHA_VERSION }})" >> $GITHUB_OUTPUT
+        run: echo "version=$(sed 's/^v//' <<< ${{ matrix.NEZHA_VERSION }})" >> "$GITHUB_OUTPUT"
 
       # https://github.com/crazy-max/ghaction-xgo?tab=readme-ov-file#usage
       - name: 'Build release binaries'
@@ -102,6 +102,10 @@ jobs:
           done
           cd ..
 
+      - name: 'Fetch build time'
+        id: build_time
+        run:  echo "time=$(date -u +'%Y-%m-%d %H:%M:%S UTC')" >> "$GITHUB_OUTPUT"
+
       # https://github.com/ncipollo/release-action/blob/main/README.zh-Hans.md
       - name: 'Create release and upload release'
         uses: ncipollo/release-action@v1
@@ -111,7 +115,7 @@ jobs:
           body: |
             Automated release of nezha-dashboard version ${{ matrix.NEZHA_VERSION }}.
             Binaries are built from official repositories.
-            Release time: $(date -u +"%Y-%m-%d %H:%M:%S UTC")
+            Release time: ${{ steps.build_time.outputs.time }}
           generateReleaseNotes: false
           name: ${{ matrix.NEZHA_VERSION }}
           tag: ${{ matrix.NEZHA_VERSION }}
@@ -183,7 +187,7 @@ jobs:
         id: bump_version
         run: |
           NEZHA_VERSION="$(wget -qO- --tries=50 --header="Authorization: token ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/repos/nezhahq/nezha/releases/latest | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')"
-          echo "version=${NEZHA_VERSION}" >> $GITHUB_OUTPUT
+          echo "version=${NEZHA_VERSION}" >> "$GITHUB_OUTPUT"
 
       - name: 'Fetch ipinfo geoip database'
         working-directory: ${{ GITHUB.WORKSPACE }}/v1
