@@ -96,3 +96,4 @@ jobs:
             Binaries are built from official repositories.
           generateReleaseNotes: false
           name: ${{ matrix.NEZHA_VERSION }}
+          tag: ${{ matrix.NEZHA_VERSION }}
