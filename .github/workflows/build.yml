@@ -21,7 +21,6 @@ defaults:
     shell: bash -ex {0}
 
 env:
-  DEBIAN_FRONTEND: noninteractive
   IPINFO_TOKEN: ${{ secrets.IPINFO_TOKEN }}
   DOCKER_USERNAME: ${{ GITHUB.REPOSITORY_OWNER }}
   DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
