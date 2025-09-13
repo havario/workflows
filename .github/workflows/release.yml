@@ -38,12 +38,12 @@ jobs:
         working-directory: ${{ GITHUB.WORKSPACE }}/source
         run: |
           rm -f pkg/geoip/geoip.db
-          wget --tries=10 -qO pkg/geoip/geoip.db "https://ipinfo.io/data/free/country.mmdb?token=${IPINFO_TOKEN}"
+          wget --tries=50 -qO pkg/geoip/geoip.db "https://ipinfo.io/data/free/country.mmdb?token=${IPINFO_TOKEN}"
 
       - name: 'Prepare version tag'
         id: bump_version
         run: |
-          echo "version=${{ matrix.NEZHA_VERSION }} | sed 's/^v//'" >> $GITHUB_OUTPUT
+          echo "version=$(sed 's/^v//' <<< ${{ matrix.NEZHA_VERSION }})" >> $GITHUB_OUTPUT
 
       - name: 'Build binaries with xgo'
         uses: crazy-max/ghaction-xgo@v2
@@ -77,19 +77,19 @@ jobs:
               PACKAGE_NAME="dashboard-${VERSION}-${PLATFORM}"
               mkdir "$PACKAGE_NAME"
               cp "$FILE" "${PACKAGE_NAME}/dashboard"
-              cp ${{ GITHUB.WORKSPACE }}/README.md "${PACKAGE_NAME}"/
               cp ${{ GITHUB.WORKSPACE }}/LICENSE "${PACKAGE_NAME}"/
               tar cfz "${PACKAGE_NAME}.tar.gz" "$PACKAGE_NAME"
               rm -rf "$PACKAGE_NAME"
             fi
           done
+          cd ..
 
       - name: 'Create Release and Upload Assets'
-        uses: ncipollo/release-action@v1
+        uses: ncipollo/release-action@v4
         with:
-          tag: "nezha-${{ matrix.NEZHA_VERSION }}"
-          name: "Release nezha-dashboard ${{ matrix.NEZHA_VERSION }}"
-          artifacts: "source/build/*.tar.gz"
           allowUpdates: true
+          artifacts: ${{ GITHUB.WORKSPACE }}/source/build/*.tar.gz
           body: "Automated release of nezha-dashboard version ${{ matrix.NEZHA_VERSION }}. Binaries are built from the external repository."
           generateReleaseNotes: false
+          tag: ${{ matrix.NEZHA_VERSION }}
+          name: "Release nezha-dashboard ${{ matrix.NEZHA_VERSION }}"
