@@ -49,13 +49,12 @@ jobs:
           rm -f pkg/geoip/geoip.db
           wget --tries=50 -qO pkg/geoip/geoip.db "https://ipinfo.io/data/free/country.mmdb?token=${IPINFO_TOKEN}"
 
-      - name: 'Prepare version tag'
+      - name: 'Extract version number'
         id: bump_version
-        run: |
-          echo "version=$(sed 's/^v//' <<< ${{ matrix.NEZHA_VERSION }})" >> $GITHUB_OUTPUT
+        run: echo "version=$(sed 's/^v//' <<< ${{ matrix.NEZHA_VERSION }})" >> $GITHUB_OUTPUT
 
       # https://github.com/crazy-max/ghaction-xgo
-      - name: 'Build binaries with xgo'
+      - name: 'Build release binaries'
         uses: crazy-max/ghaction-xgo@v2
         with:
           xgo_version: latest
@@ -73,7 +72,7 @@ jobs:
           trimpath: true
           working_dir: ${{ GITHUB.WORKSPACE }}/v0/source
 
-      - name: 'Compress release assets'
+      - name: 'Package release assets'
         working-directory: ${{ GITHUB.WORKSPACE }}/v0/source
         run: |
           cd build
