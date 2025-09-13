@@ -13,13 +13,14 @@ defaults:
   run:
     shell: bash
 
-env:
-  IPINFO_TOKEN: ${{ secrets.IPINFO_TOKEN }}
-
 jobs:
   release:
     name: 'Release ${{ matrix.NEZHA_VERSION }} of nezha-dashboard'
     runs-on: ubuntu-latest
+    env:
+      IPINFO_TOKEN: ${{ secrets.IPINFO_TOKEN }}
+    permissions:
+          contents: write
 
     strategy:
       matrix:
