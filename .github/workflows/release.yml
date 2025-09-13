@@ -76,6 +76,7 @@ jobs:
               mkdir "$PACKAGE_NAME"
               cp "$FILE" "${PACKAGE_NAME}/dashboard"
               sha256sum "${PACKAGE_NAME}/dashboard" > "${PACKAGE_NAME}/dashboard.sha256sum"
+              wget -qO "${PACKAGE_NAME}/LICENSE" https://www.apache.org/licenses/LICENSE-2.0.txt
               tar cfz "${PACKAGE_NAME}.tar.gz" "$PACKAGE_NAME"
               rm -rf "$PACKAGE_NAME"
             fi
@@ -87,6 +88,8 @@ jobs:
         with:
           allowUpdates: true
           artifacts: ${{ GITHUB.WORKSPACE }}/source/build/*.tar.gz
-          body: "Automated release of nezha-dashboard version ${{ matrix.NEZHA_VERSION }}. Binaries are built from the external repository."
+          body: |
+            Automated release of nezha-dashboard version ${{ matrix.NEZHA_VERSION }}.
+            Binaries are built from official repositories.
           generateReleaseNotes: false
           name: ${{ matrix.NEZHA_VERSION }}
