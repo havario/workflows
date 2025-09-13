@@ -102,6 +102,7 @@ jobs:
           body: |
             Automated release of nezha-dashboard version ${{ matrix.NEZHA_VERSION }}.
             Binaries are built from official repositories.
+            Release time: $(date -u +"%Y-%m-%d %H:%M:%S UTC")
           generateReleaseNotes: false
           name: ${{ matrix.NEZHA_VERSION }}
           tag: ${{ matrix.NEZHA_VERSION }}
