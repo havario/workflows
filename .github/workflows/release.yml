@@ -88,5 +88,5 @@ jobs:
           allowUpdates: true
           artifacts: ${{ GITHUB.WORKSPACE }}/source/build/*.tar.gz
           body: "Automated release of nezha-dashboard version ${{ matrix.NEZHA_VERSION }}. Binaries are built from the external repository."
-          generateReleaseNotes: true
+          generateReleaseNotes: false
           name: ${{ matrix.NEZHA_VERSION }}
