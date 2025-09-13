@@ -121,7 +121,7 @@ jobs:
           tag: ${{ matrix.NEZHA_VERSION }}
 
   build_v0:
-    name: 'Build ${{ matrix.NEZHA_VERSION }} image'
+    name: 'Build ${{ matrix.NEZHA_VERSION }} Image'
     runs-on: ubuntu-latest
 
     strategy:
@@ -174,7 +174,7 @@ jobs:
           push: true
 
   build_v1:
-    name: 'Build v1 image'
+    name: 'Build v1 Image'
     runs-on: ubuntu-latest
 
     steps:
