@@ -65,8 +65,6 @@ jobs:
 
       - name: 'Compress release assets'
         working-directory: ${{ GITHUB.WORKSPACE }}/source
-        env:
-          VERSION_TAG: ${{ matrix.NEZHA_VERSION }}
         run: |
           # Process each binary file
           VERSION=${VERSION_TAG#v}
@@ -74,7 +72,7 @@ jobs:
           for FILE in *; do
             if [ -f "$FILE" ]; then
               PLATFORM=${FILE#dashboard-}
-              PACKAGE_NAME="dashboard-${VERSION}-${PLATFORM}"
+              PACKAGE_NAME="dashboard-${{ steps.bump_version.outputs.version }}-${PLATFORM}"
               mkdir "$PACKAGE_NAME"
               cp "$FILE" "${PACKAGE_NAME}/dashboard"
               cp ${{ GITHUB.WORKSPACE }}/LICENSE "${PACKAGE_NAME}"/
