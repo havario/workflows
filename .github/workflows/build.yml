@@ -28,6 +28,7 @@ jobs:
     runs-on: ubuntu-latest
 
     strategy:
+      fail-fast: true
       matrix:
         NEZHA_VERSION:
           - 'v0.18.6'
@@ -106,6 +107,7 @@ jobs:
     runs-on: ubuntu-latest
 
     strategy:
+      fail-fast: true
       matrix:
         NEZHA_VERSION:
           - 'v0.18.6'
