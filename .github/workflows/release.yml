@@ -77,7 +77,7 @@ jobs:
               PACKAGE_NAME="dashboard-${{ steps.bump_version.outputs.version }}-${PLATFORM}"
               mkdir "$PACKAGE_NAME"
               cp "$FILE" "${PACKAGE_NAME}/dashboard"
-              sha256sum "${PACKAGE_NAME}/dashboard" > "${PACKAGE_NAME}/dashboard.sha256sum"
+              sha256sum "${PACKAGE_NAME}/dashboard" | sed 's| .*| dashboard|' > "${PACKAGE_NAME}/dashboard.sha256sum"
               wget -qO "${PACKAGE_NAME}/LICENSE" https://www.apache.org/licenses/LICENSE-2.0.txt
               tar cfz "${PACKAGE_NAME}.tar.gz" "$PACKAGE_NAME"
               rm -rf "$PACKAGE_NAME"
