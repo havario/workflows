@@ -38,10 +38,16 @@ jobs:
           - 'v0.20.13'
 
     steps:
-      - name: 'Clone source code for ${{ matrix.NEZHA_VERSION }}'
+      - name: 'Check and remove existing tag'
         run: |
           sudo apt-get update
           sudo apt-get install -qq -y --no-install-recommends git
+          if git ls-remote --tags ${{ GITHUB.REPOSITORY }} | grep -q "refs/tags/${{ matrix.NEZHA_VERSION }}$"; then
+            git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@${{ GITHUB.REPOSITORY }} :refs/tags/${{ matrix.NEZHA_VERSION }}
+          fi
+
+      - name: 'Clone source code for ${{ matrix.NEZHA_VERSION }}'
+        run: |
           mkdir -p ${{ GITHUB.WORKSPACE }}/v0/source
           cd ${{ GITHUB.WORKSPACE }}/v0/source
           git clone --depth=1 --branch ${{ matrix.NEZHA_VERSION }} https://github.com/nezhahq/nezha.git .
