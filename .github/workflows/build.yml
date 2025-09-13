@@ -55,7 +55,7 @@ jobs:
         id: bump_version
         run: echo "version=$(sed 's/^v//' <<< ${{ matrix.NEZHA_VERSION }})" >> $GITHUB_OUTPUT
 
-      # https://github.com/crazy-max/ghaction-xgo
+      # https://github.com/crazy-max/ghaction-xgo?tab=readme-ov-file#usage
       - name: 'Build release binaries'
         uses: crazy-max/ghaction-xgo@v2
         with:
