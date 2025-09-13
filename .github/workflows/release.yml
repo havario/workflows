@@ -17,8 +17,6 @@ jobs:
   release:
     name: 'Release ${{ matrix.NEZHA_VERSION }} of nezha-dashboard'
     runs-on: ubuntu-latest
-    env:
-      IPINFO_TOKEN: ${{ secrets.IPINFO_TOKEN }}
     permissions:
           contents: write
 
@@ -37,6 +35,8 @@ jobs:
 
       - name: 'Fetch ipinfo geoip db'
         working-directory: ${{ GITHUB.WORKSPACE }}/source
+        env:
+          IPINFO_TOKEN: ${{ secrets.IPINFO_TOKEN }}
         run: |
           rm -f pkg/geoip/geoip.db
           wget --tries=50 -qO pkg/geoip/geoip.db "https://ipinfo.io/data/free/country.mmdb?token=${IPINFO_TOKEN}"
