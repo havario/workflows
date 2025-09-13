@@ -39,6 +39,8 @@ jobs:
     steps:
       - name: 'Clone source code for ${{ matrix.NEZHA_VERSION }}'
         run: |
+          apt-get update
+          apt-get install -qq -y --no-install-recommends git
           mkdir -p ${{ GITHUB.WORKSPACE }}/v0/source
           cd ${{ GITHUB.WORKSPACE }}/v0/source
           git clone --depth=1 --branch ${{ matrix.NEZHA_VERSION }} https://github.com/nezhahq/nezha.git .
