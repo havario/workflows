@@ -83,7 +83,7 @@ jobs:
           cd ..
 
       - name: 'Create Release and Upload Assets'
-        uses: ncipollo/release-action@v4
+        uses: ncipollo/release-action@v1
         with:
           allowUpdates: true
           artifacts: ${{ GITHUB.WORKSPACE }}/source/build/*.tar.gz
