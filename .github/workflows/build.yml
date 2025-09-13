@@ -42,8 +42,8 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -qq -y --no-install-recommends git
-          if git ls-remote --tags ${{ GITHUB.REPOSITORY }} | grep -q "refs/tags/${{ matrix.NEZHA_VERSION }}$"; then
-            git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@${{ GITHUB.REPOSITORY }} :refs/tags/${{ matrix.NEZHA_VERSION }}
+          if git ls-remote --tags https://github.com/${{ GITHUB.REPOSITORY }} | grep -q "refs/tags/${{ matrix.NEZHA_VERSION }}$"; then
+            git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ GITHUB.REPOSITORY }} :refs/tags/${{ matrix.NEZHA_VERSION }}
           fi
 
       - name: 'Clone source code for ${{ matrix.NEZHA_VERSION }}'
