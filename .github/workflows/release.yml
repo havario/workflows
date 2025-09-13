@@ -1,3 +1,10 @@
+# Copyright (c) 2025 honeok <i@honeok.com>
+#
+# References:
+# https://github.com/naiba/nezha
+#
+# SPDX-License-Identifier: Apache-2.0
+
 ---
 name: 'Release nezha-dashboard'
 
@@ -83,7 +90,8 @@ jobs:
           done
           cd ..
 
-      - name: 'Create Release and Upload Assets'
+      # https://github.com/ncipollo/release-action/blob/main/README.zh-Hans.md
+      - name: 'Create release and upload release'
         uses: ncipollo/release-action@v1
         with:
           allowUpdates: true
