@@ -37,7 +37,7 @@ jobs:
           wget --tries=50 -qO pkg/geoip/geoip.db https://ipinfo.io/data/free/country.mmdb?token=${IPINFO_TOKEN}
       
       - name: 'Build binaries with xgo'
-        uses: crazy-max/ghaction-xgo@v2
+        uses: crazy-max/ghaction-xgo@v3
         with:
           xgo_version: latest
           go_version: 1.21
