@@ -1,7 +1,5 @@
-# SPDX-License-Identifier: Apache-2.0
-
 ---
-name: 'Release nezha-dashboard'
+name: 'Build nezha-dashboard'
 
 on:
   push:
@@ -11,16 +9,23 @@ on:
     - cron: '0 16 1 * *'
   workflow_dispatch:
 
+permissions:
+  actions: write
+  contents: write
+
 defaults:
   run:
-    shell: bash
+    shell: bash -ex {0}
+
+env:
+  IPINFO_TOKEN: ${{ secrets.IPINFO_TOKEN }}
+  DOCKER_USERNAME: ${{ github.repository_owner }}
+  DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
 
 jobs:
-  release:
-    name: 'Release ${{ matrix.NEZHA_VERSION }} of nezha-dashboard'
+  release_v0:
+    name: 'Release ${{ matrix.NEZHA_VERSION }} Binary'
     runs-on: ubuntu-latest
-    permissions:
-          contents: write
 
     strategy:
       matrix:
@@ -31,14 +36,12 @@ jobs:
     steps:
       - name: 'Clone source code for ${{ matrix.NEZHA_VERSION }}'
         run: |
-          mkdir -p ${{ GITHUB.WORKSPACE }}/source
-          cd ${{ GITHUB.WORKSPACE }}/source
+          mkdir -p ${{ GITHUB.WORKSPACE }}/v0/source
+          cd ${{ GITHUB.WORKSPACE }}/v0/source
           git clone --depth=1 --branch ${{ matrix.NEZHA_VERSION }} https://github.com/nezhahq/nezha.git .
 
-      - name: 'Fetch ipinfo geoip db'
-        working-directory: ${{ GITHUB.WORKSPACE }}/source
-        env:
-          IPINFO_TOKEN: ${{ secrets.IPINFO_TOKEN }}
+      - name: 'Fetch ipinfo geoip database'
+        working-directory: ${{ GITHUB.WORKSPACE }}/v0/source
         run: |
           rm -f pkg/geoip/geoip.db
           wget --tries=50 -qO pkg/geoip/geoip.db "https://ipinfo.io/data/free/country.mmdb?token=${IPINFO_TOKEN}"
@@ -48,6 +51,7 @@ jobs:
         run: |
           echo "version=$(sed 's/^v//' <<< ${{ matrix.NEZHA_VERSION }})" >> $GITHUB_OUTPUT
 
+      # https://github.com/crazy-max/ghaction-xgo
       - name: 'Build binaries with xgo'
         uses: crazy-max/ghaction-xgo@v2
         with:
@@ -61,15 +65,14 @@ jobs:
           x: false
           race: false
           tags: timetzdata
-          ldflags: -s -w -buildid= --extldflags '-static -fpic' -X github.com/naiba/nezha/service/singleton.Version=${{ steps.bump_version.outputs.version }}
+          ldflags: -s -w --extldflags '-static -fpic' -X github.com/naiba/nezha/service/singleton.Version=${{ steps.bump_version.outputs.version }}
           buildmode: default
           trimpath: true
-          working_dir: ${{ GITHUB.WORKSPACE }}/source
+          working_dir: ${{ GITHUB.WORKSPACE }}/v0/source
 
       - name: 'Compress release assets'
-        working-directory: ${{ GITHUB.WORKSPACE }}/source
+        working-directory: ${{ GITHUB.WORKSPACE }}/v0/source
         run: |
-          # Process each binary file
           cd build
           for FILE in *; do
             if [ -f "$FILE" ]; then
@@ -90,10 +93,62 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           allowUpdates: true
-          artifacts: ${{ GITHUB.WORKSPACE }}/source/build/*.tar.gz
+          artifacts: ${{ GITHUB.WORKSPACE }}/v0/source/build/*.tar.gz
           body: |
             Automated release of nezha-dashboard version ${{ matrix.NEZHA_VERSION }}.
             Binaries are built from official repositories.
           generateReleaseNotes: false
           name: ${{ matrix.NEZHA_VERSION }}
           tag: ${{ matrix.NEZHA_VERSION }}
+
+  build_v0:
+    name: 'Build ${{ matrix.NEZHA_VERSION }} image'
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        NEZHA_VERSION:
+          - 'v0.18.6'
+          - 'v0.20.13'
+
+    steps:
+      - name: 'Check out repository'
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: 'Fetch ipinfo geoip database'
+        working-directory: ${{ GITHUB.WORKSPACE }}/v0
+        run: |
+          rm -f pkg/geoip/geoip.db
+          wget --tries=50 -qO geoip.db https://ipinfo.io/data/free/country.mmdb?token=${IPINFO_TOKEN}
+
+      - name: 'Set up Docker QEMU'
+        uses: docker/setup-qemu-action@v3
+
+      - name: 'Set up Docker Buildx'
+        uses: docker/setup-buildx-action@v3
+
+      - name: 'Login to DockerHub'
+        uses: docker/login-action@v3
+        with:
+          username: ${{ env.DOCKER_USERNAME }}
+          password: ${{ env.DOCKER_PASSWORD }}
+
+      - name: 'Extract Docker metadata'
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.DOCKER_USERNAME }}/nezha-dashboard
+          tags: type=raw,value=${{ matrix.NEZHA_VERSION }}
+
+      - name: 'Build and Push nezha-dashboard image'
+        uses: docker/build-push-action@v6
+        with:
+          context: ${{ GITHUB.WORKSPACE }}/v0
+          file: ${{ GITHUB.WORKSPACE }}/v0/Dockerfile
+          platforms: linux/amd64, linux/arm64/v8
+          build-args: NEZHA_VERSION=${{ matrix.NEZHA_VERSION }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          push: true
