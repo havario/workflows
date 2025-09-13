@@ -45,7 +45,7 @@ jobs:
 
       - name: 'Check and remove existing tag'
         run: |
-          if git ls-remote --tags origin | grep -q "refs/tags/${{ matrix.NEZHA_VERSION }}$"; then
+          if git tag --list | grep -q "^${{ matrix.NEZHA_VERSION }}$"; then
             git push origin --delete ${{ matrix.NEZHA_VERSION }}
           fi
 
