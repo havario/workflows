@@ -2,7 +2,7 @@
 
 <div align="center">
   <br>
-  <img width="360" style="max-width:80%" src=".github/cross.jpg" title="cross">
+  <img src=".github/cross.jpg" title="cross">
   <br>
 </div>
 
