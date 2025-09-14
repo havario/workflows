@@ -13,7 +13,7 @@ insert_final_newline = true
 indent_size = 4
 
 [*.pl]
-indent_size = 2
+indent_size = 4
 
 [*.{yml,yaml}]
 indent_size = 2

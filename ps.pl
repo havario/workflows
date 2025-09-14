@@ -98,9 +98,11 @@ sub get_disk_usage {
         # 过滤掉临时的或虚拟的文件系统
         next if $line =~ /^(tmpfs|devtmpfs|squashfs)/;
         my ($fs, $size, $used, $avail, $percent, $mount) = split(/\s+/, $line);
+        # 移除百分比符号
+        $percent =~ s/%//;
         push @disks, {
             mount   => $mount,
-            percent => int($percent),
+            percent => int($percent), # 现在 $percent 是纯数字
             text    => "$used / $size",
         };
     }
