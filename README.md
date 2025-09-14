@@ -1,5 +1,11 @@
 # workflows
 
+<div align="center">
+  <br>
+  <img width="360" style="max-width:80%" src=".github/cross.jpg" title="cross">
+  <br>
+</div>
+
 <p align="center">
 <img src="https://img.shields.io/github/license/havario/workflows.svg?style=flat" alt="License" />
 <img src="https://img.shields.io/github/last-commit/havario/workflows?style=flat" alt="Last Commit" />
