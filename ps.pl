@@ -12,27 +12,27 @@ main();
 sub main {
     system("clear");
 
-    # 1. 数据采集 (Gather all data first)
-    my $cpu_usage   = get_overall_cpu_usage();
-    my $mem_swap    = get_memory_and_swap_info();
-    my $disks       = get_disk_usage();
-    my $processes   = get_top_processes();
+    # 1. 数据采集 (Gather all data first using new function names)
+    my $cpu_usage_val = cpu_usage();
+    my $mem_swap_data = mem_info();
+    my $disks_data    = disk_usage();
+    my $processes_data= top_processes();
 
     # 2. 数据展示 (Display all data)
     print_header("System Overview");
-    print_cpu_info($cpu_usage);
-    print_memory_and_swap_info($mem_swap);
+    print_cpu_info($cpu_usage_val);
+    print_memory_and_swap_info($mem_swap_data);
     
     print_header("Disk Filesystems");
-    print_disk_info($disks);
+    print_disk_info($disks_data);
 
     print_header("Top " . TOP_PROCESS_COUNT . " Processes (by CPU)");
-    print_top_processes($processes);
+    print_top_processes($processes_data);
 }
 
-# --- 数据采集函数 (Data Gathering Functions) ---
+# --- 数据采集函数 (Data Gathering Functions with new names) ---
 
-sub get_overall_cpu_usage {
+sub cpu_usage {
     my $stat1 = _get_cpu_times();
     sleep(1);
     my $stat2 = _get_cpu_times();
@@ -55,7 +55,7 @@ sub _get_cpu_times {
     return { total => $total, idle => $idle };
 }
 
-sub get_memory_and_swap_info {
+sub mem_info {
     my %data;
     open(my $fh, '<', '/proc/meminfo') or die "Cannot open /proc/meminfo: $!";
     while (my $line = <$fh>) {
@@ -80,7 +80,7 @@ sub get_memory_and_swap_info {
         my $swap_free_kb = $data{SwapFree};
         my $swap_used_kb = $swap_total_kb - $swap_free_kb;
         $result{swap_info} = {
-            swap_percent  => ($swap_used_kb / $swap_total_kb) * 100,
+            swap_percent  => $swap_total_kb > 0 ? ($swap_used_kb / $swap_total_kb) * 100 : 0,
             swap_used_gb  => $swap_used_kb / 1024 / 1024,
             swap_total_gb => $swap_total_kb / 1024 / 1024,
         };
@@ -88,7 +88,7 @@ sub get_memory_and_swap_info {
     return \%result;
 }
 
-sub get_disk_usage {
+sub disk_usage {
     # -P 参数确保长路径不换行，便于解析
     my @df_lines = `df -hP`;
     shift @df_lines; # 去掉标题行
@@ -98,18 +98,20 @@ sub get_disk_usage {
         # 过滤掉临时的或虚拟的文件系统
         next if $line =~ /^(tmpfs|devtmpfs|squashfs)/;
         my ($fs, $size, $used, $avail, $percent, $mount) = split(/\s+/, $line);
-        # 移除百分比符号
+        
+        # FIX: 在处理前，移除字符串中的 '%' 符号
         $percent =~ s/%//;
+
         push @disks, {
             mount   => $mount,
-            percent => int($percent), # 现在 $percent 是纯数字
+            percent => int($percent),
             text    => "$used / $size",
         };
     }
     return \@disks;
 }
 
-sub get_top_processes {
+sub top_processes {
     my @ps_lines = `ps aux --sort=-%cpu`;
     shift @ps_lines; # 去掉标题行
 
