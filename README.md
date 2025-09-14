@@ -4,6 +4,7 @@
   <br>
   <img width="80%" style="max-width:80%" src=".github/cross.jpg" title="cross">
   <br>
+  <p>Across the great wall, we can reach every corner in the world.</p>
 </div>
 
 <p align="center">
