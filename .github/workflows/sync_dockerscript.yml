@@ -1,5 +1,5 @@
 ---
-name: 'Sync Docker Install Script'
+name: 'Sync docker install script'
 
 on:
   schedule:
@@ -15,7 +15,7 @@ permissions:
 
 jobs:
   sync:
-    name: 'Sync Docker Install Script'
+    name: 'Sync docker install script'
     runs-on: ubuntu-latest
 
     steps:
