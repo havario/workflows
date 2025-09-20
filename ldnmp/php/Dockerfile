@@ -1,4 +1,4 @@
-# Description: This dockerfile is used build a lightweight php-fpm environment with essential extensions.
+# Description: This dockerfile is used to build a pre-configured, performance-tuned php-fpm image.
 #
 # Copyright (c) 2024-2025 honeok <i@honeok.com>
 #
