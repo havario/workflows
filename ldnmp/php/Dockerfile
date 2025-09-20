@@ -4,6 +4,7 @@
 #
 # References:
 # https://github.com/kejilion/docker
+# https://github.com/mlocati/docker-php-extension-installer
 #
 # SPDX-License-Identifier: Apache-2.0
 
