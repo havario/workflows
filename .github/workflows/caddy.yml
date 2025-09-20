@@ -60,6 +60,11 @@ jobs:
           tags: |
             type=raw,value=${{ steps.bump_version.outputs.version }}-alpine
             type=raw,value=${{ steps.bump_version.outputs.version }}
+          labels: |
+            org.opencontainers.image.description=a powerful, enterprise-ready, open source web server with automatic HTTPS written in Go
+            org.opencontainers.image.source=https://github.com/caddyserver/caddy-docker
+            org.opencontainers.image.title=Caddy
+            org.opencontainers.image.url=https://caddyserver.com
 
       - name: 'Build and Push Caddy image'
         if: env.IS_RENEW == 1 || github.event_name == 'workflow_dispatch'
