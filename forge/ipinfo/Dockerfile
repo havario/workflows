@@ -33,6 +33,7 @@ RUN set -ex \
     && ./configure --with-compat \
         --add-dynamic-module=../ngx_http_geoip2_module \
     && make modules \
+    && strip objs/*.so \
     && apk del --no-network .build-deps \
     && rm -rf /var/cache/apk/*
 
