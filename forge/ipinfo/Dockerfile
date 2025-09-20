@@ -49,9 +49,10 @@ COPY nginx/nginx.conf /etc/nginx/nginx.conf
 COPY nginx/conf.d/* /etc/nginx/conf.d/
 
 RUN set -ex \
-    && apk add --update --no-cache libmaxminddb \
+    && apk add --update --no-cache \
+        libmaxminddb \
     && rm -f /etc/nginx/conf.d/default.conf \
-    && wget --no-check-certificate -qO /usr/share/nginx/html/favicon.ico https://cdn.skyimg.net/up/2025/5/29/e8c32aa5.webp \
+    && curl -Lso /usr/share/nginx/html/favicon.ico https://m.360buyimg.com/i/jfs/t1/323476/2/22568/1018/68cf39ceF4ae3b432/6b7588e656baf098.webp \
     && rm -rf /var/cache/apk/*
 
 HEALTHCHECK --timeout=10s --start-period=5s CMD curl -fs http://127.0.0.1:80/health || exit 1
