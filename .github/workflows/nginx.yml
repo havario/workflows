@@ -64,6 +64,11 @@ jobs:
             type=raw,value=${{ steps.bump_version.outputs.ngx_version }}-alpine${{ steps.bump_version.outputs.alpine_version }}
             type=raw,value=${{ steps.bump_version.outputs.ngx_version }}-alpine
             type=raw,value=alpine
+          labels: |
+            org.opencontainers.image.description=nginx is an HTTP web server, reverse proxy, content cache, load balancer, TCP/UDP proxy server, and mail proxy server.
+            org.opencontainers.image.source=https://github.com/nginx/nginx
+            org.opencontainers.image.title=Nginx
+            org.opencontainers.image.url=https://nginx.org
 
       - name: 'Build and Push Nginx image'
         if: env.IS_RENEW == 1 || github.event_name == 'workflow_dispatch'
