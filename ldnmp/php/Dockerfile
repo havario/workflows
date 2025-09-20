@@ -14,8 +14,7 @@ FROM php:${PHP_VERSION}-fpm-alpine AS dist
 LABEL maintainer="honeok <i@honeok.com>"
 
 RUN set -ex \
-    && apk update && apk upgrade \
-    && apk add --no-cache --virtual .build-deps \
+    && apk add --update --no-cache --virtual .build-deps \
         autoconf \
         gcc \
         g++ \
