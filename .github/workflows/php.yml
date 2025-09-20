@@ -62,6 +62,11 @@ jobs:
             type=raw,value=${{ steps.bump_version.outputs.php_version }}-fpm-alpine${{ steps.bump_version.outputs.alpine_version }}
             type=raw,value=${{ steps.bump_version.outputs.php_version }}-fpm-alpine
             type=raw,value=fpm-alpine
+          labels: |
+            org.opencontainers.image.description=PHP is a popular general-purpose scripting language that is especially suited to web development. Fast, flexible and pragmatic, PHP powers everything from your blog to the most popular websites in the world.
+            org.opencontainers.image.source=https://github.com/php/php-src
+            org.opencontainers.image.title=PHP
+            org.opencontainers.image.url=https://www.php.net
 
       - name: 'Build and Push PHP image'
         if: env.IS_RENEW == 1 || github.event_name == 'workflow_dispatch'
