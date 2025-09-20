@@ -38,6 +38,7 @@ RUN set -ex \
         opcache \
         pdo_mysql \
         redis \
+        soap \
         zip \
     && echo "upload_max_filesize=50M" > /usr/local/etc/php/conf.d/uploads.ini \
     && echo "post_max_size=50M" > /usr/local/etc/php/conf.d/post.ini \
