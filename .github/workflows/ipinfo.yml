@@ -27,13 +27,13 @@ jobs:
 
       - name: 'Fetch Versions and Determine Build'
         run: |
-          NGX_LVER="$(wget -qO- --tries=50 --header="Authorization: token ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/repos/nginx/nginx/releases/latest | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/' | sed 's/release-//')"
-          NGX_ALPINE_LVER="$(docker run --rm nginx:"${NGX_LVER}-alpine" sh -c "nginx -v 2>&1 | awk -F'/' '{print \$NF}'" 2>/dev/null || true)"
+          NGX_LVER="$(wget -qO- --tries=50 --header="Authorization: token ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/repos/nginx/nginx/releases/latest | grep '"tag_name":' | sed -n 's/.*"tag_name": "[^0-9]*\([0-9.]*\)".*/\1/p')"
           GEOIP2_TAG="$(wget -qO- --tries=50 --header="Authorization: token ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/repos/leev/ngx_http_geoip2_module/releases/latest | grep -o '"tag_name": *"[^"]*"' | sed 's/.*"v\?\([^"]*\)".*/\1/')"
+          NGX_IMG_LVER="$(docker run --rm nginx:"${NGX_LVER}-alpine" sh -c "nginx -v 2>&1 | awk -F'/' '{print \$NF}'" 2>/dev/null || true)"
           echo "NGX_LVER=$NGX_LVER" >> $GITHUB_ENV
-          echo "NGX_ALPINE_LVER=$NGX_ALPINE_LVER" >> $GITHUB_ENV
+          echo "NGX_IMG_LVER=$NGX_IMG_LVER" >> $GITHUB_ENV
           echo "GEOIP2_TAG=$GEOIP2_TAG" >> $GITHUB_ENV
-          if [[ "$NGX_LVER" == "$NGX_ALPINE_LVER" ]]; then
+          if [[ "$NGX_LVER" == "$NGX_IMG_LVER" ]]; then
             echo "IS_RENEW=1" >> $GITHUB_ENV
           fi
 
