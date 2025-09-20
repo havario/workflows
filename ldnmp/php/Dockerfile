@@ -9,7 +9,7 @@
 
 ARG PHP_VERSION=""
 
-FROM php:${NGX_VERSION}-fpm-alpine AS dist
+FROM php:${PHP_VERSION}-fpm-alpine AS dist
 
 LABEL maintainer="honeok <i@honeok.com>"
 
@@ -26,7 +26,7 @@ RUN set -ex \
         imagemagick \
         imagemagick-dev \
         libgomp \
-    && curl -fsL "https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions" -o /usr/local/bin/install-php-extensions \
+    && curl -Ls https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions -o /usr/local/bin/install-php-extensions \
     && chmod +x /usr/local/bin/install-php-extensions \
     && /usr/local/bin/install-php-extensions \
         bcmath \
@@ -45,8 +45,8 @@ RUN set -ex \
     && echo "max_execution_time=1200" > /usr/local/etc/php/conf.d/max_execution_time.ini \
     && echo "max_input_time=600" > /usr/local/etc/php/conf.d/max_input_time.ini \
     && echo "max_input_vars=3500" > /usr/local/etc/php/conf.d/max_input_vars.ini \
-    && curl -fsL "https://github.com/kejilion/sh/raw/main/optimized_php.ini" -o /usr/local/etc/php/conf.d/optimized_php.ini \
-    && curl -fsL "https://github.com/kejilion/sh/raw/main/www-1.conf" -o /usr/local/etc/php-fpm.d/www.conf \
-    && apk del .build-deps \
+    && curl -Ls https://github.com/kejilion/sh/raw/main/optimized_php.ini -o /usr/local/etc/php/conf.d/optimized_php.ini \
+    && curl -Ls https://github.com/kejilion/sh/raw/main/www-1.conf -o /usr/local/etc/php-fpm.d/www.conf \
+    && apk del --no-network .build-deps \
     && rm -f /usr/local/bin/install-php-extensions \
     && rm -rf /var/cache/apk/*
