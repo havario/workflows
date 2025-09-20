@@ -1,13 +1,18 @@
 # Description: This dockerfile is used build a lightweight php-fpm environment with essential extensions.
 #
-# Copyright (c) 2024-2025 honeok <honeok@disroot.org>
+# Copyright (c) 2024-2025 honeok <i@honeok.com>
 #
-# Thanks: kejilion <lion12776@outlook.com>
+# References:
+# https://github.com/kejilion/docker
 #
 # SPDX-License-Identifier: Apache-2.0
 
-FROM php:fpm-alpine
-LABEL maintainer="honeok <honeok@disroot.org>"
+ARG PHP_VERSION=""
+
+FROM php:${NGX_VERSION}-fpm-alpine AS dist
+
+LABEL maintainer="honeok <i@honeok.com>"
+
 RUN set -ex \
     && apk update && apk upgrade \
     && apk add --no-cache --virtual .build-deps \
