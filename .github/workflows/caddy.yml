@@ -32,7 +32,7 @@ jobs:
           CADDY_CVER="$(wget -qO- --tries=50 https://hub.docker.com/v2/repositories/honeok/caddy/tags 2>/dev/null | grep -o '"name":"[^"]*"' | awk -F'"' '{print $4}' | grep -v 'alpine' | sort -Vr | head -n1 || true)"
           CADDY_ALPINE_LVER="$(docker run --rm caddy:${CADDY_LVER}-alpine 2>/dev/null sh -c 'caddy version 2>&1' | sed -n 's/^v\([0-9.]*\).*/\1/p' || true)"
           echo "version=${CADDY_LVER}" >> "$GITHUB_OUTPUT"
-          if [[ "$(printf '%s\n%s\n' "$CADDY_LVER" "$CADDY_CVER" | sort -V | head -n1)" != "$CADDY_LVER" && "$CADDY_ALPINE_LVER" == "$CADDY_LVER") || (-z "$CADDY_CVER" && "$CADDY_ALPINE_LVER" == "$CADDY_LVER") ]]; then
+          if [[ "$(printf '%s\n%s\n' "$CADDY_LVER" "$CADDY_CVER" | sort -V | head -n1)" != "$CADDY_LVER" && "$CADDY_ALPINE_LVER" == "$CADDY_LVER" || -z "$CADDY_CVER" && "$CADDY_ALPINE_LVER" == "$CADDY_LVER" ]]; then
             echo "IS_RENEW=1" >> $GITHUB_ENV
           fi
 
