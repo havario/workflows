@@ -26,8 +26,8 @@ jobs:
 
       - name: 'Fetch Versions and Determine Build'
         run: |
-          NGX_CVER="$(wget -qO- --tries=50 https://hub.docker.com/v2/repositories/honeok/nginx/tags 2>/dev/null | jq -r ".results // [] | .[].name" | grep -v '^alpine$' | sort -Vr | head -n1 | cut -d'-' -f1 || echo "")"
           NGX_LVER="$(wget -qO- --tries=50 --header="Authorization: token ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/repos/nginx/nginx/releases/latest | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/' | sed 's/release-//')"
+          NGX_CVER="$(wget -qO- --tries=50 https://hub.docker.com/v2/repositories/honeok/nginx/tags 2>/dev/null | jq -r ".results // [] | .[].name" | grep -v '^alpine$' | sort -Vr | head -n1 | cut -d'-' -f1 || echo "")"
           ZSTD_LVER="$(wget -qO- --tries=50 --header="Authorization: token ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/repos/facebook/zstd/releases/latest | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/' | sed 's/v//')"
           NGX_ALPINE_LVER="$(docker run --rm nginx:"${NGX_LVER}-alpine" sh -c "nginx -v 2>&1 | awk -F'/' '{print \$NF}'" 2>/dev/null || true)"
           NGX_ALPINE_TAG="$(docker run --rm nginx:"${NGX_LVER}-alpine" sh -c 'cat /etc/alpine-release | cut -d "." -f 1-2' 2>/dev/null || true)"
@@ -55,13 +55,23 @@ jobs:
           username: ${{ env.DOCKER_USERNAME }}
           password: ${{ env.DOCKER_PASSWORD }}
 
+      - name: 'Extract Docker metadata'
+        if: env.IS_RENEW == 1 || github.event_name == 'workflow_dispatch'
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.DOCKER_USERNAME }}/caddy
+          tags: |
+            type=raw,value=${{ steps.bump_version.outputs.version }}-alpine
+            type=raw,value=${{ steps.bump_version.outputs.version }}
+
       - name: 'Build and Push Nginx image'
         if: env.IS_RENEW == 1 || github.event_name == 'workflow_dispatch'
         uses: docker/build-push-action@v6
         with:
           context: ${{ github.workspace }}/ldnmp/nginx
           file: ${{ github.workspace }}/ldnmp/nginx/Dockerfile
-          platforms: linux/amd64, linux/arm64/v8
+          platforms: linux/amd64
           build-args: |
             NGX_VERSION=${{ env.NGX_LVER }}
             ZSTD_VERSION=${{ env.ZSTD_LVER }}
