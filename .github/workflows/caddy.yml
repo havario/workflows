@@ -16,7 +16,7 @@ env:
 
 jobs:
   build:
-    name: 'Build and Publish Stable Caddy'
+    name: 'Build and Publish Caddy'
     runs-on: ubuntu-latest
 
     steps:
