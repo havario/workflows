@@ -29,7 +29,6 @@ jobs:
         run: |
           CADDY_LVER="$(wget -qO- --tries=50 https://api.github.com/repos/caddyserver/caddy/releases/latest | grep '"tag_name":' | sed -n 's/.*"tag_name": "v\([^"]*\)".*/\1/p')"
           CADDY_CVER="$(wget -qO- --tries=50 https://hub.docker.com/v2/repositories/honeok/caddy/tags 2>/dev/null | grep -o '"name":"[^"]*"' | awk -F'"' '{print $4}' | grep -v 'alpine' | sort -Vr | head -n1 || true)"
-          [ -z "$CADDY_LVER" ] && { echo 'Error: Required parameters cannot be empty.'; exit 1; }
           CADDY_ALPINE_LVER="$(docker run --rm caddy:"${CADDY_LVER}"-alpine 2>/dev/null sh -c "caddy version 2>&1" | head -n1 | cut -d' ' -f1 | sed 's/^v//' | grep . || echo "")"
           echo "CADDY_LVER=$CADDY_LVER" >> $GITHUB_ENV
           echo "CADDY_CVER=$CADDY_CVER" >> $GITHUB_ENV
