@@ -34,7 +34,7 @@ jobs:
           NGX_ALPINE_TAG="$(docker run --rm nginx:${NGX_LVER}-alpine sh -c 'cat /etc/alpine-release' 2>/dev/null | awk -F. '{print $1"."$2}' || true)"
           echo "ngx_version=${NGX_LVER}" >> "$GITHUB_OUTPUT"
           echo "zstd_version=${ZSTD_LVER}" >> "$GITHUB_OUTPUT"
-          echo "ngx_tag=${NGX_ALPINE_TAG}" >> "$GITHUB_OUTPUT"
+          echo "alpine_version=${NGX_ALPINE_TAG}" >> "$GITHUB_OUTPUT"
           if [[ "$(printf '%s\n%s\n' "$NGX_LVER" "$NGX_CVER" | sort -V | head -n1)" != "$NGX_LVER" && "$NGX_ALPINE_LVER" == "$NGX_LVER" || -z "$NGX_CVER" && "$NGX_ALPINE_LVER" == "$NGX_LVER" ]]; then
             echo "IS_RENEW=1" >> "$GITHUB_ENV"
           fi
@@ -59,10 +59,11 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ env.DOCKER_USERNAME }}/caddy
+          images: ${{ env.DOCKER_USERNAME }}/nginx
           tags: |
-            type=raw,value=${{ steps.bump_version.outputs.version }}-alpine
-            type=raw,value=${{ steps.bump_version.outputs.version }}
+            type=raw,value=${{ steps.bump_version.outputs.ngx_version }}-alpine${{ steps.bump_version.outputs.alpine_version }}
+            type=raw,value=${{ steps.bump_version.outputs.ngx_version }}-alpine
+            type=raw,value=alpine
 
       - name: 'Build and Push Nginx image'
         if: env.IS_RENEW == 1 || github.event_name == 'workflow_dispatch'
@@ -72,10 +73,8 @@ jobs:
           file: ${{ github.workspace }}/ldnmp/nginx/Dockerfile
           platforms: linux/amd64
           build-args: |
-            NGX_VERSION=${{ env.NGX_LVER }}
-            ZSTD_VERSION=${{ env.ZSTD_LVER }}
-          tags: |
-            ${{ env.DOCKER_USERNAME }}/nginx:alpine
-            ${{ env.DOCKER_USERNAME }}/nginx:${{ env.NGX_LVER }}-alpine
-            ${{ env.DOCKER_USERNAME }}/nginx:${{ env.NGX_LVER }}-alpine${{ env.NGX_ALPINE_TAG }}
+            NGX_VERSION=${{ steps.bump_version.outputs.ngx_version }}
+            ZSTD_VERSION=${{ steps.bump_version.outputs.zstd_version }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
           push: true
