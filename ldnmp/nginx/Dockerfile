@@ -6,7 +6,7 @@
 # https://github.com/kejilion/docker
 #
 # SPDX-License-Identifier: Apache-2.0
-
+1
 ARG NGX_VERSION=""
 
 FROM alpine:latest AS builder
