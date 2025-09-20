@@ -21,7 +21,7 @@ RUN set -ex \
         git \
         make \
         pkgconfig \
-    && apk add --no-cache \
+    && apk add --update --no-cache \
         imagemagick \
         imagemagick-dev \
         libgomp \
