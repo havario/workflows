@@ -16,5 +16,8 @@ _"The river does not rush to be first, but strives to flow endlessly."_
 
 ### 🏆 GitHub Activity
 
-![GitHub Profile Trophy](https://github-profile-trophy.vercel.app/?username=honeok&theme=onedark&column=-1&margin-w=15)
+<p>
+  <img align="left" src="https://github-profile-trophy.vercel.app/?username=honeok&theme=onedark&column=-1&margin-w=15" />
+</p>
+
 [![Activity Graph](https://github-readme-activity-graph.vercel.app/graph?username=honeok&theme=merko&custom_title=Louis%20Activity%20Graph&hide_border=true&point=FFFFFF&days=50)](https://github.com/honeok)
