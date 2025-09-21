@@ -27,7 +27,7 @@ env:
 
 jobs:
   release_v0:
-    name: 'Release ${{ matrix.NEZHA_VERSION }} Binary'
+    name: 'Release ${{ matrix.NEZHA_VERSION }} binary'
     runs-on: ubuntu-latest
 
     strategy:
@@ -128,7 +128,7 @@ jobs:
           tag: ${{ matrix.NEZHA_VERSION }}
 
   build_v0:
-    name: 'Build ${{ matrix.NEZHA_VERSION }} Image'
+    name: 'Build ${{ matrix.NEZHA_VERSION }} image'
     runs-on: ubuntu-latest
 
     strategy:
@@ -186,7 +186,7 @@ jobs:
           push: true
 
   build_v1:
-    name: 'Build v1 Image'
+    name: 'Build v1 image'
     runs-on: ubuntu-latest
 
     steps:
