@@ -21,3 +21,10 @@ _"The river does not rush to be first, but strives to flow endlessly."_
 </p>
 
 [![Activity Graph](https://github-readme-activity-graph.vercel.app/graph?username=honeok&theme=merko&custom_title=Louis%20Activity%20Graph&hide_border=true&point=FFFFFF&days=50)](https://github.com/honeok)
+
+### 💬 Connect with me
+
+[![X](https://img.shields.io/badge/X-000000.svg?style=for-the-badge&logo=x&logoColor=white)](https://x.com/hone0k)
+[![Telegram](https://img.shields.io/badge/Telegram-2CA5E0?style=for-the-badge&logo=telegram&logoColor=white)](https://t.me/zzzzzzOvO)
+[![Blog](https://img.shields.io/badge/Blog-%23FF4088.svg?&style=for-the-badge&logo=wordpress&logoColor=white)](https://blog.honeok.com)
+[![Github](https://img.shields.io/badge/honeok-12100E.svg?style=for-the-badge&logo=github&logoColor=white)](https://github.com/honeok)
