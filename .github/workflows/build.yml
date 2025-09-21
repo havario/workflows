@@ -55,6 +55,13 @@ jobs:
           cd ${{ github.workspace }}/v0/source
           git clone --depth=1 --branch ${{ matrix.NEZHA_VERSION }} https://github.com/nezhahq/nezha.git .
 
+      - name: 'Replace static resources'
+        working-directory: ${{ github.workspace }}/v0/source
+        run: |
+          cp ../build.sh .
+          chmod +x build.sh
+          ./build.sh
+
       - name: 'Fetch ipinfo geoip database'
         working-directory: ${{ github.workspace }}/v0/source
         run: |
