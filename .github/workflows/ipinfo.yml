@@ -71,6 +71,9 @@ jobs:
         with:
           images: ${{ env.DOCKER_USERNAME }}/ipinfo
           tags: type=raw,value=latest
+          labels: |
+            org.opencontainers.image.description=Ipinfo is a self-hosted, no-tracking, no-ads solution for displaying client IP information such as IP address, country, AS number/description.
+            org.opencontainers.image.title=Ipinfo
 
       - name: 'Build and Push ipinfo image'
         if: env.IS_RENEW == 1 || github.event_name == 'workflow_dispatch'
