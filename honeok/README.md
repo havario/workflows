@@ -1,4 +1,4 @@
-## Hi there, I'm honeok
+## Hi there 👋 I'm honeok
 
 _"The river does not rush to be first, but strives to flow endlessly."_
 
