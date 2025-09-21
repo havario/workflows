@@ -1,6 +1,6 @@
 ## Hi there, I'm honeok
 
-_The river does not rush to be first, but strives to flow endlessly._
+_"The river does not rush to be first, but strives to flow endlessly."_
 
 ![Debian](https://img.shields.io/badge/Debian-Linux-D70A53?logo=debian&logoColor=fff&style=for-the-badge)
 ![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
