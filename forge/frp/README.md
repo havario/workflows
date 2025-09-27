@@ -32,9 +32,9 @@ Add the following content to the `docker-compose.yaml` file.
 ```shell
 tee docker-compose.yaml >/dev/null <<'EOF'
 services:
-  frp:
+  frps:
     image: honeok/frp
-    container_name: frp
+    container_name: frps
     restart: unless-stopped
     environment:
       - TZ=Asia/Shanghai
