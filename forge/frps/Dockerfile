@@ -7,7 +7,7 @@ FROM alpine:latest AS dist
 
 LABEL maintainer="honeok <i@honeok.com>"
 
-ARG FRP_VERSION=""
+ARG FRP_VERSION
 ARG TARGETOS
 ARG TARGETARCH
 
