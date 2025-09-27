@@ -54,6 +54,11 @@ jobs:
           tags: |
             type=raw,value=${{ steps.bump_version.outputs.frp_version }}
             type=raw,value=latest
+          labels: |
+            org.opencontainers.image.description=A fast reverse proxy to help you expose a local server behind a NAT or firewall to the internet.
+            org.opencontainers.image.source=https://github.com/fatedier/frp
+            org.opencontainers.image.title=FRP
+            org.opencontainers.image.url=https://gofrp.org
 
       - name: 'Build and Push frp image'
         if: env.IS_RENEW == 1 || github.event_name == 'workflow_dispatch'
