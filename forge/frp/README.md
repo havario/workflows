@@ -27,7 +27,13 @@ It can be found at [Docker Hub][3].
 
 ## Start a container
 
-Add the following content to the `docker-compose.yaml` file.
+Add the following to your `docker-compose.yaml` file to start the frp server (frps).
+
+This image is multi-purpose and can also run as an frp client (frpc). To do this, simply change the startup command in your `docker-compose.yaml`
+
+`command: frpc -c /etc/frp/frpc.toml`
+
+For detailed configuration options, please refer to the official [frp documentation][4].
 
 ```shell
 tee docker-compose.yaml >/dev/null <<'EOF'
@@ -45,6 +51,9 @@ services:
 EOF
 ```
 
+**Note**: The port you configured must be opened in the firewall.
+
 [1]: https://gofrp.org
 [2]: https://docs.docker.com/install
 [3]: https://hub.docker.com/r/honeok/frp
+[4]: https://github.com/fatedier/frp
