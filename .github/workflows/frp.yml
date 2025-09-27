@@ -1,5 +1,5 @@
 ---
-name: 'Build and Publish FRP'
+name: 'Build and Publish frp'
 
 on:
   schedule:
@@ -12,7 +12,7 @@ defaults:
 
 jobs:
   build:
-    name: 'Build and Publish FRP'
+    name: 'Build and Publish frp'
     runs-on: ubuntu-latest
     env:
       DOCKER_USERNAME: ${{ github.repository_owner }}
@@ -55,7 +55,7 @@ jobs:
             type=raw,value=${{ steps.bump_version.outputs.frp_version }}
             type=raw,value=latest
 
-      - name: 'Build and Push FRP image'
+      - name: 'Build and Push frp image'
         if: env.IS_RENEW == 1 || github.event_name == 'workflow_dispatch'
         uses: docker/build-push-action@v6
         with:
