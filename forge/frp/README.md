@@ -1,5 +1,6 @@
 # FRP
 
+[![GitHub release](https://img.shields.io/github/v/tag/fatedier/frp.svg?label=release&color=brightgreen&logo=github&style=flat-square)](https://github.com/fatedier/frp/releases)
 [![Docker Pulls](https://img.shields.io/docker/pulls/honeok/frp.svg?style=flat-square)](https://hub.docker.com/r/honeok/frp)
 [![Docker Image Size](https://img.shields.io/docker/image-size/honeok/frp.svg?style=flat-square)](https://hub.docker.com/r/honeok/frp)
 [![Docker Image Version](https://img.shields.io/docker/v/honeok/frp.svg?style=flat-square)](https://hub.docker.com/r/honeok/frp)
