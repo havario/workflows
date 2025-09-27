@@ -36,6 +36,8 @@ services:
     image: honeok/frp
     container_name: frp
     restart: unless-stopped
+    environment:
+      - TZ=Asia/Shanghai
     volumes:
       - $PWD/frps.toml:/etc/frp/frps.toml
     command: frps -c /etc/frp/frps.toml
