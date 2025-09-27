@@ -29,7 +29,7 @@ It can be found at [Docker Hub][3].
 
 Add the following to your `docker-compose.yaml` file to start the frp server (frps).
 
-This image is multi-purpose and can also run as an frp client (frpc). To do this, simply change the startup command in your `docker-compose.yaml`
+This image is multi-purpose and can also run as an frp client (frpc). To do this, simply change the startup command in your `docker-compose.yaml`.
 
 `command: frpc -c /etc/frp/frpc.toml`
 
