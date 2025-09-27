@@ -1,4 +1,4 @@
-# Description:
+# Description: This dockerfile is used build an all-in-one frps/frpc container for versatile deployments.
 #
 # Copyright (c) 2025 honeok <i@honeok.com>
 # SPDX-License-Identifier: Apache-2.0
