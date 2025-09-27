@@ -21,11 +21,11 @@ If you need to install docker by yourself, follow the [official][2] installation
 
 This pulls the latest release of FRP.
 
+It can be found at [Docker Hub][3].
+
 ```shell
 docker pull honeok/frp
 ```
-
-It can be found at [Docker Hub][3].
 
 ## Start a container
 
