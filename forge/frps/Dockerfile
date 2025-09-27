@@ -24,6 +24,6 @@ RUN set -ex \
     && mv frp_${FRP_VERSION}_${TARGETOS}_${TARGETARCH}/frps.toml /etc/frp \
     && rm -rf /var/cache/apk/* /tmp/*
 
-ENTRYPOINT [ "/usr/bin/frps" ]
+ENTRYPOINT ["/usr/bin/frps"]
 
 CMD ["-c", "/etc/frp/frps.toml"]
