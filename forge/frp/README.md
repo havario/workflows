@@ -40,9 +40,9 @@ For detailed configuration options, please refer to the official [frp documentat
 ```shell
 tee docker-compose.yaml >/dev/null <<'EOF'
 services:
-  frps:
+  frp:
     image: honeok/frp
-    container_name: frps
+    container_name: frp
     restart: unless-stopped
     environment:
       - TZ=Asia/Shanghai
