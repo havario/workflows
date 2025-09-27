@@ -13,10 +13,13 @@ ARG TARGETARCH
 
 RUN set -ex \
     && apk upgrade \
+    && apk add --update --no-cache tzdata \
     && wget -qO- https://github.com/fatedier/frp/releases/download/v${FRP_VERSION}/frp_${FRP_VERSION}_${TARGETOS}_${TARGETARCH}.tar.gz | tar xz -C /tmp --strip 1 \
     && mkdir -p /etc/frp \
     && mv /tmp/*.toml /etc/frp \
     && mv /tmp/frp* /usr/bin \
     && rm -rf /var/cache/apk/* /tmp/*
+
+ENV TZ=Asia/Shanghai
 
 CMD ["/usr/bin/frps", "-c", "/etc/frp/frps.toml"]
