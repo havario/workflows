@@ -65,4 +65,4 @@ jobs:
           build-args: FRP_VERSION=${{ steps.bump_version.outputs.frp_version }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          push: true
+          push: ${{ github.event_name != 'pull_request' }}
