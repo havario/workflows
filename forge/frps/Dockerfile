@@ -26,4 +26,4 @@ RUN set -ex \
 
 ENTRYPOINT [ "/usr/bin/frps" ]
 
-CMD ["-c","/etc/frp/frps.toml"]
+CMD ["-c", "/etc/frp/frps.toml"]
