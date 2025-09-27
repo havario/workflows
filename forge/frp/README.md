@@ -17,11 +17,11 @@ If you need to install docker by yourself, follow the [official][2] installation
 
 ## Pull the image
 
+This pulls the latest release of FRP.
+
 ```shell
 docker pull honeok/frp
 ```
-
-This pulls the latest release of Xray-core.
 
 It can be found at [Docker Hub][3].
 
