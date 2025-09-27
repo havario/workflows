@@ -7,4 +7,8 @@
 
 [FRP][1] is a high-performance reverse proxy focused on NAT traversal, supporting protocols such as TCP, UDP, HTTP, HTTPS, and P2P communication. It enables you to securely and conveniently expose local services behind a NAT or firewall to the public internet through a relay server with a public IP.
 
+## Architecture
+
+![Architecture](https://github.com/fatedier/frp/raw/master/doc/pic/architecture.png)
+
 [1]: https://gofrp.org
