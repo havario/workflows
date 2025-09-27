@@ -20,6 +20,4 @@ RUN set -ex \
     && mv /tmp/frp* /usr/bin \
     && rm -rf /var/cache/apk/* /tmp/*
 
-ENV TZ=Asia/Shanghai
-
 CMD ["/usr/bin/frps", "-c", "/etc/frp/frps.toml"]
