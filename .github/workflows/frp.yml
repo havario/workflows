@@ -10,13 +10,14 @@ defaults:
   run:
     shell: bash
 
+env:
+  DOCKER_USERNAME: ${{ github.repository_owner }}
+  DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+
 jobs:
   build:
     name: 'Build and Publish frp'
     runs-on: ubuntu-latest
-    env:
-      DOCKER_USERNAME: ${{ github.repository_owner }}
-      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
 
     steps:
       - name: 'Check out repository'
@@ -75,3 +76,24 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           push: ${{ github.event_name != 'pull_request' }}
+
+  sync:
+    name: 'Sync README to dockerhub'
+    needs:
+      - build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 'Check out repository'
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: 'Sync README to dockerhub'
+        uses: peter-evans/dockerhub-description@v4
+        with:
+          username: ${{ env.DOCKER_USERNAME }}
+          password: ${{ env.DOCKER_PASSWORD }}
+          repository: ${{ env.DOCKER_USERNAME }}/frp
+          readme-filepath: ${{ github.workspace }}/forge/frp/README.md
+          enable-url-completion: false
