@@ -12,7 +12,7 @@ insert_final_newline = true
 [*.go]
 indent_style = tab
 
-[*.mk,Makefile,Makefile.*]
+[{*.mk,Makefile,Makefile.*}]
 indent_style = tab
 
 [*.{pl,py,sh}]
