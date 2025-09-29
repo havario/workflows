@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: Apache-2.0
 
 # variables
-DOCKER_USER := $(shell git remote get-url origin | awk -F'/' '{print $4}' 2>/dev/null || echo honeok)
+DOCKER_USER := honeok
 DOCKER_REPO := openresty
 RESTY_VERSION := $(shell wget -qO- https://api.github.com/repos/openresty/openresty/tags | grep '"name":' | sed -n 's/.*"name": "[^0-9]*\([0-9.]*\)".*/\1/p' | sort -Vr | head -n1)
 ZSTD_VERSION := $(shell wget -qO- https://api.github.com/repos/facebook/zstd/releases/latest | grep '"tag_name":' | sed -n 's/.*"tag_name": "[^0-9]*\([0-9.]*\)".*/\1/p')
