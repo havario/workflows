@@ -20,7 +20,7 @@ indent_size = 4
 [*.{pl,py,sh}]
 indent_size = 4
 
-[*.{json,yml,yaml}]
+[*.{json,yaml}]
 indent_size = 2
 
 [*.md]
