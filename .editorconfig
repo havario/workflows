@@ -11,9 +11,11 @@ insert_final_newline = true
 
 [*.go]
 indent_style = tab
+indent_size = 4
 
 [{*.mk,Makefile,Makefile.*}]
 indent_style = tab
+indent_size = 4
 
 [*.{pl,py,sh}]
 indent_size = 4
