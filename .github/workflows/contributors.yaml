@@ -15,7 +15,7 @@ permissions:
 
 jobs:
   sync_readme:
-    name: 'Sync contributors'
+    name: 'Sync contributors to github'
     runs-on: ubuntu-latest
     outputs:
       is_renew: ${{ steps.compare.outputs.is_renew }}
@@ -48,7 +48,7 @@ jobs:
           branch: release
 
   sync_dockerhub:
-    name: 'Sync README to dockerhub'
+    name: 'Sync readme to dockerhub'
     runs-on: ubuntu-latest
     env:
       DOCKER_USERNAME: ${{ github.repository_owner }}
