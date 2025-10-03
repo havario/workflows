@@ -10,6 +10,9 @@ defaults:
   run:
     shell: bash
 
+permissions:
+  contents: write
+
 jobs:
   sync:
     name: 'Sync contributors'
@@ -40,3 +43,6 @@ jobs:
         with:
           commit_message: "chore: sync contributors by github actions"
           branch: release
+          commit_user_name: github-actions[bot]
+          commit_user_email: 41898282+github-actions[bot]@users.noreply.github.com
+          commit_author: username <numeric_id+username@users.noreply.github.com>
