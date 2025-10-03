@@ -1,0 +1,28 @@
+---
+name: 'Sync README to dockerhub'
+
+on:
+  workflow_dispatch:
+
+jobs:
+  sync:
+    name: 'Sync README to dockerhub'
+    runs-on: ubuntu-latest
+    env:
+      DOCKER_USERNAME: ${{ github.repository_owner }}
+      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+
+    steps:
+      - name: 'Check out repository'
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: 'Sync README to dockerhub'
+        uses: peter-evans/dockerhub-description@v5
+        with:
+          username: ${{ env.DOCKER_USERNAME }}
+          password: ${{ env.DOCKER_PASSWORD }}
+          repository: ${{ env.DOCKER_USERNAME }}/nezha-dashboard
+          readme-filepath: ./README.md
+          enable-url-completion: false
