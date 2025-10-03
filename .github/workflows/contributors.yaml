@@ -47,6 +47,9 @@ jobs:
   sync_dockerhub:
     name: 'Sync README to dockerhub'
     runs-on: ubuntu-latest
+    env:
+      DOCKER_USERNAME: ${{ github.repository_owner }}
+      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
     needs:
       - sync_readme
 
