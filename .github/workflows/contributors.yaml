@@ -17,6 +17,8 @@ jobs:
   sync_readme:
     name: 'Sync contributors'
     runs-on: ubuntu-latest
+    outputs:
+      is_renew: ${{ steps.compare.outputs.is_renew }}
 
     steps:
       - name: 'Check out repository'
@@ -26,6 +28,7 @@ jobs:
           fetch-depth: 0
 
       - name: 'Comparing contributors'
+        id: compare
         run: |
           OFFICIAL="$(wget -qO- https://github.com/nezhahq/nezha/raw/master/README.md | sed -n '/<!--GAMFC_DELIMITER-->/,/<!--GAMFC_DELIMITER_END-->/p')"
           LOCAL="$(sed -n '/<!--GAMFC_DELIMITER-->/,/<!--GAMFC_DELIMITER_END-->/p' ./README.md)"
@@ -34,12 +37,12 @@ jobs:
               /<!--GAMFC_DELIMITER-->/r /dev/stdin
               /<!--GAMFC_DELIMITER-->/,/<!--GAMFC_DELIMITER_END-->/d
             }' ./README.md
-            echo "IS_RENEW=1" >> "$GITHUB_ENV"
+            echo "is_renew=1" >> "$GITHUB_OUTPUT"
           fi
 
       - name: 'Upload commit to repository'
         uses: stefanzweifel/git-auto-commit-action@v6
-        if: env.IS_RENEW == 1
+        if: steps.compare.outputs.is_renew == 1
         with:
           commit_message: "docs: sync contributors by github actions"
           branch: release
@@ -52,6 +55,7 @@ jobs:
       DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
     needs:
       - sync_readme
+    if: needs.sync_readme.outputs.is_renew == 1
 
     steps:
       - name: 'Check out repository'
