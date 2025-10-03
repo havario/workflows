@@ -18,7 +18,7 @@ jobs:
     name: 'Sync contributors to github'
     runs-on: ubuntu-latest
     outputs:
-      is_renew: ${{ steps.compare.outputs.is_renew }}
+      update_readme: ${{ steps.compare.outputs.update_readme }}
 
     steps:
       - name: 'Check out repository'
@@ -37,12 +37,12 @@ jobs:
               /<!--GAMFC_DELIMITER-->/r /dev/stdin
               /<!--GAMFC_DELIMITER-->/,/<!--GAMFC_DELIMITER_END-->/d
             }' ./README.md
-            echo "is_renew=1" >> "$GITHUB_OUTPUT"
+            echo "update_readme=1" >> "$GITHUB_OUTPUT"
           fi
 
       - name: 'Upload commit to repository'
         uses: stefanzweifel/git-auto-commit-action@v6
-        if: steps.compare.outputs.is_renew == 1
+        if: steps.compare.outputs.update_readme == 1
         with:
           commit_message: "docs: sync contributors by github actions"
           branch: release
@@ -55,7 +55,7 @@ jobs:
       DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
     needs:
       - sync_readme
-    if: needs.sync_readme.outputs.is_renew == 1
+    if: needs.sync_readme.outputs.update_readme == 1
 
     steps:
       - name: 'Check out repository'
