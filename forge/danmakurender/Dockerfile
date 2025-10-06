@@ -8,15 +8,13 @@ LABEL maintainer="honeok <i@honeok.com>"
 ARG BILIUP_VERSION
 RUN set -ex; \
     case "$(uname -m)" in \
-        amd64|x86_64) OS_ARCH="x86_64";; \
-        arm64|aarch64) OS_ARCH="aarch64";; \
+        amd64|x86_64) OS_ARCH="x86_64" ;; \
+        arm64|aarch64) OS_ARCH="aarch64" ;; \
     esac; \
     wget -qO- https://github.com/biliup/biliup-rs/releases/download/${BILIUP_VERSION}/biliupR-${BILIUP_VERSION}-${OS_ARCH}-linux.tar.xz | tar Jx -C /tmp --strip 1
 
 FROM python:3.9-slim-bookworm AS dist
 LABEL maintainer="honeok <i@honeok.com>"
-ARG TARGETOS
-ARG TARGETARCH
 ARG DANMAKU_VERSION
 WORKDIR /app
 RUN set -ex \
