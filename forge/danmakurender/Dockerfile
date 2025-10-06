@@ -32,7 +32,7 @@ RUN set -ex \
     && python3 -m pip install --no-cache-dir quickjs --root-user-action=ignore \
     && apt-get purge -y --auto-remove git \
     && rm -rf /var/lib/apt/lists/* /tmp/* docs/ Dockerfile README.md
-COPY --from=deps /tmp/biliup /app/tools/biliup
+COPY --from=deps /tmp/biliup tools/biliup
 ENV TZ=Asia/Shanghai
 VOLUME ["/app"]
 ENTRYPOINT ["/docker-entrypoint.sh"]
