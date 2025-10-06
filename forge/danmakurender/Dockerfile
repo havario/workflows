@@ -17,7 +17,9 @@ FROM python:3.9-slim-bookworm AS dist
 LABEL maintainer="honeok <i@honeok.com>"
 ARG DANMAKU_VERSION
 WORKDIR /app
+COPY docker-entrypoint.sh /
 RUN set -ex \
+    && chmod +x /docker-entrypoint.sh \
     && apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         ffmpeg \
@@ -29,6 +31,8 @@ RUN set -ex \
     && python3 -m pip install --no-cache-dir -r requirements.txt --root-user-action=ignore \
     && python3 -m pip install --no-cache-dir quickjs --root-user-action=ignore \
     && apt-get purge -y --auto-remove git \
-    && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/* /tmp/* docs/ Dockerfile README.md
+COPY --from=deps /tmp/biliup /app/tools/biliup
 ENV TZ=Asia/Shanghai
-ENTRYPOINT ["python3", "-u", "main.py"]
+VOLUME ["/app"]
+ENTRYPOINT ["/docker-entrypoint.sh"]
