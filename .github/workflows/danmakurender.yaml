@@ -28,12 +28,12 @@ jobs:
       - name: 'Fetch Versions and Determine Build'
         run: |
           DANMAKU_TAG="$(wget -qO- --tries=50 --header="Authorization: token ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/repos/SmallPeaches/DanmakuRender/releases/latest | grep '"tag_name":' | sed -n 's/.*"tag_name": "[^0-9]*\([0-9.]*\)".*/\1/p')"
+          DANMAKU_LVER="$(awk -F. '{printf("%d.%d.%d\n", substr($1,3), $2, $3)}' <<< "$DANMAKU_TAG")"
           DANMAKU_CVER="$(wget -qO- --tries=50 https://hub.docker.com/v2/repositories/$DOCKER_USERNAME/danmakurender/tags 2>/dev/null | grep -o '"name":"[^"]*"' | awk -F'"' '$4!="latest"{print $4}' | sort -rV | head -n1 || true)"
-          echo "DANMAKU_CVER=$DANMAKU_CVER" >> $GITHUB_ENV
-          echo "DANMAKU_LVER=$DANMAKU_LVER" >> $GITHUB_ENV
-          echo "DANMAKU_BRANCH=$DANMAKU_BRANCH" >> $GITHUB_ENV
-          if [[ "$(echo -e "$DANMAKU_LVER\n$DANMAKU_CVER" | sort -V | head -n1)" != "$DANMAKU_LVER" || -z "$DANMAKU_CVER" ]]; then
-            echo "IS_RENEW=1" >> $GITHUB_ENV
+          echo "danmaku_tag=${DANMAKU_TAG}" >> "$GITHUB_OUTPUT"
+          echo "danmaku_version=${DANMAKU_LVER}" >> "$GITHUB_OUTPUT"
+          if [[ "$(printf '%s\n%s\n' "$DANMAKU_LVER" "$DANMAKU_CVER" | sort -V | head -n1)" != "$DANMAKU_LVER" || -z "$DANMAKU_CVER" && -n "$DANMAKU_LVER" ]]; then
+            echo "IS_RENEW=1" >> "$GITHUB_ENV"
           fi
 
       - name: 'Set up Docker QEMU'
