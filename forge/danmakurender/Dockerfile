@@ -20,8 +20,12 @@ RUN set -eux; \
         tzdata \
         xz-utils; \
     case "$(uname -m)" in \
-        amd64|x86_64) OS_ARCH="x86_64" ;; \
-        arm64|aarch64) OS_ARCH="aarch64" ;; \
+        amd64|x86_64) \
+            OS_ARCH="x86_64"; \
+        ;; \
+        arm64|aarch64) \
+            OS_ARCH="aarch64"; \
+        ;; \
     esac; \
     curl -Ls https://github.com/biliup/biliup-rs/releases/download/v${BILIUP_VERSION}/biliupR-v${BILIUP_VERSION}-${OS_ARCH}-linux.tar.xz | tar xJf - -C /tmp --strip 1; \
     git clone --depth=1 --branch ${DANMAKU_VERSION} https://github.com/SmallPeaches/DanmakuRender.git .; \
