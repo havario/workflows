@@ -68,7 +68,7 @@ jobs:
             org.opencontainers.image.licenses=Apache-2.0
             org.opencontainers.image.source=https://github.com/SmallPeaches/DanmakuRender
             org.opencontainers.image.title=DanmakuRender
-            org.opencontainers.image.url=https://github.com/SmallPeaches/DanmakuRender
+            org.opencontainers.image.url=https://hub.docker.com/r/honeok/danmakurender
 
       - name: 'Build and push DanmakuRender image'
         if: env.IS_RENEW == 1 || github.event_name == 'workflow_dispatch'
