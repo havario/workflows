@@ -29,7 +29,7 @@ jobs:
         id: bump_version
         run: |
           DANMAKU_TAG="$(wget -qO- --tries=50 --header="Authorization: token ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/repos/SmallPeaches/DanmakuRender/releases/latest | grep '"tag_name":' | sed -n 's/.*"tag_name": "[^0-9]*\([0-9.]*\)".*/\1/p')"
-          DANMAKU_LVER="$(awk -F. '{printf("v%d.%d.%d", substr($1,3), $2, $3)}' <<< "$DANMAKU_TAG")"
+          DANMAKU_LVER="$(awk -F. '{printf("%d.%d.%d", substr($1,3), $2, $3)}' <<< "$DANMAKU_TAG")"
           DANMAKU_CVER="$(wget -qO- --tries=50 https://hub.docker.com/v2/repositories/$DOCKER_USERNAME/danmakurender/tags 2>/dev/null | grep -o '"name":"[^"]*"' | awk -F'"' '$4!="latest"{print $4}' | sort -rV | head -n1 || true)"
           BILIUP_VERSION="$(wget -qO- --tries=50 --header="Authorization: token ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/repos/biliup/biliup-rs/releases | grep -E '"tag_name": "v[0-9]' | sed -n 's/.*"tag_name": "[^0-9]*\([0-9.]*\)".*/\1/p' | sort -rV | head -n1)"
           echo "danmaku_tag=${DANMAKU_TAG}" >> "$GITHUB_OUTPUT"
