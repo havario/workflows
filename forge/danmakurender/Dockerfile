@@ -6,7 +6,7 @@
 FROM python:3.9-slim-bookworm AS dist
 LABEL maintainer="honeok <i@honeok.com>"
 ARG BILIUP_VERSION=""
-ARG DANMAKU_VERSION=""
+ARG DANMAKU_TAG=""
 WORKDIR /app
 COPY docker-entrypoint.sh /
 RUN set -eux; \
@@ -28,7 +28,7 @@ RUN set -eux; \
         ;; \
     esac; \
     curl -Ls https://github.com/biliup/biliup-rs/releases/download/v${BILIUP_VERSION}/biliupR-v${BILIUP_VERSION}-${OS_ARCH}-linux.tar.xz | tar xJf - -C /tmp --strip 1; \
-    git clone --depth=1 --branch ${DANMAKU_VERSION} https://github.com/SmallPeaches/DanmakuRender.git .; \
+    git clone --depth=1 --branch ${DANMAKU_TAG} https://github.com/SmallPeaches/DanmakuRender.git .; \
     python3 -m pip install --no-cache-dir -r requirements.txt --root-user-action=ignore; \
     python3 -m pip install --no-cache-dir quickjs --root-user-action=ignore; \
     mv /tmp/biliup tools; \
