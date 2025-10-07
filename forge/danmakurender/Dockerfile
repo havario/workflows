@@ -5,8 +5,6 @@
 
 FROM python:3.9-slim-bookworm AS dist
 LABEL maintainer="honeok <i@honeok.com>"
-ARG DANMAKU_TAG=""
-ARG BILIUP_VERSION=""
 ARG DANMAKU_PKG_RUNDEPS="\
     curl \
     ffmpeg \
@@ -19,6 +17,8 @@ ARG DANMAKU_BUILD_DEPS="\
     git \
     xz-utils \
     "
+ARG DANMAKU_TAG=""
+ARG BILIUP_VERSION=""
 WORKDIR /app
 COPY docker-entrypoint.sh /
 RUN set -ex \
