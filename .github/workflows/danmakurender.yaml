@@ -27,13 +27,8 @@ jobs:
 
       - name: 'Fetch Versions and Determine Build'
         run: |
-          DANMAKU_CVER="$(wget -qO- --tries=5 "https://hub.docker.com/v2/repositories/honeok/danmakurender/tags" 2>/dev/null | \
-            jq -r ".results // [] | .[].name" | grep -v '^latest$' | sort -Vr | head -n1 | awk -F'-' '{print $2}' || echo "")"
-          DANMAKU_LVER="$(wget -qO- --tries=5 "https://api.github.com/repos/SmallPeaches/DanmakuRender/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')"
-          DANMAKU_BRANCH="$(wget -qO- --tries=5 "https://api.github.com/repos/SmallPeaches/DanmakuRender" | jq -r '.default_branch')"
-          if [[ -z "$DANMAKU_LVER" || -z "$DANMAKU_BRANCH" ]]; then
-            echo 'Error: Required parameters cannot be empty.' && exit 1
-          fi
+          DANMAKU_LVER="$(wget -qO- --tries=50 https://api.github.com/repos/SmallPeaches/DanmakuRender/releases/latest | grep '"tag_name":' | sed -n 's/.*"tag_name": "[^0-9]*\([0-9.]*\)".*/\1/p')"
+          DANMAKU_CVER="$(wget -qO- --tries=50 https://hub.docker.com/v2/repositories/$DOCKER_USERNAME/danmakurender/tags 2>/dev/null | grep -o '"name":"[^"]*"' | awk -F'"' '$4!="latest"{print $4}' | sort -rV | head -n1 || true)"
           echo "DANMAKU_CVER=$DANMAKU_CVER" >> $GITHUB_ENV
           echo "DANMAKU_LVER=$DANMAKU_LVER" >> $GITHUB_ENV
           echo "DANMAKU_BRANCH=$DANMAKU_BRANCH" >> $GITHUB_ENV
