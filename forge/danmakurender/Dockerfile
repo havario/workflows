@@ -5,7 +5,7 @@
 
 FROM python:3.9-slim-bookworm AS dist
 LABEL maintainer="honeok <i@honeok.com>"
-ARG DANMAKU_PKG_RUNDEPS="\
+ARG DANMAKU_RUN_DEPS="\
     curl \
     ffmpeg \
     nodejs \
@@ -24,7 +24,7 @@ COPY docker-entrypoint.sh /
 RUN set -ex \
     && apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-        ${DANMAKU_PKG_RUNDEPS} \
+        ${DANMAKU_RUN_DEPS} \
         ${DANMAKU_BUILD_DEPS} \
     && git clone --depth=1 --branch ${DANMAKU_TAG} https://github.com/SmallPeaches/DanmakuRender.git . \
     && python3 -m pip install --no-cache-dir -r requirements.txt --root-user-action=ignore \
