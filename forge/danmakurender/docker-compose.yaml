@@ -7,4 +7,4 @@ services:
     volumes:
       - ./logs:/app/logs
       - ./configs:/app/configs
-    network_mode: host
+    network_mode: bridge
