@@ -30,7 +30,7 @@ RUN set -eux; \
     mv /tmp/biliup tools; \
     chmod +x /docker-entrypoint.sh; \
     apt-get purge -y --auto-remove git xz-utils; \
-    rm -rf /var/lib/apt/lists/* /tmp/* docs/ Dockerfile README.md
+    rm -rf /var/lib/apt/lists/* /tmp/* docs/ Dockerfile README.md requirements.txt
 ENV TZ=Asia/Shanghai
 VOLUME ["/app"]
 ENTRYPOINT ["/docker-entrypoint.sh"]
