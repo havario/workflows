@@ -17,10 +17,10 @@ indent_size = 4
 indent_style = tab
 indent_size = 4
 
-[*.{html,php,pl,py,sh}]
+[*.{php,pl,py,sh}]
 indent_size = 4
 
-[*.{json,yaml}]
+[*.{css,html,js,json,ts,yaml}]
 indent_size = 2
 
 [*.md]
