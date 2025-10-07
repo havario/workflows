@@ -64,7 +64,7 @@ jobs:
             type=raw,value=${{ steps.bump_version.outputs.danmaku_version }}
             type=raw,value=latest
           labels: |
-            org.opencontainers.image.description=A gadget that can record live streams with barrage.
+            org.opencontainers.image.description=A small tool that can record live streams with danmaku.
             org.opencontainers.image.licenses=Apache-2.0
             org.opencontainers.image.source=https://github.com/SmallPeaches/DanmakuRender
             org.opencontainers.image.title=DanmakuRender
