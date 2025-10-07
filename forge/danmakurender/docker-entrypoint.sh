@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 #
 # Copyright (c) 2025 honeok <i@honeok.com>
 # Copyright 2024 The Nezha Authors. All rights reserved.
