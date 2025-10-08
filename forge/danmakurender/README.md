@@ -8,7 +8,6 @@
 
 ```yaml
 tee docker-compose.yaml >/dev/null <<'EOF'
----
 services:
   danmakurender:
     image: honeok/danmakurender
