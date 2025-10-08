@@ -8,11 +8,11 @@ end_of_line = lf
 insert_final_newline = true
 trim_trailing_whitespace = true
 
-[{*.{c,go,h,mk},*[Mm]akefile*}]
+[{*.{go,mk},*[Mm]akefile*}]
 indent_style = tab
 indent_size = 4
 
-[{*.{awk,java,lua,php,pl,py,sh},*[Dd]ockerfile*}]
+[{*.{awk,c,h,java,lua,php,pl,py,sh},*[Dd]ockerfile*}]
 indent_style = space
 indent_size = 4
 
