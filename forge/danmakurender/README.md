@@ -15,8 +15,8 @@ services:
     container_name: danmakurender
     restart: unless-stopped
     volumes:
-      - ./logs:/app/logs
-      - ./configs:/app/configs
+      - $PWD/logs:/app/logs
+      - $PWD/configs:/app/configs
     network_mode: bridge
 EOF
 ```
