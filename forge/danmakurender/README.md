@@ -6,7 +6,7 @@
 [![Docker Image Version](https://img.shields.io/docker/v/honeok/danmakurender.svg?style=flat-square&logo=docker&color=blue&logoColor=white)](https://hub.docker.com/r/honeok/danmakurender)
 
 
-```yaml
+```shell
 tee docker-compose.yaml >/dev/null <<'EOF'
 services:
   danmakurender:
