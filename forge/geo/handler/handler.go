@@ -14,7 +14,6 @@ import (
 
 // RateLimitMiddleware 频率限制中间件
 func RateLimitMiddleware() gin.HandlerFunc {
-	//每IP每分钟60次
 	rate := limiter.Rate{Period: time.Minute, Limit: 60}
 	store := memory.NewStore()
 	instance := limiter.New(store, rate)
@@ -23,10 +22,9 @@ func RateLimitMiddleware() gin.HandlerFunc {
 
 // Index 处理主页请求
 func Index(c *gin.Context) {
-	// 解析IP
+	//解析IP
 	ip := getIP(c)
-	mg := api.NewMeituanGeo()
-	if ip == "" || !mg.IsValidPublicIP(ip) {
+	if ip == "" || !api.IsValidPublicIP(ip) {
 		if c.GetHeader("User-Agent") == "" {
 			c.JSON(http.StatusOK, gin.H{"code": 1, "message": "error"})
 		} else {
@@ -35,6 +33,7 @@ func Index(c *gin.Context) {
 		return
 	}
 	//调用API
+	mg := api.NewMeituanGeo()
 	loc, err := mg.GetLocation(ip)
 	if err != nil {
 		if c.GetHeader("User-Agent") == "" {

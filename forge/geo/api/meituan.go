@@ -27,13 +27,13 @@ func NewMeituanGeo() *MeituanGeo {
 	return &MeituanGeo{client: &http.Client{Timeout: 10 * time.Second}}
 }
 
-// GetLocation 获取ip定位和城市信息
+// GetLocation 获取IP定位和城市信息
 func (m *MeituanGeo) GetLocation(ip string) (*model.LocationResponse, error) {
 	//验证IP非私有
-	if !isValidPublicIP(ip) {
+	if !IsValidPublicIP(ip) {
 		return nil, fmt.Errorf("invalid or private IP")
 	}
-	// 调用第一个api获取ip经纬度
+	//调用第一个API获取经纬度
 	apiURL := ipLocAPI + url.QueryEscape(ip)
 	resp, err := m.client.Get(apiURL)
 	if err != nil {
@@ -48,7 +48,7 @@ func (m *MeituanGeo) GetLocation(ip string) (*model.LocationResponse, error) {
 	if err := json.Unmarshal(body, &ipLoc); err != nil {
 		return nil, fmt.Errorf("parse IP response failed: %v", err)
 	}
-	// 调用第二个api获取城市信息
+	//调用第二个API获取城市信息
 	latlngURL := fmt.Sprintf("%s%.1f,%.1f?tag=0", latlngAPI, ipLoc.Data.Lat, ipLoc.Data.Lng)
 	resp, err = m.client.Get(latlngURL)
 	if err != nil {
@@ -63,7 +63,7 @@ func (m *MeituanGeo) GetLocation(ip string) (*model.LocationResponse, error) {
 	if err := json.Unmarshal(body, &city); err != nil {
 		return nil, fmt.Errorf("parse city response failed: %v", err)
 	}
-	// 组合结果
+	//组合结果
 	return &model.LocationResponse{
 		IP:       ip,
 		Country:  city.Data.Country,
@@ -77,8 +77,8 @@ func (m *MeituanGeo) GetLocation(ip string) (*model.LocationResponse, error) {
 	}, nil
 }
 
-// isValidPublicIP 验证ip非私有
-func isValidPublicIP(ip string) bool {
+// IsValidPublicIP 验证IP非私有
+func IsValidPublicIP(ip string) bool {
 	parts := strings.Split(ip, ".")
 	if len(parts) != 4 {
 		return false
