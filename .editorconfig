@@ -16,7 +16,7 @@ indent_size = 4
 indent_style = space
 indent_size = 4
 
-[*.{css,html,js,json,ts,xml,yaml}]
+[*.{css,html,js,json,ts,tsx,xml,yaml}]
 indent_style = space
 indent_size = 2
 
