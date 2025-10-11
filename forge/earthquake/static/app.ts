@@ -24,6 +24,7 @@ L.tileLayer(tileUrl, { attribution }).addTo(map);
 
 let markers: any[] = [];
 let eventList: HTMLElement = document.getElementById('event-list')!;
+let eventCount: HTMLElement = document.getElementById('event-count')!;
 let updateTime: HTMLElement = document.getElementById('update-time')!;
 
 async function fetchEarthquakes(): Promise<ApiResponse> {
@@ -42,8 +43,9 @@ function updateMapAndList(data: ApiResponse): void {
   markers = [];
   eventList.innerHTML = data.error ? `<p class="text-danger">加载失败: ${data.error}</p>` : '';
 
-  if (data.earthquakes.length === 0) {
+  if (data.earthquakes.length === 0 && !data.error) {
     eventList.innerHTML = '<p class="text-muted">暂无今日地震数据（min 2.5级）</p>';
+    eventCount.textContent = '0';
     updateTime.textContent = new Date().toLocaleString('zh-CN');
     return;
   }
@@ -53,9 +55,9 @@ function updateMapAndList(data: ApiResponse): void {
     const row = document.createElement('div');
     row.className = 'event-item mb-2 p-2 border-bottom';
     row.innerHTML = `
-            <strong>${eq.title}</strong><br>
-            <small>时间: ${timeStr} | 震级: ${eq.mag} | 深度: ${eq.depth.toFixed(1)}km</small>
-        `;
+              <strong>${eq.title}</strong><br>
+              <small>时间: ${timeStr} | 震级: ${eq.mag} | 深度: ${eq.depth.toFixed(1)}km</small>
+            `;
     eventList.appendChild(row);
 
     const radius = Math.max(5, eq.mag * 3);
@@ -77,11 +79,12 @@ function updateMapAndList(data: ApiResponse): void {
     map.fitBounds(group.getBounds().pad(0.1));
   }
 
-  updateTime.textContent = `前${data.earthquakes.length}条 | 更新于: ${new Date().toLocaleString('zh-CN')}`;
+  eventCount.textContent = data.earthquakes.length.toString();
+  updateTime.textContent = new Date().toLocaleString('zh-CN');
 }
 
 function init(): void {
-  updateMapAndList({ earthquakes: [] });
+  eventList.innerHTML = '<p class="text-muted">正在加载数据...</p>';
   fetchEarthquakes().then(updateMapAndList);
   setInterval(() => fetchEarthquakes().then(updateMapAndList), 600000);
 }
