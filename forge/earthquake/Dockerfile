@@ -8,7 +8,7 @@ RUN set -ex \
 FROM python:3.14-alpine AS dist
 ARG EARTHQUAKE_VERSION
 LABEL org.opencontainers.image.author="honeok <i@honeok.com>" \
-    org.opencontainers.image.description="The earthquake dashboard container delivering real-time visualization of global USGS seismic data." \
+    org.opencontainers.image.description="The earthquake dashboard container delivering real time visualization of global USGS seismic data." \
     org.opencontainers.image.licenses="Apache-2.0" \
     org.opencontainers.image.source="https://github.com/honeok/tools" \
     org.opencontainers.image.title="earthquake" \
