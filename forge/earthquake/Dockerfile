@@ -9,7 +9,7 @@ RUN set -ex \
     && npm install \
     && npx tsc -p .
 
-FROM python:3.14-alpine
+FROM python:3.14-alpine AS dist
 WORKDIR /app
 COPY --from=builder /app/app.js static/app.js
 COPY . .
