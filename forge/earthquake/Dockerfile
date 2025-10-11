@@ -1,6 +1,3 @@
-# Copyright (c) 2025 honeok <i@honeok.com>
-# SPDX-License-Identifier: Apache-2.0
-
 FROM node:24.10-alpine AS builder
 WORKDIR /app
 COPY package.json tsconfig.json ./
