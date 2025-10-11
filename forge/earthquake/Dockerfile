@@ -1,7 +1,6 @@
 FROM node:24.10-alpine AS builder
 WORKDIR /app
-COPY package.json tsconfig.json ./
-COPY static/app.ts ./static/
+COPY . .
 RUN set -ex \
     && npm install \
     && npx tsc -p .
