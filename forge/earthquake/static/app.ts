@@ -29,7 +29,8 @@ const updateTime: HTMLElement = document.getElementById('update-time')!;
 
 async function fetchEarthquakes(): Promise<ApiResponse> {
   try {
-    const response = await fetch('/api/earthquakes');
+    const url = `/api/earthquakes?timestamp=${new Date().getTime()}`;
+    const response = await fetch(url);
     if (!response.ok) throw new Error('API Error');
     return await response.json();
   } catch (error) {
@@ -50,9 +51,10 @@ function updateMapAndList(data: ApiResponse): void {
     return;
   }
 
+  eventList.innerHTML = '';
+
   data.earthquakes.forEach((eq: Earthquake) => {
     const timeStr = new Date(eq.time).toLocaleString();
-
     const row = document.createElement('div');
     row.className = 'event-item';
     row.innerHTML = `
@@ -148,8 +150,11 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () 
 function init(): void {
   eventList.innerHTML = '<p class="text-muted">正在加载数据...</p>';
   fetchEarthquakes().then(updateMapAndList);
-  setInterval(() => fetchEarthquakes().then(updateMapAndList), 600000);
   initializeTheme();
+
+  setInterval(() => {
+    fetchEarthquakes().then(updateMapAndList);
+  }, 120000);
 }
 
 init();
