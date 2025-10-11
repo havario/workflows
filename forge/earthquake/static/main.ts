@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2025 honeok <i@honeok.com>
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 declare const L: any;
 
 interface Earthquake {
@@ -14,6 +19,7 @@ interface ApiResponse {
   error?: string;
 }
 
+// 初始化地图视图, 并根据用户区域动态选择服务器
 const map = L.map('map').setView([0, 0], 2);
 const isChina = navigator.language.startsWith('zh');
 const tileUrl = isChina
@@ -22,11 +28,17 @@ const tileUrl = isChina
 const attribution = isChina ? '&copy; 高德地图 & OpenStreetMap contributors' : '&copy; OpenStreetMap contributors';
 L.tileLayer(tileUrl, { attribution }).addTo(map);
 
+
+// 缓存DOM元素引用以提升性能
 let markers: any[] = [];
 const eventList: HTMLElement = document.getElementById('event-list')!;
 const eventCount: HTMLElement = document.getElementById('event-count')!;
 const updateTime: HTMLElement = document.getElementById('update-time')!;
 
+/*
+ * 从后端API获取地震数据
+ * 附加时间戳参数以"破坏缓存" 确保每次调用都获取最新数据
+ */
 async function fetchEarthquakes(): Promise<ApiResponse> {
   try {
     const url = `/api/earthquakes?timestamp=${new Date().getTime()}`;
@@ -39,7 +51,12 @@ async function fetchEarthquakes(): Promise<ApiResponse> {
   }
 }
 
+/*
+ * 将地震数据渲染到视图, 包括地图和事件列表
+ * 自动将时间戳本地化为用户浏览器所在时区的时间
+ */
 function updateMapAndList(data: ApiResponse): void {
+  // 渲染新标记前先从地图上清除旧标记
   markers.forEach(marker => map.removeLayer(marker));
   markers = [];
   eventList.innerHTML = data.error ? `<p class="text-danger">加载失败: ${data.error}</p>` : '';
@@ -51,7 +68,7 @@ function updateMapAndList(data: ApiResponse): void {
     return;
   }
 
-  eventList.innerHTML = '';
+  eventList.innerHTML = ''; // 填充新数据前确保列表已被清空
 
   data.earthquakes.forEach((eq: Earthquake) => {
     const timeStr = new Date(eq.time).toLocaleString();
@@ -82,10 +99,15 @@ function updateMapAndList(data: ApiResponse): void {
     map.fitBounds(group.getBounds().pad(0.1));
   }
 
+  // 使用最新的数据数量和时间戳更新UI
   eventCount.textContent = data.earthquakes.length.toString();
   updateTime.textContent = new Date().toLocaleString();
 }
 
+/*
+ * 主题管理
+ * 处理主题切换 (浅色/深色/自动) 并持久化用户选择
+ */
 const themeSwitcher = document.getElementById('theme-switcher')!;
 const themeIcon = document.getElementById('theme-icon')!;
 const themeText = document.getElementById('theme-text')!;
@@ -147,11 +169,16 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () 
   }
 });
 
+/*
+ * 应用主入口
+ * 初始化应用状态并设置周期性数据轮询
+ */
 function init(): void {
   eventList.innerHTML = '<p class="text-muted">正在加载数据...</p>';
   fetchEarthquakes().then(updateMapAndList);
   initializeTheme();
 
+  // 设置轮询机制每2分钟刷新一次数据
   setInterval(() => {
     fetchEarthquakes().then(updateMapAndList);
   }, 120000);
