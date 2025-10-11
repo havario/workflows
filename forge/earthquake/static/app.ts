@@ -23,9 +23,9 @@ const attribution = isChina ? '&copy; 高德地图 & OpenStreetMap contributors'
 L.tileLayer(tileUrl, { attribution }).addTo(map);
 
 let markers: any[] = [];
-let eventList: HTMLElement = document.getElementById('event-list')!;
-let eventCount: HTMLElement = document.getElementById('event-count')!;
-let updateTime: HTMLElement = document.getElementById('update-time')!;
+const eventList: HTMLElement = document.getElementById('event-list')!;
+const eventCount: HTMLElement = document.getElementById('event-count')!;
+const updateTime: HTMLElement = document.getElementById('update-time')!;
 
 async function fetchEarthquakes(): Promise<ApiResponse> {
   try {
@@ -53,11 +53,11 @@ function updateMapAndList(data: ApiResponse): void {
   data.earthquakes.forEach((eq: Earthquake) => {
     const timeStr = new Date(eq.time).toLocaleString('zh-CN');
     const row = document.createElement('div');
-    row.className = 'event-item mb-2 p-2 border-bottom';
+    row.className = 'event-item';
     row.innerHTML = `
-              <strong>${eq.title}</strong><br>
-              <small>时间: ${timeStr} | 震级: ${eq.mag} | 深度: ${eq.depth.toFixed(1)}km</small>
-            `;
+            <strong>${eq.title}</strong><br>
+            <small>时间: ${timeStr} | 震级: ${eq.mag} | 深度: ${eq.depth.toFixed(1)}km</small>
+        `;
     eventList.appendChild(row);
 
     const radius = Math.max(5, eq.mag * 3);
@@ -83,10 +83,72 @@ function updateMapAndList(data: ApiResponse): void {
   updateTime.textContent = new Date().toLocaleString('zh-CN');
 }
 
+const themeSwitcher = document.getElementById('theme-switcher')!;
+const themeIcon = document.getElementById('theme-icon')!;
+const themeText = document.getElementById('theme-text')!;
+const themeOptions = document.querySelectorAll('[data-theme-value]');
+
+const themeMap: { [key: string]: { icon: string; text: string } } = {
+  light: { icon: 'bi-sun-fill', text: '浅色' },
+  dark: { icon: 'bi-moon-stars-fill', text: '深色' },
+  auto: { icon: 'bi-circle-half', text: '系统' }
+};
+
+const getSystemTheme = (): 'light' | 'dark' => {
+  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+};
+
+const applyTheme = (theme: 'light' | 'dark'): void => {
+  document.body.setAttribute('data-theme', theme);
+};
+
+const updateThemeUI = (theme: string): void => {
+  const { icon, text } = themeMap[theme];
+  themeIcon.className = `bi ${icon}`;
+  themeText.textContent = text;
+};
+
+const handleThemeChange = (theme: string): void => {
+  if (theme === 'auto') {
+    applyTheme(getSystemTheme());
+    localStorage.removeItem('theme');
+  } else {
+    applyTheme(theme as 'light' | 'dark');
+    localStorage.setItem('theme', theme);
+  }
+  updateThemeUI(theme);
+};
+
+const initializeTheme = (): void => {
+  const savedTheme = localStorage.getItem('theme');
+  if (savedTheme) {
+    handleThemeChange(savedTheme);
+  } else {
+    handleThemeChange('auto');
+  }
+};
+
+themeOptions.forEach(option => {
+  option.addEventListener('click', () => {
+    const themeValue = option.getAttribute('data-theme-value');
+    if (themeValue) {
+      handleThemeChange(themeValue);
+    }
+  });
+});
+
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+  const currentTheme = localStorage.getItem('theme');
+  if (!currentTheme || currentTheme === 'auto') {
+    handleThemeChange('auto');
+  }
+});
+
 function init(): void {
   eventList.innerHTML = '<p class="text-muted">正在加载数据...</p>';
   fetchEarthquakes().then(updateMapAndList);
   setInterval(() => fetchEarthquakes().then(updateMapAndList), 600000);
+  initializeTheme();
 }
 
 init();
