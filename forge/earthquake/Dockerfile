@@ -7,6 +7,7 @@ RUN set -ex \
 
 FROM python:3.14-alpine AS dist
 ARG EARTHQUAKE_VERSION
+ARG TZ=Asia/Shanghai
 LABEL org.opencontainers.image.author="honeok <i@honeok.com>" \
     org.opencontainers.image.description="The earthquake dashboard container delivering real time visualization of global USGS seismic data." \
     org.opencontainers.image.licenses="Apache-2.0" \
@@ -21,5 +22,5 @@ COPY static/*.css static/
 RUN set -ex \
     && python3 -m pip install --no-cache-dir flask gunicorn requests
 EXPOSE 8000
-ENV TZ=Asia/Shanghai
+ENV TZ=$TZ
 ENTRYPOINT ["gunicorn", "--workers", "2", "--bind", "0.0.0.0:8000", "earthquake:app"]
