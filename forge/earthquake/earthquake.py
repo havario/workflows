@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 #
 # Copyright (c) 2025 honeok <i@honeok.com>
 # SPDX-License-Identifier: Apache-2.0
@@ -19,13 +20,14 @@ def get_earthquakes():
     today = datetime.now().strftime('%Y-%m-%d')
     params = {
         'format': 'geojson',
-        'starttime': '2024-10-11',  # 测历史50条，prod切today
+        'starttime': today,
         'limit': 100,
         'minmagnitude': 2.5
     }
     try:
         response = requests.get(base_url, params=params, timeout=10)
         response.raise_for_status()
+        response.encoding = 'utf-8'
         data = response.json()
         events = data['features'][:50]
         processed = []
@@ -44,5 +46,8 @@ def get_earthquakes():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+# if __name__ == '__main__':
+#     app.run(debug=True, host='0.0.0.0', port=5000)
+
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    app.run(host='0.0.0.0', port=5000)

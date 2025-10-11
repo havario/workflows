@@ -13,7 +13,7 @@
 <body>
   <div class="container-fluid">
     <header class="bg-danger text-white text-center py-3 mb-4">
-      <h1>🌍 全球地震监控仪表盘</h1>
+      <h1>全球地震监控仪表盘</h1>
       <p class="lead">实时USGS数据 | 今日事件 | 动态更新</p>
     </header>
     <div class="row">
@@ -29,6 +29,9 @@
       </div>
     </div>
   </div>
+  <footer class="bg-light text-center py-3 mt-4">
+    <small class="text-muted">Powered by Earthquake API & OpenStreetMap</small>
+  </footer>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
   <script src="{{ url_for('static', filename='app.js') }}"></script>
