@@ -6,7 +6,7 @@
 
 from flask import Flask, render_template, jsonify
 import requests
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 
 app = Flask(__name__)
 
@@ -17,31 +17,43 @@ def index():
 @app.route('/api/earthquakes')
 def get_earthquakes():
     base_url = "https://earthquake.usgs.gov/fdsnws/event/1/query"
-    today = datetime.now().strftime('%Y-%m-%d')
+
+    """
+    使用标准utc时间提供统一时间
+    https://www.usgs.gov/faqs/what-utc-and-why-do-you-report-earthquakes-utc
+    The default time reference on the Latest Earthquakes list is your local time based on the time clock on your computer or mobile device.
+    """
+    end_time = datetime.now(timezone.utc)
+    start_time = end_time - timedelta(hours=24)
+
     params = {
         'format': 'geojson',
-        'starttime': today,
+        'starttime': start_time.isoformat(), # 使用24小时前的utc时间
+        'endtime': end_time.isoformat(),     # 使用当前utc时间
         'limit': 100,
-        'minmagnitude': 2.5
+        'minmagnitude': 2.5,
+        'orderby': 'time' # 按时间排序
     }
     try:
         response = requests.get(base_url, params=params, timeout=10)
         response.raise_for_status()
         response.encoding = 'utf-8'
         data = response.json()
-        events = data['features'][:50]
+
+        events = data.get('features', [])[:50]
+
         processed = []
         for event in events:
             props = event['properties']
             geom = event['geometry']['coordinates']
             processed.append({
-                'time': props['time'],
-                'title': props['title'],
-                'mag': props['mag'],
+                'time': props.get('time'),
+                'title': props.get('title'),
+                'mag': props.get('mag'),
                 'lat': geom[1],
                 'lon': geom[0],
                 'depth': geom[2]
             })
         return jsonify({'earthquakes': processed})
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        return jsonify({'error': str(e), 'earthquakes': []}), 500

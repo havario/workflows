@@ -44,14 +44,15 @@ function updateMapAndList(data: ApiResponse): void {
   eventList.innerHTML = data.error ? `<p class="text-danger">加载失败: ${data.error}</p>` : '';
 
   if (data.earthquakes.length === 0 && !data.error) {
-    eventList.innerHTML = '<p class="text-muted">暂无今日地震数据（min 2.5级）</p>';
+    eventList.innerHTML = '<p class="text-muted">过去24小时内无地震数据（min 2.5级）</p>';
     eventCount.textContent = '0';
-    updateTime.textContent = new Date().toLocaleString('zh-CN');
+    updateTime.textContent = new Date().toLocaleString();
     return;
   }
 
   data.earthquakes.forEach((eq: Earthquake) => {
-    const timeStr = new Date(eq.time).toLocaleString('zh-CN');
+    const timeStr = new Date(eq.time).toLocaleString();
+
     const row = document.createElement('div');
     row.className = 'event-item';
     row.innerHTML = `
@@ -80,7 +81,7 @@ function updateMapAndList(data: ApiResponse): void {
   }
 
   eventCount.textContent = data.earthquakes.length.toString();
-  updateTime.textContent = new Date().toLocaleString('zh-CN');
+  updateTime.textContent = new Date().toLocaleString();
 }
 
 const themeSwitcher = document.getElementById('theme-switcher')!;
