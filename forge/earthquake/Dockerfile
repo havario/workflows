@@ -1,4 +1,4 @@
-FROM node:24.10-alpine AS builder
+FROM node:24.10-alpine AS deps
 WORKDIR /app
 COPY . .
 RUN set -ex \
@@ -15,7 +15,7 @@ LABEL org.opencontainers.image.author="honeok <i@honeok.com>" \
     org.opencontainers.image.title="earthquake" \
     org.opencontainers.image.version="$EARTHQUAKE_VERSION"
 WORKDIR /app
-COPY --from=builder /app/app.js static/app.js
+COPY --from=deps /app/app.js static/app.js
 COPY earthquake.py .
 COPY templates/ templates/
 COPY static/*.css static/
