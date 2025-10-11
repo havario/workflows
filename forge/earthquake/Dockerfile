@@ -1,3 +1,6 @@
+# Copyright (c) 2025 honeok <i@honeok.com>
+# SPDX-License-Identifier: Apache-2.0
+
 FROM node:24.10-alpine AS deps
 WORKDIR /app
 COPY . .
