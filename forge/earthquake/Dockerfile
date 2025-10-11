@@ -14,6 +14,7 @@ WORKDIR /app
 COPY --from=builder /app/app.js static/app.js
 COPY . .
 RUN set -ex \
+    && chmod +x earthquake.py \
     && python3 -m pip install --no-cache-dir flask requests
 EXPOSE 5000
-ENTRYPOINT ["python3", "earthquake.py"]
+ENTRYPOINT ["./earthquake.py"]

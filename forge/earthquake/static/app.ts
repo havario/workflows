@@ -15,9 +15,12 @@ interface ApiResponse {
 }
 
 const map = L.map('map').setView([0, 0], 2);
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  attribution: '&copy; OpenStreetMap contributors'
-}).addTo(map);
+const isChina = navigator.language.startsWith('zh');
+const tileUrl = isChina
+  ? 'http://webst0{1-4}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}'
+  : 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+const attribution = isChina ? '&copy; 高德地图 & OpenStreetMap contributors' : '&copy; OpenStreetMap contributors';
+L.tileLayer(tileUrl, { attribution }).addTo(map);
 
 let markers: any[] = [];
 let eventList: HTMLElement = document.getElementById('event-list')!;
@@ -80,7 +83,7 @@ function updateMapAndList(data: ApiResponse): void {
 function init(): void {
   updateMapAndList({ earthquakes: [] });
   fetchEarthquakes().then(updateMapAndList);
-  setInterval(() => fetchEarthquakes().then(updateMapAndList), 600000);  // 10min
+  setInterval(() => fetchEarthquakes().then(updateMapAndList), 600000);
 }
 
 init();
