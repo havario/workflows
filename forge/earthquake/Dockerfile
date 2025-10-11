@@ -12,7 +12,7 @@ COPY --from=builder /app/app.js static/app.js
 COPY . .
 RUN set -ex \
     && chmod +x earthquake.py \
-    && python3 -m pip install --no-cache-dir flask requests
-EXPOSE 5000
+    && python3 -m pip install --no-cache-dir flask gunicorn requests
+EXPOSE 8000
 ENV TZ=Asia/Shanghai
-ENTRYPOINT ["./earthquake.py"]
+ENTRYPOINT ["gunicorn", "--workers", "2", "--bind", "0.0.0.0:8000", "earthquake:app"]
