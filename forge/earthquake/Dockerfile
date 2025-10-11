@@ -25,4 +25,4 @@ RUN set -ex \
     && rm -rf /var/cache/apk/* requirements.txt
 EXPOSE 8000
 ENV TZ=$TZ
-CMD ["/usr/local/bin/gunicorn", "--workers", "2", "--bind", "0.0.0.0:8000", "main:app"]
+CMD ["gunicorn", "--workers", "2", "--bind", "0.0.0.0:8000", "main:app"]
