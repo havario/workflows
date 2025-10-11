@@ -8,7 +8,7 @@ RUN set -ex \
 
 FROM python:3.14-alpine AS dist
 WORKDIR /app
-COPY --from=builder /app/*.js static/
+COPY --from=builder /app/app.js static/app.js
 COPY earthquake.py .
 COPY templates/ templates/
 COPY static/*.css static/
