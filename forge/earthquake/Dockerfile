@@ -13,7 +13,6 @@ COPY earthquake.py .
 COPY templates/ templates/
 COPY static/*.css static/
 RUN set -ex \
-    && chmod +x earthquake.py \
     && python3 -m pip install --no-cache-dir flask gunicorn requests
 EXPOSE 8000
 ENV TZ=Asia/Shanghai
