@@ -17,4 +17,5 @@ RUN set -ex \
     && chmod +x earthquake.py \
     && python3 -m pip install --no-cache-dir flask requests
 EXPOSE 5000
+ENV TZ=Asia/Shanghai
 ENTRYPOINT ["./earthquake.py"]
