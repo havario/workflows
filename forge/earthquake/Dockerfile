@@ -3,7 +3,7 @@ WORKDIR /app
 COPY . .
 RUN set -ex \
     && npm install \
-    && npx tsc -p .
+    && npm run build
 
 FROM python:3.14-alpine AS dist
 WORKDIR /app
