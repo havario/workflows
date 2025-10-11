@@ -15,7 +15,7 @@ LABEL org.opencontainers.image.author="honeok <i@honeok.com>" \
     org.opencontainers.image.title="earthquake" \
     org.opencontainers.image.version="$EARTHQUAKE_VERSION"
 WORKDIR /app
-COPY --from=deps /app/app.js static/app.js
+COPY --from=deps /app/main.js static/main.js
 COPY earthquake.py .
 COPY requirements.txt .
 COPY templates/ templates/
