@@ -12,17 +12,21 @@ DEV_IMAGE       ?= $(DOCKER_USERNAME)/$(DOCKER_REPO):dev
 CONTAINER_NAME  ?= earthquake
 PORT            ?= 8000
 
-.PHONY: build run release
+.PHONY: build-dev run-dev release-deps release clean
 
-build:
-	@echo "--> building development image $(DEV_IMAGE)"
+build-dev:
+	@echo "--> build development image $(DEV_IMAGE)"
 	@docker build --no-cache --build-arg EARTHQUAKE_VERSION="$(VERSION)-dev" --tag $(DEV_IMAGE) .
 
-run:
+run-dev:
 	@docker run -d -p $(PORT):8000 --name $(CONTAINER_NAME) $(DEV_IMAGE)
 
+release-deps:
+	@docker buildx create --name builder --use
+	@docker buildx inspect --bootstrap
+
 release:
-	@echo "--> Release version $(VERSION) to the dockerhub $(DOCKER_USERNAME)/$(DOCKER_REPO)"
+	@echo "--> release version $(VERSION) to the dockerhub $(DOCKER_USERNAME)/$(DOCKER_REPO)"
 	@docker buildx build \
 		--no-cache \
 		--progress=plain \
@@ -33,3 +37,8 @@ release:
 		--push \
 		--file Dockerfile
 	@echo "--> version: $(VERSION) build complete!"
+
+clean:
+	@docker buildx prune --all --force 2>/dev/null || true
+	@docker system prune -af --volumes 2>/dev/null || true
+	@docker buildx rm -f builder 2>/dev/null || true
