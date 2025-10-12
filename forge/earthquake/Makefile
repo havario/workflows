@@ -18,7 +18,7 @@ PORT                  ?= 8000
 
 export DOCKER_BUILDKIT = 1
 
-.PHONY: all build-dev run-dev release-deps release clean help
+.PHONY: all build-dev run-dev clean-dev release-deps release clean help
 
 all: help ## show this help information (default)
 
@@ -28,6 +28,9 @@ build-dev: ## build docker image for development
 
 run-dev: ## run development container
 	@docker run -d -p $(PORT):8000 --name $(CONTAINER_NAME) $(DEV_IMAGE)
+
+clean-dev: ## clean docker container for development
+	@docker rm -f $(CONTAINER_NAME) || true
 
 release-deps: ## setup the buildx builder environment
 	@docker buildx create --name builder --use || true
