@@ -15,9 +15,8 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    # 读取版本号
-    EARTHQUAKE_VERSION = os.environ.get('EARTHQUAKE_VERSION') or os.environ.get('earthquake_version') or 'none'
-    return render_template('index.html', earthquake_version=EARTHQUAKE_VERSION)
+    earthquake_version = (os.environ.get('EARTHQUAKE_VERSION') or os.environ.get('earthquake_version') or 'none').lstrip('v')
+    return render_template('index.html', earthquake_version=earthquake_version)
 
 @app.route('/api/earthquakes')
 def get_earthquakes():
