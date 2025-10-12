@@ -24,7 +24,7 @@ run-dev: ## run development container
 	@docker run -d -p $(PORT):8000 --name $(CONTAINER_NAME) $(DEV_IMAGE)
 
 release-deps: ## setup the buildx builder environment
-	@docker buildx create --name builder --use
+	@docker buildx create --name builder --use || true
 	@docker buildx inspect --bootstrap
 
 release: ## build multi platform images and push to dockerhub
