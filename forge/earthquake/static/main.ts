@@ -1,5 +1,5 @@
 /*
- * This file handles the core front-end logic for the real-time earthquake dashboard, including data fetching, map rendering, ui updates, and theme control.
+ * This file handles the core frontend logic for the real-time earthquake dashboard, including data fetching, map rendering, ui updates, and theme control.
  *
  * Copyright (c) 2025 honeok <i@honeok.com>
  * SPDX-License-Identifier: Apache-2.0
