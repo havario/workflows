@@ -12,20 +12,22 @@ DEV_IMAGE       ?= $(DOCKER_USERNAME)/$(DOCKER_REPO):dev
 CONTAINER_NAME  ?= earthquake
 PORT            ?= 8000
 
-.PHONY: build-dev run-dev release-deps release clean
+.PHONY: all build-dev run-dev release-deps release clean
 
-build-dev:
+all: help ## show this help information (default)
+
+build-dev: ## build docker image for development
 	@echo "--> build development image $(DEV_IMAGE)"
 	@docker build --no-cache --build-arg EARTHQUAKE_VERSION="$(VERSION)-dev" --tag $(DEV_IMAGE) .
 
-run-dev:
+run-dev: ## run development container
 	@docker run -d -p $(PORT):8000 --name $(CONTAINER_NAME) $(DEV_IMAGE)
 
-release-deps:
+release-deps: ## setup the buildx builder environment
 	@docker buildx create --name builder --use
 	@docker buildx inspect --bootstrap
 
-release:
+release: ## build multi platform images and push to dockerhub
 	@echo "--> release version $(VERSION) to the dockerhub $(DOCKER_USERNAME)/$(DOCKER_REPO)"
 	@docker buildx build \
 		--no-cache \
@@ -35,10 +37,13 @@ release:
 		--tag $(DOCKER_USERNAME)/$(DOCKER_REPO):$(VERSION) \
 		--tag $(DOCKER_USERNAME)/$(DOCKER_REPO):latest \
 		--push \
-		--file Dockerfile
+		.
 	@echo "--> version: $(VERSION) build complete!"
 
-clean:
+clean: ## clean all build caches, containers and images
 	@docker buildx prune --all --force 2>/dev/null || true
 	@docker system prune -af --volumes 2>/dev/null || true
 	@docker buildx rm -f builder 2>/dev/null || true
+
+help: ## show this help information
+	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-15s\033[0m %s\n", $$1, $$2}'
