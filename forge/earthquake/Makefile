@@ -28,9 +28,12 @@ build-dev: ## build docker image for development
 
 run-dev: ## run development container
 	@docker run -d -p $(PORT):8000 --name $(CONTAINER_NAME) $(DEV_IMAGE)
+	@echo
+	@docker ps | grep -E '\s+$(CONTAINER_NAME)($|\s)'
 
 clean-dev: ## clean docker container for development
 	@docker rm -f $(CONTAINER_NAME) || true
+	@docker system prune -af --volumes 2>/dev/null || true
 
 release-deps: ## setup the buildx builder environment
 	@docker buildx create --name builder --use || true
