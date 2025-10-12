@@ -18,7 +18,7 @@ PORT                  ?= 8000
 
 export DOCKER_BUILDKIT = 1
 
-.PHONY: all build-dev run-dev release-deps release clean
+.PHONY: all build-dev run-dev release-deps release clean help
 
 all: help ## show this help information (default)
 
