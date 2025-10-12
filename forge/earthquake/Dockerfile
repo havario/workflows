@@ -19,7 +19,7 @@ LABEL org.opencontainers.image.author="honeok <i@honeok.com>" \
     org.opencontainers.image.version="$EARTHQUAKE_VERSION"
 WORKDIR /app
 COPY --from=deps /app/main.js static/main.js
-COPY main.py .
+COPY *.py .
 COPY requirements.txt .
 COPY templates/ templates/
 COPY static/*.css static/
@@ -28,4 +28,4 @@ RUN set -ex \
     && rm -rf /var/cache/apk/* requirements.txt
 EXPOSE 8000
 ENV TZ=$TZ
-CMD ["gunicorn", "--workers", "2", "--bind", "0.0.0.0:8000", "main:app"]
+ENTRYPOINT ["gunicorn", "-c", "gunicorn.conf.py", "main:app"]
