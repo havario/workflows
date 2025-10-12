@@ -1,4 +1,9 @@
 # -*- coding: utf-8 -*-
+#
+# Copyright (c) 2025 honeok <i@honeok.com>
+# SPDX-License-Identifier: Apache-2.0
+#
+# References:
 # https://github.com/benoitc/gunicorn/blob/master/examples/example_config.py
 
 # import multiprocessing
