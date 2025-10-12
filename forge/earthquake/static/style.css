@@ -98,7 +98,7 @@ footer {
   color: var(--muted-text-color);
   opacity: 0.7;
   pointer-events: none;
-  z-index: 1000;
+  z-index: -1;
   transition: opacity 0.3s ease;
 }
 
