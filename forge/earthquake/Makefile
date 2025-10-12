@@ -28,8 +28,9 @@ build-dev: ## build docker image for development
 
 run-dev: ## run development container
 	@docker run -d -p $(PORT):8000 --name $(CONTAINER_NAME) $(DEV_IMAGE)
+	@sleep 2
 	@echo
-	@docker ps | grep -E "[[:space:]]$(CONTAINER_NAME)($|[[:space:]])"
+	@docker ps | grep $(CONTAINER_NAME)
 
 clean-dev: ## clean docker container for development
 	@docker rm -f $(CONTAINER_NAME) || true
