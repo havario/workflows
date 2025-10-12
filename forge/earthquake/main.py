@@ -6,15 +6,18 @@
 # Copyright (c) 2025 honeok <i@honeok.com>
 # SPDX-License-Identifier: Apache-2.0
 
-from flask import Flask, render_template, jsonify
+import os
 import requests
+from flask import Flask, render_template, jsonify
 from datetime import datetime, timedelta, timezone
 
 app = Flask(__name__)
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    # 读取版本号
+    EARTHQUAKE_VERSION = os.environ.get('EARTHQUAKE_VERSION') or os.environ.get('earthquake_version') or 'none'
+    return render_template('index.html', earthquake_version=EARTHQUAKE_VERSION)
 
 @app.route('/api/earthquakes')
 def get_earthquakes():

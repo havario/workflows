@@ -30,4 +30,5 @@ RUN set -ex \
     && rm -rf /var/cache/apk/* requirements.txt
 EXPOSE 8000
 ENV TZ=$TZ
+ENV EARTHQUAKE_VERSION=$EARTHQUAKE_VERSION
 ENTRYPOINT ["gunicorn", "-c", "gunicorn.conf.py", "main:app"]
