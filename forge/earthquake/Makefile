@@ -1,3 +1,5 @@
+# Description: The automation entrypoint for managing the build, development, and release lifecycle of the earthquake dashboard service.
+#
 # Copyright (c) 2025 honeok <i@honeok.com>
 # SPDX-License-Identifier: Apache-2.0
 
