@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 #
+# Description: This implements the backend service for the real time earthquake dashboard, fetching the latest seismic data from the USGS.
+#
 # Copyright (c) 2025 honeok <i@honeok.com>
 # SPDX-License-Identifier: Apache-2.0
 
