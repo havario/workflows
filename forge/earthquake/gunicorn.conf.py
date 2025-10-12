@@ -42,6 +42,7 @@ max_requests = 1000
 
 # 为max_requests添加一个随机抖动
 # 这能确保所有工作进程不会在同一时刻重启避免服务瞬间中断
+# https://docs.gunicorn.org/en/stable/settings.html#max-requests-jitter
 max_requests_jitter = 100
 
 # 安装一个跟踪函数 它会输出运行服务器时执行的每一行python代码
