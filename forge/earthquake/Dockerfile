@@ -29,6 +29,6 @@ RUN set -ex \
     && python3 -m pip install --no-cache-dir -r requirements.txt --root-user-action=ignore \
     && rm -rf /var/cache/apk/* requirements.txt
 EXPOSE 8000
-ENV TZ=$TZ
 ENV EARTHQUAKE_VERSION=$EARTHQUAKE_VERSION
+ENV TZ=$TZ
 ENTRYPOINT ["gunicorn", "-c", "gunicorn.conf.py", "main:app"]
