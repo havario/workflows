@@ -75,12 +75,3 @@ accesslog = '-'
 # 自定义访问日志的格式
 # 包含了客户端IP(h) 请求行(r) 状态码(s) 响应大小(b)等有用信息
 access_log_format = '%(h)s %(l)s %(u)s %(t)s "%(r)s" %(s)s %(b)s "%(f)s" "%(a)s"'
-
-## Server hooks
-
-def when_ready(server):
-    server.log.info("The server is ready and starting worker processes")
-
-# 从响应头中移除Server字段
-def post_request(worker, req, environ, resp):
-    resp.headers = [h for h in resp.headers if h[0] != "Server"]
