@@ -23,7 +23,9 @@ def get_earthquakes():
     """
     使用标准utc时间提供统一时间
     https://www.usgs.gov/faqs/what-utc-and-why-do-you-report-earthquakes-utc
+
     The default time reference on the Latest Earthquakes list is your local time based on the time clock on your computer or mobile device.
+    最新地震列表中的默认时间参考是基于您计算机或移动设备上的时间钟的当地时间
     """
     end_time = datetime.now(timezone.utc)
     start_time = end_time - timedelta(hours=24)
