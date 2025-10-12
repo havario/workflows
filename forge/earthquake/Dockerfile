@@ -1,4 +1,4 @@
-# Description: This dockerfile creates an earthquake dashboard image, serving a web application for real time USGS seismic data visualization.
+# Description: This dockerfile creates an earthquake dashboard image, serving web application for real time USGS seismic data visualization.
 #
 # Copyright (c) 2025 honeok <i@honeok.com>
 # SPDX-License-Identifier: Apache-2.0
