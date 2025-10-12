@@ -9,7 +9,7 @@ DOCKER_USERNAME       := honeok
 DOCKER_REPO           := earthquake
 DOCKER_BUILD_ARGS     := --no-cache --progress=plain
 PLATFORMS             := linux/amd64,linux/arm64
-VERSION               := v$(shell date -u '+%Y.%m.%d' | awk -F. '{printf("%d.%d.%d\n", substr($$1,3), $$2, $$3)}')
+VERSION               := v$(shell date -u '+%Y.%m.%d' -d '+8 hours' | awk -F. '{printf("%d.%d.%d\n", substr($$1,3), $$2, $$3)}')
 
 # dev
 DEV_IMAGE             ?= $(DOCKER_USERNAME)/$(DOCKER_REPO):dev
