@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2025 honeok <i@honeok.com>
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 :root {
   --bg-gradient-start: #ffffff;
   --bg-gradient-end: #ffffff;
@@ -55,6 +60,7 @@ body {
   border-bottom: 1px solid var(--border-color);
   padding-bottom: 10px;
   flex-shrink: 0;
+  text-align: center;
 }
 
 #event-list {
