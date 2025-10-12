@@ -7,7 +7,7 @@
 # general
 DOCKER_USERNAME       := honeok
 DOCKER_REPO           := earthquake
-DOCKER_BUILD_DEPS     := --no-cache --progress=plain
+DOCKER_BUILD_ARGS     := --no-cache --progress=plain
 PLATFORMS             := linux/amd64,linux/arm64
 VERSION               := v$(shell date -u '+%Y.%m.%d' | awk -F. '{printf("%d.%d.%d\n", substr($$1,3), $$2, $$3)}')
 
@@ -24,7 +24,7 @@ all: help ## show this help information (default)
 
 build-dev: ## build docker image for development
 	@echo "--> build development image $(DEV_IMAGE)"
-	@docker build $(DOCKER_BUILD_DEPS) --build-arg EARTHQUAKE_VERSION="$(VERSION)-dev" --tag $(DEV_IMAGE) .
+	@docker build $(DOCKER_BUILD_ARGS) --build-arg EARTHQUAKE_VERSION="$(VERSION)-dev" --tag $(DEV_IMAGE) .
 
 run-dev: ## run development container
 	@docker run -d -p $(PORT):8000 --name $(CONTAINER_NAME) $(DEV_IMAGE)
@@ -36,7 +36,7 @@ release-deps: ## setup the buildx builder environment
 release: ## build multi platform images and push to dockerhub
 	@echo "--> release version $(VERSION) to the dockerhub $(DOCKER_USERNAME)/$(DOCKER_REPO)"
 	@docker buildx build \
-		$(DOCKER_BUILD_DEPS) \
+		$(DOCKER_BUILD_ARGS) \
 		--platform $(PLATFORMS) \
 		--build-arg EARTHQUAKE_VERSION=$(VERSION) \
 		--tag $(DOCKER_USERNAME)/$(DOCKER_REPO):$(VERSION) \
