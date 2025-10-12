@@ -68,9 +68,9 @@ tmp_upload_dir = None
 
 ## Logging
 
+loglevel = 'info' # string of "debug", "info", "warning", "error", "critical"
 accesslog = '-' # 输出到标准输出
 errorlog = '-'
-loglevel = 'info' # string of "debug", "info", "warning", "error", "critical"
 
 # 自定义访问日志的格式
 # 包含了客户端IP(h) 请求行(r) 状态码(s) 响应大小(b)等有用信息
