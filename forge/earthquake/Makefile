@@ -1,3 +1,6 @@
+# Copyright (c) 2025 honeok <i@honeok.com>
+# SPDX-License-Identifier: Apache-2.0
+
 ## variables
 # general
 DOCKER_USERNAME := honeok
