@@ -1,0 +1,86 @@
+## 全局配置
+metadata:
+  logging: # 日志设置
+    level: info # debug info warn error
+    output: /var/log/gost/gost.log
+    format: json # json/text
+  dns: # DNS设置
+    addr: 223.5.5.5 # DNS服务器
+    ttl: 3600 # 缓存时间 (秒)
+  trace: false # 启用请求追踪
+  timeout: 30s # 全局超时
+
+## 服务列表
+services:
+  - name: http-proxy # HTTP代理服务
+    addr: :8080 # 监听地址
+    listener:
+      type: tcp # 监听器: tcp/udp/ws/kcp/quic
+      metadata:
+        backlog: 128 # 连接队列大小
+    handler:
+      type: http # 处理器: http/socks5/shadowsocks等
+      chain: proxy-chain # 关联转发链
+      metadata:
+        tunnel: false # 是否启用隧道模式
+    router: # 路由器
+      rules:
+        - match: host("*.cn") # 匹配中国域名
+          chain: direct # 直连
+        - match: true # 默认规则
+          chain: proxy-chain # 走代理
+
+  - name: socks5-auth # SOCKS5带认证
+    addr: :1080
+    listener:
+      type: tcp
+    handler:
+      type: socks5
+      auth: basic-auth # 引用认证器
+      metadata:
+        udp: true # 启用UDP支持
+    router:
+      rules:
+        - match: geoip("CN") # 中国IP直连
+          chain: direct
+        - match: true
+          chain: proxy-chain
+
+# 绕过规则: 跳过代理的流量
+bypasses:
+  - name: local-bypass
+    matcher:
+      ip:
+        - 127.0.0.1/8
+        - 192.168.0.0/16
+      domain:
+        - localhost
+        - "*.local"
+
+# 准入控制: 限制访问
+admissions:
+  - name: rate-limit
+    type: rate
+    limit: 1000 # 每秒1000字节
+  - name: whitelist
+    type: ip
+    matcher:
+      ip:
+        - 10.0.0.0/8
+
+# DNS解析器
+resolvers:
+  - name: google-dns
+    type: dns
+    addr: 8.8.8.8
+    timeout: 5s
+  - name: doh
+    type: doh
+    addr: https://dns.google/dns-query
+
+# 主机映射
+hosts:
+  - domain: local.example.com
+    ip: 192.168.1.100
+  - domain: test.example.com
+    ip: 1.2.3.4
