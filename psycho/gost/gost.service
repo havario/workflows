@@ -1,0 +1,15 @@
+[Unit]
+Description=Gost Tunnel Service
+Wants=network-online.target systemd-networkd-wait-online.service
+After=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/gost -C /etc/gost/config.yaml
+Restart=on-failure
+RestartSec=5s
+DynamicUser=true
+LimitNOFILE=65536
+
+[Install]
+WantedBy=multi-user.target
