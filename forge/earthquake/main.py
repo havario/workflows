@@ -62,5 +62,5 @@ def get_earthquakes():
                 'depth': geom[2]
             })
         return jsonify({'earthquakes': processed})
-    except Exception as e:
-        return jsonify({'error': str(e), 'earthquakes': []}), 500
+    except Exception as error:
+        return jsonify({'error': str(error), 'earthquakes': []}), 500
