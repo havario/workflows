@@ -1,59 +1,67 @@
+# Description:
+#
+# Copyright (c) 2025 honeok <i@honeok.com>
+# SPDX-License-Identifier: GPL-2.0
+#
+# References:
+# https://gost.run
+
 ---
 ## 全局配置
-metadata:
-  logging: # 日志设置
-    level: info # debug info warn error
-    output: /var/log/gost/gost.log
-    format: json # json/text
-  dns: # DNS设置
-    addr: 223.5.5.5 # DNS服务器
-    ttl: 3600 # 缓存时间 (秒)
-  trace: false # 启用请求追踪
-  timeout: 30s # 全局超时
+# 认证器
+authers:
+- name: auther
+  auths:
+    - username: admin
+      password: admin
+
+# 日志
+log:
+  level: info
+  format: json
+  output: /var/log/gost/gost.log
+  rotation: # 备份和压缩，当output为文件时有效
+    maxSize: 100 # 日志轮转阈值
+    maxAge: 7 # 日志文件保存天数
+    maxBackups: 3 # 备份日志文件数量
+    localTime: true # 备份文件名使用本地时间格式 (默认UTC时间)
+    compress: true # 备份文件压缩
+
+# 监控指标
+metrics:
+  addr: :9000
+  path: /metrics
+  auther: auther # 引用多用户认证器
 
 ## 服务列表
+# https://gost.run/tutorials/port-forwarding
 services:
-# TCP转发
-- name: DMIT
-  addr: :30000
-  handler:
-    type: rtcp
-  listener:
-    type: rtcp
-  forwarder:
-    nodes:
-    - name: Juhost
-      addr: 1.1.1.1:38438
+  # TCP转发
+  - name: DMIT
+    addr: :30000
+    handler:
+      type: rtcp
+    listener:
+      type: rtcp
+    forwarder:
+      nodes:
+      - name: DMIT
+        addr: 1.1.1.1:38438
+    metrics: true
 
-# UDP转发
-- name: Bandwagon
-  addr: :30001
-  handler:
-    type: rudp
-  listener:
-    type: rudp
-  forwarder:
-    nodes:
-    - name: Bandwagon
-      addr: 8.8.8.8:38438
-
-## 绕过规则
-bypasses:
-  - name: local-bypass
-    matcher:
-      ip:
-        - 127.0.0.1/8
-        - 192.168.0.0/16
-      domain:
-        - localhost
-        - "*.local"
-
-## DNS解析器
-resolvers:
-  - name: google-dns
-    type: dns
-    addr: 8.8.8.8
-    timeout: 5s
-  - name: doh
-    type: doh
-    addr: https://dns.google/dns-query
+  # UDP转发
+  - name: Bandwagon
+    addr: :30001
+    handler:
+      type: rudp
+    listener:
+      type: rudp
+      metadata:
+        keepAlive: true # 每一个客户端对应一条转发通道, 当keepalive参数设置为false时, 请求的响应数据返回给客户端后会立即关闭通道连接
+        ttl: 5s # 同时也是UDP数据包大小的上限, 如果数据包大小超过此设定值数据会被截断
+        readBufferSize: 4096 # UDP读缓冲区大小, 同时也是UDP数据包大小的上限, 如果数据包大小超过此设定值数据会被截断
+    forwarder:
+      nodes:
+      - name: Bandwagon
+        addr: 8.8.8.8:38438
+    metrics: true
