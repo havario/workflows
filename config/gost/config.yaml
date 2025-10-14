@@ -8,7 +8,6 @@ metrics:
   addr: :9000
   path: /metrics
 
-## 服务列表
 services:
   # TCP转发
   - name: DMIT
@@ -31,8 +30,8 @@ services:
     listener:
       type: rudp
       metadata:
-        keepAlive: true # 每一个客户端对应一条转发通道, 当keepalive参数设置为false时, 请求的响应数据返回给客户端后会立即关闭通道连接
-        ttl: 5s # 同时也是UDP数据包大小的上限, 如果数据包大小超过此设定值数据会被截断
+        keepAlive: true      # 每一个客户端对应一条转发通道, 当keepalive参数设置为false时, 请求的响应数据返回给客户端后会立即关闭通道连接
+        ttl: 5s              # 同时也是UDP数据包大小的上限, 如果数据包大小超过此设定值数据会被截断
         readBufferSize: 4096 # UDP读缓冲区大小, 同时也是UDP数据包大小的上限, 如果数据包大小超过此设定值数据会被截断
     forwarder:
       nodes:
