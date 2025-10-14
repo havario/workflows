@@ -1,18 +1,14 @@
 ---
-## 全局配置
-# 日志
 log:
   level: warn
   format: json
   output: none
 
-# 监控指标
 metrics:
   addr: :9000
   path: /metrics
 
 ## 服务列表
-# https://gost.run/tutorials/port-forwarding
 services:
   # TCP转发
   - name: DMIT
