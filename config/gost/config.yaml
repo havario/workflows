@@ -1,37 +1,15 @@
-# Description:
-#
-# Copyright (c) 2025 honeok <i@honeok.com>
-# SPDX-License-Identifier: GPL-2.0
-#
-# References:
-# https://gost.run
-
 ---
 ## 全局配置
-# 认证器
-authers:
-- name: auther
-  auths:
-    - username: admin
-      password: admin
-
 # 日志
 log:
-  level: info
+  level: warn
   format: json
-  output: /var/log/gost/gost.log
-  rotation: # 备份和压缩，当output为文件时有效
-    maxSize: 100 # 日志轮转阈值
-    maxAge: 7 # 日志文件保存天数
-    maxBackups: 3 # 备份日志文件数量
-    localTime: true # 备份文件名使用本地时间格式 (默认UTC时间)
-    compress: true # 备份文件压缩
+  output: none
 
 # 监控指标
 metrics:
   addr: :9000
   path: /metrics
-  auther: auther # 引用多用户认证器
 
 ## 服务列表
 # https://gost.run/tutorials/port-forwarding
