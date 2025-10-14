@@ -13,7 +13,6 @@ metadata:
 
 ## 服务列表
 services:
-
 # TCP转发
 - name: DMIT
   addr: :30000
