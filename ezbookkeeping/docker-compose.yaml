@@ -44,6 +44,7 @@ services:
       EBK_DATABASE_PASSWD: ezbookkeeping
       EBK_LOG_MODE: file
       EBK_SECURITY_SECRET_KEY: 0ab78c51dbf12dd9884fd020f1be73b38217ea3f20f6ccab850aae5dd167fce8 # openssl rand -hex 32
+      EBK_USER_ENABLE_REGISTER: false
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ./ez_storage:/ezbookkeeping/storage
