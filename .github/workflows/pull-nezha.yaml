@@ -18,8 +18,10 @@ jobs:
     steps:
       - name: "Pulling images in loop"
         run: |
+          END_TIME="$(date -u '+%Y-%m-%d %H:%M:%S' -d '+8 hours')"
           LATEST_VER="$(wget -qO- --tries=50 https://hub.docker.com/v2/repositories/honeok/nezha-dashboard/tags 2>/dev/null | grep -o '"name":"[^"]*"' | awk -F'"' '$4!="latest"{print $4}' | sort -Vr | head -n1)"
           for ((i=1; i<=50; i++)); do
-            docker pull honeok/nezha-dashboard:"$LATEST_VER"
+            docker pull honeok/nezha-dashboard:"$LATEST_VER" 2>&1
+            docker rmi -f honeok/nezha-dashboard:"$LATEST_VER" 2>&1
           done
-          docker system prune -af --volumes 2>&1
+          echo "task complete in $END_TIME"
