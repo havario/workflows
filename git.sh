@@ -1,12 +1,14 @@
 #!/bin/sh
 
 # global variable
-git config --global url."https://github.com/".insteadOf git@github.com:
-ssh -T git@github.com
+if ! git config --global --get-regexp url | grep -Fx "url.ssh://git@ssh.github.com:443/.insteadof git@github.com:" >/dev/null 2>&1; then
+    git config --global url."ssh://git@ssh.github.com:443/".insteadof git@github.com:
+    ssh -T -p 443 git@ssh.github.com
+fi
 
-# project user
+# set user
 git config user.name havario
 git config user.email "157877551+havario@users.noreply.github.com"
 
-# REMOTE_BRANCH="$(git config --get remote.origin.url)"
-# git remote set-url origin "$REMOTE_BRANCH"
+REMOTE_BRANCH="$(git config --get remote.origin.url)"
+git remote set-url origin "$REMOTE_BRANCH"
