@@ -1,0 +1,25 @@
+---
+name: "Pull nezha image"
+
+on:
+  schedule:
+    - cron: "0 22,4,10,16 * * *"
+  workflow_dispatch:
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  pull:
+    name: "Pull nezha image"
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: "Pulling images in loop"
+        run: |
+          LATEST_VER="$(wget -qO- --tries=50 https://hub.docker.com/v2/repositories/honeok/nezha-dashboard/tags 2>/dev/null | grep -o '"name":"[^"]*"' | awk -F'"' '$4!="latest"{print $4}' | sort -Vr | head -n1)"
+          for ((i=1; i<=50; i++)) do;
+            docker pull honeok/nezha-dashboard:"$LATEST_VER"
+          done
+          docker system prune -af --volumes 2>&1
