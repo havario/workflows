@@ -1,5 +1,7 @@
 #!/bin/sh
 
+set -eEu
+
 # global variable
 if ! git config --global --get-regexp url | grep -Fx "url.ssh://git@ssh.github.com:443/.insteadof git@github.com:" >/dev/null 2>&1; then
     git config --global url."ssh://git@ssh.github.com:443/".insteadof git@github.com:
