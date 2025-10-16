@@ -10,5 +10,4 @@ fi
 git config user.name havario
 git config user.email "157877551+havario@users.noreply.github.com"
 
-REMOTE_BRANCH="$(git config --get remote.origin.url)"
-git remote set-url origin "$REMOTE_BRANCH"
+git remote set-url origin "$(git config --get remote.origin.url)"
