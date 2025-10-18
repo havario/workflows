@@ -1,0 +1,28 @@
+---
+name: "GitHub Actions Mirror"
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+jobs:
+  mirror_to_cnb:
+    name: "Mirror to cnb"
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: "Checkout repository"
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: "Mirror to cnb"
+        uses: yesolutions/mirror-action@master
+        with:
+          REMOTE: https://cnb.cool/honeok/workflows.git
+          GIT_USERNAME: cnb
+          GIT_PASSWORD: ${{ secrets.SYNC_CNB_TOKEN }}
+          PUSH_ALL_REFS: false
+          GIT_SSH_NO_VERIFY_HOST: true
