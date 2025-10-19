@@ -93,5 +93,12 @@ COPY --from=builder /tmp/nginx-${NGX_VERSION}/objs/*.so /usr/lib/nginx/modules
 COPY html /usr/share/nginx/html
 
 RUN set -ex \
+    && mkdir /etc/nginx/modsec \
+    && cd /tmp \
+    && curl -Ls https://github.com/coreruleset/coreruleset/archive/v${CORERULESET_VERSION}.tar.gz -o v${CORERULESET_VERSION}.tar.gz \
+    && tar fxz v${CORERULESET_VERSION}.tar.gz --strip-components=1 -C /etc/nginx/modsec \
+    && mv /etc/nginx/modsec/crs-setup.conf.example /etc/nginx/modsec/crs-setup.conf \
+    && curl -Ls https://github.com/owasp-modsecurity/ModSecurity/raw/v3/master/modsecurity.conf-recommended -o /etc/nginx/modsec/modsecurity.conf \
+    && \
     && curl -Ls https://m.360buyimg.com/i/jfs/t1/338259/3/13529/2356/68cfeb12F04f8452e/5edd63c5e68fc7fa.webp -o /usr/share/nginx/html/favicon.ico \
-    && rm -rf /var/cache/apk/*
+    && rm -rf /var/cache/apk/* /tmp/*
