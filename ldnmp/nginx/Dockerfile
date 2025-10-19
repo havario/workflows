@@ -115,10 +115,10 @@ SecAction \
 EOF \
     && curl -Ls https://github.com/owasp-modsecurity/ModSecurity/raw/v3/master/modsecurity.conf-recommended -o /etc/nginx/modsec/modsecurity.conf \
     && sed -i 's/SecRuleEngine DetectionOnly/SecRuleEngine On/' /etc/nginx/modsec/modsecurity.conf \
-    # https://github.com/SpiderLabs/owasp-modsecurity-crs/issues/656
+# https://github.com/SpiderLabs/owasp-modsecurity-crs/issues/656
     && sed -i 's/SecPcreMatchLimit [0-9]\+/SecPcreMatchLimit 20000/' /etc/nginx/modsec/modsecurity.conf \
     && sed -i 's/SecPcreMatchLimitRecursion [0-9]\+/SecPcreMatchLimitRecursion 20000/' /etc/nginx/modsec/modsecurity.conf \
-    # https://blog.wpsec.com/wordpress-modsecurity-waf
+# https://blog.wpsec.com/wordpress-modsecurity-waf
     && sed -i 's/^SecRequestBodyLimit\s\+[0-9]\+/SecRequestBodyLimit 16777216/' /etc/nginx/modsec/modsecurity.conf \
     && sed -i 's/^SecRequestBodyNoFilesLimit\s\+[0-9]\+/SecRequestBodyNoFilesLimit 524288/' /etc/nginx/modsec/modsecurity.conf \
     && sed -i 's/^SecAuditEngine RelevantOnly/SecAuditEngine Off/' /etc/nginx/modsec/modsecurity.conf \
