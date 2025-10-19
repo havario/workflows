@@ -17,8 +17,8 @@ FROM alpine:latest AS builder
 
 LABEL maintainer="honeok <i@honeok.com>"
 
-ARG LUA_VERSION=""
 ARG NGX_VERSION=""
+ARG LUA_VERSION=""
 ARG ZSTD_VERSION=""
 ARG HEADERS_MORE_TAG=""
 ARG ACME_VERSION=""
@@ -93,8 +93,8 @@ FROM nginx:${NGX_VERSION}-alpine AS dist
 
 LABEL maintainer="honeok <i@honeok.com>"
 
-ARG LUA_VERSION=""
 ARG NGX_VERSION=""
+ARG LUA_VERSION=""
 ARG CORERULESET_VERSION=""
 
 COPY --from=builder /tmp/nginx-${NGX_VERSION}/objs/*.so /usr/lib/nginx/modules
