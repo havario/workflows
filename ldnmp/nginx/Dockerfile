@@ -129,4 +129,5 @@ EOF \
     && echo 'Include /etc/nginx/modsec/plugins/*-after.conf' >> /etc/nginx/modsec/modsecurity.conf \
     && curl -Ls https://github.com/owasp-modsecurity/ModSecurity/raw/v3/master/unicode.mapping -o /etc/nginx/modsec/unicode.mapping \
     && curl -Ls https://m.360buyimg.com/i/jfs/t1/338259/3/13529/2356/68cfeb12F04f8452e/5edd63c5e68fc7fa.webp -o /usr/share/nginx/html/favicon.ico \
-    && rm -rf /var/cache/apk/* /tmp/* /etc/nginx/modsec/*.md /etc/nginx/modsec/docs /etc/nginx/modsec/LICENSE /etc/nginx/modsec/*.json
+    && rm -rf /var/cache/apk/* /tmp/* /etc/nginx/modsec/*.md /etc/nginx/modsec/docs /etc/nginx/modsec/LICENSE /etc/nginx/modsec/*.json \
+    && find /etc/nginx/modsec/ -maxdepth 1 -name ".*" ! -name "." ! -name ".." -exec rm -rf {} \;
