@@ -35,6 +35,7 @@ RUN set -ex \
         libtool \
         libxml2-dev \
         linux-headers \
+        lua-dev \
         make \
         openssl-dev \
         pcre2-dev \
@@ -95,6 +96,7 @@ COPY html /usr/share/nginx/html
 
 RUN set -ex \
     && apk add --update --no-cache \
+        lua5.1 \
         yajl \
     && mkdir /etc/nginx/modsec \
     && cd /tmp \
