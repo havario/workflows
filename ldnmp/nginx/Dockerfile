@@ -85,6 +85,7 @@ FROM nginx:${NGX_VERSION}-alpine AS dist
 LABEL maintainer="honeok <i@honeok.com>"
 
 ARG NGX_VERSION=""
+ARG CORERULESET_VERSION=""
 
 COPY --from=builder /tmp/nginx-${NGX_VERSION}/objs/*.so /usr/lib/nginx/modules
 COPY html /usr/share/nginx/html
