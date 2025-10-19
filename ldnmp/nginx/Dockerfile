@@ -95,25 +95,19 @@ COPY html /usr/share/nginx/html
 
 RUN set -ex \
     && apk add --update --no-cache \
-        lua5.1 \
-        lua5.1-dev \
-        pcre \
-        pcre-dev \
         yajl \
-        yajl-dev \
     && mkdir /etc/nginx/modsec \
     && cd /tmp \
     && curl -Ls https://github.com/coreruleset/coreruleset/archive/v${CORERULESET_VERSION}.tar.gz -o v${CORERULESET_VERSION}.tar.gz \
     && tar fxz v${CORERULESET_VERSION}.tar.gz --strip-components=1 -C /etc/nginx/modsec \
     && mv /etc/nginx/modsec/crs-setup.conf.example /etc/nginx/modsec/crs-setup.conf \
-    && tee <<'EOF' >> /etc/nginx/modsec/crs-setup.conf
-SecAction \
-    "id:900110,\
-    phase:1,\
-    pass,\
-    setvar:tx.inbound_anomaly_score_threshold=30,\
-    setvar:tx.outbound_anomaly_score_threshold=16"
-EOF \
+    && printf "%s\n" \
+    "SecAction \\" \
+    "    \"id:900110,\\" \
+    "    phase:1,\\" \
+    "    pass,\\" \
+    "    setvar:tx.inbound_anomaly_score_threshold=30,\\" \
+    "    setvar:tx.outbound_anomaly_score_threshold=16\"" >> /etc/nginx/modsec/crs-setup.conf \
     && curl -Ls https://github.com/owasp-modsecurity/ModSecurity/raw/v3/master/modsecurity.conf-recommended -o /etc/nginx/modsec/modsecurity.conf \
     && sed -i 's/SecRuleEngine DetectionOnly/SecRuleEngine On/' /etc/nginx/modsec/modsecurity.conf \
 # https://github.com/SpiderLabs/owasp-modsecurity-crs/issues/656
