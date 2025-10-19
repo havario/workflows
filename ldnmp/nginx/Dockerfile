@@ -50,12 +50,12 @@ RUN set -ex \
     && tar fxz nginx-acme-${ACME_VERSION}.tar.gz \
     && cd nginx-${NGX_VERSION} \
     && ./configure \
-    --with-compat \
-    --with-http_ssl_module \
-    --add-dynamic-module=../ngx_brotli \
-    --add-dynamic-module=../zstd-nginx-module \
-    --add-dynamic-module=../headers-more-nginx-module-${HEADERS_MORE_TAG} \
-    --add-dynamic-module=../nginx-acme-${ACME_VERSION} \
+        --with-compat \
+        --with-http_ssl_module \
+        --add-dynamic-module=../ngx_brotli \
+        --add-dynamic-module=../zstd-nginx-module \
+        --add-dynamic-module=../headers-more-nginx-module-${HEADERS_MORE_TAG} \
+        --add-dynamic-module=../nginx-acme-${ACME_VERSION} \
     && make modules \
     && strip objs/*.so \
     && apk del --no-network .build-deps \
