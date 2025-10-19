@@ -93,12 +93,33 @@ COPY --from=builder /tmp/nginx-${NGX_VERSION}/objs/*.so /usr/lib/nginx/modules
 COPY html /usr/share/nginx/html
 
 RUN set -ex \
+    && apk add --update --no-cache \
+        lua5.1 \
+        lua5.1-dev \
+        pcre \
+        pcre-dev \
+        yajl \
+        yajl-dev \
     && mkdir /etc/nginx/modsec \
     && cd /tmp \
     && curl -Ls https://github.com/coreruleset/coreruleset/archive/v${CORERULESET_VERSION}.tar.gz -o v${CORERULESET_VERSION}.tar.gz \
     && tar fxz v${CORERULESET_VERSION}.tar.gz --strip-components=1 -C /etc/nginx/modsec \
     && mv /etc/nginx/modsec/crs-setup.conf.example /etc/nginx/modsec/crs-setup.conf \
+    && printf 'SecAction \\\n    "id:900110,\\\n    phase:1,\\\n    pass,\\\n    t:none,\\\n    nolog,\\\n    tag:\'OWASP_CRS\',\\\n    ver:\'OWASP_CRS/4.20.0-dev\',\\\n    setvar:tx.inbound_anomaly_score_threshold=30,\\\n    setvar:tx.outbound_anomaly_score_threshold=16"\n' >> /etc/nginx/modsec/crs-setup.conf \
     && curl -Ls https://github.com/owasp-modsecurity/ModSecurity/raw/v3/master/modsecurity.conf-recommended -o /etc/nginx/modsec/modsecurity.conf \
-    && \
+    && sed -i 's/SecRuleEngine DetectionOnly/SecRuleEngine On/' /etc/nginx/modsec/modsecurity.conf \
+    # https://github.com/SpiderLabs/owasp-modsecurity-crs/issues/656
+    && sed -i 's/SecPcreMatchLimit [0-9]\+/SecPcreMatchLimit 20000/' /etc/nginx/modsec/modsecurity.conf \
+    && sed -i 's/SecPcreMatchLimitRecursion [0-9]\+/SecPcreMatchLimitRecursion 20000/' /etc/nginx/modsec/modsecurity.conf \
+    # https://blog.wpsec.com/wordpress-modsecurity-waf
+    && sed -i 's/^SecRequestBodyLimit\s\+[0-9]\+/SecRequestBodyLimit 16777216/' /etc/nginx/modsec/modsecurity.conf \
+    && sed -i 's/^SecRequestBodyNoFilesLimit\s\+[0-9]\+/SecRequestBodyNoFilesLimit 524288/' /etc/nginx/modsec/modsecurity.conf \
+    && sed -i 's/^SecAuditEngine RelevantOnly/SecAuditEngine Off/' /etc/nginx/modsec/modsecurity.conf \
+    && echo 'Include /etc/nginx/modsec/crs-setup.conf' >> /etc/nginx/modsec/modsecurity.conf \
+    && echo 'Include /etc/nginx/modsec/plugins/*-config.conf' >> /etc/nginx/modsec/modsecurity.conf \
+    && echo 'Include /etc/nginx/modsec/plugins/*-before.conf' >> /etc/nginx/modsec/modsecurity.conf \
+    && echo 'Include /etc/nginx/modsec/rules/*.conf' >> /etc/nginx/modsec/modsecurity.conf \
+    && echo 'Include /etc/nginx/modsec/plugins/*-after.conf' >> /etc/nginx/modsec/modsecurity.conf \
+    && curl -Ls https://github.com/owasp-modsecurity/ModSecurity/raw/v3/master/unicode.mapping -o /etc/nginx/modsec/unicode.mapping \
     && curl -Ls https://m.360buyimg.com/i/jfs/t1/338259/3/13529/2356/68cfeb12F04f8452e/5edd63c5e68fc7fa.webp -o /usr/share/nginx/html/favicon.ico \
-    && rm -rf /var/cache/apk/* /tmp/*
+    && rm -rf /var/cache/apk/* /tmp/* /etc/nginx/modsec/*.md /etc/nginx/modsec/docs /etc/nginx/modsec/LICENSE /etc/nginx/modsec/*.json
