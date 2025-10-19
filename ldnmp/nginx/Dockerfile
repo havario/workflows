@@ -40,7 +40,7 @@ RUN set -ex \
         libxml2-dev \
         lmdb-dev \
         linux-headers \
-        lua${LUA_VERSION}-dev \
+        lua5.1-dev \
         make \
         openssl-dev \
         pcre2-dev \
@@ -103,7 +103,7 @@ COPY html /usr/share/nginx/html
 RUN set -ex \
     && apk add --update --no-cache \
         lmdb \
-        lua${LUA_VERSION} \
+        lua5.1 \
         yajl \
     && mkdir /etc/nginx/modsec \
     && cd /tmp \
