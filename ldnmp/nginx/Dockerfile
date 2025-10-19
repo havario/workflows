@@ -110,10 +110,6 @@ SecAction \
     "id:900110,\
     phase:1,\
     pass,\
-    t:none,\
-    nolog,\
-    tag:'OWASP_CRS',\
-    ver:'OWASP_CRS/4.20.0-dev',\
     setvar:tx.inbound_anomaly_score_threshold=30,\
     setvar:tx.outbound_anomaly_score_threshold=16"
 EOF \
