@@ -105,7 +105,18 @@ RUN set -ex \
     && curl -Ls https://github.com/coreruleset/coreruleset/archive/v${CORERULESET_VERSION}.tar.gz -o v${CORERULESET_VERSION}.tar.gz \
     && tar fxz v${CORERULESET_VERSION}.tar.gz --strip-components=1 -C /etc/nginx/modsec \
     && mv /etc/nginx/modsec/crs-setup.conf.example /etc/nginx/modsec/crs-setup.conf \
-    && printf 'SecAction \\\n    "id:900110,\\\n    phase:1,\\\n    pass,\\\n    t:none,\\\n    nolog,\\\n    tag:\'OWASP_CRS\',\\\n    ver:\'OWASP_CRS/4.20.0-dev\',\\\n    setvar:tx.inbound_anomaly_score_threshold=30,\\\n    setvar:tx.outbound_anomaly_score_threshold=16"\n' >> /etc/nginx/modsec/crs-setup.conf \
+    && tee <<'EOF' >> /etc/nginx/modsec/crs-setup.conf
+SecAction \
+    "id:900110,\
+    phase:1,\
+    pass,\
+    t:none,\
+    nolog,\
+    tag:'OWASP_CRS',\
+    ver:'OWASP_CRS/4.20.0-dev',\
+    setvar:tx.inbound_anomaly_score_threshold=30,\
+    setvar:tx.outbound_anomaly_score_threshold=16"
+EOF \
     && curl -Ls https://github.com/owasp-modsecurity/ModSecurity/raw/v3/master/modsecurity.conf-recommended -o /etc/nginx/modsec/modsecurity.conf \
     && sed -i 's/SecRuleEngine DetectionOnly/SecRuleEngine On/' /etc/nginx/modsec/modsecurity.conf \
     # https://github.com/SpiderLabs/owasp-modsecurity-crs/issues/656
