@@ -22,16 +22,16 @@ ARG ACME_VERSION=""
 
 RUN set -ex \
     && apk add --update --no-cache --virtual .build-deps \
-    brotli-dev \
-    build-base \
-    cargo \
-    clang-dev \
-    curl \
-    git \
-    make \
-    openssl-dev \
-    pcre2-dev \
-    rust \
+        brotli-dev \
+        build-base \
+        cargo \
+        clang-dev \
+        curl \
+        git \
+        make \
+        openssl-dev \
+        pcre2-dev \
+        rust \
     && cd /tmp \
     && curl -Ls https://github.com/nginx/nginx/releases/download/release-${NGX_VERSION}/nginx-${NGX_VERSION}.tar.gz -o nginx-${NGX_VERSION}.tar.gz \
     && tar fxz nginx-${NGX_VERSION}.tar.gz \
