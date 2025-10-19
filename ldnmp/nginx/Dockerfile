@@ -1,7 +1,6 @@
-# Description: This dockerfile is used to add third-party modules to nginx and recompile the nginx web server.
-#
-# Copyright (c) 2024-2025 honeok <i@honeok.com>
 # SPDX-License-Identifier: Apache-2.0
+# Copyright (c) 2024-2025 honeok <i@honeok.com>
+# Description: This dockerfile is used to add third-party modules to nginx and recompile the nginx web server.
 #
 # References:
 # https://github.com/kejilion/docker
