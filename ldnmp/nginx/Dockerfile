@@ -96,7 +96,6 @@ ARG CORERULESET_VERSION=""
 
 COPY --from=builder /tmp/nginx-${NGX_VERSION}/objs/*.so /usr/lib/nginx/modules
 COPY --from=builder /usr/local/modsecurity/lib/* /usr/local/modsecurity/lib/
-COPY html /usr/share/nginx/html
 
 RUN set -ex \
     && apk add --update --no-cache \
