@@ -22,16 +22,24 @@ ARG ACME_VERSION=""
 
 RUN set -ex \
     && apk add --update --no-cache --virtual .build-deps \
+        autoconf \
+        automake \
         brotli-dev \
         build-base \
         cargo \
         clang-dev \
         curl \
         git \
+        libtool \
+        libxml2-dev \
+        linux-headers \
         make \
         openssl-dev \
         pcre2-dev \
+        pkgconfig \
         rust \
+        yajl-dev \
+        zlib-dev \
     && cd /tmp \
     && curl -Ls https://github.com/nginx/nginx/releases/download/release-${NGX_VERSION}/nginx-${NGX_VERSION}.tar.gz -o nginx-${NGX_VERSION}.tar.gz \
     && tar fxz nginx-${NGX_VERSION}.tar.gz \
@@ -48,6 +56,16 @@ RUN set -ex \
     && tar fxz v${HEADERS_MORE_TAG}.tar.gz \
     && curl -Ls https://github.com/nginx/nginx-acme/releases/download/v${ACME_VERSION}/nginx-acme-${ACME_VERSION}.tar.gz -o nginx-acme-${ACME_VERSION}.tar.gz \
     && tar fxz nginx-acme-${ACME_VERSION}.tar.gz \
+    && git clone --depth 1 https://github.com/owasp-modsecurity/ModSecurity \
+    && cd ModSecurity \
+    && git submodule init \
+    && git submodule update \
+    && ./build.sh \
+    && ./configure \
+    && make -j$(getconf _NPROCESSORS_ONLN) \
+    && make -j$(getconf _NPROCESSORS_ONLN) install \
+    && cd /tmp \
+    && git clone https://github.com/owasp-modsecurity/ModSecurity-nginx \
     && cd nginx-${NGX_VERSION} \
     && ./configure \
         --with-compat \
@@ -56,6 +74,7 @@ RUN set -ex \
         --add-dynamic-module=../zstd-nginx-module \
         --add-dynamic-module=../headers-more-nginx-module-${HEADERS_MORE_TAG} \
         --add-dynamic-module=../nginx-acme-${ACME_VERSION} \
+        --add-dynamic-module=../ModSecurity-nginx \
     && make modules \
     && strip objs/*.so \
     && apk del --no-network .build-deps \
