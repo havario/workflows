@@ -23,6 +23,7 @@ ARG HEADERS_MORE_TAG=""
 ARG ACME_VERSION=""
 
 RUN set -ex \
+# https://github.com/owasp-modsecurity/ModSecurity/blob/v3/master/configure.ac
     && apk add --update --no-cache --virtual .build-deps \
         autoconf \
         automake \
@@ -31,16 +32,20 @@ RUN set -ex \
         cargo \
         clang-dev \
         curl \
+        curl-dev \
+        geoip-dev \
         git \
         libtool \
         libxml2-dev \
+        lmdb-dev \
         linux-headers \
-        lua-dev \
+        lua5.4-dev \
         make \
         openssl-dev \
         pcre2-dev \
         pkgconfig \
         rust \
+        ssdeep-dev \
         yajl-dev \
         zlib-dev \
     && cd /tmp \
@@ -96,7 +101,7 @@ COPY html /usr/share/nginx/html
 
 RUN set -ex \
     && apk add --update --no-cache \
-        lua5.1 \
+        lua5.4 \
         yajl \
     && mkdir /etc/nginx/modsec \
     && cd /tmp \
