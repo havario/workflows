@@ -46,7 +46,6 @@ RUN set -ex \
         pcre2-dev \
         pkgconfig \
         rust \
-        ssdeep-dev \
         yajl-dev \
         zlib-dev \
     && cd /tmp \
@@ -105,7 +104,6 @@ RUN set -ex \
     && apk add --update --no-cache \
         lmdb \
         lua${LUA_VERSION} \
-        ssdeep \
         yajl \
     && mkdir /etc/nginx/modsec \
     && cd /tmp \
