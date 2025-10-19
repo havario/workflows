@@ -103,7 +103,9 @@ COPY html /usr/share/nginx/html
 
 RUN set -ex \
     && apk add --update --no-cache \
+        lmdb \
         lua${LUA_VERSION} \
+        ssdeep \
         yajl \
     && mkdir /etc/nginx/modsec \
     && cd /tmp \
