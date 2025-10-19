@@ -8,6 +8,8 @@
 # https://github.com/google/ngx_brotli
 # https://github.com/facebook/zstd
 # https://github.com/nginx/nginx-acme
+# https://github.com/owasp-modsecurity
+# https://coreruleset.org/docs
 
 ARG NGX_VERSION=""
 
