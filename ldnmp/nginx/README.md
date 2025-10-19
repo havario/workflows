@@ -37,12 +37,13 @@ To leverage the unique features of this image, append the following lines to you
 vim /etc/nginx/nginx.conf
 
 ...
-load_module modules/ngx_http_headers_more_filter_module.so;
-load_module modules/ngx_http_zstd_filter_module.so;
-load_module modules/ngx_http_zstd_static_module.so;
+load_module modules/ngx_http_acme_module.so;
 load_module modules/ngx_http_brotli_filter_module.so;
 load_module modules/ngx_http_brotli_static_module.so;
-load_module modules/ngx_http_acme_module.so;
+load_module modules/ngx_http_headers_more_filter_module.so;
+load_module modules/ngx_http_modsecurity_module.so;
+load_module modules/ngx_http_zstd_filter_module.so;
+load_module modules/ngx_http_zstd_static_module.so;
 ...
 ```
 
