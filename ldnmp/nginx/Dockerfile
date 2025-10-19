@@ -17,6 +17,7 @@ FROM alpine:latest AS builder
 
 LABEL maintainer="honeok <i@honeok.com>"
 
+ARG LUA_VERSION=""
 ARG NGX_VERSION=""
 ARG ZSTD_VERSION=""
 ARG HEADERS_MORE_TAG=""
@@ -39,7 +40,7 @@ RUN set -ex \
         libxml2-dev \
         lmdb-dev \
         linux-headers \
-        lua5.4-dev \
+        lua${LUA_VERSION}-dev \
         make \
         openssl-dev \
         pcre2-dev \
@@ -92,6 +93,7 @@ FROM nginx:${NGX_VERSION}-alpine AS dist
 
 LABEL maintainer="honeok <i@honeok.com>"
 
+ARG LUA_VERSION=""
 ARG NGX_VERSION=""
 ARG CORERULESET_VERSION=""
 
@@ -101,7 +103,7 @@ COPY html /usr/share/nginx/html
 
 RUN set -ex \
     && apk add --update --no-cache \
-        lua5.4 \
+        lua${LUA_VERSION} \
         yajl \
     && mkdir /etc/nginx/modsec \
     && cd /tmp \
