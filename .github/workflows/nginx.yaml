@@ -11,7 +11,7 @@ defaults:
     shell: bash
 
 env:
-  DOCKER_USERNAME: ${{ github.repository_owner }}
+  DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
   DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
 
 jobs:
