@@ -49,7 +49,7 @@ ip_address() {
         return
     fi
     if [[ -n "$IPV6_ADDRESS" && "$IPV6_ADDRESS" =~ ^([0-9a-fA-F]{0,4}:){2,} ]]; then
-        IPV6_ADDRESS="$(sed -E 's/^(([^:]+:){2}).*/\1*:*:*:*:*:*' <<< "$IPV6_ADDRESS")"
+        IPV6_ADDRESS="${IPV6_ADDRESS%%:*:*:*:*:*:*}:*:*:*:*:*:*"
         echo "$IPV6_ADDRESS"
         return
     fi
