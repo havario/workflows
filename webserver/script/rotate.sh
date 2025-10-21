@@ -27,24 +27,6 @@ curl() {
     done
 }
 
-# 获取一个IP即返回
-ip_address() {
-    local IPV4_ADDRESS IPV6_ADDRESS
-    IPV4_ADDRESS="$(curl -Ls -4 http://www.qualcomm.cn/cdn-cgi/trace 2>/dev/null | grep -i '^ip=' | cut -d'=' -f2 || true)"
-    IPV6_ADDRESS="$(curl -Ls -6 http://www.qualcomm.cn/cdn-cgi/trace 2>/dev/null | grep -i '^ip=' | cut -d'=' -f2 || true)"
-
-    if [[ -n "$IPV4_ADDRESS" && "$IPV4_ADDRESS" =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]; then
-        IPV4_ADDRESS="${IPV4_ADDRESS%.*.*}.*.*"
-        echo "$IPV4_ADDRESS"
-        return
-    fi
-    if [[ -n "$IPV6_ADDRESS" && "$IPV6_ADDRESS" =~ ^([0-9a-fA-F]{0,4}:){2,} ]]; then
-        IPV6_ADDRESS="${IPV6_ADDRESS%%:*:*:*:*:*:*}:*:*:*:*:*:*"
-        echo "$IPV6_ADDRESS"
-        return
-    fi
-}
-
 send_msg() {
     local MESSAGE="$1"
     curl -Ls -X POST "https://api.telegram.org/bot$BOT_TOKEN/sendMessage" \
