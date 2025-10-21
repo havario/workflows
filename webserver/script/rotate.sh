@@ -4,6 +4,10 @@
 # Description:
 # Copyright (c) 2025 honeok <i@honeok.com>
 
+# Thanks:
+# jimin.huang <jimin.huang@nx-engine.com>
+# zhenqiang.zhang <zhenqiang.zhang@nx-engine.com>
+
 set -eEuo pipefail
 
 SCRIPT_DIR="$(dirname "${BASH_SOURCE:-$0}")"
