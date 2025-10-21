@@ -29,7 +29,13 @@ curl() {
 
 send_msg() {
     local MESSAGE="$1"
-    curl -Ls -X POST "https://api.telegram.org/bot$BOT_TOKEN/sendMessage" \
-        -H "Content-Type: application/json" \
-        -d "{\"chat_id\":\"$CHAT_ID\",\"text\":\"$MESSAGE\"}" >/dev/null 2>&1
+
+    if [[ -n "$BOT_TOKEN" && -n "$CHAT_ID" ]]; then
+        curl -Ls -X POST "https://api.telegram.org/bot$BOT_TOKEN/sendMessage" \
+            -H "Content-Type: application/json" \
+            -d "{\"chat_id\":\"$CHAT_ID\",\"text\":\"$MESSAGE\"}" >/dev/null 2>&1
+    fi
+    if [ -n "$BARK_TOKEN" ]; then
+        curl -Ls "https://api.honeok.de/$BARK_TOKEN/Nginx/$MESSAGE" >/dev/null 2>&1
+    fi
 }
