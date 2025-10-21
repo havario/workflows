@@ -1,14 +1,4 @@
 #!/bin/bash
-# SPDX-License-Identifier: Apache-2.0
-#
-# Description:
-# Copyright (c) 2021 The Nx-Engine Ops Team. All rights reserved.
-# Copyright (c) 2021-2025 yihao.he <yihao.he@nx-engine.com>
-#                         honeok <i@honeok.com>
-
-# Thanks:
-# jimin.huang <jimin.huang@nx-engine.com>
-# zhenqiang.zhang <zhenqiang.zhang@nx-engine.com>
 
 set -eEuo pipefail
 
