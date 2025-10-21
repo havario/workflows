@@ -44,7 +44,7 @@ ip_address() {
     IPV6_ADDRESS="$(curl -Ls -6 http://www.qualcomm.cn/cdn-cgi/trace 2>/dev/null | grep -i '^ip=' | cut -d'=' -f2 || true)"
 
     if [[ -n "$IPV4_ADDRESS" && "$IPV4_ADDRESS" =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]; then
-        IPV4_ADDRESS="$(sed -E 's/^([0-9]{1,3}\.[0-9]{1,3})\.[0-9]{1,3}\.[0-9]{1,3}$/\1.*.*/' <<< "$IPV4_ADDRESS")"
+        IPV4_ADDRESS="${IPV4_ADDRESS%.*.*}.*.*"
         echo "$IPV4_ADDRESS"
         return
     fi
