@@ -44,6 +44,7 @@ RUN set -eux \
         --with-compat \
         --add-dynamic-module=../zstd-nginx-module \
     && make \
+    && strip build/nginx-*/objs/*.so \
     && apk del --no-network .build-deps \
     && rm -rf /var/cache/apk/*
 
