@@ -19,7 +19,7 @@ LABEL maintainer="honeok <i@honeok.com>"
 ARG RESTY_VERSION=""
 ARG ZSTD_VERSION=""
 
-RUN set -ex \
+RUN set -eux \
     && apk add --update --no-cache --virtual .build-deps \
         build-base \
         curl \
@@ -148,7 +148,7 @@ ARG RESTY_CONFIG_DEPS="--with-pcre \
 
 COPY --from=builder /tmp/openresty-${RESTY_VERSION}/build/nginx-*/objs/*.so /usr/local/openresty/nginx/modules/
 
-RUN set -ex \
+RUN set -eux \
 # create nginx user/group first, to be consistent throughout docker variants
     && addgroup -g 101 -S nginx \
     && adduser -S -D -H -u 101 -h /var/cache/nginx -s /sbin/nologin -G nginx -g nginx nginx \
