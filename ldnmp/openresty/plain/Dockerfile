@@ -1,22 +1,22 @@
+# SPDX-License-Identifier: BSD-2-Clause
+#
 # Description: This dockerfile creates an openresty production image on alpine, integrating nginx with optimized configurations for high-performance web serving.
-#
 # Copyright (c) 2025 honeok <i@honeok.com>
-#
+
 # References:
 # https://github.com/openresty/docker-openresty
 # https://github.com/nginx/docker-nginx
-#
-# Thanks: YichunZhang <agentzh@gmail.com>
-#                     <admin@openresty.com>
-#
-# SPDX-License-Identifier: BSD-2-Clause
+# Thanks:
+# YichunZhang <agentzh@gmail.com>
+#             <admin@openresty.com>
 
-FROM alpine:latest AS builder
+FROM alpine:3.22.2 AS base
+
+FROM base AS builder
 
 LABEL maintainer="honeok <i@honeok.com>"
 
-# Docker Build Arguments
-ARG RESTY_VERSION="1.27.1.2"
+ARG RESTY_VERSION=""
 ARG ZSTD_VERSION=""
 
 RUN set -ex \
@@ -47,13 +47,12 @@ RUN set -ex \
     && apk del --no-network .build-deps \
     && rm -rf /var/cache/apk/*
 
-FROM alpine:latest AS dist
+FROM base AS dist
 
 LABEL maintainer="Evan Wies <evan@neomantra.net>"
 LABEL maintainer="honeok <i@honeok.com>"
 
-# Docker Build Arguments
-ARG RESTY_VERSION="1.27.1.2"
+ARG RESTY_VERSION=""
 
 # https://github.com/openresty/openresty-packaging/blob/master/alpine/openresty-openssl3/APKBUILD
 ARG RESTY_OPENSSL_VERSION="3.4.1"
