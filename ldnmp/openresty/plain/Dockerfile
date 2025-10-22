@@ -179,7 +179,7 @@ RUN set -ex \
     && curl -Ls "${RESTY_OPENSSL_URL_BASE}/openssl-${RESTY_OPENSSL_VERSION}.tar.gz" -o openssl-${RESTY_OPENSSL_VERSION}.tar.gz \
     && tar fxz openssl-${RESTY_OPENSSL_VERSION}.tar.gz \
     && cd openssl-${RESTY_OPENSSL_VERSION} \
-    # patching openssl 3.x for openresty
+# Patching OpenSSL 3.x for OpenResty
     && curl -Ls https://github.com/openresty/openresty/raw/master/patches/openssl-${RESTY_OPENSSL_PATCH_VERSION}-sess_set_get_cb_yield.patch | patch -p1 \
     && ./config \
         shared zlib -g \
@@ -209,7 +209,7 @@ RUN set -ex \
     && make -j$(getconf _NPROCESSORS_ONLN) \
     && make -j$(getconf _NPROCESSORS_ONLN) install \
     && if [ -n "${RESTY_STRIP_BINARIES}" ]; then \
-        rm -Rf /usr/local/openresty/openssl3/bin/c_rehash /usr/local/openresty/openssl3/lib/*.a /usr/local/openresty/openssl3/include \
+        && rm -Rf /usr/local/openresty/openssl3/bin/c_rehash /usr/local/openresty/openssl3/lib/*.a /usr/local/openresty/openssl3/include \
         && find /usr/local/openresty/openssl3 -type f -perm -u+x -exec strip --strip-unneeded '{}' \; \
         && rm -Rf /usr/local/openresty/pcre2/bin /usr/local/openresty/pcre2/share \
         && find /usr/local/openresty/pcre2 -type f -perm -u+x -exec strip --strip-unneeded '{}' \; \
@@ -222,7 +222,6 @@ RUN set -ex \
     && apk del --no-network .build-deps \
 # Temporary file cache directory.
     && mkdir -p /var/cache/openresty \
-    && curl -Ls https://openresty.org/favicon.ico -o /usr/local/openresty/nginx/html/favicon.ico \
 # Add `envsubst` for templating environment variables.
     && apk add --no-cache gettext-envsubst \
 # if we have leftovers from building, let's purge them (including extra, unnecessary build deps)
