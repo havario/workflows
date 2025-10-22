@@ -4,12 +4,14 @@
 # Description: This script is used to builds and publishes the latest version of the openresty image.
 # Copyright (c) 2025 honeok <i@honeok.com>
 
-set -eE
+set -eEu
 
 START_TIME="$(date +%s)"
 
 RESTY_VERSION="$(wget -qO- --tries=50 https://api.github.com/repos/openresty/openresty/tags | grep '"name":' | sed -E 's/.*"name": *"([^"]+)".*/\1/' | sort -rV | head -n1 | sed 's/v//')"
 ZSTD_VERSION="$(wget -qO- --tries=50 https://api.github.com/repos/facebook/zstd/releases/latest | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/' | sed 's/v//')"
+DOCKER_USERNAME="honeok"
+DOCKER_REPO="openresty"
 
 _exit() {
     local ET_CODE="$?"
@@ -20,10 +22,10 @@ _exit() {
     exit "$ET_CODE"
 }
 
-trap '_exit' SIGINT SIGQUIT SIGTERM EXIT
+trap '_exit' INT TERM EXIT
 
-docker buildx create --name builder --use
-docker buildx inspect --bootstrap
+docker buildx create --name builder --use || true
+docker buildx inspect --bootstrap || true
 
 find . -type f -name "*.sh" -exec dos2unix {} \; -exec chmod +x {} \;
 
@@ -33,7 +35,8 @@ docker buildx build \
     --platform linux/amd64,linux/arm64 \
     --build-arg RESTY_VERSION="$RESTY_VERSION" \
     --build-arg ZSTD_VERSION="$ZSTD_VERSION" \
-    --tag honeok/openresty:"$RESTY_VERSION-alpine" \
+    --build-arg RESTY_STRIP_BINARIES=1 \
+    --tag "$DOCKER_USERNAME"/"$DOCKER_REPO":"$RESTY_VERSION-alpine" \
     --push \
     . && echo 2>&1 "build complete!"
 
