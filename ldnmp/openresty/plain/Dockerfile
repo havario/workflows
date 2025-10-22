@@ -19,7 +19,7 @@ LABEL maintainer="honeok <i@honeok.com>"
 ARG RESTY_VERSION=""
 ARG ZSTD_VERSION=""
 
-RUN set -eux \
+RUN set -ex \
     && apk add --update --no-cache --virtual .build-deps \
         build-base \
         curl \
@@ -148,7 +148,7 @@ ARG RESTY_CONFIG_DEPS="--with-pcre \
 
 COPY --from=builder /tmp/openresty-${RESTY_VERSION}/build/nginx-*/objs/*.so /usr/local/openresty/nginx/modules/
 
-RUN set -eux \
+RUN set -ex \
     && addgroup -g 101 -S nginx \
     && adduser -S -D -H -u 101 -h /var/cache/openresty -s /sbin/nologin -G nginx -g nginx nginx \
     && apk add --update --no-cache --virtual .build-deps \
