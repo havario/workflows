@@ -154,14 +154,12 @@ RUN set -ex \
     && apk add --update --no-cache --virtual .build-deps \
         brotli-dev \
         build-base \
-        binutils \
         coreutils \
         gd-dev \
         geoip-dev \
         git \
         libxslt-dev \
         linux-headers \
-        make \
         perl-dev \
         readline-dev \
         zlib-dev \
