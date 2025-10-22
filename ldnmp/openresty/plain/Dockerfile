@@ -26,7 +26,7 @@ RUN set -eux \
         git \
         openssl-dev \
         pcre2-dev \
-        perl \
+        perl-dev \
         zlib-dev \
     && cd /tmp \
     && curl -Ls https://openresty.org/download/openresty-${RESTY_VERSION}.tar.gz -o openresty-${RESTY_VERSION}.tar.gz  \
@@ -59,9 +59,8 @@ ARG RESTY_VERSION=""
 ARG RESTY_OPENSSL_VERSION="3.4.1"
 ARG RESTY_OPENSSL_PATCH_VERSION="3.4.1"
 ARG RESTY_OPENSSL_URL_BASE="https://github.com/openssl/openssl/releases/download/openssl-${RESTY_OPENSSL_VERSION}"
-# legacy: https://www.openssl.org/source/old/1.1.1
-ARG RESTY_OPENSSL_BUILD_OPTIONS="enable-camellia enable-cms enable-fips enable-ktls enable-md2 enable-rc5 \
-    enable-rfc3779 enable-seed enable-ssl3 enable-ssl3-method enable-weak-ssl-ciphers \
+ARG RESTY_OPENSSL_BUILD_OPTIONS="enable-camellia enable-seed enable-rfc3779 enable-cms enable-md2 enable-rc5 \
+    enable-weak-ssl-ciphers enable-ssl3 enable-ssl3-method enable-md2 enable-ktls enable-fips \
     "
 
 # https://github.com/openresty/openresty-packaging/blob/master/alpine/openresty-pcre2/APKBUILD
