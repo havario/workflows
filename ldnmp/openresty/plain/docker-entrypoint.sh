@@ -1,5 +1,4 @@
 #!/usr/bin/env sh
-# vim:sw=4:ts=4:et
 
 set -e
 
@@ -16,7 +15,7 @@ if [ "$1" = "nginx" ] || [ "$1" = "nginx-debug" ]; then
         entrypoint_log "$0: Looking for shell scripts in /docker-entrypoint.d/"
         /usr/bin/find "/docker-entrypoint.d/" -follow -type f -print | sort -V | while read -r SCRIPT; do
             case "$SCRIPT" in
-                *.envsh )
+                *.envsh)
                     if [ -x "$SCRIPT" ]; then
                         entrypoint_log "$0: Sourcing $SCRIPT";
                         # shellcheck source=/dev/null
@@ -26,7 +25,7 @@ if [ "$1" = "nginx" ] || [ "$1" = "nginx-debug" ]; then
                         entrypoint_log "$0: Ignoring $SCRIPT, not executable";
                     fi
                 ;;
-                *.sh )
+                *.sh)
                     if [ -x "$SCRIPT" ]; then
                         entrypoint_log "$0: Launching $SCRIPT";
                         "$SCRIPT"
@@ -35,7 +34,7 @@ if [ "$1" = "nginx" ] || [ "$1" = "nginx-debug" ]; then
                         entrypoint_log "$0: Ignoring $SCRIPT, not executable";
                     fi
                 ;;
-                * )
+                *)
                     entrypoint_log "$0: Ignoring $SCRIPT"
                 ;;
             esac
