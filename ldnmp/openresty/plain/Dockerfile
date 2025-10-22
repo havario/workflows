@@ -21,6 +21,7 @@ ARG ZSTD_VERSION=""
 
 RUN set -ex \
     && apk add --update --no-cache --virtual .build-deps \
+        brotli-dev \
         build-base \
         curl \
         git \
@@ -31,17 +32,19 @@ RUN set -ex \
     && cd /tmp \
     && curl -Ls https://openresty.org/download/openresty-${RESTY_VERSION}.tar.gz -o openresty-${RESTY_VERSION}.tar.gz  \
     && tar fxz openresty-${RESTY_VERSION}.tar.gz \
+    && git clone --recurse-submodules -j8 https://github.com/google/ngx_brotli \
     && curl -Ls https://github.com/facebook/zstd/releases/download/v${ZSTD_VERSION}/zstd-${ZSTD_VERSION}.tar.gz -o zstd-${ZSTD_VERSION}.tar.gz \
     && tar fxz zstd-${ZSTD_VERSION}.tar.gz \
     && cd zstd-${ZSTD_VERSION} \
     && make clean \
     && CFLAGS="-fPIC" make -j$(getconf _NPROCESSORS_ONLN) \
-    && make install \
+    && make -j$(getconf _NPROCESSORS_ONLN) install \
     && cd /tmp \
     && git clone --depth=10 https://github.com/tokers/zstd-nginx-module.git \
     && cd openresty-${RESTY_VERSION} \
     && ./configure \
         --with-compat \
+        --add-dynamic-module=../ngx_brotli \
         --add-dynamic-module=../zstd-nginx-module \
     && make \
     && strip build/nginx-*/objs/*.so \
