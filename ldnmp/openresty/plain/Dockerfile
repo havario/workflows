@@ -6,9 +6,9 @@
 # References:
 # https://github.com/openresty/docker-openresty
 # https://github.com/nginx/docker-nginx
-# Thanks:
-# YichunZhang <agentzh@gmail.com>
-#             <admin@openresty.com>
+# Acknowledgements:
+# openresty and it's author YichunZhang (agentzh) <agentzh@gmail.com>
+#                                                 <admin@openresty.com>
 
 FROM alpine:3.22.2 AS base
 
