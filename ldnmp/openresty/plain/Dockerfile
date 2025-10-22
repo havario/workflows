@@ -168,6 +168,7 @@ RUN set -ex \
         curl \
         gd \
         geoip \
+        gettext-envsubst \
         libgcc \
         libxslt \
         tzdata \
@@ -220,8 +221,6 @@ RUN set -ex \
     && apk del --no-network .build-deps \
 # Temporary file cache directory.
     && mkdir -p /var/cache/openresty \
-# Add `envsubst` for templating environment variables.
-    && apk add --no-cache gettext-envsubst \
 # if we have leftovers from building, let's purge them (including extra, unnecessary build deps)
     && rm -rf /var/cache/apk/* \
 # forward request and error logs to docker log collector.
