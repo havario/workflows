@@ -179,7 +179,7 @@ RUN set -ex \
     && curl -Ls "${RESTY_OPENSSL_URL_BASE}/openssl-${RESTY_OPENSSL_VERSION}.tar.gz" -o openssl-${RESTY_OPENSSL_VERSION}.tar.gz \
     && tar fxz openssl-${RESTY_OPENSSL_VERSION}.tar.gz \
     && cd openssl-${RESTY_OPENSSL_VERSION} \
-# Patching OpenSSL 3.x for OpenResty
+# Patching openssl 3.x for openresty
     && curl -Ls https://github.com/openresty/openresty/raw/master/patches/openssl-${RESTY_OPENSSL_PATCH_VERSION}-sess_set_get_cb_yield.patch | patch -p1 \
     && ./config \
         shared zlib -g \
@@ -221,12 +221,12 @@ RUN set -ex \
     && apk del --no-network .build-deps \
 # Temporary file cache directory.
     && mkdir -p /var/cache/openresty \
-# if we have leftovers from building, let's purge them (including extra, unnecessary build deps)
+# If we have leftovers from building, let's purge them (including extra, unnecessary build deps)
     && rm -rf /var/cache/apk/* \
-# forward request and error logs to docker log collector.
+# Forward request and error logs to docker log collector.
     && ln -sf /dev/stdout /usr/local/openresty/nginx/logs/access.log \
     && ln -sf /dev/stderr /usr/local/openresty/nginx/logs/error.log \
-# create a docker-entrypoint.d directory
+# Create a docker-entrypoint.d directory
     && mkdir /docker-entrypoint.d
 
 # Add additional binaries into PATH for convenience.
