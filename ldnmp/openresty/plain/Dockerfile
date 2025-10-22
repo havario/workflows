@@ -149,10 +149,8 @@ ARG RESTY_CONFIG_DEPS="--with-pcre \
 COPY --from=builder /tmp/openresty-${RESTY_VERSION}/build/nginx-*/objs/*.so /usr/local/openresty/nginx/modules/
 
 RUN set -eux \
-# create nginx user/group first, to be consistent throughout docker variants
     && addgroup -g 101 -S nginx \
-    && adduser -S -D -H -u 101 -h /var/cache/nginx -s /sbin/nologin -G nginx -g nginx nginx \
-# let's build binaries from the published packaging sources
+    && adduser -S -D -H -u 101 -h /var/cache/openresty -s /sbin/nologin -G nginx -g nginx nginx \
     && apk add --update --no-cache --virtual .build-deps \
         brotli-dev \
         build-base \
