@@ -1,5 +1,6 @@
 #!/bin/sh
 # vim:sw=4:ts=4:et
+# SPDX-License-Identifier: BSD-2-Clause
 # shellcheck disable=all
 
 set -e
@@ -10,7 +11,7 @@ entrypoint_log() {
     fi
 }
 
-if [ "$1" = "nginx" ] || [ "$1" = "nginx-debug" ]; then
+if [ "$1" = "nginx" ] || [ "$1" = "openresty" ]; then
     if /usr/bin/find "/docker-entrypoint.d/" -mindepth 1 -maxdepth 1 -type f -print -quit 2>/dev/null | read v; then
         entrypoint_log "$0: /docker-entrypoint.d/ is not empty, will attempt to perform configuration"
 
