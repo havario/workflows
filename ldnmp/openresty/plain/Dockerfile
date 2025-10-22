@@ -176,10 +176,12 @@ RUN set -eux \
         zlib \
         ${RESTY_ADD_PACKAGE_RUNDEPS} \
     && cd /tmp \
+    && if [ -n "${RESTY_EVAL_PRE_CONFIGURE}" ]; then eval $(echo ${RESTY_EVAL_PRE_CONFIGURE}); fi \
+    && cd /tmp \
     && curl -Ls "${RESTY_OPENSSL_URL_BASE}/openssl-${RESTY_OPENSSL_VERSION}.tar.gz" -o openssl-${RESTY_OPENSSL_VERSION}.tar.gz \
     && tar fxz openssl-${RESTY_OPENSSL_VERSION}.tar.gz \
     && cd openssl-${RESTY_OPENSSL_VERSION} \
-# patching openssl 3.x for openresty
+    # patching openssl 3.x for openresty
     && curl -Ls https://github.com/openresty/openresty/raw/master/patches/openssl-${RESTY_OPENSSL_PATCH_VERSION}-sess_set_get_cb_yield.patch | patch -p1 \
     && ./config \
         shared zlib -g \
