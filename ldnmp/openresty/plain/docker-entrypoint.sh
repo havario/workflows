@@ -1,42 +1,41 @@
-#!/usr/bin/env sh
+#!/bin/sh
+# vim:sw=4:ts=4:et
+# shellcheck disable=all
 
 set -e
 
 entrypoint_log() {
-    if [ -z "${RESTY_QUIET_LOGS:-}" ]; then
+    if [ -z "${RESTY_ENTRYPOINT_QUIET_LOGS:-}" ]; then
         echo "$@"
     fi
 }
 
 if [ "$1" = "nginx" ] || [ "$1" = "nginx-debug" ]; then
-    if /usr/bin/find "/docker-entrypoint.d/" -mindepth 1 -maxdepth 1 -type f -print -quit 2>/dev/null; then
+    if /usr/bin/find "/docker-entrypoint.d/" -mindepth 1 -maxdepth 1 -type f -print -quit 2>/dev/null | read v; then
         entrypoint_log "$0: /docker-entrypoint.d/ is not empty, will attempt to perform configuration"
 
         entrypoint_log "$0: Looking for shell scripts in /docker-entrypoint.d/"
-        /usr/bin/find "/docker-entrypoint.d/" -follow -type f -print | sort -V | while read -r SCRIPT; do
-            case "$SCRIPT" in
+        /usr/bin/find "/docker-entrypoint.d/" -follow -type f -print | sort -V | while read -r f; do
+            case "$f" in
                 *.envsh)
-                    if [ -x "$SCRIPT" ]; then
-                        entrypoint_log "$0: Sourcing $SCRIPT";
-                        # shellcheck source=/dev/null
-                        . "$SCRIPT"
+                    if [ -x "$f" ]; then
+                        entrypoint_log "$0: Sourcing $f";
+                        . "$f"
                     else
                         # warn on shell scripts without exec bit
-                        entrypoint_log "$0: Ignoring $SCRIPT, not executable";
+                        entrypoint_log "$0: Ignoring $f, not executable";
                     fi
-                ;;
+                    ;;
                 *.sh)
-                    if [ -x "$SCRIPT" ]; then
-                        entrypoint_log "$0: Launching $SCRIPT";
-                        "$SCRIPT"
+                    if [ -x "$f" ]; then
+                        entrypoint_log "$0: Launching $f";
+                        "$f"
                     else
                         # warn on shell scripts without exec bit
-                        entrypoint_log "$0: Ignoring $SCRIPT, not executable";
+                        entrypoint_log "$0: Ignoring $f, not executable";
                     fi
-                ;;
-                *)
-                    entrypoint_log "$0: Ignoring $SCRIPT"
-                ;;
+                    ;;
+                *) entrypoint_log "$0: Ignoring $f";;
             esac
         done
 
