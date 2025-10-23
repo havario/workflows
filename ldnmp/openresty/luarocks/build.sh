@@ -6,7 +6,7 @@
 
 set -eE
 
-RESTY_VERSION="$(wget -qO- --tries=50 https://api.github.com/repos/openresty/openresty/tags | grep '"name":' | sed -E 's/.*"name": *"([^"]+)".*/\1/' | sort -rV | head -n1 | sed 's/v//')"
+RESTY_VERSION="$(wget -qO- https://api.github.com/repos/openresty/openresty/tags | grep '"name":' | sed -E 's/.*"name": *"([^"]+)".*/\1/' | sort -rV | head -n1 | sed 's/v//')"
 
 docker buildx build \
     --no-cache \
