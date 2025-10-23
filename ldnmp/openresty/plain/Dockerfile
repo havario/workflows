@@ -145,8 +145,7 @@ ARG RESTY_CONFIG_DEPS="--with-pcre \
     --with-ld-opt='-L/usr/local/openresty/pcre2/lib -L/usr/local/openresty/openssl3/lib -Wl,-rpath,/usr/local/openresty/pcre2/lib:/usr/local/openresty/openssl3/lib' \
     "
 
-LABEL maintainer="Evan Wies <evan@neomantra.net>" \
-    maintainer="honeok <i@honeok.com>" \
+LABEL maintainer="honeok <i@honeok.com>" \
     org.opencontainers.image.description="High Performance Web Platform Based on Nginx and LuaJIT" \
     org.opencontainers.image.licenses="BSD-2-Clause" \
     org.opencontainers.image.source="https://github.com/openresty/openresty" \
