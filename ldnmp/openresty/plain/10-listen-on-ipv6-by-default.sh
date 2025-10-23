@@ -43,7 +43,7 @@ entrypoint_log "$ME: info: Getting the checksum of /$DEFAULT_CONF_FILE"
 
 case "$ID" in
     alpine|debian)
-        echo "$CHECKSUM  /$DEFAULT_CONF_FILE" | md5sum -c - >/dev/null 2>&1 || {
+        echo "$CHECKSUM  /$DEFAULT_CONF_FILE" | sha1sum -c - >/dev/null 2>&1 || {
             entrypoint_log "$ME: info: /$DEFAULT_CONF_FILE differs from the packaged version"
             exit 0
         }
