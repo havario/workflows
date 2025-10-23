@@ -2,8 +2,6 @@
 # vim:sw=4:ts=4:et
 # SPDX-License-Identifier: BSD-2-Clause
 
-# shellcheck disable=all
-
 set -e
 
 entrypoint_log() {
@@ -13,6 +11,7 @@ entrypoint_log() {
 }
 
 if [ "$1" = "nginx" ] || [ "$1" = "openresty" ]; then
+    # shellcheck disable=SC2034,SC2162
     if /usr/bin/find "/docker-entrypoint.d/" -mindepth 1 -maxdepth 1 -type f -print -quit 2>/dev/null | read v; then
         entrypoint_log "$0: /docker-entrypoint.d/ is not empty, will attempt to perform configuration"
 
@@ -22,6 +21,7 @@ if [ "$1" = "nginx" ] || [ "$1" = "openresty" ]; then
                 *.envsh)
                     if [ -x "$f" ]; then
                         entrypoint_log "$0: Sourcing $f";
+                        # shellcheck disable=SC1090
                         . "$f"
                     else
                         # warn on shell scripts without exec bit
