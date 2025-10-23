@@ -39,6 +39,7 @@ release: prepare release-deps
 		--build-arg RESTY_VERSION="$(RESTY_VERSION)" \
 		--build-arg ZSTD_VERSION="$(ZSTD_VERSION)" \
 		--tag $(DOCKER_USERNAME)/$(DOCKER_REPO):$(RESTY_VERSION)-alpine \
+		--tag $(DOCKER_USERNAME)/$(DOCKER_REPO):alpine \
 		--push \
 		.
 	@echo "--> version: $(RESTY_VERSION) build complete!"
