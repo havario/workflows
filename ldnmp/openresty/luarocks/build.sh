@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # SPDX-License-Identifier: Apache-2.0
 #
 # Description: This script is used to build and publish the latest version of openresty integrated luarocks image.
