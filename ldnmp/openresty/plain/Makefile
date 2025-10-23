@@ -1,4 +1,4 @@
-# SPDX-License-Identifier: Apache-2.0
+# SPDX-License-Identifier: BSD-2-Clause
 # Copyright (c) 2025 honeok <i@honeok.com>
 
 # variables
