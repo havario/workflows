@@ -1,6 +1,9 @@
 #!/bin/sh
 # vim:sw=4:ts=4:et
 # SPDX-License-Identifier: BSD-2-Clause
+#
+# Modified from the project: https://github.com/nginx/docker-nginx
+# Copyright (c) 2025 honeok <i@honeok.com>
 
 set -e
 
