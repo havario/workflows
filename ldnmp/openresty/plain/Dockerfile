@@ -53,9 +53,6 @@ RUN set -ex \
 
 FROM base AS dist
 
-LABEL maintainer="Evan Wies <evan@neomantra.net>"
-LABEL maintainer="honeok <i@honeok.com>"
-
 ARG RESTY_VERSION=""
 
 # https://github.com/openresty/openresty-packaging/blob/master/alpine/openresty-openssl3/APKBUILD
@@ -147,6 +144,15 @@ ARG RESTY_CONFIG_DEPS="--with-pcre \
     --with-cc-opt='-DNGX_LUA_ABORT_AT_PANIC -I/usr/local/openresty/pcre2/include -I/usr/local/openresty/openssl3/include' \
     --with-ld-opt='-L/usr/local/openresty/pcre2/lib -L/usr/local/openresty/openssl3/lib -Wl,-rpath,/usr/local/openresty/pcre2/lib:/usr/local/openresty/openssl3/lib' \
     "
+
+LABEL maintainer="Evan Wies <evan@neomantra.net>" \
+    maintainer="honeok <i@honeok.com>" \
+    org.opencontainers.image.description="High Performance Web Platform Based on Nginx and LuaJIT" \
+    org.opencontainers.image.licenses="BSD-2-Clause" \
+    org.opencontainers.image.source="https://github.com/openresty/openresty" \
+    org.opencontainers.image.title="OpenResty" \
+    org.opencontainers.image.url="https://openresty.org" \
+    org.opencontainers.image.version=${RESTY_VERSION}
 
 COPY --from=builder /tmp/openresty-${RESTY_VERSION}/build/nginx-*/objs/*.so /usr/local/openresty/nginx/modules/
 
