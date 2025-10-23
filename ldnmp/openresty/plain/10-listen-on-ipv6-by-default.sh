@@ -12,6 +12,8 @@ entrypoint_log() {
 
 ME=$(basename "$0")
 DEFAULT_CONF_FILE="etc/nginx/conf.d/default.conf"
+
+# wget -qO- https://github.com/openresty/docker-openresty/raw/master/nginx.vh.default.conf | sha1sum
 CHECKSUM="5595cfb7b243d04cdf5e5b8749b792362c2712b0"
 
 # check if we have ipv6 available
