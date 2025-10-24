@@ -4,6 +4,15 @@
 local ngx = ngx
 local regex_match = ngx.re.match
 
+-- 获取当前请求的URI路径不包括查询字符串
+local request_uri = ngx.var.uri or ""
+local request_line = ngx.var.request or ""
+
+-- 乱码请求快速关闭连接
+if string.match(request_line, "^[^A-Z]") then
+    return ngx.exit(444)
+end
+
 -- 定义敏感文件
 local sensitive_files = {
     "^/\\.(?!well-known)(env|git|gitignore|htaccess|hg|svn|bzr|editorconfig|npmrc|bashrc|bash_profile|bash_history|[^/]+)$",
@@ -14,9 +23,6 @@ local sensitive_files = {
     "^/(wp-config\\.php|config\\.php|settings\\.php|database\\.yml|secrets\\.yaml)$",
     "^/(\\.DS_Store|Thumbs\\.db|\\.idea|\\.vscode)$"
 }
-
--- 获取当前请求的URI路径不包括查询字符串
-local request_uri = ngx.var.uri or ""
 
 for _, pattern in ipairs(sensitive_files) do
     if regex_match(request_uri, pattern, "ioj") then
