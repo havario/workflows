@@ -7,15 +7,15 @@ local ngx = ngx
 
 -- 配置参数
 -- 连接数限制
-local CONN_SHM_NAME = "conn_limit_shm"
-local CONN_LIMIT = 20   -- 每个IP允许的最大并发连接数
-local CONN_DELAY = 0    -- 连接数超限不等待，直接拒绝 0: 拒绝 >0: 延迟
+local CONN_SHM_NAME = "conn_limit_shm"  -- 共享内存名称
+local CONN_LIMIT = 20                   -- 每个IP允许的最大并发连接数
+local CONN_DELAY = 0                    -- 连接数超限不等待，直接拒绝 0: 拒绝 >0: 延迟
 
 -- 请求速率限制
-local REQ_SHM_NAME = "req_limit_shm"
-local REQ_RATE = 50     -- 允许的平均速率: 每秒50个请求
-local REQ_BURST = 20     -- 允许的突发请求数: 额外20个
-local REQ_DURATION = 1  -- 周期(秒)
+local REQ_SHM_NAME = "req_limit_shm"    -- 共享内存名称
+local REQ_RATE = 50                     -- 允许的平均速率: 每秒50个请求
+local REQ_BURST = 20                    -- 允许的突发请求数: 额外20个
+local REQ_DURATION = 1                  -- 周期(秒)
 
 -- 状态码
 local TOO_MANY_REQUESTS = 503
