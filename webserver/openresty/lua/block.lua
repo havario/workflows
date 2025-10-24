@@ -15,13 +15,11 @@ local sensitive_files = {
     "^/(\\.DS_Store|Thumbs\\.db|\\.idea|\\.vscode)$"
 }
 
--- 无响应时关闭连接
-local return_code = 444
 -- 获取当前请求的URI路径不包括查询字符串
 local request_uri = ngx.var.uri or ""
 
 for _, pattern in ipairs(sensitive_files) do
     if regex_match(request_uri, pattern, "ioj") then
-        return ngx.exit(return_code)
+        return ngx.exit(444)
     end
 end
