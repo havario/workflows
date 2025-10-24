@@ -54,6 +54,9 @@ services:
       - php-socket:/run/php
     networks:
       - web
+    depends_on:
+      mysql:
+        condition: service_healthy
 
   redis:
     image: 8.0.4-alpine
