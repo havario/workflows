@@ -19,6 +19,7 @@ local REQ_DURATION = 1  -- 周期(秒)
 
 -- 状态码
 local TOO_MANY_REQUESTS = 503
+local RETRY_AFTER_SECONDS = 1
 
 -- 实例化限流
 local conn_lim = limit_conn.new(CONN_SHM_NAME)
@@ -31,14 +32,14 @@ if not conn_lim or not req_lim then
 end
 
 -- 获取客户端IP作为限流键
-local key = ngx.var.remote_addr
+local client_ip = ngx.var.remote_addr
 
-if not key then
+if not client_ip then
     return ngx.exit(ngx.HTTP_INTERNAL_SERVER_ERROR)
 end
 
 -- 连接频率限制
-local conn_status, conn_err = conn_lim:incoming(key, CONN_LIMIT, CONN_DELAY)
+local conn_status, conn_err = conn_lim:incoming(client_ip, CONN_LIMIT, CONN_DELAY)
 
 if not conn_status then
     ngx.log(ngx.ERR, "lim:conn:incoming failed: ", conn_err)
@@ -47,13 +48,13 @@ end
 
 if conn_status == 2 or conn_status == 1 then -- 2: 拒绝 1: 延迟
     -- 如果超过连接数限制直接拒绝
-    ngx.log(ngx.WARN, "Conn limit exceeded for IP: ", key)
-    ngx.header["Retry-After"] = 1
+    ngx.log(ngx.WARN, "Conn limit exceeded for IP: ", client_ip)
+    ngx.header["Retry-After"] = RETRY_AFTER_SECONDS
     return ngx.exit(TOO_MANY_REQUESTS)
 end
 
 -- 请求频率限制
-local req_delay_or_reject, req_err = req_lim:incoming(key, REQ_RATE * REQ_DURATION, REQ_BURST * REQ_DURATION, REQ_DURATION)
+local req_delay_or_reject, req_err = req_lim:incoming(client_ip, REQ_RATE * REQ_DURATION, REQ_BURST * REQ_DURATION, REQ_DURATION)
 
 if not req_delay_or_reject then
     ngx.log(ngx.ERR, "lim:req:incoming failed: ", req_err)
@@ -62,8 +63,8 @@ end
 
 -- 如果超过请求速率限制，(返回值 >0 表示延迟或拒绝) 直接拒绝
 if req_delay_or_reject > 0 then
-    ngx.log(ngx.WARN, "Rate limit exceeded for IP: ", key)
-    ngx.header["Retry-After"] = 1
+    ngx.log(ngx.WARN, "Rate limit exceeded for IP: ", client_ip)
+    ngx.header["Retry-After"] = RETRY_AFTER_SECONDS
     return ngx.exit(TOO_MANY_REQUESTS)
 end
 
