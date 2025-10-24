@@ -1,5 +1,6 @@
 -- limit.lua
 
+-- 加载模块
 local limit_conn = require "resty.limit.conn"
 local limit_req = require "resty.limit.req"
 
@@ -32,10 +33,11 @@ if not conn_lim or not req_lim then
 end
 
 -- 获取客户端IP作为限流键
-local client_ip = ngx.var.remote_addr
+local client_ip = ngx.var.remote_addr or ""
 
-if not client_ip then
-    return ngx.exit(ngx.HTTP_INTERNAL_SERVER_ERROR)
+if client_ip == "" then
+    ngx.log(ngx.WARN, "Client ip missing: remote_addr is empty. Skipping limit check.")
+    return
 end
 
 -- 连接频率限制
