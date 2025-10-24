@@ -61,7 +61,7 @@ if not req_delay_or_reject then
     return ngx.exit(ngx.HTTP_INTERNAL_SERVER_ERROR)
 end
 
--- 如果超过请求速率限制，(返回值 >0 表示延迟或拒绝) 直接拒绝
+-- 如果超过请求速率限制 (返回值 >0 表示延迟或拒绝) 直接拒绝
 if req_delay_or_reject > 0 then
     ngx.log(ngx.WARN, "Rate limit exceeded for IP: ", client_ip)
     ngx.header["Retry-After"] = RETRY_AFTER_SECONDS
