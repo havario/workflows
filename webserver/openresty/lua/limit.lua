@@ -13,8 +13,8 @@ local CONN_DELAY = 0    -- 连接数超限不等待，直接拒绝 0: 拒绝 >0:
 
 -- 请求速率限制
 local REQ_SHM_NAME = "req_limit_shm"
-local REQ_RATE = 10     -- 允许的平均速率: 每秒10个请求
-local REQ_BURST = 5     -- 允许的突发请求数: 额外5个
+local REQ_RATE = 50     -- 允许的平均速率: 每秒50个请求
+local REQ_BURST = 20     -- 允许的突发请求数: 额外20个
 local REQ_DURATION = 1  -- 周期(秒)
 
 -- 状态码
