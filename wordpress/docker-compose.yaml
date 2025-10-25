@@ -28,6 +28,7 @@ services:
       MYSQL_USER: honeok
       MYSQL_PASSWORD: 4siz2vOewdLbww # openssl rand -base64 10
     volumes:
+      - $PWD/mysql/my.cnf:/etc/my.cnf
       - $PWD/mysql/conf.d:/etc/mysql/conf.d
       - $PWD/mysql/data:/var/lib/mysql
     healthcheck:
