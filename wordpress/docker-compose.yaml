@@ -7,12 +7,12 @@ services:
     environment:
       TZ: Asia/Shanghai
     volumes:
-      - $PWD/openresty/nginx.conf:/usr/local/openresty/nginx/conf/nginx.conf
-      - $PWD/openresty/conf.d:/etc/nginx/conf.d
-      - $PWD/openresty/lua:/etc/nginx/lua
-      - $PWD/openresty/certs:/etc/nginx/certs
-      - $PWD/openresty/html:/usr/local/openresty/nginx/html
-      - $PWD/openresty/logs:/usr/local/openresty/nginx/logs
+      - $PWD/nginx/nginx.conf:/usr/local/openresty/nginx/conf/nginx.conf
+      - $PWD/nginx/conf.d:/etc/nginx/conf.d
+      - $PWD/nginx/lua:/etc/nginx/lua
+      - $PWD/nginx/certs:/etc/nginx/certs
+      - $PWD/nginx/html:/usr/local/openresty/nginx/html
+      - $PWD/nginx/logs:/usr/local/openresty/nginx/logs
       - php-socket:/run/php
     tmpfs:
       - /var/cache/openresty:rw,noexec,nosuid,size=512m
@@ -51,7 +51,7 @@ services:
     environment:
       TZ: Asia/Shanghai
     volumes:
-      - $PWD/openresty/html:/var/www/html
+      - $PWD/nginx/html:/var/www/html
       - php-socket:/run/php
     networks:
       - web
