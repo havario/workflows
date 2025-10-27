@@ -17,6 +17,15 @@ die() {
     echo >&2 "Error: $*"; exit 1
 }
 
+_exists() {
+    local _CMD="$1"
+    if type "$_CMD" >/dev/null 2>&1; then return;
+    elif command -v "$_CMD" >/dev/null 2>&1; then return;
+    elif which "$_CMD" >/dev/null 2>&1; then return;
+    else return 1;
+    fi
+}
+
 curl() {
     local RET
     for ((i=1; i<=5; i++)); do
