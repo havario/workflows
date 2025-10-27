@@ -100,7 +100,7 @@ check_srv() {
 # 日志截断
 log_rotate() {
     local START_TIME
-    START_TIME="$(date +%Y-%m-%d)"
+    START_TIME="$(date +%Y-%m-%d-%S)"
 
     cd "${SCRIPT_DIR:?}" >/dev/null 2>&1 || die "Cannot enter directory."
     mv -f logs/access.log "logs/access_$START_TIME.log" >/dev/null 2>&1
