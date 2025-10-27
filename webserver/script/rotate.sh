@@ -79,10 +79,6 @@ log_rotate() {
     find logs -type f -name "*.log.gz" -mtime +7 -exec rm {} \; >/dev/null 2>&1
 }
 
-build_msg() {
-    END_TIME="$(date -u '+%Y-%m-%d %H:%M:%S' -d '+8 hours')"
-}
-
 send_msg() {
     local MESSAGE="$1"
 
@@ -92,13 +88,19 @@ send_msg() {
             -d "{\"chat_id\":\"$CHAT_ID\",\"text\":\"$MESSAGE\"}" >/dev/null 2>&1
     fi
     if [ -n "$BARK_TOKEN" ]; then
-        curl -Ls "https://api.honeok.de/$BARK_TOKEN/Nginx/$MESSAGE" >/dev/null 2>&1
+        curl -Ls "https://api.honeok.de/$BARK_TOKEN/$CONTAINER_NAME/$MESSAGE" >/dev/null 2>&1
     fi
+}
+
+# 构建消息推送
+const_msg() {
+    local END_TIME
+    END_TIME="$(date -u '+%Y-%m-%d %H:%M:%S' -d '+8 hours')"
+    send_msg "$END_TIME $CONTAINER_NAME complete log rotation!"
 }
 
 check_root
 check_cmd
 check_srv
 log_rotate
-build_msg
-send_msg
+const_msg
