@@ -1,4 +1,8 @@
-#!/bin/bash
+#!/usr/bin/env bash
+# SPDX-License-Identifier: Apache-2.0
+#
+# Description: This script is used to rotate web server logs and push message to tgbot and bark server.
+# Copyright (c) 2025 honeok <i@honeok.com>
 
 set -eEuo pipefail
 
