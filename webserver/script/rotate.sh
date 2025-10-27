@@ -107,7 +107,9 @@ send_msg() {
             -d "{\"chat_id\":\"$CHAT_ID\",\"text\":\"$MESSAGE\"}" >/dev/null 2>&1 || true
     fi
     if [ -n "$BARK_TOKEN" ]; then
-        curl -Ls "https://api.honeok.de/$BARK_TOKEN/$CONTAINER_NAME/$MESSAGE" >/dev/null 2>&1 || true
+        curl -Ls -X POST "https://api.honeok.de/$BARK_TOKEN" \
+            -H "Content-Type: application/json" \
+            -d "{\"title\":\"$CONTAINER_NAME\",\"body\":\"${MESSAGE//$'\n'/\\n}\"}" >/dev/null 2>&1 || true
     fi
 }
 
