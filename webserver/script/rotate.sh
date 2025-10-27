@@ -85,10 +85,10 @@ send_msg() {
     if [[ -n "$BOT_TOKEN" && -n "$CHAT_ID" ]]; then
         curl -Ls -X POST "https://api.telegram.org/bot$BOT_TOKEN/sendMessage" \
             -H "Content-Type: application/json" \
-            -d "{\"chat_id\":\"$CHAT_ID\",\"text\":\"$MESSAGE\"}" >/dev/null 2>&1
+            -d "{\"chat_id\":\"$CHAT_ID\",\"text\":\"$MESSAGE\"}" >/dev/null 2>&1 || true
     fi
     if [ -n "$BARK_TOKEN" ]; then
-        curl -Ls "https://api.honeok.de/$BARK_TOKEN/$CONTAINER_NAME/$MESSAGE" >/dev/null 2>&1
+        curl -Ls "https://api.honeok.de/$BARK_TOKEN/$CONTAINER_NAME/$MESSAGE" >/dev/null 2>&1 || true
     fi
 }
 
@@ -128,8 +128,8 @@ const_msg() {
     ip_info
 
     send_msg "$END_TIME
-        $MASKED_IP $SERVER_CITY
-        $CONTAINER_NAME complete log rotation!"
+$MASKED_IP $SERVER_CITY
+$CONTAINER_NAME complete log rotation!"
 }
 
 check_root
