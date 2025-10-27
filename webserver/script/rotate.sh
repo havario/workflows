@@ -70,7 +70,7 @@ log_rotate() {
     local START_TIME
     START_TIME="$(date +%Y-%m-%d)"
 
-    cd "${SCRIPT_DIR:?}" >/dev/null 2>&1 || die "Unable to enter directory."
+    cd "${SCRIPT_DIR:?}" >/dev/null 2>&1 || die "Cannot enter directory."
     mv -f logs/access.log "logs/access_$START_TIME.log" >/dev/null 2>&1
     mv -f logs/error.log "logs/error_$START_TIME.log" >/dev/null 2>&1
     docker exec "$CONTAINER_NAME" nginx -s reopen >/dev/null 2>&1
@@ -92,11 +92,44 @@ send_msg() {
     fi
 }
 
+ip_address() {
+    local IPV4_ADDRESS IPV6_ADDRESS
+
+    IPV4_ADDRESS="$(curl -Ls -4 http://www.qualcomm.cn/cdn-cgi/trace 2>/dev/null | grep -i '^ip=' | cut -d'=' -f2 || true)"
+    IPV6_ADDRESS="$(curl -Ls -6 http://www.qualcomm.cn/cdn-cgi/trace 2>/dev/null | grep -i '^ip=' | cut -d'=' -f2 || true)"
+
+    if [[ -n "$IPV4_ADDRESS" && "$IPV4_ADDRESS" =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]; then
+        PUBLIC_IP="$IPV4_ADDRESS"
+        MASKED_IP="$(awk -F. 'NF==4{print $1"."$2".*.*"} NF!=4{print ""}' <<<"$IPV4_ADDRESS")"
+        return
+    fi
+    if [[ -n "$IPV6_ADDRESS" && "$IPV6_ADDRESS" == *":"* ]]; then
+        PUBLIC_IP="[$IPV6_ADDRESS]"
+        MASKED_IP="$(awk -F: '{print $1":"$2":"$3":*:*:*:*:*"}' <<< "$IPV6_ADDRESS")"
+        return
+    fi
+
+    die "No valid public ip."
+}
+
+ip_info() {
+    local IP_API
+
+    IP_API="$(curl -Ls "https://api.ipbase.com/v1/json/$PUBLIC_IP")"
+    SERVER_CITY="$(sed -En 's/.*"(city_name|cityName|city)":[ ]*"([^"]+)".*/\2/p' <<< "$IP_API")"
+}
+
 # 构建消息推送
 const_msg() {
     local END_TIME
     END_TIME="$(date -u '+%Y-%m-%d %H:%M:%S' -d '+8 hours')"
-    send_msg "$END_TIME $CONTAINER_NAME complete log rotation!"
+
+    ip_address
+    ip_info
+
+    send_msg "$END_TIME
+        $MASKED_IP $SERVER_CITY
+        $CONTAINER_NAME complete log rotation!"
 }
 
 check_root
