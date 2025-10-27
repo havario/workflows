@@ -33,6 +33,25 @@ curl() {
     done
 }
 
+pkg_install() {
+    for pkg in "$@"; do
+        if _exists dnf; then
+            dnf install -y "$pkg"
+        elif _exists yum; then
+            yum install -y "$pkg"
+        elif _exists apt-get; then
+            apt-get update
+            apt-get install -y -q "$pkg"
+        elif _exists apk; then
+            apk add --no-cache "$pkg"
+        elif _exists pacman; then
+            pacman -S --noconfirm --needed "$pkg"
+        else
+            die "The package manager is not supported."
+        fi
+    done
+}
+
 check_root() {
     if [ "$EUID" -ne 0 ] || [ "$(id -ru)" -ne 0 ]; then
         die "This script must be run as root."
