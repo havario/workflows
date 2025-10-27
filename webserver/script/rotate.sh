@@ -76,7 +76,7 @@ log_rotate() {
     docker exec "$CONTAINER_NAME" nginx -s reopen >/dev/null 2>&1
     gzip "logs/access_$START_TIME.log" >/dev/null 2>&1
     gzip "logs/error_$START_TIME.log" >/dev/null 2>&1
-    find logs -type f -name "*.log.gz" -mtime +7 -exec rm {} \; >/dev/null 2>&1
+    find logs -type f -name "*.log.gz" -mtime +7 -exec rm -f {} \; >/dev/null 2>&1
 }
 
 send_msg() {
