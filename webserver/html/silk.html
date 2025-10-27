@@ -4,11 +4,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>随机白丝图片</title>
+  <title>随机黑丝图片</title>
   <link rel="icon" type="image/png"
     href="https://m.360buyimg.com/i/jfs/t1/343134/32/18184/15071/68ff3492F23f6841a/7f13cf100e65096d.png">
   <script defer src="https://umami.honeok.com/script.js"
-    data-website-id="245da918-fcba-4c29-ae16-fd20457aa531"></script>
+    data-website-id="825b987b-6add-4b6a-b55d-c1cf19cd2690"></script>
   <style>
     body {
       background-color: #121212;
@@ -82,7 +82,7 @@
 
 <body>
   <div class="container">
-    <h1>随机白丝图片</h1>
+    <h1>随机黑丝图片</h1>
     <img id="randomImage" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
       alt="随机图片">
     <div class="buttons">
@@ -92,19 +92,37 @@
 
   <script>
     const image = document.getElementById('randomImage');
+
+    let preloader = new Image();
+    let isPrefetched = false;
+    const apiUrl = () => `https://v2.api-m.com/api/heisi?return=302&t=${Date.now()}`;
+
+    function prefetchNextImage() {
+      isPrefetched = false;
+      preloader = new Image();
+      preloader.onload = () => { isPrefetched = true; };
+      preloader.onerror = () => { isPrefetched = false; };
+      preloader.src = apiUrl();
+    }
     function loadImage() {
-      const currentImageUrl = `https://v2.api-m.com/api/baisi?return=302&t=${Date.now()}`;
-      image.style.opacity = 0.5;
-      const preloader = new Image();
-      preloader.onload = () => {
-        image.src = currentImageUrl;
-        image.style.opacity = 1;
-      };
-      preloader.onerror = () => {
-        console.error("图片加载失败");
-        image.style.opacity = 1;
-      };
-      preloader.src = currentImageUrl;
+      if (isPrefetched) {
+        image.src = preloader.src;
+        prefetchNextImage();
+      } else {
+        const currentImageUrl = apiUrl();
+        image.style.opacity = 0.5;
+        const currentLoader = new Image();
+        currentLoader.onload = () => {
+          image.src = currentImageUrl;
+          image.style.opacity = 1;
+        };
+        currentLoader.onerror = () => {
+          console.error("图片加载失败");
+          image.style.opacity = 1;
+        };
+        currentLoader.src = currentImageUrl;
+        prefetchNextImage();
+      }
     }
 
     // 页面初次加载时显示一张图片
