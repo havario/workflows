@@ -10,6 +10,7 @@ set -eEuo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
 BOT_TOKEN=""
 CHAT_ID=""
+BARK_URL=""
 BARK_TOKEN=""
 
 # 设置PATH环境变量
@@ -32,7 +33,7 @@ _exists() {
 
 curl() {
     local RET
-    for ((i=1; i<=5; i++)); do
+    for ((i=1; i<=3; i++)); do
         command curl --connect-timeout 10 --fail --insecure "$@"
         RET="$?"
         if [ "$RET" -eq 0 ]; then
@@ -120,7 +121,7 @@ send_msg() {
             -d "{\"chat_id\":\"$CHAT_ID\",\"text\":\"$MESSAGE\"}" >/dev/null 2>&1 || true
     fi
     if [ -n "$BARK_TOKEN" ]; then
-        curl -Ls -X POST "https://api.honeok.de/$BARK_TOKEN" \
+        curl -Ls -X POST "https://${BARK_URL:-api.day.app}/$BARK_TOKEN" \
             -H "Content-Type: application/json" \
             -d "{\"title\":\"$CONTAINER_NAME\",\"body\":\"${MESSAGE//$'\n'/\\n}\"}" >/dev/null 2>&1 || true
     fi
