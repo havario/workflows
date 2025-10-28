@@ -1,0 +1,20 @@
+---
+log:
+  level: {{ log_level | default("warn") }}
+  format: {{ log_format | default("json") }}
+  output: {{ log_output | default("none") }}
+
+services:
+{% for service in services %}
+- name: {{ service.name }}
+  addr: :{{ service.port }}
+  handler:
+    type: {{ service.handler_type | default("rtcp") }}
+  listener:
+    type: {{ service.listener_type | default("rtcp") }}
+  forwarder:
+    nodes:
+    - name: {{ service.node_name | default(service.name) }}
+      addr: {{ service.node_addr }}
+  metrics: {{ service.metrics | default(true) | lower }}
+{% endfor %}
