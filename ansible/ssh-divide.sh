@@ -2,7 +2,6 @@
 # SPDX-License-Identifier: MIT
 #
 # Description: This script is used distributes ssh public keys to multiple remote hosts to enable seamless passwordless login.
-#
 # Copyright (c) 2025 honeok <i@honeok.com>
 # Copyright (c) 2025 zzwsec <zzwsec@163.com>
 

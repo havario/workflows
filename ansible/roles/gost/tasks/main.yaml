@@ -1,0 +1,3 @@
+---
+# 检查gost安装目录
+- name: "Check the gost directory"

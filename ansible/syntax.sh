@@ -9,7 +9,7 @@ set -eE
 
 WORK_DIR="$(dirname "${BASH_SOURCE[0]}")"
 
-for file in "$WORK_DIR"/*yml; do
+for file in "$WORK_DIR"/*.yaml; do
     ansible-playbook -v --syntax-check "$file"
 done
 
