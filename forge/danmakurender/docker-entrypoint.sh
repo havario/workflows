@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
+# SPDX-License-Identifier: Apache-2.0
 #
 # Copyright (c) 2025 honeok <i@honeok.com>
 # Copyright 2024 The Nezha Authors. All rights reserved.
-# SPDX-License-Identifier: Apache-2.0
 
 WORKDIR="/app"
 
