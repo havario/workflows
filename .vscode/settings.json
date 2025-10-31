@@ -1,4 +1,7 @@
 {
+  // workbench
+  "workbench.colorTheme": "Default Dark Modern",
+
   // editor setting
   "editor.fontSize": 15,
   "editor.formatOnSave": true,
@@ -8,11 +11,8 @@
 
   // git setting
   "git.enableSmartCommit": true,
+  "git.alwaysSignOff": true,
   "git.confirmSync": false,
   "git.fetchOnPull": true,
-  "git.pruneOnFetch": true,
-  "git.alwaysSignOff": true,
-
-  // workbench
-  "workbench.colorTheme": "Default Dark Modern"
+  "git.pruneOnFetch": true
 }
