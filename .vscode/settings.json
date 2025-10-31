@@ -1,10 +1,18 @@
 {
+  // Editor settings
   "editor.fontSize": 15,
   "editor.formatOnSave": true,
   "editor.formatOnPaste": true,
   "editor.useEditorConfig": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "workbench.colorTheme": "Default Dark Modern",
+
+  // Git settings
   "git.enableSmartCommit": true,
-  "git.alwaysSignOff": true
+  "git.confirmSync": false,
+  "git.fetchOnPull": true,
+  "git.pruneOnFetch": true,
+  "git.alwaysSignOff": true,
+
+  // Workbench
+  "workbench.colorTheme": "Default Dark Modern"
 }
