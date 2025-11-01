@@ -35,13 +35,9 @@ jobs:
           NGX_IMG_LVER="$(docker run --rm nginx:${NGX_LVER}-alpine sh -c "nginx -v 2>&1" 2>/dev/null | awk -F'[/ ]' '{print $NF}' || true)"
           ZSTD_LVER="$(wget -qO- --tries=50 --header="Authorization: token ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/repos/facebook/zstd/releases/latest | grep '"tag_name":' | sed -n 's/.*"tag_name": "[^0-9]*\([0-9.]*\)".*/\1/p')"
           HEADERS_MORE_LTAG="$(wget -qO- --tries=50 --header="Authorization: token ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/repos/openresty/headers-more-nginx-module/tags | sed -n 's/.*"name": "v\?\([0-9][0-9.]*\)".*/\1/p' | sort -rV | head -n1)"
-          ACME_LVER="$(wget -qO- --tries=50 --header="Authorization: token ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/repos/nginx/nginx-acme/releases/latest | grep '"tag_name":' | sed -n 's/.*"tag_name": "[^0-9]*\([0-9.]*\)".*/\1/p')"
-          CORERULESET_LVER="$(wget -qO- --tries=50 --header="Authorization: token ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/repos/coreruleset/coreruleset/releases/latest | grep '"tag_name":' | sed -n 's/.*"tag_name": "[^0-9]*\([0-9.]*\)".*/\1/p')"
           echo "ngx_version=${NGX_LVER}" >> "$GITHUB_OUTPUT"
           echo "zstd_version=${ZSTD_LVER}" >> "$GITHUB_OUTPUT"
           echo "headers_more_tag=${HEADERS_MORE_LTAG}" >> "$GITHUB_OUTPUT"
-          echo "acme_version=${ACME_LVER}" >> "$GITHUB_OUTPUT"
-          echo "coreruleset_version=${CORERULESET_LVER}" >> "$GITHUB_OUTPUT"
           if [[ "$(printf '%s\n%s\n' "$NGX_LVER" "$NGX_CVER" | sort -V | head -n1)" != "$NGX_LVER" && "$NGX_IMG_LVER" == "$NGX_LVER" || -z "$NGX_CVER" && "$NGX_IMG_LVER" == "$NGX_LVER" ]]; then
             echo "build_image=1" >> "$GITHUB_OUTPUT"
           fi
@@ -68,8 +64,8 @@ jobs:
         with:
           images: ${{ env.DOCKER_USERNAME }}/nginx
           tags: |
-            type=raw,value=${{ steps.bump_version.outputs.ngx_version }}-alpine
             type=raw,value=alpine
+            type=raw,value=${{ steps.bump_version.outputs.ngx_version }}-alpine
           labels: |
             org.opencontainers.image.description=nginx is an HTTP web server, reverse proxy, content cache, load balancer, TCP/UDP proxy server, and mail proxy server.
             org.opencontainers.image.source=https://github.com/nginx/nginx
@@ -87,8 +83,6 @@ jobs:
             NGX_VERSION=${{ steps.bump_version.outputs.ngx_version }}
             ZSTD_VERSION=${{ steps.bump_version.outputs.zstd_version }}
             HEADERS_MORE_TAG=${{ steps.bump_version.outputs.headers_more_tag }}
-            ACME_VERSION=${{ steps.bump_version.outputs.acme_version }}
-            CORERULESET_VERSION=${{ steps.bump_version.outputs.coreruleset_version }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           push: ${{ github.event_name != 'pull_request' }}
