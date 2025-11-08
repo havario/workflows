@@ -5,19 +5,19 @@
 [![Docker Image Size](https://img.shields.io/docker/image-size/honeok/danmakurender.svg?style=flat-square&logo=docker&color=blue&logoColor=white)](https://hub.docker.com/r/honeok/danmakurender)
 [![Docker Image Version](https://img.shields.io/docker/v/honeok/danmakurender.svg?style=flat-square&logo=docker&color=blue&logoColor=white)](https://hub.docker.com/r/honeok/danmakurender)
 
-[DanmakuRender][1] is a small tool that can record live streams with on-screen comments.
+[DanmakuRender][1] is a lightweight tool for recording live streams with on-screen comments.
 
-This Docker image is designed for rapid deployment across various cloud computing platforms.
+This Docker image is optimized for quick deployment across different cloud platforms.
 
-For additional details on Docker and containerization technologies, consult the [official document][2].
+For additional details on Docker and containerization technologies, refer to the [official documentation][2].
 
 ## Preparing the Host
 
-If Docker is not yet installed, follow the [official installation guide][3] to set it up on your system.
+If Docker isn’t installed yet, follow the [official installation guide][3] to install it on your system.
 
 ## Purpose of This Build
 
-This image was created for one-click operation, eliminating the need for users to perform tedious tasks such as environment deployment.
+This image is designed for one-click deployment, removing the need for manual environment setup.
 
 ## Pull the image
 
@@ -49,9 +49,9 @@ Finally, run the following command to start the container.
 docker compose up -d
 ```
 
-For reference, you can check the [Configuration][4] for DanmakuRender.
+For reference, see the [DanmakuRender Configuration Guide][4].
 
-**Note**: The port you configured must be opened in the firewall.
+**Note**: Make sure the configured port is allowed through your firewall.
 
 [1]: https://github.com/SmallPeaches/DanmakuRender
 [2]: https://docs.docker.com
