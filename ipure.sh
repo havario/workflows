@@ -7,12 +7,12 @@
 # Thanks:
 # https://www.nodeseek.com/post-499781-1
 
-_red() { printf "\033[31m%b\033[0m\n" "$*"; }
-_green() { printf "\033[92m%b\033[0m\n" "$*"; }
-_yellow() { printf "\033[93m%b\033[0m\n" "$*"; }
-_err_msg() { printf "\033[41m\033[1mError\033[0m %b\n" "$*"; }
-_suc_msg() { printf "\033[42m\033[1mSuccess\033[0m %b\n" "$*"; }
-_info_msg() { printf "\033[43m\033[1mInfo\033[0m %b\n" "$*"; }
+_red() { printf "\033[31m%b\033[0m" "$*"; }
+_green() { printf "\033[92m%b\033[0m" "$*"; }
+_yellow() { printf "\033[93m%b\033[0m" "$*"; }
+_err_msg() { printf "\033[41m\033[1mError\033[0m %b" "$*"; }
+_suc_msg() { printf "\033[42m\033[1mSuccess\033[0m %b" "$*"; }
+_info_msg() { printf "\033[43m\033[1mInfo\033[0m %b" "$*"; }
 
 # 各变量默认值
 USER_AGENT="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36"
@@ -43,11 +43,11 @@ curl() {
 
 check_reddit() {
     local RESULT
-    RESULT="$(curl --user-agent "$USER_AGENT" -o /dev/null -w %{http_code} -Ls https://www.reddit.com)"
+    RESULT="$(curl -Ls -o /dev/null -w %{http_code} --user-agent "$USER_AGENT" https://www.reddit.com)"
     case "$RESULT" in
-        '200') echo -en "\r Reddit:\t\t\t\t $(_green 'Yes')\n" ;;
-        '403') echo -en "\r Reddit:\t\t\t\t $(_red 'No')\n" ;;
-        *) echo -en "\r Reddit:\t\t\t\t $(_red "Failed (Error: $RESULT)")\n" ;;
+        '200') echo -en "\r Reddit:\t\t\t $(_green 'Yes')\n" ;;
+        '403') echo -en "\r Reddit:\t\t\t $(_red 'No')\n" ;;
+        *) echo -en "\r Reddit:\t\t\t $(_red "Failed (Error: $RESULT)")\n" ;;
     esac
 }
 
