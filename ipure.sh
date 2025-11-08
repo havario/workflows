@@ -41,6 +41,7 @@ curl() {
     done
 }
 
+# reddit无需登录即可访问
 check_reddit() {
     local RESULT
     RESULT="$(curl -Ls -o /dev/null -w %{http_code} --user-agent "$USER_AGENT" https://www.reddit.com)"
@@ -51,5 +52,28 @@ check_reddit() {
     esac
 }
 
+# imgur图片非压缩缩略图 部分机房ip看到的是缩略图 而非原图
+check_imgur() {
+    local RESULT HTTP_CODE CONTENT_LEN
+    RESULT="$(curl -Ls -I --user-agent "$USER_AGENT" https://i.imgur.com/cJh4ed2.jpeg)"
+    HTTP_CODE="$(head -n1 <<< "$RESULT" | awk '{print $2}')"
+    CONTENT_LEN="$(grep -Ei "^content-length" <<< "$RESULT" | awk '{print $2}' | tr -cd '0-9')"
+
+    case "$HTTP_CODE" in
+        '200')
+            if [ -z "$CONTENT_LEN" ]; then
+                echo -en "\r Imgur:\t\t\t\t $(_red 'No')\n"
+            elif [ "$CONTENT_LEN" -gt 307200 ]; then
+                echo -en "\r Imgur:\t\t\t\t $(_green 'Yes')\n"
+            else
+                echo -en "\r Imgur:\t\t\t\t $(_red 'No')\n"
+            fi
+        ;;
+        '403') echo -en "\r Imgur:\t\t\t\t $(_red 'No')\n" ;;
+        *) echo -en "\r Imgur:\t\t\t\t $(_red "Failed (Error: $RESULT)")\n" ;;
+    esac
+}
+
 clear
 check_reddit
+check_imgur
