@@ -70,7 +70,7 @@ check_imgur() {
             fi
         ;;
         '403') echo -en "\r Imgur:\t\t\t\t $(_red 'No')\n" ;;
-        *) echo -en "\r Imgur:\t\t\t\t $(_red "Failed (Error: $RESULT)")\n" ;;
+        *) echo -en "\r Imgur:\t\t\t\t $(_red "Failed (Error: $HTTP_CODE)")\n" ;;
     esac
 }
 
