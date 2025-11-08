@@ -5,6 +5,19 @@
 [![Docker Image Size](https://img.shields.io/docker/image-size/honeok/danmakurender.svg?style=flat-square&logo=docker&color=blue&logoColor=white)](https://hub.docker.com/r/honeok/danmakurender)
 [![Docker Image Version](https://img.shields.io/docker/v/honeok/danmakurender.svg?style=flat-square&logo=docker&color=blue&logoColor=white)](https://hub.docker.com/r/honeok/danmakurender)
 
+[DanmakuRender][1] is a small tool that can record live streams with on-screen comments.
+
+This Docker image is designed for rapid deployment across various cloud computing platforms.
+
+For additional details on Docker and containerization technologies, consult the [official document][2].
+
+## Purpose of This Build
+
+This image was created for one-click operation, eliminating the need for users to perform tedious tasks such as environment deployment.
+
+## Start container
+
+following content to the `docker-compose.yaml` file.
 
 ```shell
 tee docker-compose.yaml >/dev/null <<'EOF'
@@ -19,3 +32,15 @@ services:
     network_mode: bridge
 EOF
 ```
+
+Finally, run the following command to start the container.
+
+```shell
+docker compose up -d
+```
+
+For reference, you can check the [Configuration][3] for DanmakuRender.
+
+[1]: https://github.com/SmallPeaches/DanmakuRender
+[2]: https://docs.docker.com
+[3]: https://github.com/SmallPeaches/DanmakuRender/blob/v5/docs/usage.md
