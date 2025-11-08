@@ -51,6 +51,8 @@ docker compose up -d
 
 For reference, you can check the [Configuration][4] for DanmakuRender.
 
+**Note**: The port you configured must be opened in the firewall.
+
 [1]: https://github.com/SmallPeaches/DanmakuRender
 [2]: https://docs.docker.com
 [3]: https://docs.docker.com/install
