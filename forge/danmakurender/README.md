@@ -49,7 +49,7 @@ Finally, run the following command to start the container.
 docker compose up -d
 ```
 
-For reference, see the [DanmakuRender Configuration Guide][4].
+For reference, see the DanmakuRender [Configuration Guide][4].
 
 **Note**: Make sure the configured port is allowed through your firewall.
 
