@@ -25,7 +25,7 @@ This image was created to address specific requirements and explore creative enh
 docker pull honeok/nginx:alpine
 ```
 
-## Start container
+## Start the Container
 
 For detailed instructions on running the container, see the official [documentation][4].
 
