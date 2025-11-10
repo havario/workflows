@@ -40,7 +40,6 @@ def format_weather(weather_data):
 
 # 异步发送消息
 async def send_message(message):
-    """"""
     try:
         await bot.send_message(chat_id=CHAT_ID, text=message)
         print("Message sent successfully.")
