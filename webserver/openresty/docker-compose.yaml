@@ -15,5 +15,5 @@ services:
     tmpfs:
       - /var/cache/openresty:rw,noexec,nosuid,size=256m
     network_mode: host
-    cap_add:
-      - SYS_ADMIN
+    # cap_add:
+    #   - SYS_ADMIN
