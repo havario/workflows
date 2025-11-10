@@ -11,7 +11,7 @@ CHAT_ID = '6485476975'
 OWM_TOKEN = '6f5e9d518306864d1ad6801d73dbb653'
 LOCATIONS = 'Chengdu'
 
-WEATHER_URL = f'https://api.openweathermap.org/data/2.5/weather?q={LOCATIONS}&units=metric&appid={OWM_TOKEN}'
+WEATHER_URL = f'https://api.openweathermap.org/data/2.5/weather?q={LOCATIONS}&units=metric&lang=zh_cn&appid={OWM_TOKEN}'
 
 # 初始化tgbot
 bot = Bot(token=BOT_TOKEN)
