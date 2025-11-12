@@ -6,6 +6,7 @@
 FROM nginx:${NGX_VERSION}-alpine AS dist
 LABEL maintainer="honeok <i@honeok.com>"
 ARG NGX_VERSION=""
+# RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.nju.edu.cn/g' /etc/apk/repositories
 RUN set -ex \
     && apk add --update --no-cache --virtual .build-deps \
         git \
