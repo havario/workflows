@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: Apache-2.0
 #
-# Description:
+# Description: The dockerfile build the classic 2048 game, where players combine tiles to reach 2048.
 # Copyright (c) 2025 honeok <i@honeok.com>
 
 FROM nginx:${NGX_VERSION}-alpine AS dist
