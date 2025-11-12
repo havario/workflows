@@ -15,3 +15,4 @@ RUN set -ex \
     && find /usr/share/nginx/html -maxdepth 1 \( -name ".git" -o -name ".*" -o -name "*.md" -o -name "LICENSE*" -o -name "Rakefile" \) -exec rm -rf {} + \
     && apk del --no-network .build-deps \
     && rm -rf /var/cache/apk/*
+COPY nginx.conf /etc/nginx/nginx.conf
