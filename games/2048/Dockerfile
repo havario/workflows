@@ -8,8 +8,7 @@ LABEL maintainer="honeok <i@honeok.com>"
 ARG NGX_VERSION=""
 # RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.nju.edu.cn/g' /etc/apk/repositories
 RUN set -ex \
-    && apk add --update --no-cache --virtual .build-deps \
-        git \
+    && apk add --update --no-cache --virtual .build-deps git \
     && rm -f /usr/share/nginx/html/* \
     && git clone --depth=1 https://github.com/gabrielecirulli/2048.git /usr/share/nginx/html \
     && find /usr/share/nginx/html -maxdepth 1 \( -name ".git" -o -name ".*" -o -name "*.md" -o -name "LICENSE*" -o -name "Rakefile" \) -exec rm -rf {} + \
