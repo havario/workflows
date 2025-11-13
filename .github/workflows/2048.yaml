@@ -29,9 +29,11 @@ jobs:
         id: bump_version
         run: |
           LATEST_VER="$(wget -qO- --tries=50 --header="Authorization: token ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/repos/nginx/nginx/releases/latest | grep '"tag_name":' | sed -n 's/.*"tag_name": "[^0-9]*\([0-9.]*\)".*/\1/p')"
+          LATEST_TAG="$(awk -F. '{printf("v%d.%d.%d", substr($1,3), $2, $3)}' <<< "$(date -u '+%Y.%m.%d' -d '+8 hours')")"
           CURRENT_VER="$(docker run --rm ${DOCKER_USERNAME}/2048:latest sh -c "nginx -v 2>&1" 2>/dev/null | awk -F'[/ ]' '{print $NF}' || true)"
           NGX_IMG_VER="$(docker run --rm nginx:${LATEST_VER}-alpine sh -c "nginx -v 2>&1" 2>/dev/null | awk -F'[/ ]' '{print $NF}' || true)"
           echo "ngx_version=${LATEST_VER}" >> "$GITHUB_OUTPUT"
+          echo "img_tag=${LATEST_TAG}" >> "$GITHUB_OUTPUT"
           if [[ "$(printf '%s\n%s\n' "$LATEST_VER" "$CURRENT_VER" | sort -V | head -n1)" != "$LATEST_VER" && "$NGX_IMG_VER" == "$LATEST_VER" || -z "$CURRENT_VER" && "$NGX_IMG_VER" == "$LATEST_VER" ]]; then
             echo "build_image=1" >> "$GITHUB_OUTPUT"
           fi
@@ -58,7 +60,7 @@ jobs:
         with:
           images: ${{ env.DOCKER_USERNAME }}/2048
           tags: |
-            type=raw,value=${{ steps.bump_version.outputs.ngx_version }}
+            type=raw,value=${{ steps.bump_version.outputs.img_tag }}
             type=raw,value=latest
           labels: |
             org.opencontainers.image.description=2048 is a simple yet addictive puzzle game where players merge matching tiles to reach the number 2048.
