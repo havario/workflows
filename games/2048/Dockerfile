@@ -3,9 +3,9 @@
 # Description: The dockerfile build the classic 2048 game, where players combine tiles to reach 2048.
 # Copyright (c) 2025 honeok <i@honeok.com>
 
+ARG NGX_VERSION=""
 FROM nginx:${NGX_VERSION}-alpine AS dist
 LABEL maintainer="honeok <i@honeok.com>"
-ARG NGX_VERSION=""
 # RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.nju.edu.cn/g' /etc/apk/repositories
 RUN set -ex \
     && apk add --update --no-cache --virtual .build-deps git \
