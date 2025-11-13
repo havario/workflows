@@ -1,0 +1,79 @@
+---
+name: "Build and Publish 2048"
+
+on:
+  schedule:
+    - cron: "0 16 * * 3,6"
+  workflow_dispatch:
+
+defaults:
+  run:
+    shell: bash
+
+env:
+  DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+  DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+
+jobs:
+  build:
+    name: "Build and Publish 2048"
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: "Check out repository"
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: "Fetch Versions and Determine Build"
+        id: bump_version
+        run: |
+          LATEST_VER="$(wget -qO- --tries=50 --header="Authorization: token ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/repos/nginx/nginx/releases/latest | grep '"tag_name":' | sed -n 's/.*"tag_name": "[^0-9]*\([0-9.]*\)".*/\1/p')"
+          CURRENT_VER="$(docker run --rm ${DOCKER_USERNAME}/2048:latest sh -c "nginx -v 2>&1" 2>/dev/null | awk -F'[/ ]' '{print $NF}' || true)"
+          NGX_IMG_VER="$(docker run --rm nginx:${LATEST_VER}-alpine sh -c "nginx -v 2>&1" 2>/dev/null | awk -F'[/ ]' '{print $NF}' || true)"
+          echo "ngx_version=${LATEST_VER}" >> "$GITHUB_OUTPUT"
+          if [[ "$(printf '%s\n%s\n' "$LATEST_VER" "$CURRENT_VER" | sort -V | head -n1)" != "$LATEST_VER" && "$NGX_IMG_VER" == "$LATEST_VER" || -z "$CURRENT_VER" && "$NGX_IMG_VER" == "$LATEST_VER" ]]; then
+            echo "build_image=1" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: "Set up Docker QEMU"
+        if: steps.bump_version.outputs.build_image == '1' || github.event_name == 'workflow_dispatch'
+        uses: docker/setup-qemu-action@v3
+
+      - name: "Set up Docker Buildx"
+        if: steps.bump_version.outputs.build_image == '1' || github.event_name == 'workflow_dispatch'
+        uses: docker/setup-buildx-action@v3
+
+      - name: "Login to DockerHub"
+        if: steps.bump_version.outputs.build_image == '1' || github.event_name == 'workflow_dispatch'
+        uses: docker/login-action@v3
+        with:
+          username: ${{ env.DOCKER_USERNAME }}
+          password: ${{ env.DOCKER_PASSWORD }}
+
+      - name: "Extract Docker metadata"
+        if: steps.bump_version.outputs.build_image == '1' || github.event_name == 'workflow_dispatch'
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.DOCKER_USERNAME }}/2048
+          tags: |
+            type=raw,value=${{ steps.bump_version.outputs.ngx_version }}
+            type=raw,value=latest
+          labels: |
+            org.opencontainers.image.description=2048 is a simple yet addictive puzzle game where players merge matching tiles to reach the number 2048.
+            org.opencontainers.image.source=https://github.com/gabrielecirulli/2048
+            org.opencontainers.image.title=2048
+            org.opencontainers.image.url=https://play2048.co
+
+      - name: "Build and Push 2048 image"
+        if: steps.bump_version.outputs.build_image == '1' || github.event_name == 'workflow_dispatch'
+        uses: docker/build-push-action@v6
+        with:
+          context: ${{ github.workspace }}/games/2048
+          file: ${{ github.workspace }}/games/2048/Dockerfile
+          platforms: linux/amd64, linux/arm64
+          build-args: NGX_VERSION=${{ steps.bump_version.outputs.ngx_version }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          push: ${{ github.event_name != 'pull_request' }}
