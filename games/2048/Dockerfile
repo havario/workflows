@@ -15,4 +15,3 @@ RUN set -ex \
     && apk del --no-network .build-deps \
     && rm -rf /var/cache/apk/*
 COPY nginx.conf /etc/nginx/nginx.conf
-HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3 CMD curl -fLs http://localhost >/dev/null 2>&1 || exit 1
