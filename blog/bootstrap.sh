@@ -1,11 +1,17 @@
 #!/bin/bash
+# SPDX-License-Identifier: Apache-2.0
+# Copyright (c) 2025 honeok <i@honeok.com>
 
 set -eE
 
 command clear
 
-chown -R 1001:1001 mysql/data
-chown -R 1001:1001 mysql/logs
+# mysql
+# mysqldump -u root -p'8aDdVzUzXwjEAOhifFW6yg' --single-transaction --set-gtid-purged=OFF wordpress > ./wordpress.sql
+# mysql -u root -p"8aDdVzUzXwjEAOhifFW6yg" -e "CREATE DATABASE IF NOT EXISTS wordpress;GRANT ALL PRIVILEGES ON wordpress.* TO 'honeok'@'%';FLUSH PRIVILEGES;"
+[ -d mysql/data ] && chown -R 1001:1001 mysql/data
+[ -d mysql/logs ] && chown -R 1001:1001 mysql/logs
+
 docker compose up -d
 docker exec php sh -c "mkdir -p /run/php && chmod 777 /run/php"
 docker exec php sh -c "sed -i '1i [global]\\ndaemonize = no' /usr/local/etc/php-fpm.d/www.conf"
@@ -20,6 +26,3 @@ docker compose restart openresty php
 
 sleep 2
 docker ps
-
-# mysqldump -u root -p'8aDdVzUzXwjEAOhifFW6yg' --single-transaction --set-gtid-purged=OFF wordpress > ./wordpress.sql
-# mysql -u root -p"8aDdVzUzXwjEAOhifFW6yg" -e "CREATE DATABASE IF NOT EXISTS wordpress;GRANT ALL PRIVILEGES ON wordpress.* TO 'honeok'@'%';FLUSH PRIVILEGES;"
