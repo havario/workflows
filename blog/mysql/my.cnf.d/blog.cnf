@@ -1,3 +1,6 @@
+# SPDX-License-Identifier: Apache-2.0
+# Copyright (c) 2025 honeok <i@honeok.com>
+
 [mysql]
 default-character-set=utf8mb4
 
@@ -10,13 +13,31 @@ default-character-set=utf8mb4
 port=3306
 host_cache_size=0         # 禁用主机缓存
 skip-name-resolve         # 禁用DNS反向解析 消除连接时DNS查询延迟 提升连接握手速度
-interactive_timeout=3600  # 交互式连接超时
-wait_timeout=20           # 非交互式连接超时
-max_allowed_packet=64M    # 最大允许的数据包大小 默认值64MB
-max_connections=50        # 最大连接数 根据PHP-FPM的pm.max_children来设定 默认值151
-connect_timeout=10        # 连接握手超时 防止慢连接攻击 默认值10
-max_connect_errors=100    # 最大连接错误数 防止暴力破解 默认值100
-net_read_timeout=60       # 网络读取超时时间 允许稍慢的查询完成数据传输 默认值30
+
+# https://dev.mysql.com/doc/refman/8.4/en/server-system-variables.html
+# 服务器在关闭一个交互式连接之前 等待该连接保持活动的秒数
+interactive_timeout=3600
+
+# 关闭一个非交互式连接之前 等待该连接保持活动的秒数
+wait_timeout=20
+
+# https://dev.mysql.com/doc/refman/8.4/en/packet-too-large.html
+# 服务器可以接收或发送的单个通信数据包的最大大小
+max_allowed_packet=64M    # 服务器的默认值max_allowed_packet值为64MB
+
+# https://www.percona.com/blog/dealing-with-too-many-connections-error-in-mysql-8
+# 服务器允许的最大并发客户端连接数 默认值151
+# 一旦服务器上的活动连接数达到了这个值将拒绝所有新的连接请求 并返回"ERROR 1040 (08004): Too many connections"错误
+max_connections=50        # 根据PHP-FPM的pm.max_children设定
+
+# 连接握手超时 主要用于防范"慢连接"攻击 默认值10
+connect_timeout=10
+
+# 阻止暴力破解攻击 定义服务器在暂时"拉黑"一个特定主机之前 允许该主机连续连接失败的最大次数 默认值100
+max_connect_errors=100
+
+# 网络读取超时时间 允许稍慢的查询完成数据传输 默认值30
+net_read_timeout=30
 
 ## 基础与安全设置
 default-storage-engine=INNODB # 默认存储引擎
