@@ -4,6 +4,8 @@ services:
     image: percona/percona-server:8.4.6-6.1
     container_name: mysql
     restart: unless-stopped
+    ports:
+      - 3306:3306
     environment:
       TZ: Asia/Shanghai
       MYSQL_ROOT_PASSWORD: 8aDdVzUzXwjEAOhifFW6yg # openssl rand -base64 16
