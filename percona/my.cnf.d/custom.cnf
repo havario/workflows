@@ -31,7 +31,7 @@ innodb_redo_log_capacity=512M # nnoDB日志文件大小
 ## 路径与文件
 # datadir=/var/lib/mysql # MySQL存储所有数据文件的根目录，包括数据库、表、索引、以及二进制日志文件
 # socket=/var/run/mysqld/mysqld.sock # MySQL服务器为本地客户端连接创建的Unix套接字文件的路径
-log-error=/var/log/mysql/error.log
+# log-error=/var/log/mysql/error.log
 # pid-file=/var/run/mysqld/mysqld.pid
 
 ## 日志
