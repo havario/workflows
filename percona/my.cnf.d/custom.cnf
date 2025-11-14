@@ -7,8 +7,9 @@ default-character-set=utf8mb4
 
 [mysqld]
 ## 网络与连接设置
-# port=3306
-# skip-name-resolve        # 禁用DNS反向解析，提升连接速度和稳定性
+port=3306
+host_cache_size=0
+skip-name-resolve         # 禁用DNS反向解析，提升连接速度和稳定性
 max_allowed_packet=256M   # 最大允许的数据包大小 默认值64MB
 max_connections=500       # 最大连接数，根据PHP-FPM的pm.max_children来设定 默认值151
 connect_timeout=10        # 连接超时时间，防止慢连接攻击 默认值10

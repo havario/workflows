@@ -11,7 +11,7 @@ services:
       MYSQL_PASSWORD: 4siz2vOewdLbww # openssl rand -base64 10
     volumes:
       - $PWD/my.cnf:/etc/my.cnf
-      - $PWD/conf.d:/etc/mysql/conf.d
+      - $PWD/my.cnf.d:/etc/my.cnf.d
       - $PWD/data:/var/lib/mysql
     healthcheck:
       test:
