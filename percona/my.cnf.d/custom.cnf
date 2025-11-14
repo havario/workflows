@@ -21,7 +21,7 @@ default-storage-engine=INNODB # 默认存储引擎
 character-set-server=utf8mb4  # 字符集设置
 # collation-server=utf8mb4_general_ci
 # default-authentication-plugin=mysql_native_password # 默认身份验证插件
-sql_mode=STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION # SQL模式设置
+sql_mode=STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ZERO_DATE,NO_ENGINE_SUBSTITUTION # SQL模式设置
 
 ## InnoDB核心引擎
 innodb_buffer_pool_size=750M  # InnoDB缓冲池大小
