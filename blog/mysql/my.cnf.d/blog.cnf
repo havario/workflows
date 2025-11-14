@@ -32,8 +32,8 @@ innodb_lru_scan_depth=256     # 降低小内存池的I/O抖动 默认1024
 innodb_numa_interleave=0
 
 ## 路径与文件
-# datadir=/var/lib/mysql # MySQL存储所有数据文件的根目录 包括数据库 表 索引 以及二进制日志文件
-# socket=/var/run/mysqld/mysqld.sock # MySQL服务器为本地客户端连接创建的Unix套接字文件的路径
+# datadir=/var/lib/mysql               # MySQL存储所有数据文件的根目录 包括数据库 表 索引 以及二进制日志文件
+# socket=/var/lib/mysql/mysql.sock     # MySQL服务器为本地客户端连接创建的Unix套接字文件的路径
 # log-error=/var/log/mysql/error.log
 # pid-file=/var/run/mysqld/mysqld.pid
 
