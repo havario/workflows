@@ -5,12 +5,12 @@ services:
     container_name: mysql
     restart: unless-stopped
     environment:
-      TZ: Asia/Shanghai
+      # TZ: Asia/Shanghai
       MYSQL_ROOT_PASSWORD: 8aDdVzUzXwjEAOhifFW6yg # openssl rand -base64 16
       MYSQL_USER: honeok
       MYSQL_PASSWORD: 4siz2vOewdLbww # openssl rand -base64 10
     volumes:
-      - /usr/share/zoneinfo:/usr/share/zoneinfo:ro
+      - /etc/localtime:/etc/localtime:ro
       - $PWD/my.cnf:/etc/my.cnf
       - $PWD/my.cnf.d:/etc/my.cnf.d
       - $PWD/data:/var/lib/mysql

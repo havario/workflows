@@ -35,6 +35,7 @@ innodb_redo_log_capacity=512M # nnoDB日志文件大小
 # pid-file=/var/run/mysqld/mysqld.pid
 
 ## 日志
+secure_log_path=/var/log/mysql
 log_bin=/var/log/mysql/binlog      # 开启二进制日志功能
 sync_binlog=1                      # 强制要求MySQL在每次提交事务后，都必须将二进制日志事件同步刷写到磁盘上
 max_binlog_size=512M               # 最大二进制日志文件大小
