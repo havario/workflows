@@ -10,6 +10,8 @@ default-character-set=utf8mb4
 port=3306
 host_cache_size=0         # 禁用主机缓存
 skip-name-resolve         # 禁用DNS反向解析 消除连接时DNS查询延迟 提升连接握手速度
+interactive_timeout=3600  # 交互式连接超时
+wait_timeout=20           # 非交互式连接超时
 max_allowed_packet=64M    # 最大允许的数据包大小 默认值64MB
 max_connections=50        # 最大连接数 根据PHP-FPM的pm.max_children来设定 默认值151
 connect_timeout=10        # 连接握手超时 防止慢连接攻击 默认值10
@@ -27,7 +29,7 @@ sql_mode=STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ZERO_
 innodb_buffer_pool_size=768M  # InnoDB缓冲池大小
 innodb_log_buffer_size=32M    # InnoDB日志缓冲区大小 减少大事务的I/O次数
 innodb_redo_log_capacity=512M # InnoDB日志文件大小
-innodb_flush_method=O_DIRECT  # 绕过OS Page Cache 避免InnoDB Pool和OS Cache双重缓存 节省内存
+innodb_flush_method=O_DIRECT  # 绕过OS Page Cache避免InnoDB Pool和OS Cache双重缓存 节省内存
 innodb_lru_scan_depth=256     # 降低小内存池的I/O抖动 默认1024
 innodb_numa_interleave=0
 
@@ -58,3 +60,4 @@ max_heap_table_size=32M    # 内存表(MEMORY 引擎)最大值 通常设为与tm
 read_rnd_buffer_size=256K  # 随机读缓冲区(用于排序后的读取) 默认值256KB
 read_buffer_size=256K      # 顺序读缓冲区
 sort_buffer_size=512K      # 排序缓冲区(ORDER BY/GROUP BY) 默认256K
+thread_cache_size=16       # 线程缓存 减少高并发下线程创建/销毁的开销
