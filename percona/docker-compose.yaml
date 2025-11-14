@@ -1,7 +1,7 @@
 ---
 services:
   mysql:
-    image: percona/percona-server:8.0.42
+    image: percona/percona-server:8.0.42-33
     container_name: mysql
     restart: unless-stopped
     environment:
@@ -10,9 +10,11 @@ services:
       MYSQL_USER: honeok
       MYSQL_PASSWORD: 4siz2vOewdLbww # openssl rand -base64 10
     volumes:
+      - /usr/share/zoneinfo:/usr/share/zoneinfo:ro
       - $PWD/my.cnf:/etc/my.cnf
       - $PWD/my.cnf.d:/etc/my.cnf.d
       - $PWD/data:/var/lib/mysql
+      - $PWD/logs:/var/log/mysql
     healthcheck:
       test:
         [
