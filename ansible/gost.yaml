@@ -1,5 +1,0 @@
----
-- hosts: node
-  remote_user: root
-  roles:
-    - gost
