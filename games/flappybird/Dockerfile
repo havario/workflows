@@ -11,6 +11,7 @@ RUN set -ex \
     && rm -f /usr/share/nginx/html/* \
     && git clone --depth=1 https://github.com/noanonoa/flappy-bird.git /usr/share/nginx/html \
     && find /usr/share/nginx/html -maxdepth 1 \( -name ".DS_Store" -o -name ".git" -o -name "README.md" \) -exec rm -rf {} + \
+    && rm -f /usr/share/nginx/html/img/.DS_Store \
     && apk del --no-network .build-deps \
     && rm -rf /var/cache/apk/*
 COPY nginx.conf /etc/nginx/nginx.conf
