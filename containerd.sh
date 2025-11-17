@@ -65,3 +65,6 @@ tar Cxzvf /opt/cni/bin cni-plugins-linux-amd64-v1.8.0.tgz
 curl -Ls -O https://github.com/containerd/nerdctl/releases/download/v2.2.0/nerdctl-2.2.0-linux-amd64.tar.gz
 grep nerdctl-2.2.0-linux-amd64.tar.gz SHA256SUMS | sha256sum -c -
 tar Cxzvf /usr/local/bin nerdctl-2.2.0-linux-amd64.tar.gz
+
+curl -Ls -O https://github.com/moby/buildkit/releases/download/v0.26.0/buildkit-v0.26.0.linux-amd64.tar.gz
+tar Cxzvf /usr/local buildkit-v0.26.0.linux-amd64.tar.gz
