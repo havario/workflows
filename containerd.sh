@@ -54,7 +54,7 @@ EOF
 curl -Ls -O https://github.com/opencontainers/runc/releases/download/v1.3.3/runc.amd64
 curl -Ls -O https://github.com/opencontainers/runc/releases/download/v1.3.3/runc.sha256sum
 grep runc.amd64 runc.sha256sum | sha256sum -c -
-install -m 755 runc.amd64 /usr/local/bin
+install -m 755 runc.amd64 /usr/local/bin/runc
 
 curl -Ls -O https://github.com/containernetworking/plugins/releases/download/v1.8.0/cni-plugins-linux-amd64-v1.8.0.tgz
 curl -Ls -O https://github.com/containernetworking/plugins/releases/download/v1.8.0/cni-plugins-linux-amd64-v1.8.0.tgz.sha256
@@ -63,3 +63,5 @@ mkdir -p /opt/cni/bin
 tar Cxzvf /opt/cni/bin cni-plugins-linux-amd64-v1.8.0.tgz
 
 curl -Ls -O https://github.com/containerd/nerdctl/releases/download/v2.2.0/nerdctl-2.2.0-linux-amd64.tar.gz
+grep nerdctl-2.2.0-linux-amd64.tar.gz SHA256SUMS | sha256sum -c -
+tar Cxzvf /usr/local/bin nerdctl-2.2.0-linux-amd64.tar.gz
