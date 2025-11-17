@@ -1,4 +1,4 @@
-# SPDX-License-Identifier: Apache-2.0
+# SPDX-License-Identifier: BSD-2-Clause
 
 # Description:
 # Copyright (c) 2025 honeok <i@honeok.com>
@@ -8,8 +8,8 @@
 # https://github.com/nginx/docker-nginx
 # https://github.com/teddysun/openresty
 # Acknowledgements:
-# openresty and it's author YichunZhang (agentzh) <agentzh@gmail.com>
-#                                                 <admin@openresty.com>
+# openresty and it's author agentzh <agentzh@gmail.com>
+#                                   <admin@openresty.com>
 
 FROM alpine:3.22.2 AS base
 
@@ -33,7 +33,7 @@ RUN set -ex \
         xz-dev \
         zlib-dev \
     && cd /tmp \
-    && curl -Ls https://openresty.org/download/openresty-${RESTY_VERSION}.tar.gz -o openresty-${RESTY_VERSION}.tar.gz  \
+    && curl -Ls https://github.com/teddysun/openresty/releases/download/v${RESTY_VERSION}/openresty-${RESTY_VERSION}.tar.gz -o openresty-${RESTY_VERSION}.tar.gz \
     && tar fxz openresty-${RESTY_VERSION}.tar.gz \
     && git clone --recurse-submodules -j8 https://github.com/google/ngx_brotli \
     && curl -Ls https://github.com/facebook/zstd/releases/download/v${ZSTD_VERSION}/zstd-${ZSTD_VERSION}.tar.gz -o zstd-${ZSTD_VERSION}.tar.gz \
@@ -59,16 +59,16 @@ FROM base AS dist
 ARG RESTY_VERSION=""
 
 # https://github.com/openresty/openresty-packaging/blob/master/alpine/openresty-openssl3/APKBUILD
-ARG RESTY_OPENSSL_VERSION="3.4.1"
-ARG RESTY_OPENSSL_PATCH_VERSION="3.4.1"
+ARG RESTY_OPENSSL_VERSION="3.5.4"
+ARG RESTY_OPENSSL_PATCH_VERSION="3.5.4"
 ARG RESTY_OPENSSL_URL_BASE="https://github.com/openssl/openssl/releases/download/openssl-${RESTY_OPENSSL_VERSION}"
 ARG RESTY_OPENSSL_BUILD_OPTIONS="enable-camellia enable-seed enable-rfc3779 enable-cms enable-md2 enable-rc5 \
     enable-weak-ssl-ciphers enable-ssl3 enable-ssl3-method enable-md2 enable-ktls enable-fips \
     "
 
 # https://github.com/openresty/openresty-packaging/blob/master/alpine/openresty-pcre2/APKBUILD
-ARG RESTY_PCRE_VERSION="10.44"
-ARG RESTY_PCRE_SHA256="86b9cb0aa3bcb7994faa88018292bc704cdbb708e785f7c74352ff6ea7d3175b"
+ARG RESTY_PCRE_VERSION="10.46"
+ARG RESTY_PCRE_SHA512="8bc85f1e47633f4cab07e00b65e9f94a38bb8db56d7ea0a3068774a5ccfe5b777e6645c0a345dd265a06aa6672448ad51c9e56636c48ec87dae9f884a998e00b"
 ARG RESTY_PCRE_BUILD_OPTIONS="--enable-jit --enable-pcre2grep-jit --disable-bsr-anycrlf --disable-coverage --disable-ebcdic --disable-fuzz-support \
     --disable-jit-sealloc --disable-never-backslash-C --enable-newline-is-lf --enable-pcre2-8 --enable-pcre2-16 --enable-pcre2-32 \
     --enable-pcre2grep-callout --enable-pcre2grep-callout-fork --disable-pcre2grep-libbz2 --disable-pcre2grep-libz --disable-pcre2test-libedit \
@@ -150,7 +150,7 @@ ARG RESTY_CONFIG_DEPS="--with-pcre \
 
 LABEL maintainer="honeok <i@honeok.com>" \
     org.opencontainers.image.description="High Performance Web Platform Based on Nginx and LuaJIT" \
-    org.opencontainers.image.licenses="Apache-2.0" \
+    org.opencontainers.image.licenses="BSD-2-Clause" \
     org.opencontainers.image.source="https://github.com/openresty/openresty" \
     org.opencontainers.image.title="OpenResty" \
     org.opencontainers.image.url="https://openresty.org" \
@@ -199,7 +199,7 @@ RUN set -ex \
     && make -j$(getconf _NPROCESSORS_ONLN) install_sw \
     && cd /tmp \
     && curl -Ls https://github.com/PCRE2Project/pcre2/releases/download/pcre2-${RESTY_PCRE_VERSION}/pcre2-${RESTY_PCRE_VERSION}.tar.gz -o pcre2-${RESTY_PCRE_VERSION}.tar.gz \
-    && echo "${RESTY_PCRE_SHA256}  pcre2-${RESTY_PCRE_VERSION}.tar.gz" | shasum -a 256 --check \
+    && echo "${RESTY_PCRE_SHA512}  pcre2-${RESTY_PCRE_VERSION}.tar.gz" | shasum -a 512 --check \
     && tar fxz pcre2-${RESTY_PCRE_VERSION}.tar.gz \
     && cd pcre2-${RESTY_PCRE_VERSION} \
     && CFLAGS="-g -O3" ./configure \
@@ -209,7 +209,7 @@ RUN set -ex \
     && CFLAGS="-g -O3" make -j$(getconf _NPROCESSORS_ONLN) \
     && CFLAGS="-g -O3" make -j$(getconf _NPROCESSORS_ONLN) install \
     && cd /tmp \
-    && curl -Ls https://openresty.org/download/openresty-${RESTY_VERSION}.tar.gz -o openresty-${RESTY_VERSION}.tar.gz \
+    && curl -Ls https://github.com/teddysun/openresty/releases/download/v${RESTY_VERSION}/openresty-${RESTY_VERSION}.tar.gz -o openresty-${RESTY_VERSION}.tar.gz \
     && tar fxz openresty-${RESTY_VERSION}.tar.gz \
     && cd openresty-${RESTY_VERSION} \
     && eval ./configure -j$(getconf _NPROCESSORS_ONLN) ${RESTY_CONFIG_DEPS} ${RESTY_CONFIG_OPTIONS} ${RESTY_CONFIG_OPTIONS_MORE} ${RESTY_LUAJIT_OPTIONS} ${RESTY_PCRE_OPTIONS} \
