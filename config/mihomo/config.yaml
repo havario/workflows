@@ -1,6 +1,6 @@
 # Copyright (c) 2025 honeok <i@honeok.com>
-# SPDX-License-Identifier: GPL-2.0
 # Description: This config defines custom routing rules and proxy policies in Mihomo GUI for domain/ip based traffic control.
+# SPDX-License-Identifier: GPL-2.0
 
 # References:
 # https://linux.do/t/topic/243618
