@@ -87,6 +87,7 @@ tun:
   enable: true
   stack: mixed # system/gvisor/mixed
   dns-hijack: ["any:53", "tcp://any:53"] # 需要劫持的DNS
+  device: nikki
   auto-detect-interface: false # 自动识别出口网卡
   auto-route: false # 配置路由表
   auto-redirect: false # 自动配置iptables以重定向TCP连接, 仅支持Linux带有auto-redirect的auto-route现在可以在路由器上按预期工作无需干预
