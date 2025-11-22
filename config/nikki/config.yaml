@@ -30,7 +30,7 @@ lan-allowed-ips: # 允许连接的IP地址段, 仅作用于allow-lan为true, 默
 #  - always: 开启, 强制匹配所有进程
 #  - strict: 默认, 由mihomo判断是否开启
 #  - off: 不匹配进程, 推荐在路由器上使用此模式
-find-process-mode: strict
+find-process-mode: off
 
 mode: rule
 
