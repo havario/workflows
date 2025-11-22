@@ -138,7 +138,7 @@ dns:
 ## 节点信息
 proxies:
   - name: "🟢 直连"
-    type: direct
+    type: DIRECT
     udp: true
 
   # 链式代理流量走向机制 丨 Mihomo本机 <-> 前置节点 <-> 落地节点 <-> Internet互联网
