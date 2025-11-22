@@ -72,6 +72,19 @@ profile:
   store-selected: true # 存储select选择记录
   store-fake-ip: true # 持久化fake-ip
 
+## Tun配置
+tun:
+  enable: true
+  stack: mixed # system/gvisor/mixed
+  dns-hijack: # 需要劫持的DNS
+    - "any:53"
+    - "tcp://any:53"
+  auto-detect-interface: false # 自动识别出口网卡
+  auto-route: false # 配置路由表
+  auto-redirect: false # 自动配置iptables以重定向TCP连接, 仅支持Linux带有auto-redirect的auto-route现在可以在路由器上按预期工作无需干预
+  # strict-route: true # 将所有连接路由到Tun来防止泄漏, 但你的设备将无法其他设备被访问
+  disable-icmp-forwarding: true # 禁用ICMP转发, 防止某些情况下的ICMP环回问题, ping将不会显示真实的延迟
+
 ## DNS模块
 dns:
   cache-algorithm: arc
@@ -86,6 +99,7 @@ dns:
   enhanced-mode: fake-ip # 启用Fake-IP模式 or redir-host
 
   fake-ip-range: 198.18.0.1/16 # fake-ip池设置
+  # fake-ip-range6: fdfe:dcba:9876::1/64 # fake-ip6池设置
 
   # 配置不使用fake-ip的域名
   fake-ip-filter:
@@ -152,6 +166,7 @@ proxy-providers:
     override: # 覆写节点加载时的一些配置项
       udp: true
 
+## 锚点
 ## 锚点
 main:
   &main {
@@ -418,11 +433,11 @@ rules:
 rule-anchor:
   ip: &ip { type: http, interval: 86400, behavior: ipcidr, format: mrs }
   domain: &domain { type: http, interval: 86400, behavior: domain, format: mrs }
-  class: &class { type: http, interval: 86400, behavior: classical, format: text }
+  # class: &class {type: http, interval: 86400, behavior: classical, format: text}
 
 ## 订阅规则
 rule-providers:
-  proxylite: { <<: *class, url: "https://raw.githubusercontent.com/qichiyuhub/rule/main/proxy.list" }
+  # proxylite: { <<: *class, url: "https://raw.githubusercontent.com/qichiyuhub/rule/main/proxy.list"}
 
   private_domain:
     { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/private.mrs" }
