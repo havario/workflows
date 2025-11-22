@@ -165,59 +165,57 @@ proxy-providers:
       udp: true
 
 ## 锚点
-# prettier-ignore
-main: &main {type: select, proxies: [🚀 默认代理, ♻️ 自动选择, 🔯 故障转移, 🔮 负载均衡, 🇭🇰 香港链式, 🇸🇬 新加坡链式, 🇭🇰 香港节点, 🇲🇴 澳门节点, 🇹🇼 台湾节点, 🇸🇬 狮城节点, 🇯🇵 日本节点, 🇰🇷 韩国节点, 🇲🇾 马来节点, 🇺🇲 美国节点, 🇬🇧 英国节点, 🇳🇱 荷兰节点, 🇩🇪 德国节点, 🟢 直连]}
+main: &main { type: select, proxies: [🚀 默认代理, ♻️ 自动选择, 🔯 故障转移, 🔮 负载均衡, 🇭🇰 香港链式, 🇸🇬 新加坡链式, 🇭🇰 香港节点, 🇲🇴 澳门节点, 🇹🇼 台湾节点, 🇸🇬 狮城节点, 🇯🇵 日本节点, 🇰🇷 韩国节点, 🇲🇾 马来节点, 🇺🇲 美国节点, 🇬🇧 英国节点, 🇳🇱 荷兰节点, 🇩🇪 德国节点, 🟢 直连] }
 specific: &specific { type: select, proxies: [🇸🇬 新加坡链式, 🇹🇼 台湾节点, 🇸🇬 狮城节点, 🇯🇵 日本节点, 🇰🇷 韩国节点, 🇲🇾 马来节点, 🇺🇲 美国节点, 🇬🇧 英国节点, 🇳🇱 荷兰节点, 🇩🇪 德国节点] }
 island: &island { type: select, proxies: [🚀 默认代理, 🇭🇰 香港链式, 🇭🇰 香港节点, 🇲🇴 澳门节点, 🇹🇼 台湾节点, 🟢 直连] }
 
 ## 代理分组
 # include-all-providers: true 自动引入proxy-providers所有代理集合, 顺序将按照名称排序
-# prettier-ignore
 proxy-groups:
   #------------------------基础分组------------------------#
-  - {name: 🚀 默认代理, type: select, proxies: [♻️ 自动选择, 🔯 故障转移, 🔮 负载均衡, 🇭🇰 香港链式, 🇸🇬 新加坡链式, 🇭🇰 香港节点, 🇲🇴 澳门节点, 🇹🇼 台湾节点, 🇸🇬 狮城节点, 🇯🇵 日本节点, 🇰🇷 韩国节点, 🇲🇾 马来节点, 🇺🇲 美国节点, 🇬🇧 英国节点, 🇳🇱 荷兰节点, 🇩🇪 德国节点, 🟢 直连]}
+  - { name: 🚀 默认代理, type: select, proxies: [♻️ 自动选择, 🔯 故障转移, 🔮 负载均衡, 🇭🇰 香港链式, 🇸🇬 新加坡链式, 🇭🇰 香港节点, 🇲🇴 澳门节点, 🇹🇼 台湾节点, 🇸🇬 狮城节点, 🇯🇵 日本节点, 🇰🇷 韩国节点, 🇲🇾 马来节点, 🇺🇲 美国节点, 🇬🇧 英国节点, 🇳🇱 荷兰节点, 🇩🇪 德国节点, 🟢 直连] }
   # url-test将按照url测试结果使用延迟最低节点
-  - {name: ♻️ 自动选择, type: url-test, include-all-providers: true, tolerance: 100, url: "http://connectivitycheck.gstatic.com/generate_204", interval: 300}
+  - { name: ♻️ 自动选择, type: url-test, include-all-providers: true, tolerance: 100, url: "http://connectivitycheck.gstatic.com/generate_204", interval: 300 }
   # fallback将按照url测试结果按照节点顺序选择
-  - {name: 🔯 故障转移, type: fallback, include-all-providers: true, url: "http://connectivitycheck.gstatic.com/generate_204", interval: 300}
+  - { name: 🔯 故障转移, type: fallback, include-all-providers: true, url: "http://connectivitycheck.gstatic.com/generate_204", interval: 300 }
   # load-balance将按照算法随机选择节点  strategy可选: round-robin/consistent-hashing/sticky-sessions
-  - {name: 🔮 负载均衡, type: load-balance, include-all-providers: true, url: "http://connectivitycheck.gstatic.com/generate_204", interval: 300, strategy: round-robin}
+  - { name: 🔮 负载均衡, type: load-balance, include-all-providers: true, url: "http://connectivitycheck.gstatic.com/generate_204", interval: 300, strategy: round-robin }
 
   #------------------------场景分组------------------------#
-  - {name: 📹 YouTube, <<: *main}
-  - {name: 🍀 Google, <<: *main}
-  - {name: 🤖 AI, <<: *specific}
-  - {name: 📺 BiliBili, <<: *island}
-  - {name: 👨‍💻 GitHub, <<: *main}
-  - {name: 🦊 GitLab, <<: *main}
-  - {name: 🐳 Docker, <<: *main}
-  - {name: 🐬 OneDrive, <<: *main}
-  - {name: 🪟 Microsoft, <<: *main}
-  - {name: 🎧 Spotify, <<: *island}
-  - {name: 🎵 TikTok, <<: *specific}
-  - {name: 📲 Telegram, <<: *main}
-  - {name: 🎥 NETFLIX, <<: *specific}
-  - {name: ✈️ Speedtest, <<: *main}
-  - {name: 💶 PayPal, <<: *main}
-  - {name: 🍎 Apple, <<: *main}
+  - { name: 📹 YouTube, <<: *main }
+  - { name: 🍀 Google, <<: *main }
+  - { name: 🤖 AI, <<: *specific }
+  - { name: 📺 BiliBili, <<: *island }
+  - { name: 👨‍💻 GitHub, <<: *main }
+  - { name: 🦊 GitLab, <<: *main }
+  - { name: 🐳 Docker, <<: *main }
+  - { name: 🐬 OneDrive, <<: *main }
+  - { name: 🪟 Microsoft, <<: *main }
+  - { name: 🎧 Spotify, <<: *island }
+  - { name: 🎵 TikTok, <<: *specific }
+  - { name: 📲 Telegram, <<: *main }
+  - { name: 🎥 NETFLIX, <<: *specific }
+  - { name: ✈️ Speedtest, <<: *main }
+  - { name: 💶 PayPal, <<: *main }
+  - { name: 🍎 Apple, <<: *main }
 
   #------------------------地区分组------------------------#
   ## 测速地址: https://ybfl.net/sites/58.html
-  - {name: 🇭🇰 香港节点, type: url-test, include-all-providers: true, tolerance: 100, filter: "(?i)港|hk|hongkong|hong kong", url: "http://connectivitycheck.gstatic.com/generate_204", interval: 300}
-  - {name: 🇲🇴 澳门节点, type: url-test, include-all-providers: true, tolerance: 100, filter: "(?i)澳|澳门|mo|macau|macao", url: "http://connectivitycheck.gstatic.com/generate_204", interval: 300}
-  - {name: 🇹🇼 台湾节点, type: url-test, include-all-providers: true, tolerance: 100, filter: "(?i)台|tw|taiwan|taipei", url: "http://connectivitycheck.gstatic.com/generate_204", interval: 300}
-  - {name: 🇸🇬 狮城节点, type: url-test, include-all-providers: true, tolerance: 100, filter: "(?i)新加坡|坡|狮城|SG|Singapore", url: "http://connectivitycheck.gstatic.com/generate_204", interval: 300}
-  - {name: 🇯🇵 日本节点, type: url-test, include-all-providers: true, tolerance: 100, filter: "(?i)日本|jp|japan|tokyo|osaka", url: "http://connectivitycheck.gstatic.com/generate_204", interval: 300}
-  - {name: 🇰🇷 韩国节点, type: url-test, include-all-providers: true, tolerance: 100, filter: "(?i)韩|kr|korea|seoul", url: "http://connectivitycheck.gstatic.com/generate_204", interval: 300}
-  - {name: 🇲🇾 马来节点, type: url-test, include-all-providers: true, tolerance: 100, filter: "(?i)马来|马来西亚|my|mys|malay|malaysia", url: "http://connectivitycheck.gstatic.com/generate_204", interval: 300}
-  - {name: 🇺🇲 美国节点, type: url-test, include-all-providers: true, tolerance: 100, filter: "(?i)美|us|united states|america|los angeles|san jose|silicon valley", url: "http://connectivitycheck.gstatic.com/generate_204", interval: 300}
-  - {name: 🇬🇧 英国节点, type: url-test, include-all-providers: true, tolerance: 100, filter: "(?i)英|uk|united kingdom|london", url: "http://connectivitycheck.gstatic.com/generate_204", interval: 300}
-  - {name: 🇳🇱 荷兰节点, type: url-test, include-all-providers: true, tolerance: 100, filter: "(?i)荷兰|nl|netherlands", url: "http://connectivitycheck.gstatic.com/generate_204", interval: 300}
-  - {name: 🇩🇪 德国节点, type: url-test, include-all-providers: true, tolerance: 100, filter: "(?i)德|de|germany|frankfurt", url: "http://connectivitycheck.gstatic.com/generate_204", interval: 300}
+  - { name: 🇭🇰 香港节点, type: url-test, include-all-providers: true, tolerance: 100, filter: "(?i)港|hk|hongkong|hong kong", url: "http://connectivitycheck.gstatic.com/generate_204", interval: 300 }
+  - { name: 🇲🇴 澳门节点, type: url-test, include-all-providers: true, tolerance: 100, filter: "(?i)澳|澳门|mo|macau|macao", url: "http://connectivitycheck.gstatic.com/generate_204", interval: 300 }
+  - { name: 🇹🇼 台湾节点, type: url-test, include-all-providers: true, tolerance: 100, filter: "(?i)台|tw|taiwan|taipei", url: "http://connectivitycheck.gstatic.com/generate_204", interval: 300 }
+  - { name: 🇸🇬 狮城节点, type: url-test, include-all-providers: true, tolerance: 100, filter: "(?i)新加坡|坡|狮城|SG|Singapore", url: "http://connectivitycheck.gstatic.com/generate_204", interval: 300 }
+  - { name: 🇯🇵 日本节点, type: url-test, include-all-providers: true, tolerance: 100, filter: "(?i)日本|jp|japan|tokyo|osaka", url: "http://connectivitycheck.gstatic.com/generate_204", interval: 300 }
+  - { name: 🇰🇷 韩国节点, type: url-test, include-all-providers: true, tolerance: 100, filter: "(?i)韩|kr|korea|seoul", url: "http://connectivitycheck.gstatic.com/generate_204", interval: 300 }
+  - { name: 🇲🇾 马来节点, type: url-test, include-all-providers: true, tolerance: 100, filter: "(?i)马来|马来西亚|my|mys|malay|malaysia", url: "http://connectivitycheck.gstatic.com/generate_204", interval: 300 }
+  - { name: 🇺🇲 美国节点, type: url-test, include-all-providers: true, tolerance: 100, filter: "(?i)美|us|united states|america|los angeles|san jose|silicon valley", url: "http://connectivitycheck.gstatic.com/generate_204", interval: 300 }
+  - { name: 🇬🇧 英国节点, type: url-test, include-all-providers: true, tolerance: 100, filter: "(?i)英|uk|united kingdom|london", url: "http://connectivitycheck.gstatic.com/generate_204", interval: 300 }
+  - { name: 🇳🇱 荷兰节点, type: url-test, include-all-providers: true, tolerance: 100, filter: "(?i)荷兰|nl|netherlands", url: "http://connectivitycheck.gstatic.com/generate_204", interval: 300 }
+  - { name: 🇩🇪 德国节点, type: url-test, include-all-providers: true, tolerance: 100, filter: "(?i)德|de|germany|frankfurt", url: "http://connectivitycheck.gstatic.com/generate_204", interval: 300 }
 
   #------------------------特殊分组------------------------#
-  - {name: 🎯 全球直连, type: select, proxies: [🟢 直连, 🚀 默认代理]}
-  - {name: 🐟 漏网之鱼, <<: *main}
+  - { name: 🎯 全球直连, type: select, proxies: [🟢 直连, 🚀 默认代理] }
+  - { name: 🐟 漏网之鱼, <<: *main }
 
 ## 规则匹配
 rules:
