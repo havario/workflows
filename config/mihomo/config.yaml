@@ -123,7 +123,7 @@ proxies:
     udp: true
 
   # 链式代理流量走向机制 丨 Mihomo本机 <-> 前置节点 <-> 落地节点 <-> Internet互联网
-  - name: "🇸🇬 新加坡链式"
+  - name: "🇸🇬 狮城链式"
     dialer-proxy: "🇭🇰 香港节点"
     type: socks5
     server: "1.1.1.1"
@@ -165,15 +165,15 @@ proxy-providers:
       udp: true
 
 ## 锚点
-main: &main { type: select, proxies: [🚀 默认代理, ♻️ 自动选择, 🔯 故障转移, 🔮 负载均衡, 🇭🇰 香港链式, 🇸🇬 新加坡链式, 🇭🇰 香港节点, 🇲🇴 澳门节点, 🇹🇼 台湾节点, 🇸🇬 狮城节点, 🇯🇵 日本节点, 🇰🇷 韩国节点, 🇲🇾 马来节点, 🇺🇲 美国节点, 🇬🇧 英国节点, 🇳🇱 荷兰节点, 🇩🇪 德国节点, 🟢 直连] }
-specific: &specific { type: select, proxies: [🇸🇬 新加坡链式, 🇹🇼 台湾节点, 🇸🇬 狮城节点, 🇯🇵 日本节点, 🇰🇷 韩国节点, 🇲🇾 马来节点, 🇺🇲 美国节点, 🇬🇧 英国节点, 🇳🇱 荷兰节点, 🇩🇪 德国节点] }
+main: &main { type: select, proxies: [🚀 默认代理, ♻️ 自动选择, 🔯 故障转移, 🔮 负载均衡, 🇭🇰 香港链式, 🇸🇬 狮城链式, 🇭🇰 香港节点, 🇲🇴 澳门节点, 🇹🇼 台湾节点, 🇸🇬 狮城节点, 🇯🇵 日本节点, 🇰🇷 韩国节点, 🇲🇾 马来节点, 🇺🇲 美国节点, 🇬🇧 英国节点, 🇳🇱 荷兰节点, 🇩🇪 德国节点, 🟢 直连] }
+specific: &specific { type: select, proxies: [🇸🇬 狮城链式, 🇹🇼 台湾节点, 🇸🇬 狮城节点, 🇯🇵 日本节点, 🇰🇷 韩国节点, 🇲🇾 马来节点, 🇺🇲 美国节点, 🇬🇧 英国节点, 🇳🇱 荷兰节点, 🇩🇪 德国节点] }
 island: &island { type: select, proxies: [🚀 默认代理, 🇭🇰 香港链式, 🇭🇰 香港节点, 🇲🇴 澳门节点, 🇹🇼 台湾节点, 🟢 直连] }
 
 ## 代理分组
 # include-all-providers: true 自动引入proxy-providers所有代理集合, 顺序将按照名称排序
 proxy-groups:
   #------------------------基础分组------------------------#
-  - { name: 🚀 默认代理, type: select, proxies: [♻️ 自动选择, 🔯 故障转移, 🔮 负载均衡, 🇭🇰 香港链式, 🇸🇬 新加坡链式, 🇭🇰 香港节点, 🇲🇴 澳门节点, 🇹🇼 台湾节点, 🇸🇬 狮城节点, 🇯🇵 日本节点, 🇰🇷 韩国节点, 🇲🇾 马来节点, 🇺🇲 美国节点, 🇬🇧 英国节点, 🇳🇱 荷兰节点, 🇩🇪 德国节点, 🟢 直连] }
+  - { name: 🚀 默认代理, type: select, proxies: [♻️ 自动选择, 🔯 故障转移, 🔮 负载均衡, 🇭🇰 香港链式, 🇸🇬 狮城链式, 🇭🇰 香港节点, 🇲🇴 澳门节点, 🇹🇼 台湾节点, 🇸🇬 狮城节点, 🇯🇵 日本节点, 🇰🇷 韩国节点, 🇲🇾 马来节点, 🇺🇲 美国节点, 🇬🇧 英国节点, 🇳🇱 荷兰节点, 🇩🇪 德国节点, 🟢 直连] }
   # url-test将按照url测试结果使用延迟最低节点
   - { name: ♻️ 自动选择, type: url-test, include-all-providers: true, tolerance: 100, url: "http://connectivitycheck.gstatic.com/generate_204", interval: 300 }
   # fallback将按照url测试结果按照节点顺序选择
