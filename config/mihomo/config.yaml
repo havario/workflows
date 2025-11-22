@@ -93,7 +93,7 @@ dns:
   listen: 0.0.0.0:1053 # 开启DNS服务器监听
   ipv6: false # false将返回AAAA的空结果
   # ipv6-timeout: 300 # 单位：ms 内部双栈并发时, 向上游查询AAAA时, 等待AAAA的时间, 默认100ms
-  default-nameserver: # 指定初始DNS解析服务器, 用于解析mihomo自身需要的域名 (如订阅地址、规则集地址), 只能使用纯IP地址
+  default-nameserver: # 指定初始DNS解析服务器, 用于解析mihomo自身需要的域名 (如订阅地址、规则集地址) 只能使用纯IP地址
     - 119.29.29.29
     - 223.5.5.5
   enhanced-mode: fake-ip # 启用Fake-IP模式 or redir-host
@@ -226,11 +226,11 @@ rules:
   # 本地局域网
   - DOMAIN-SUFFIX,local,🟢 直连
   - DOMAIN-SUFFIX,localhost,🟢 直连
+  - RULE-SET,private_ip,🟢 直连,no-resolve
   - RULE-SET,private_domain,🟢 直连
 
   # 应用分流
   - RULE-SET,apple_domain,🍎 Apple
-  - RULE-SET,proxylite,🚀 默认代理
   - RULE-SET,ai_domain,🤖 AI
   - RULE-SET,bilibili_domain,📺 BiliBili
   - RULE-SET,github_domain,👨‍💻 GitHub
@@ -249,9 +249,10 @@ rules:
   - RULE-SET,gfw_domain,🚀 默认代理
   - RULE-SET,geolocation-!cn,🚀 默认代理
 
-  - RULE-SET,google_ip,🍀 Google,no-resolve
-  - RULE-SET,netflix_ip,🎥 NETFLIX,no-resolve
-  - RULE-SET,telegram_ip,📲 Telegram,no-resolve
+  - RULE-SET,apple_ip,🍎 Apple
+  - RULE-SET,google_ip,🍀 Google
+  - RULE-SET,netflix_ip,🎥 NETFLIX
+  - RULE-SET,telegram_ip,📲 Telegram
 
   - RULE-SET,cn_ip,🎯 全球直连
   - RULE-SET,cn_domain,🎯 全球直连
@@ -270,7 +271,6 @@ rule-anchor:
 ## 订阅规则
 rule-providers:
   private_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/private.mrs" }
-  # proxylite: { <<: *class, url: "https://raw.githubusercontent.com/qichiyuhub/rule/main/proxy.list" }
 
   gfw_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/gfw.mrs" }
   ai_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-ai-!cn.mrs" }
@@ -286,7 +286,7 @@ rule-providers:
   paypal_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/paypal.mrs" }
   onedrive_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/onedrive.mrs" }
   microsoft_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/microsoft.mrs" }
-  apple_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/apple-cn.mrs" }
+  apple_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/apple.mrs" }
   speedtest_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/speedtest.mrs" }
   tiktok_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/tiktok.mrs" }
   geolocation-!cn: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/geolocation-!cn.mrs" }
