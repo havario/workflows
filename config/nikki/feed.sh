@@ -51,6 +51,9 @@ if _exists opkg; then
 	fi
 	echo "src/gz nikki $FEED_URL" >> /etc/opkg/nikki.conf
 	opkg update
+    opkg install nikki
+    opkg install luci-app-nikki
+    opkg install luci-i18n-nikki-zh-cn
 elif _exists apk; then
 	wget --no-check-certificate -qO /etc/apk/keys/nikki.pem "$REPOSITORY_URL/public-key.pem"
 	if grep -q nikki /etc/apk/repositories.d/nikki.list; then
@@ -58,6 +61,9 @@ elif _exists apk; then
     fi
     echo "$FEED_URL/packages.adb" >> /etc/apk/repositories.d/nikki.list
     apk update
+    apk add nikki
+    apk add luci-app-nikki
+    apk add luci-i18n-nikki-zh-cn
 fi
 
 echo "success"
