@@ -94,6 +94,26 @@ tun:
   # strict-route: true # 将所有连接路由到Tun来防止泄漏, 但你的设备将无法其他设备被访问
   disable-icmp-forwarding: true # 禁用ICMP转发, 防止某些情况下的ICMP环回问题, ping将不会显示真实的延迟
 
+## 嗅探域名
+sniffer:
+  enable: true
+  # 是否使用嗅探结果作为实际访问, 默认true
+  # 全局配置, 优先级低于sniffer.sniff实际配置
+  # override-destination: false
+  sniff: # TLS和QUIC默认如果不配置ports默认嗅探443
+    QUIC:
+      ports: [443, 8443]
+    TLS:
+      ports: [443, 8443]
+    # 默认嗅探80
+    HTTP: # 需要嗅探的端口
+      ports: [80, 8080-8880]
+      override-destination: false
+  # 对嗅探结果进行跳过
+  skip-domain:
+    - "Mijia Cloud"
+    - "+.push.apple.com"
+
 ## DNS模块
 dns:
   cache-algorithm: arc
