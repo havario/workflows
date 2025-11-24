@@ -131,9 +131,9 @@ dns:
 
   # 配置不使用fake-ip的域名
   fake-ip-filter:
-    - "*"
-    - "+.lan"
+    - "*.lan"
     - "+.local"
+    - "+.localdomain"
     - "rule-set:private_domain,cn_domain,ntp_domain"
     - "+.msftconnecttest.com"
     - "+.msftncsi.com"
