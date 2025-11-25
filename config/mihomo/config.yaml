@@ -50,6 +50,12 @@ ipv6: false # IPv6总开关, 关闭阻断所有IPv6链接和屏蔽DNS请求AAAA�
 
 tcp-concurrent: true # TCP并发连接所有IP, 将使用最快握手的TCP
 
+# 配置WEB UI目录, 使用http://{{external-controller}}/ui访问
+external-ui: ui
+external-ui-name: zashboard
+# 目前支持下载zip tgz格式的压缩包
+external-ui-url: "https://v6.gh-proxy.com/https://github.com/Zephyruso/zashboard/releases/latest/download/dist.zip"
+
 # interface-name: en0 # 设置出口网卡
 
 # 全局TLS指纹, 优先低于proxy内的client-fingerprint
@@ -76,7 +82,6 @@ dns:
   # ipv6-timeout: 300 # 单位：ms 内部双栈并发时, 向上游查询AAAA时, 等待AAAA的时间, 默认100ms
   default-nameserver: # 指定初始DNS解析服务器, 用于解析mihomo自身需要的域名 (如订阅地址、规则集地址) 只能使用纯IP地址
     - 119.29.29.29
-    - 223.5.5.5
   enhanced-mode: fake-ip # 启用Fake-IP模式 or redir-host
 
   fake-ip-range: 198.18.0.1/16 # fake-ip池设置
@@ -84,14 +89,14 @@ dns:
 
   # 配置不使用fake-ip的域名
   fake-ip-filter:
-    - "rule-set:private_domain"
-    - "rule-set:cn_domain"
-    - "rule-set:ntp_domain"
     - "*.lan"
     - "+.local"
     - "+.localdomain"
+    - "rule-set:private_domain,cn_domain,ntp_domain"
     - "+.msftconnecttest.com"
     - "+.msftncsi.com"
+    - "time.*.com"
+    - "+.market.xiaomi.com"
     - "localhost.ptlogin2.qq.com"
   fake-ip-filter-mode: blacklist # 配置fake-ip-filter的匹配模式, 默认为blacklist, 即如果匹配成功不返回fake-ip
 
@@ -109,12 +114,10 @@ dns:
   # 这部分为主要DNS配置, 影响所有直连, 确保使用对大陆解析精准的DNS
   nameserver:
     - https://doh.pub/dns-query
-    - https://dns.alidns.com/dns-query
 
   # 专用于节点域名解析的DNS服务器, 非必要配置项, 如果不填则遵循nameserver-policy nameserver和fallback的配置
   proxy-server-nameserver:
     - https://doh.pub/dns-query
-    - https://dns.alidns.com/dns-query
 
 ## 节点信息
 proxies:
@@ -128,8 +131,8 @@ proxies:
     type: socks5
     server: "1.1.1.1"
     port: 1080
-    username: "12345"
-    password: "12345"
+    username: "socks"
+    password: "socks"
     udp: true
 
   # Shadowsocks
@@ -146,7 +149,7 @@ proxies:
     server: "1.0.0.1"
     port: 8388
     cipher: "aes-128-gcm"
-    password: "12345"
+    password: "shadowsocks"
     udp: true
 
 ## 订阅合集
