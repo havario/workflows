@@ -163,7 +163,7 @@ proxy-providers:
       enable: true
       interval: 300
       url: "http://connectivitycheck.gstatic.com/generate_204"
-      expected-status: 204 # 当健康检查返回状态码与期望值不符时认为节点不可用
+      # expected-status: 204 # 当健康检查返回状态码与期望值不符时认为节点不可用
     override: # 覆写节点加载时的一些配置项
       udp: true
 
