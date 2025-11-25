@@ -1,7 +1,7 @@
 #!/bin/sh
 # SPDX-License-Identifier: GPL-3.0
 #
-# Copyright 2024-2025 The OpenWrt-nikki Authors. All rights reserved.
+# Copyright (c) 2024-2025 The OpenWrt-nikki Authors. All rights reserved.
 # Copyright (c) 2025 honeok <i@honeok.com>
 
 # References:
