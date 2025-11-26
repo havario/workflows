@@ -22,7 +22,9 @@ fi
 # 主机清单
 HOSTS=(hadoop102 hadoop103 hadoop104)
 
-separator() { printf '%.0s-' {1..10}; }
+separator() {
+    printf '%.0s-' {1..10}
+}
 
 _exists() {
     command -v "$@" >/dev/null 2>&1
@@ -36,7 +38,7 @@ if [ "$#" -lt 1 ]; then
     die "Not enough arguments."
 fi
 
-_exists rsync || die "rsync command not found."
+_exists rsync || die "rsync Command not found."
 
 for h in "${HOSTS[@]}"; do
     printf "%s %s %s\n" "$(separator)" "$h" "$(separator)"
