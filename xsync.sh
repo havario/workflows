@@ -36,9 +36,7 @@ if [ "$#" -lt 1 ]; then
     die "Not enough arguments."
 fi
 
-if ! _exists rsync; then
-    die "rsync command not found."
-fi
+_exists rsync || die "rsync command not found."
 
 for h in "${HOSTS[@]}"; do
     printf "%s %s %s\n" "$(separator)" "$h" "$(separator)"
@@ -50,7 +48,7 @@ for h in "${HOSTS[@]}"; do
             FILE_NAME="$(basename "$f")"
 
             # 在远程主机上创建目录
-            ssh -p "$SSH_PORT" "$SSH_OPTS" "$h" "mkdir -p \"$SRC_DIR\"" || die "Failed to create directory $SRC_DIR on $h"
+            eval ssh -p "$SSH_PORT" "$SSH_OPTS" "$h" "mkdir -p \"$SRC_DIR\"" || die "Failed to create directory $SRC_DIR on $h"
             # 将文件同步到远程主机
             rsync "$RSYNC_OPTS" -e "ssh -p $SSH_PORT $SSH_OPTS" "$SRC_DIR/$FILE_NAME" "$h:$SRC_DIR"
         else
