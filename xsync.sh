@@ -56,3 +56,5 @@ for h in "${HOSTS[@]}"; do
         fi
     done
 done
+
+echo "success"
