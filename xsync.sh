@@ -36,9 +36,7 @@ if [ "$#" -lt 1 ]; then
     die "Not enough arguments."
 fi
 
-if ! _exists rsync; then
-    die "rsync command not found."
-fi
+_exists rsync || die "rsync command not found."
 
 for h in "${HOSTS[@]}"; do
     printf "%s %s %s\n" "$(separator)" "$h" "$(separator)"
