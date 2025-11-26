@@ -10,6 +10,9 @@
 
 set -eEu
 
+SSH_PORT="22"
+SSH_OPTS="-o BatchMode=yes -o ConnectTimeout=5"
+
 # 若 export FORCE_SYNC=1 则开启delete模式
 RSYNC_OPTS="-av"
 if [ "${FORCE_SYNC:-0}" -eq 1 ]; then
@@ -33,7 +36,7 @@ if [ "$#" -lt 1 ]; then
     die "Not enough arguments."
 fi
 
-if _exists rsync; then
+if ! _exists rsync; then
     die "rsync command not found."
 fi
 
@@ -47,9 +50,9 @@ for h in "${HOSTS[@]}"; do
             FILE_NAME="$(basename "$f")"
 
             # 在远程主机上创建目录
-            ssh -o BatchMode=yes -o ConnectTimeout=5 "$h" "mkdir -p \"$SRC_DIR\"" || die "Failed to create directory $SRC_DIR on $h"
+            ssh -p "$SSH_PORT" "$SSH_OPTS" "$h" "mkdir -p \"$SRC_DIR\"" || die "Failed to create directory $SRC_DIR on $h"
             # 将文件同步到远程主机
-            rsync "$RSYNC_OPTS" "$SRC_DIR/$FILE_NAME" "$h:$SRC_DIR"
+            rsync "$RSYNC_OPTS" -e "ssh -p $SSH_PORT $SSH_OPTS" "$SRC_DIR/$FILE_NAME" "$h:$SRC_DIR"
         else
             die "$f does not exist."
         fi
