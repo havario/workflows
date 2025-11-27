@@ -1,9 +1,8 @@
 #!/bin/bash
 # SPDX-License-Identifier: Apache-2.0
-
 # Copyright (c) 2025 honeok <i@honeok.com>
 
-set -x
+set -eEuxo pipefail
 
 systemctl stop docker.socket
 systemctl stop docker.service
