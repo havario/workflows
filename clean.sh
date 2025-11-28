@@ -18,5 +18,5 @@ rm -rf /var/crash/* 2>/dev/null
 find /var/log -type f -name "*.log" -exec truncate -s 0 {} \;
 find /var/log -type f \( -name "*.gz" -o -name "*.1" \) -delete
 
-printf "Cleanup Success.\n"
+echo "Cleanup Success."
 df -h /
