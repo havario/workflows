@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 # SPDX-License-Identifier: MIT
 #
 # Description:
@@ -7,111 +7,87 @@
 
 set -eEu
 
-red='\033[91m'
-green='\033[92m'
-yellow='\033[93m'
-white='\033[0m'
-_red() { echo -e "${red}$*${white}"; }
-_green() { echo -e "${green}$*${white}"; }
-_yellow() { echo -e "${yellow}$*${white}"; }
+# 设置PATH环境变量
+export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:$PATH
+# 环境变量用于在debian或ubuntu操作系统中设置非交互式 (noninteractive) 安装模式
+export DEBIAN_FRONTEND=noninteractive
 
-_err_msg() { echo -e "\033[41m\033[1mError${white} $*"; }
-_suc_msg() { echo -e "\033[42m\033[1mSuccess${white} $*"; }
-
-
-OS_NAME="$(grep "^ID=" /etc/os-release | awk -F'=' '{print $2}' | sed 's/"//g')"
-
-	if ! test -r /etc/os-release; then
-		die "The file /etc/os-release is not readable"
-	fi
+_red() { printf "\033[31m%b\033[0m\n" "$*"; }
+_err_msg() { printf "\033[41m\033[1mError\033[0m %b\n" "$*"; }
 
 # 定义被控服务器
-declare -a control_hosts
-control_hosts=()
-# sshkey秘钥存储路径
-sshkey_path="$HOME/.ssh/id_rsa"
-# 主机秘钥
-host_password=''
+declare -a HOSTS
+HOSTS=()
+# 秘钥存储路径
+SSHKEY_PATH="$HOME/.ssh/id_ed25519"
+SSH_PORT="22"
+# 主机密码
+HOST_PASSWD=""
+
+separator() {
+    printf '%.0s-' {1..10}
+}
+
+die() {
+    _err_msg >&2 "$(_red "$@")"; exit 1
+}
 
 _exists() {
-    local _cmd="$1"
-    if type "$_cmd" >/dev/null 2>&1; then
-        return 0
-    elif command -v "$_cmd" >/dev/null 2>&1; then
-        return 0
-    else
-        return 1
+    local _CMD="$1"
+    if type "$_CMD" >/dev/null 2>&1; then return;
+    elif command -v "$_CMD" >/dev/null 2>&1; then return;
+    elif which "$_CMD" >/dev/null 2>&1; then return;
+    else return 1;
     fi
 }
 
 pkg_install() {
-    for package in "$@"; do
-        _yellow "Installing $package"
+    for pkg in "$@"; do
         if _exists dnf; then
-            dnf install -y "$package"
+            dnf install -y "$pkg"
         elif _exists yum; then
-            yum install -y "$package"
-        elif _exists apt; then
-            DEBIAN_FRONTEND=noninteractive apt install -y -q "$package"
+            yum install -y "$pkg"
         elif _exists apt-get; then
-            DEBIAN_FRONTEND=noninteractive apt-get install -y -q "$package"
+            apt-get update
+            apt-get install -y -q "$pkg"
+        elif _exists apk; then
+            apk add --no-cache "$pkg"
         elif _exists zypper; then
-            zypper install -y "$package"
+            zypper install -y "$pkg"
+        else
+            die "The package manager is not supported."
         fi
     done
 }
 
-pre_check() {
-    [ -t 1 ] && tput clear 2>/dev/null || echo -e "\033[2J\033[H" || clear
-    _yellow "当前脚本版本: $version \xF0\x9F\x8D\xB4 "
-    # 操作系统和权限校验
-    if [ "$(id -ru)" -ne "0" ] || [ "$EUID" -ne "0" ]; then
-        _err_msg "$(_red '此脚本必须以root身份运行!')" && exit 1
-    fi
-    if [ "$os_name" != "alinux" ] && [ "$os_name" != "almalinux" ] \
-        && [ "$os_name" != "centos" ] && [ "$os_name" != "debian" ] \
-        && [ "$os_name" != "fedora" ] && [ "$os_name" != "opencloudos" ] \
-        && [ "$os_name" != "opensuse" ] && [ "$os_name" != "rhel" ] \
-        && [ "$os_name" != "rocky" ] && [ "$os_name" != "ubuntu" ]; then
-        _err_msg "$(_red '当前操作系统不受支持!')" && exit 1
+check_root() {
+    if [ "$EUID" -ne 0 ] || [ "$(id -ru)" -ne 0 ]; then
+        die "This script must be run as root."
     fi
 }
 
-sshkey_check() {
-    if [ ! -f "$sshkey_path" ]; then
-        if ! ssh-keygen -t rsa -f "$sshkey_path" -P '' >/dev/null 2>&1; then
-            _err_msg "$(_red '密钥创建失败, 请重试!')" && exit 1
-        fi
+check_cmd() {
+    _exists sshpass || pkg_install sshpass
+}
+
+check_sshkey() {
+    if [ ! -f "$SSHKEY_PATH" ]; then
+        ssh-keygen -t ed25519 -f "$SSHKEY_PATH" -P '' >/dev/null 2>&1
     fi
 }
 
-sshkey_send() {
-    if [ "${#control_hosts[@]}" -eq 0 ]; then _err_msg "$(_red '主机清单为空')" && exit 1; fi
-    if [ -z "$host_password" ]; then _err_msg "$(_red '主机密码为空, 请检查脚本配置!')" && exit 1; fi
+send_sshkey() {
+    local SSH_OPTS
+    SSH_OPTS="-o StrictHostKeyChecking=no -o ConnectTimeout=30"
 
-    if ! _exists sshpass >/dev/null 2>&1; then
-        pkg_install sshpass
-    fi
-    # 并行执行提高效率
-    for host in "${control_hosts[@]}"; do
-        # 启动子进程, 每个分发操作完全独立运行在新的进程中
-        # 子进程报错退出避免主机过多导致进程崩溃
-        (
-            _yellow "正在向 $host 分发公钥."
-            if ! sshpass -p"$host_password" ssh-copy-id -i "$sshkey_path" -o StrictHostKeyChecking=no -o ConnectTimeout=30 root@"$host" >/dev/null 2>&1; then
-                _err_msg "$(_red "$host 公钥分发失败!")" && exit 1
-            fi
-            _suc_msg "$(_green "$host 公钥分发成功")"
-        ) &
+    for h in "${HOSTS[@]}"; do
+        # shellcheck disable=SC2059
+        printf -- "$(separator) $h $(separator)\n"
+        eval sshpass -p"$HOST_PASSWD" ssh-copy-id -i "$SSHKEY_PATH" -p "$SSH_PORT" "$SSH_OPTS" root@"$h"
     done
-    # 等待并行任务
-    wait
 }
 
-ssh_divide() {
-    pre_check
-    sshkey_check
-    sshkey_send
-}
-
-ssh_divide
+check_root
+check_cmd
+check_sshkey
+send_sshkey
