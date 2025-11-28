@@ -1,6 +1,7 @@
 #!/bin/sh
 
-tux_logo() {
+# generate by: https://github.com/deater/linux_logo
+show_logo() {
     printf "\
 
                                                                  #####
@@ -18,4 +19,4 @@ tux_logo() {
 "
 }
 
-tux_logo
+show_logo
