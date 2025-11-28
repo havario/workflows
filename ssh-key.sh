@@ -91,3 +91,5 @@ check_root
 check_cmd
 check_sshkey
 send_sshkey
+
+echo "success"
