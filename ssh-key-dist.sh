@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: MIT
 #
 # Description: The script is designed to automatically generate and batch deploy ssh keys to establish passwordless authentication across multiple servers.
-# Copyright (c) 2025 yihao ho <i@honeok.com>
+# Copyright (c) 2025 Yihao He <i@honeok.com>
 # Copyright (c) 2025 zzwsec <zzwsec@163.com>
 
 set -eEu
