@@ -3,8 +3,8 @@
 # 基础软件包清理
 apt-get clean
 apt-get autoremove --purge -y
-rm -rf /var/lib/apt/lists/* # 清理索引文件
-rm -rf /var/cache/apt/archives/* # 清理安装包残留
+rm -rf /var/lib/apt/lists/* 2>/dev/null # 清理索引文件
+rm -rf /var/cache/apt/archives/* 2>/dev/null # 清理安装包残留
 
 # 移除多余语言包 (保留中英)
 find /usr/share/locale -mindepth 1 -maxdepth 1 ! -name 'en*' ! -name 'zh*' -exec rm -rf {} +
