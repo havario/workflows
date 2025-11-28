@@ -84,6 +84,7 @@ send_sshkey() {
         # shellcheck disable=SC2059
         printf -- "$(separator) $h $(separator)\n"
         eval sshpass -p"$HOST_PASSWD" ssh-copy-id -i "$SSHKEY_PATH" -p "$SSH_PORT" "$SSH_OPTS" root@"$h"
+        printf "success\n"
     done
 }
 
@@ -91,5 +92,3 @@ check_root
 check_cmd
 check_sshkey
 send_sshkey
-
-echo "success"
