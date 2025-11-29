@@ -5,7 +5,7 @@
 # Copyright (c) 2025 honeok <i@honeok.com>
 
 # https://github.com/deater/linux_logo
-show_logo() {
+linux_logo() {
     printf "\
                                                                  #####
                                                                 #######
