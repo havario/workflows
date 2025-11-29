@@ -44,8 +44,12 @@ clear() {
 }
 
 die() {
-    echo >&2 "Error: $*"
-    exit 1
+    local EXIT_CODE
+
+    EXIT_CODE="${2:-1}"
+
+    printf >&2 'Error: %s\n' "$1"
+    exit "$EXIT_CODE"
 }
 
 get_cmd_path() {
@@ -71,6 +75,15 @@ install_pkg() {
             die "The package manager is not supported."
         fi
     done
+}
+
+load_os_info() {
+    if [ ! -r /etc/os-release ]; then
+        die "The file /etc/os-release is not readable."
+    fi
+
+    # shellcheck source=/dev/null
+    . /etc/os-release
 }
 
 curl() {
@@ -100,15 +113,14 @@ curl() {
 # debian/ubuntu
 # https://xanmod.org
 xanmod_install() {
-    local XANMOD_VER VERSION_CODE
+    local XANMOD_VER
 
     # https://gitlab.com/xanmod/linux
     XANMOD_VER="$(curl -L https://dl.xanmod.org/check_x86-64_psabi.sh | awk -f - 2>/dev/null | awk -F 'x86-64-v' '{v=$2+0; if(v==4)v=3; print v}')"
-    VERSION_CODE="$(grep "^VERSION_CODENAME" /etc/os-release | cut -d= -f2)"
 
     dpkg -s gnupg >/dev/null 2>&1 || install_pkg gnupg
     curl -L https://dl.xanmod.org/archive.key | gpg --dearmor -vo /etc/apt/keyrings/xanmod-archive-keyring.gpg
-    echo "deb [signed-by=/etc/apt/keyrings/xanmod-archive-keyring.gpg] http://deb.xanmod.org $VERSION_CODE main" | tee /etc/apt/sources.list.d/xanmod-release.list
+    echo "deb [signed-by=/etc/apt/keyrings/xanmod-archive-keyring.gpg] http://deb.xanmod.org $VERSION_CODENAME main" | tee /etc/apt/sources.list.d/xanmod-release.list
     if [[ -n "$XANMOD_VER" && "$XANMOD_VER" =~ ^[0-9]$ ]]; then
         install_pkg "linux-xanmod-x64v$XANMOD_VER"
     fi
@@ -118,7 +130,7 @@ xanmod_install() {
 ## 主程序入口
 clear
 linux_logo
-xanmod_install
+load_os_info
 
 while true; do
     -h | --help)
@@ -129,3 +141,5 @@ while true; do
         shift
     ;;
 done
+
+xanmod_install
