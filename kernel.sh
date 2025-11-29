@@ -1,6 +1,10 @@
-#!/bin/sh
+#!/usr/bin/env bash
+# SPDX-License-Identifier: Apache-2.0
+#
+# Description:
+# Copyright (c) 2025 honeok <i@honeok.com>
 
-# generate by: https://github.com/deater/linux_logo
+# https://github.com/deater/linux_logo
 show_logo() {
     printf "\
 
@@ -19,4 +23,4 @@ show_logo() {
 "
 }
 
-show_logo
+## 主程序入口
