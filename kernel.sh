@@ -110,6 +110,7 @@ xanmod_install() {
     if [[ -n "$XANMOD_VER" && "$XANMOD_VER" =~ ^[0-9]$ ]]; then
         install_pkg "linux-xanmod-x64v$XANMOD_VER"
     fi
+    update-grub
 }
 
 ## 主程序入口
