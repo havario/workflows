@@ -42,22 +42,23 @@ die() {
     exit 1
 }
 
-_exists() {
-    local _CMD="$1"
-    if type "$_CMD" >/dev/null 2>&1; then return;
-    elif command -v "$_CMD" >/dev/null 2>&1; then return;
-    elif which "$_CMD" >/dev/null 2>&1; then return;
-    else return 1;
-    fi
+get_cmd_path() {
+    # -f: 忽略shell内置命令和函数, 只考虑外部命令
+    # -p: 只输出外部命令的完整路径
+    type -f -p "$1"
+}
+
+is_have_cmd() {
+    get_cmd_path "$1" >/dev/null 2>&1
 }
 
 install_pkg() {
     for pkg in "$@"; do
-        if _exists dnf; then
+        if is_have_cmd dnf; then
             dnf install -y "$pkg"
-        elif _exists yum; then
+        elif is_have_cmd yum; then
             yum install -y "$pkg"
-        elif _exists apt-get; then
+        elif is_have_cmd apt-get; then
             apt-get update
             apt-get install -y -q "$pkg"
         else
@@ -69,7 +70,7 @@ install_pkg() {
 curl() {
     local EXIT_CODE
 
-    _exists curl || install_pkg curl
+    is_have_cmd curl || install_pkg curl
 
     # --fail             4xx/5xx返回非0
     # --insecure         兼容旧平台证书问题
