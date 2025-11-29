@@ -7,7 +7,6 @@
 # https://github.com/deater/linux_logo
 show_logo() {
     printf "\
-
                                                                  #####
                                                                 #######
                    @                                            ##O#O##
