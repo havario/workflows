@@ -4,6 +4,8 @@
 # Description:
 # Copyright (c) 2025 honeok <i@honeok.com>
 
+set -eE
+
 # https://github.com/deater/linux_logo
 linux_logo() {
     printf "\
@@ -22,9 +24,36 @@ linux_logo() {
 "
 }
 
+die() {
+    echo >&2 "Error: $*"; exit 1
+}
+
+_exists() {
+    local _CMD="$1"
+    if type "$_CMD" >/dev/null 2>&1; then return;
+    elif command -v "$_CMD" >/dev/null 2>&1; then return;
+    elif which "$_CMD" >/dev/null 2>&1; then return;
+    else return 1;
+    fi
+}
+
+pkg_install() {
+    for pkg in "$@"; do
+        if _exists dnf; then
+            dnf install -y "$pkg"
+        elif _exists yum; then
+            yum install -y "$pkg"
+        elif _exists apt-get; then
+            apt-get update
+            apt-get install -y -q "$pkg"
+        else
+            die "The package manager is not supported."
+        fi
+    done
+}
+
 # debian/ubuntu
 # https://xanmod.org
-
 xanmod_install() {
     local XANMOD_VER VERSION_CODE
 
@@ -33,7 +62,13 @@ xanmod_install() {
     VERSION_CODE="$(grep "^VERSION_CODENAME" /etc/os-release | cut -d= -f2)"
 
     pkg_install gnupg
-    curl -Ls https://dl.xanmod.org/archive.key | gpg --dearmor -vo /etc/apt/keyrings/xanmod-archive-keyring.gpg --yes
+    curl -L https://dl.xanmod.org/archive.key | gpg --dearmor -vo /etc/apt/keyrings/xanmod-archive-keyring.gpg
+    echo "deb [signed-by=/etc/apt/keyrings/xanmod-archive-keyring.gpg] http://deb.xanmod.org $VERSION_CODE main" | tee /etc/apt/sources.list.d/xanmod-release.list
+    if [[ -n "$XANMOD_VER" && "$XANMOD_VER" =~ ^[0-9]$ ]]; then
+        pkg_install "linux-xanmod-x64v$XANMOD_VER"
+    fi
 }
 
 ## 主程序入口
+linux_logo
+xanmod_install
