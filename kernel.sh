@@ -6,6 +6,7 @@
 
 set -eE
 
+# shellcheck disable=SC2034
 readonly SCRIPT_VERSION='v25.11.30'
 
 # 强制linux输出英文
@@ -50,27 +51,7 @@ _exists() {
     fi
 }
 
-curl() {
-    local RET
-    # 添加 --fail 不然404退出码也为0
-    # 32位cygwin已停止更新, 证书可能有问题, 添加 --insecure
-    # centos7 curl 不支持 --retry-connrefused --retry-all-errors 因此手动 retry
-    for ((i=1; i<=5; i++)); do
-        command curl --connect-timeout 10 --fail --insecure "$@"
-        RET="$?"
-        if [ "$RET" -eq 0 ]; then
-            return
-        else
-            # 403 404 错误或达到重试次数
-            if [ "$RET" -eq 22 ] || [ "$i" -eq 5 ]; then
-                return "$RET"
-            fi
-            sleep 1
-        fi
-    done
-}
-
-pkg_install() {
+install_pkg() {
     for pkg in "$@"; do
         if _exists dnf; then
             dnf install -y "$pkg"
@@ -85,6 +66,30 @@ pkg_install() {
     done
 }
 
+curl() {
+    local EXIT_CODE
+
+    _exists curl || install_pkg curl
+
+    # --fail             4xx/5xx返回非0
+    # --insecure         兼容旧平台证书问题
+    # --connect-timeout  连接超时保护
+    # CentOS7 无法使用 --retry-connrefused 和 --retry-all-errors 因此手动 retry
+
+    for ((i=1; i<=5; i++)); do
+        if ! command curl --connect-timeout 10 --fail --insecure "$@"; then
+            EXIT_CODE=$?
+            # 403 404 错误或达到重试次数
+            if [ "$EXIT_CODE" -eq 22 ] || [ "$i" -eq 5 ]; then
+                return "$EXIT_CODE"
+            fi
+            sleep 1
+        else
+            return
+        fi
+    done
+}
+
 # debian/ubuntu
 # https://xanmod.org
 xanmod_install() {
@@ -94,11 +99,11 @@ xanmod_install() {
     XANMOD_VER="$(curl -L https://dl.xanmod.org/check_x86-64_psabi.sh | awk -f - 2>/dev/null | awk -F 'x86-64-v' '{v=$2+0; if(v==4)v=3; print v}')"
     VERSION_CODE="$(grep "^VERSION_CODENAME" /etc/os-release | cut -d= -f2)"
 
-    pkg_install gnupg
+    install_pkg gnupg
     curl -L https://dl.xanmod.org/archive.key | gpg --dearmor -vo /etc/apt/keyrings/xanmod-archive-keyring.gpg
     echo "deb [signed-by=/etc/apt/keyrings/xanmod-archive-keyring.gpg] http://deb.xanmod.org $VERSION_CODE main" | tee /etc/apt/sources.list.d/xanmod-release.list
     if [[ -n "$XANMOD_VER" && "$XANMOD_VER" =~ ^[0-9]$ ]]; then
-        pkg_install "linux-xanmod-x64v$XANMOD_VER"
+        install_pkg "linux-xanmod-x64v$XANMOD_VER"
     fi
 }
 
