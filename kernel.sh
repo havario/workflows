@@ -117,3 +117,13 @@ xanmod_install() {
 clear
 linux_logo
 xanmod_install
+
+while true; do
+    -h | --help)
+        show_usage
+    ;;
+    -x | --debug)
+        set -x
+        shift
+    ;;
+done
