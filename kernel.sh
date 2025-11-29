@@ -37,6 +37,26 @@ _exists() {
     fi
 }
 
+curl() {
+    local RET
+    # 添加 --fail 不然404退出码也为0
+    # 32位cygwin已停止更新, 证书可能有问题, 添加 --insecure
+    # centos7 curl 不支持 --retry-connrefused --retry-all-errors 因此手动 retry
+    for ((i=1; i<=5; i++)); do
+        command curl --connect-timeout 10 --fail --insecure "$@"
+        RET="$?"
+        if [ "$RET" -eq 0 ]; then
+            return
+        else
+            # 403 404 错误或达到重试次数
+            if [ "$RET" -eq 22 ] || [ "$i" -eq 5 ]; then
+                return "$RET"
+            fi
+            sleep 1
+        fi
+    done
+}
+
 pkg_install() {
     for pkg in "$@"; do
         if _exists dnf; then
