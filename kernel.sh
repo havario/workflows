@@ -99,7 +99,7 @@ xanmod_install() {
     XANMOD_VER="$(curl -L https://dl.xanmod.org/check_x86-64_psabi.sh | awk -f - 2>/dev/null | awk -F 'x86-64-v' '{v=$2+0; if(v==4)v=3; print v}')"
     VERSION_CODE="$(grep "^VERSION_CODENAME" /etc/os-release | cut -d= -f2)"
 
-    install_pkg gnupg
+    dpkg -s gnupg >/dev/null 2>&1 || install_pkg gnupg
     curl -L https://dl.xanmod.org/archive.key | gpg --dearmor -vo /etc/apt/keyrings/xanmod-archive-keyring.gpg
     echo "deb [signed-by=/etc/apt/keyrings/xanmod-archive-keyring.gpg] http://deb.xanmod.org $VERSION_CODE main" | tee /etc/apt/sources.list.d/xanmod-release.list
     if [[ -n "$XANMOD_VER" && "$XANMOD_VER" =~ ^[0-9]$ ]]; then
