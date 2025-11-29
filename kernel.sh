@@ -34,6 +34,8 @@ linux_logo() {
     ##       # @@#    ##     ##  ##     ##     ## ##     QQQQQQ#       #QQQQQQ
     ##      ## @@# #  ##     ##  ###   ###    ##   ##    QQQQQQQ#     #QQQQQQQ
   ############  ###  ####   ####   #### ### ##### ######   QQQQQ#######QQQQQ
+
+       Linux Version $(uname -r 2>/dev/null), Compiled $(uname -v 2>/dev/null | awk '{print $1,$2,$3}')
 "
 }
 
