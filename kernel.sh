@@ -37,6 +37,10 @@ linux_logo() {
 "
 }
 
+clear() {
+    [ -t 1 ] && tput clear 2>/dev/null || printf "\033[2J\033[H" || command clear
+}
+
 die() {
     echo >&2 "Error: $*"
     exit 1
@@ -109,5 +113,6 @@ xanmod_install() {
 }
 
 ## 主程序入口
+clear
 linux_logo
 xanmod_install
