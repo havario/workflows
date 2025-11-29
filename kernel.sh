@@ -6,6 +6,18 @@
 
 set -eE
 
+readonly SCRIPT_VERSION='v25.11.30'
+
+# 强制linux输出英文
+# https://www.gnu.org/software/gettext/manual/html_node/The-LANGUAGE-variable.html
+export LC_ALL=C
+
+# 设置PATH环境变量
+export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:$PATH
+
+# 环境变量用于在debian或ubuntu操作系统中设置非交互式 (noninteractive) 安装模式
+export DEBIAN_FRONTEND=noninteractive
+
 # https://github.com/deater/linux_logo
 linux_logo() {
     printf "\
@@ -25,7 +37,8 @@ linux_logo() {
 }
 
 die() {
-    echo >&2 "Error: $*"; exit 1
+    echo >&2 "Error: $*"
+    exit 1
 }
 
 _exists() {
