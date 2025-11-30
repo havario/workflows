@@ -62,13 +62,13 @@ is_have_cmd() {
     get_cmd_path "$1" >/dev/null 2>&1
 }
 
-check_root() {
+is_have_root() {
     if [ "$EUID" -ne 0 ] || [ "$(id -ru)" -ne 0 ]; then
         die "This script must be run as root!"
     fi
 }
 
-check_bash() {
+is_have_bash() {
     local BASH_VER
     BASH_VER="$(bash --version 2>&1 | head -n1 | awk -F ' ' '{for (i=1; i<=NF; i++) if ($i ~ /^[0-9]+\.[0-9]+\.[0-9]+/) {print $i; exit}}' | cut -d . -f1)"
 
@@ -83,7 +83,7 @@ check_bash() {
     fi
 }
 
-check_arch() {
+is_check_arch() {
     if [ -z "$OS_ARCH" ]; then
         case "$(uname -m 2>/dev/null)" in
             amd64 | x86_64) OS_ARCH="amd64" ;;
@@ -166,9 +166,9 @@ xanmod_install() {
 ## 主程序入口
 clear
 linux_logo
-check_root
-check_bash
-check_arch
+is_have_root
+is_have_bash
+is_check_arch
 load_os_info
 
 while true; do
@@ -178,6 +178,10 @@ while true; do
     -x | --debug)
         set -x
         shift
+    ;;
+    *)
+        echo "Unexpected option: $1"
+        show_usage
     ;;
 done
 
