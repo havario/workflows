@@ -67,5 +67,4 @@ curl() {
 }
 
 IPV4="$(curl -Ls -4 http://www.qualcomm.cn/cdn-cgi/trace | grep -i '^ip=' | cut -d'=' -f2 | grep .)"
-
-curl -Ls "https://rdap.arin.net/registry/ip/1.1.1.1" | grep -o '"country":"[^"]*"' | head -n 1 | cut -d'"' -f4
+curl -Ls "https://rdap.arin.net/registry/ip/$IPV4" | grep -o '"country":"[^"]*"' | head -n 1 | cut -d'"' -f4
