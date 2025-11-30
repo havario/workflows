@@ -62,6 +62,42 @@ is_have_cmd() {
     get_cmd_path "$1" >/dev/null 2>&1
 }
 
+check_root() {
+    if [ "$EUID" -ne 0 ] || [ "$(id -ru)" -ne 0 ]; then
+        die "This script must be run as root!"
+    fi
+}
+
+check_bash() {
+    local BASH_VER
+    BASH_VER="$(bash --version 2>&1 | head -n1 | awk -F ' ' '{for (i=1; i<=NF; i++) if ($i ~ /^[0-9]+\.[0-9]+\.[0-9]+/) {print $i; exit}}' | cut -d . -f1)"
+
+    if [ -z "$BASH_VERSION" ]; then
+        die "This script needs to be run with bash, not sh!"
+    fi
+    if [ -z "$BASH_VER" ] || ! [[ "$BASH_VER" =~ ^[0-9]+$ ]]; then
+        die "Failed to parse Bash version!"
+    fi
+    if [ "$BASH_VER" -lt 4 ]; then
+        die "Bash version is lower than 4.0!"
+    fi
+}
+
+check_arch() {
+    if [ -z "$OS_ARCH" ]; then
+        case "$(uname -m 2>/dev/null)" in
+            amd64 | x86_64) OS_ARCH="amd64" ;;
+            *) die "This architecture is not supported."
+        esac
+    fi
+
+    if [ "$(dpkg --print-architecture 2>/dev/null)" != "amd64" ]; then
+        die "This architecture is not supported."
+    fi
+
+    echo >&1 "Architecture: $OS_ARCH"
+}
+
 install_pkg() {
     for pkg in "$@"; do
         if is_have_cmd dnf; then
@@ -130,6 +166,9 @@ xanmod_install() {
 ## 主程序入口
 clear
 linux_logo
+check_root
+check_bash
+check_arch
 load_os_info
 
 while true; do
