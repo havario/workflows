@@ -8,7 +8,7 @@
 # https://github.com/bin456789/reinstall
 # https://github.com/mlocati/docker-php-extension-installer
 
-set -eEu
+set -eE
 
 # shellcheck disable=SC2034
 readonly SCRIPT_VERSION='v25.11.30'
