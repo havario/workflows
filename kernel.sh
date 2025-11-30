@@ -4,7 +4,7 @@
 # Description:
 # Copyright (c) 2025 honeok <i@honeok.com>
 
-set -eE
+set -eEu
 
 # shellcheck disable=SC2034
 readonly SCRIPT_VERSION='v25.11.30'
