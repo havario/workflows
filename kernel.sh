@@ -4,6 +4,10 @@
 # Description:
 # Copyright (c) 2025 honeok <i@honeok.com>
 
+# References:
+# https://github.com/bin456789/reinstall
+# https://github.com/mlocati/docker-php-extension-installer
+
 set -eEu
 
 # shellcheck disable=SC2034
