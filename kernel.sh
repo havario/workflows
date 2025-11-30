@@ -91,10 +91,6 @@ check_arch() {
         esac
     fi
 
-    if [ "$(dpkg --print-architecture 2>/dev/null)" != "amd64" ]; then
-        die "This architecture is not supported."
-    fi
-
     echo >&1 "Architecture: $OS_ARCH"
 }
 
