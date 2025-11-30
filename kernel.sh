@@ -149,20 +149,20 @@ curl() {
 # debian/ubuntu
 # https://xanmod.org
 xanmod_install() {
-    local XANMOD_VERSION XANMOD_KEYRING XANMOD_APT_LIST
+    local XANMOD_VERSION XANMOD_KEYRING XANMOD_APTLIST
 
     # https://gitlab.com/xanmod/linux
     XANMOD_VERSION="$(curl -L https://dl.xanmod.org/check_x86-64_psabi.sh | awk -f - 2>/dev/null | awk -F 'x86-64-v' '{v=$2+0; if(v==4)v=3; print v}')"
     XANMOD_KEYRING="/etc/apt/keyrings/xanmod-archive-keyring.gpg"
-    XANMOD_APT_LIST="/etc/apt/sources.list.d/xanmod-release.list"
+    XANMOD_APTLIST="/etc/apt/sources.list.d/xanmod-release.list"
 
     dpkg -s gnupg >/dev/null 2>&1 || install_pkg gnupg
     curl -L https://dl.xanmod.org/archive.key | gpg --dearmor -vo "$XANMOD_KEYRING"
-    echo "deb [signed-by=$XANMOD_KEYRING] http://deb.xanmod.org $VERSION_CODENAME main" | tee "$XANMOD_APT_LIST"
+    echo "deb [signed-by=$XANMOD_KEYRING] http://deb.xanmod.org $VERSION_CODENAME main" | tee "$XANMOD_APTLIST"
     if [[ -n "$XANMOD_VERSION" && "$XANMOD_VERSION" =~ ^[0-9]$ ]]; then
         install_pkg "linux-xanmod-x64v$XANMOD_VERSION"
     fi
-    rm -f "$XANMOD_APT_LIST" || true
+    rm -f "$XANMOD_APTLIST" || true
     update-grub
 }
 
