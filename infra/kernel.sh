@@ -203,6 +203,8 @@ while true; do
         ;;
         -x | --debug)
             set -x
+            # shellcheck disable=SC2034
+            DEBUG=1
             shift
         ;;
         --ci)
