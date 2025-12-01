@@ -14,7 +14,18 @@ jobs:
       fail-fast: true
       matrix:
         os:
-          - centos:7.9.2009
+          - almalinux:8
+          - almalinux:9
+          - almalinux:10
+          # - quay.io/centos/centos:centos7.9.2009
+          - quay.io/centos/centos:8
+          - quay.io/centos/centos:9
+          - quay.io/centos/centos:10
+          - rockylinux/rockylinux:8
+          - rockylinux/rockylinux:9
+          - rockylinux/rockylinux:10
+          - registry.redhat.io/quay/quay-rhel8
+          - registry.redhat.io/quay/quay-rhel9
     container:
       image: ${{ matrix.os }}
 
