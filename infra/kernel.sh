@@ -184,25 +184,29 @@ check_arch
 load_os_info
 
 while true; do
-    -h | --help)
-        show_usage
-    ;;
-    -x | --debug)
-        set -x
-        shift
-    ;;
-    --ci)
-        # curl: (22) The requested URL returned error: 403
-        GITHUB_CI=1
-    ;;
-    --)
-        shift
-        break
-    ;;
-    *)
-        echo "Unexpected option: $1"
-        show_usage
-    ;;
+    case "$1" in
+        -h|--help)
+            show_usage
+            shift
+        ;;
+        -x|--debug)
+            set -x
+            shift
+        ;;
+        --ci)
+            GITHUB_CI=1
+            shift
+        ;;
+        --)
+            shift
+            break
+        ;;
+        *)
+            echo "Unexpected option: $1"
+            show_usage
+            exit 1
+        ;;
+    esac
 done
 
 xanmod_install
