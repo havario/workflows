@@ -111,6 +111,7 @@ rhel_install() {
             rpm -q epel-release >/dev/null 2>&1 || install_pkg epel-release
             # 导入ELRepo GPG公钥
             # RHEL 10默认策略会拒绝旧算法key
+            # error: Certificate 309BC305BAADAE52:
             rpm --import https://www.elrepo.org/RPM-GPG-KEY-elrepo.org || true
             dnf install -y --nogpgcheck "https://www.elrepo.org/elrepo-release-$MAJOR_VER.el$MAJOR_VER.elrepo.noarch.rpm"
             dnf makecache
