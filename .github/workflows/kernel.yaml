@@ -1,5 +1,5 @@
 ---
-name: "Validate kernel.sh Across Multiple OS"
+name: "kernel.sh CI"
 
 on:
   push:
