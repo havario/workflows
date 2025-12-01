@@ -16,13 +16,13 @@ jobs:
       fail-fast: false
       matrix:
         os:
-          - ubuntu:jammy
-          - ubuntu:noble
-          - ubuntu:plucky
+          - ubuntu:jammy # 22.04
+          - ubuntu:noble # 24.04
+          - ubuntu:plucky # 25.04
           - ubuntu:rolling
-          - debian:bullseye
-          - debian:bookworm
-          - debian:trixie
+          - debian:bullseye # 11
+          - debian:bookworm # 12
+          - debian:trixie # 13
           - debian:sid
     container:
       image: ${{ matrix.os }}
