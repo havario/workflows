@@ -123,7 +123,9 @@ load_os_info() {
 }
 
 curl() {
-    local EXIT_CODE
+    local EXIT_CODE UA_BROWSER
+
+    UA_BROWSER="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
 
     is_have_cmd curl || install_pkg curl
 
@@ -133,7 +135,7 @@ curl() {
     # CentOS7 无法使用 --retry-connrefused 和 --retry-all-errors 因此手动 retry
 
     for ((i=1; i<=5; i++)); do
-        if ! command curl --connect-timeout 10 --fail --insecure "$@"; then
+        if ! command curl --connect-timeout 10 --fail --insecure --user-agent "$UA_BROWSER" "$@"; then
             EXIT_CODE=$?
             # 403 404 错误或达到重试次数
             if [ "$EXIT_CODE" -eq 22 ] || [ "$i" -eq 5 ]; then
