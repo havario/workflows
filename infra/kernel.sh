@@ -98,6 +98,18 @@ check_arch() {
     echo >&1 "Architecture: $OS_ARCH"
 }
 
+check_vir() {
+    if is_have_cmd systemd-detect-virt; then
+        if systemd-detect-virt -qc; then
+            die "Not supported os in container."
+        fi
+    else
+        if [ -d /proc/vz ] || grep -q container=lxc /proc/1/environ; then
+            die "Not supported os in container."
+        fi
+    fi
+}
+
 install_pkg() {
     for pkg in "$@"; do
         if is_have_cmd dnf; then
@@ -178,9 +190,10 @@ xanmod_install() {
 ## 主程序入口
 clear
 linux_logo
+
 check_root
 check_bash
-check_arch
+
 load_os_info
 
 LONG_OPTS=
@@ -203,12 +216,14 @@ while true; do
         ;;
         -x | --debug)
             set -x
-            # shellcheck disable=SC2034
-            DEBUG=1
             shift
         ;;
         --ci)
             GITHUB_CI=1
+            shift
+        ;;
+        --force-cn)
+            FORCE_CN=1
             shift
         ;;
         --)
@@ -222,5 +237,11 @@ while true; do
         ;;
     esac
 done
+
+# 检查架构 仅支持amd64
+check_arch
+
+# 不支持容器虚拟化
+check_vir
 
 xanmod_install
