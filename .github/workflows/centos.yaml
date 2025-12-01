@@ -1,0 +1,30 @@
+---
+name: "centos"
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
+      matrix:
+        os:
+          - centos:7.9.2009
+    container:
+      image: ${{ matrix.os }}
+
+    steps:
+      - name: "Checkout repository"
+        uses: actions/checkout@v6
+
+      - name: "Prepare and run kernel.sh"
+        working-directory: ${{ github.workspace }}/infra
+        run: |
+          bash kernel-ci-extensions.sh
+          GITHUB_CI=1
+          bash -x centos.sh
