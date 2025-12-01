@@ -20,7 +20,7 @@ jobs:
 
     steps:
       - name: "Checkout repository"
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
       - name: "Prepare and run kernel.sh"
         working-directory: ${{ github.workspace }}/infra
