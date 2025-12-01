@@ -19,9 +19,6 @@ jobs:
           - almalinux:8
           - almalinux:9
           - almalinux:10
-          - fedora:42
-          - fedora:43
-          - fedora:44
           # - quay.io/centos/centos:centos7.9.2009
           - quay.io/centos/centos:9
           - quay.io/centos/centos:10
