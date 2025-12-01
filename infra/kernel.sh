@@ -25,7 +25,7 @@ export DEBIAN_FRONTEND=noninteractive
 
 # https://github.com/deater/linux_logo
 linux_logo() {
-    printf "\
+    printf "%b" "\
                                                                  #####
                                                                 #######
                    @                                            ##O#O##
@@ -183,6 +183,7 @@ check_bash
 check_arch
 load_os_info
 
+set -- "$@"
 while true; do
     case "$1" in
         # -h|--help)
