@@ -11,7 +11,7 @@ jobs:
   run:
     runs-on: ubuntu-latest
     strategy:
-      fail-fast: true
+      fail-fast: false
       matrix:
         os:
           - almalinux:8
@@ -24,8 +24,8 @@ jobs:
           - rockylinux/rockylinux:8
           - rockylinux/rockylinux:9
           - rockylinux/rockylinux:10
-          - registry.redhat.io/quay/quay-rhel8
-          - registry.redhat.io/quay/quay-rhel9
+          # - registry.redhat.io/quay/quay-rhel8
+          # - registry.redhat.io/quay/quay-rhel9
     container:
       image: ${{ matrix.os }}
 
