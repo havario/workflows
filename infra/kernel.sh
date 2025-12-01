@@ -184,8 +184,7 @@ check_arch
 load_os_info
 
 LONG_OPTS=
-for o in
-    ci \
+for o in ci \
     debug \
     help; do
     [ -n "$LONG_OPTS" ] && LONG_OPTS+=","
