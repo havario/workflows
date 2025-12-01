@@ -29,6 +29,11 @@ jobs:
       - name: "Checkout repository"
         uses: actions/checkout@v6
 
+      - name: "Install Dependencies"
+        run: |
+          apt-get update
+          apt-get install -y curl bash sudo
+
       - name: "Run kernel.sh"
         working-directory: ${{ github.workspace }}/infra
         run: sudo bash kernel.sh --debug --ci
