@@ -18,10 +18,12 @@ jobs:
         os:
           - ubuntu:22.04
           - ubuntu:24.04
-          - ubuntu:devel
+          - ubuntu:25.10
+          - ubuntu:26.04
           - debian:11
           - debian:12
-          - debian:trixie
+          - debian:13
+          - debian:unstable
     container:
       image: ${{ matrix.os }}
 
