@@ -14,7 +14,7 @@ _exists() {
 install_pkg() {
     for pkg in "$@"; do
         if _exists dnf; then
-            dnf install -y "$pkg"
+            dnf install -y --allowerasing "$pkg"
         elif _exists yum; then
             yum install -y "$pkg"
         elif _exists apt-get; then
