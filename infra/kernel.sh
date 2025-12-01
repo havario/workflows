@@ -158,6 +158,18 @@ curl() {
     done
 }
 
+is_china() {
+    [ "$FORCE_CN" = 1 ] && return
+
+    if [ -z "$COUNTRY" ]; then
+        if ! COUNTRY="$(curl -L http://www.qualcomm.cn/cdn-cgi/trace | grep '^loc=' | cut -d= -f2 | grep .)"; then
+            die "Can not get location."
+        fi
+        echo 2>&1 "Location: $COUNTRY"
+    fi
+    [ "$COUNTRY" = CN ]
+}
+
 # debian/ubuntu
 # https://xanmod.org
 xanmod_install() {
@@ -223,6 +235,7 @@ while true; do
             shift
         ;;
         --force-cn)
+            # 仅测试
             FORCE_CN=1
             shift
         ;;
