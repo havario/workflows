@@ -19,5 +19,6 @@ jobs:
         uses: actions/checkout@v6
 
       - name: "Main program running"
+        working-directory: ${{ github.workspace }}/infra
         run: |
           sudo bash -x kernel.sh
