@@ -21,4 +21,4 @@ jobs:
       - name: "Main program running"
         working-directory: ${{ github.workspace }}/infra
         run: |
-          sudo bash -x kernel.sh
+          sudo bash kernel.sh --debug --ci
