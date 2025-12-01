@@ -130,3 +130,4 @@ rhel_install() {
 . /etc/os-release
 os_version
 rhel_install
+echo "success"
