@@ -1,5 +1,5 @@
 ---
-name: "kernel script CI"
+name: "Validate Kernel Script"
 
 on:
   push:
