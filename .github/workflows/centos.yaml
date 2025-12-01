@@ -26,8 +26,9 @@ jobs:
           - rockylinux/rockylinux:8
           - rockylinux/rockylinux:9
           - rockylinux/rockylinux:10
-          # - registry.redhat.io/quay/quay-rhel8
-          # - registry.redhat.io/quay/quay-rhel9
+          - registry.access.redhat.com/ubi8/ubi
+          - registry.access.redhat.com/ubi9/ubi
+          - registry.access.redhat.com/ubi10/ubi
     container:
       image: ${{ matrix.os }}
 
