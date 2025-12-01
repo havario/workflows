@@ -32,7 +32,7 @@ jobs:
       - name: "Install Dependencies"
         run: |
           apt-get update
-          DEBIAN_FRONTEND=noninteractive apt-get install -y bash curl grub2-common
+          DEBIAN_FRONTEND=noninteractive apt-get install -y bash curl
 
       - name: "Run kernel.sh"
         working-directory: ${{ github.workspace }}/infra
