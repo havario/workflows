@@ -1,5 +1,5 @@
 ---
-name: "kernel.sh CI"
+name: "kernel script CI"
 
 on:
   push:
