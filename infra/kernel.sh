@@ -172,7 +172,7 @@ xanmod_install() {
         install_pkg "linux-xanmod-x64v$XANMOD_VERSION"
     fi
     rm -f "$XANMOD_APTLIST" || true
-    [ "$GITHUB_CI" = "1" ] || update-grub
+    [ "$GITHUB_CI" = 1 ] || update-grub
 }
 
 ## 主程序入口
