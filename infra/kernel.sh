@@ -185,10 +185,10 @@ load_os_info
 
 while true; do
     case "$1" in
-        -h|--help)
-            show_usage
-            shift
-        ;;
+        # -h|--help)
+        #     show_usage
+        #     shift
+        # ;;
         -x|--debug)
             set -x
             shift
