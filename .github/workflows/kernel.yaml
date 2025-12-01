@@ -18,7 +18,9 @@ jobs:
       matrix:
         os:
           - ubuntu-latest
-          - debian-12
+          - bullseye
+          - bookworm
+          - trixie
 
     steps:
       - name: "Checkout repository"
