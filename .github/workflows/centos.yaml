@@ -6,6 +6,7 @@ on:
     branches:
       - master
     paths:
+      - ".github/workflows/centos.yaml"
       - "infra/centos.sh"
   workflow_dispatch:
 
