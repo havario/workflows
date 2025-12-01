@@ -183,14 +183,26 @@ check_bash
 check_arch
 load_os_info
 
-set -- "$@"
+LONG_OPTS=
+for o in
+    ci \
+    debug \
+    help; do
+    [ -n "$LONG_OPTS" ] && LONG_OPTS+=","
+    LONG_OPTS+=$o
+done
+
+# 整理参数
+ARGS=$(getopt -n "$0" -o "h,x" --long "$LONG_OPTS" -- "$@") || die "Parameter parsing failed."
+
+eval set -- "$ARGS"
 while true; do
     case "$1" in
-        # -h|--help)
-        #     show_usage
-        #     shift
-        # ;;
-        -x|--debug)
+        -h | --help)
+            show_usage
+            shift
+        ;;
+        -x | --debug)
             set -x
             shift
         ;;
@@ -204,7 +216,7 @@ while true; do
         ;;
         *)
             echo "Unexpected option: $1"
-            # show_usage
+            show_usage
             exit 1
         ;;
     esac
