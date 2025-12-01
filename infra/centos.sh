@@ -110,6 +110,7 @@ rhel_install() {
         8 | 9 | 10)
             rpm -q epel-release >/dev/null 2>&1 || install_pkg epel-release
             rpm --import https://www.elrepo.org/RPM-GPG-KEY-elrepo.org # 导入ELRepo GPG公钥
+            install_pkg "https://www.elrepo.org/elrepo-release-$MAJOR_VER.el$MAJOR_VER.elrepo.noarch.rpm"
             dnf makecache
             if is_china; then
                 sed -i 's/mirrorlist=/#mirrorlist=/g' /etc/yum.repos.d/elrepo.repo
