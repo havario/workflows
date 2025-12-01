@@ -149,9 +149,7 @@ curl() {
 # debian/ubuntu
 # https://xanmod.org
 xanmod_install() {
-    local XANMOD_URL XANMOD_CHECK_SCRIPT XANMOD_KEY KEYRING_DIR XANMOD_VERSION XANMOD_KEYRING XANMOD_APTLIST
-
-    KEYRING_DIR="/etc/apt/keyrings"
+    local XANMOD_URL XANMOD_CHECK_SCRIPT XANMOD_KEY XANMOD_VERSION XANMOD_KEYRING XANMOD_APTLIST
 
     if [ "$GITHUB_CI" = 1 ]; then
         XANMOD_CHECK_SCRIPT="https://github.com/yumaoss/My_tools/raw/main/check_x86-64_psabi.sh"
@@ -162,12 +160,9 @@ xanmod_install() {
         XANMOD_KEY="https://$XANMOD_URL/archive.key"
     fi
 
-    # debian11: gpg: can't create '/etc/apt/keyrings/xanmod-archive-keyring.gpg': No such file or directory
-    [ -d "$KEYRING_DIR" ] || mkdir -p "$KEYRING_DIR" >/dev/null 2>&1
-
     # https://gitlab.com/xanmod/linux
     XANMOD_VERSION="$(curl -L "$XANMOD_CHECK_SCRIPT" | awk -f - 2>/dev/null | awk -F 'x86-64-v' '{v=$2+0; if(v==4)v=3; print v}')"
-    XANMOD_KEYRING="$KEYRING_DIR/xanmod-archive-keyring.gpg"
+    XANMOD_KEYRING="/etc/apt/keyrings/xanmod-archive-keyring.gpg"
     XANMOD_APTLIST="/etc/apt/sources.list.d/xanmod-release.list"
 
     dpkg -s gnupg >/dev/null 2>&1 || install_pkg gnupg

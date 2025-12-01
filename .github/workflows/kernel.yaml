@@ -20,7 +20,6 @@ jobs:
           - ubuntu:noble # 24.04
           - ubuntu:plucky # 25.04
           - ubuntu:rolling
-          - debian:bullseye # 11
           - debian:bookworm # 12
           - debian:trixie # 13
           - debian:sid
