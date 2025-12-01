@@ -204,7 +204,7 @@ while true; do
         ;;
         *)
             echo "Unexpected option: $1"
-            show_usage
+            # show_usage
             exit 1
         ;;
     esac
