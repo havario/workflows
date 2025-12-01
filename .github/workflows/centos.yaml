@@ -18,9 +18,9 @@ jobs:
           - almalinux:9
           - almalinux:10
           # - quay.io/centos/centos:centos7.9.2009
-          - quay.io/centos/centos:8
-          - quay.io/centos/centos:9
-          - quay.io/centos/centos:10
+          - quay.io/centos/centos:stream8
+          - quay.io/centos/centos:stream9
+          - quay.io/centos/centos:stream10
           - rockylinux/rockylinux:8
           - rockylinux/rockylinux:9
           - rockylinux/rockylinux:10
