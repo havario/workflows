@@ -174,18 +174,18 @@ check_bash
 check_arch
 load_os_info
 
-while true; do
-    -h | --help)
-        show_usage
-    ;;
-    -x | --debug)
-        set -x
-        shift
-    ;;
-    *)
-        echo "Unexpected option: $1"
-        show_usage
-    ;;
-done
+# while true; do
+#     -h | --help)
+#         show_usage
+#     ;;
+#     -x | --debug)
+#         set -x
+#         shift
+#     ;;
+#     *)
+#         echo "Unexpected option: $1"
+#         show_usage
+#     ;;
+# done
 
 xanmod_install

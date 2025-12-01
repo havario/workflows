@@ -1,0 +1,23 @@
+---
+name: "kernel.sh"
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - "infra/kernel.*"
+  workflow_dispatch:
+
+jobs:
+  run:
+    name: "Main program running"
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: "Checkout repository"
+        uses: actions/checkout@v6
+
+      - name: "Main program running"
+        run: |
+          sudo bash -x kernel.sh
