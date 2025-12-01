@@ -6,10 +6,49 @@
 
 set -eE
 
+die() {
+    local EXIT_CODE
+
+    EXIT_CODE="${2:-1}"
+
+    printf >&2 'Error: %s\n' "$1"
+    exit "$EXIT_CODE"
+}
+
+get_cmd_path() {
+    # -f: 忽略shell内置命令和函数, 只考虑外部命令
+    # -p: 只输出外部命令的完整路径
+    type -f -p "$1"
+}
+
+is_have_cmd() {
+    get_cmd_path "$1" >/dev/null 2>&1
+}
+
+install_pkg() {
+    for pkg in "$@"; do
+        if is_have_cmd dnf; then
+            dnf install -y "$pkg"
+        elif is_have_cmd yum; then
+            yum install -y "$pkg"
+        elif is_have_cmd apt-get; then
+            apt-get update
+            apt-get install -y -q "$pkg"
+        fi
+    done
+}
+
+# 提取主版本号
+os_version() {
+    local MAIN_VER
+    MAIN_VER="$(grep -oE "[0-9.]+" <<< "$VERSION_ID")"
+    MAJOR_VER="${MAIN_VER%%.*}"
+}
+
 curl() {
     local EXIT_CODE
 
-    # is_have_cmd curl || install_pkg curl
+    is_have_cmd curl || install_pkg curl
 
     # --fail             4xx/5xx返回非0
     # --insecure         兼容旧平台证书问题
@@ -30,10 +69,21 @@ curl() {
     done
 }
 
+is_china() {
+    if [ -z "$COUNTRY" ]; then
+        if ! COUNTRY="$(curl -L http://www.qualcomm.cn/cdn-cgi/trace | grep '^loc=' | cut -d= -f2 | grep .)"; then
+            die "Can not get location."
+        fi
+        echo 2>&1 "Location: $COUNTRY"
+    fi
+    [ "$COUNTRY" = CN ]
+}
+
 # http://developer.aliyun.com/mirror/elrepo?spm=a2c6h.13651102.0.0.b9361b11Q0alNh
 # https://www.rockylinux.cn/notes/rocky-linux-9-nei-he-sheng-ji-zhi-6.html
 rhel_install() {
     local ELREPO_URL
+    local KERNEL_CHANNEL="$1"
 
     # 设置默认值为最新主线内核
     # lt: 长期支持的稳定内核
@@ -57,10 +107,22 @@ rhel_install() {
             fi
             rm -f "kernel-$KERNEL_CHANNEL"* || true
         ;;
+        8 | 9 | 10)
+            rpm -q epel-release >/dev/null 2>&1 || install_pkg epel-release
+            rpm --import https://www.elrepo.org/RPM-GPG-KEY-elrepo.org # 导入ELRepo GPG公钥
+            dnf makecache
+            if is_china; then
+                sed -i 's/mirrorlist=/#mirrorlist=/g' /etc/yum.repos.d/elrepo.repo
+                sed -i "s#elrepo.org/linux#mirror.nju.edu.cn/elrepo#g" /etc/yum.repos.d/elrepo.repo
+            fi
+            dnf -y install --nogpgcheck --enablerepo=elrepo-kernel "kernel-$KERNEL_CHANNEL" "kernel-$KERNEL_CHANNEL-devel"
+        ;;
         *)
-            :
+            die "Unsupported system version."
         ;;
     esac
 }
 
+. /etc/os-release
+os_version
 rhel_install
