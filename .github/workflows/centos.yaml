@@ -41,4 +41,5 @@ jobs:
         run: |
           bash kernel-deps.sh
           GITHUB_CI=1
+          KERNEL_CHANNEL=lt
           bash -x centos.sh
