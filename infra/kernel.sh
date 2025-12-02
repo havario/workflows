@@ -134,6 +134,13 @@ load_os_info() {
     . /etc/os-release
 }
 
+# 提取主版本号
+load_os_ver() {
+    local MAIN_VER
+    MAIN_VER="$(grep -oE "[0-9.]+" <<< "$VERSION_ID")"
+    MAJOR_VER="${MAIN_VER%%.*}"
+}
+
 curl() {
     local EXIT_CODE
 
@@ -207,6 +214,7 @@ check_root
 check_bash
 
 load_os_info
+load_os_ver
 
 LONG_OPTS=
 for o in ci \
@@ -253,6 +261,9 @@ done
 
 # 检查架构 仅支持amd64
 check_arch
+
+# 检查目标系统名
+# verify_os_name "$@"
 
 # 不支持容器虚拟化
 check_vir
