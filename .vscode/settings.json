@@ -9,6 +9,10 @@
   "editor.useEditorConfig": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
 
+  "[json]": {
+    "editor.defaultFormatter": "vscode.json-language-features"
+  },
+
   // git setting
   "git.enableSmartCommit": true,
   "git.alwaysSignOff": true,
