@@ -26,16 +26,21 @@ is_have_cmd() {
 }
 
 install_pkg() {
-    for pkg in "$@"; do
-        if is_have_cmd dnf; then
-            dnf install -y "$pkg"
-        elif is_have_cmd yum; then
-            yum install -y "$pkg"
-        elif is_have_cmd apt-get; then
-            apt-get update
-            apt-get install -y -q "$pkg"
-        fi
-    done
+    local PKG_MGR NEED_UP
+
+    if is_have_cmd dnf; then
+        PKG_MGR="dnf"
+    elif is_have_cmd yum; then
+        PKG_MGR="yum"
+    elif is_have_cmd apt-get; then
+        PKG_MGR="apt-get"
+        NEED_UP="true"
+    else
+        die "No supported package manager found."
+    fi
+
+    [ "$NEED_UP" = "true" ] && eval "$PKG_MGR" update
+    eval "$PKG_MGR" install -y "$*"
 }
 
 # 提取主版本号
@@ -113,13 +118,13 @@ rhel_install() {
             # RHEL 10默认策略会拒绝旧算法key
             # error: Certificate 309BC305BAADAE52:
             rpm --import https://www.elrepo.org/RPM-GPG-KEY-elrepo.org || true
-            dnf install -y --nogpgcheck "https://www.elrepo.org/elrepo-release-$MAJOR_VER.el$MAJOR_VER.elrepo.noarch.rpm"
+            install_pkg --nogpgcheck "https://www.elrepo.org/elrepo-release-$MAJOR_VER.el$MAJOR_VER.elrepo.noarch.rpm"
             dnf makecache
             if is_china; then
                 sed -i 's/mirrorlist=/#mirrorlist=/g' /etc/yum.repos.d/elrepo.repo
                 sed -i "s#elrepo.org/linux#mirror.nju.edu.cn/elrepo#g" /etc/yum.repos.d/elrepo.repo
             fi
-            dnf install -y --nogpgcheck --enablerepo=elrepo-kernel "kernel-$KERNEL_CHANNEL" "kernel-$KERNEL_CHANNEL-devel"
+            install_pkg --nogpgcheck --enablerepo=elrepo-kernel "kernel-$KERNEL_CHANNEL" "kernel-$KERNEL_CHANNEL-devel"
         ;;
         *)
             die "Unsupported system version."
