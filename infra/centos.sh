@@ -39,8 +39,8 @@ install_pkg() {
         die "No supported package manager found."
     fi
 
-    [ "$NEED_UP" = "true" ] && eval "$PKG_MGR" update
-    eval "$PKG_MGR" install -y "$*"
+    [ "$NEED_UP" ] && "$PKG_MGR" update
+    "$PKG_MGR" install -y "$@"
 }
 
 # 提取主版本号
