@@ -10,7 +10,31 @@ import (
 	"log"
 	"net/http"
 	"net/url"
+	"runtime"
 )
+
+var (
+	VersionX   byte   = 1
+	VersionY   byte   = 0
+	VersionZ   byte   = 0
+	Codename          = "Geolocation, Fast and Lightweight."
+	Intro             = "A lightweight API IP lookup service."
+)
+
+func Version() string {
+	return fmt.Sprintf("%d.%d.%d", VersionX, VersionY, VersionZ)
+}
+
+func PrintBanner() {
+	log.Printf("Geolocation %s (%s) (%s %s/%s)",
+		Version(),
+		Codename,
+		runtime.Version(),
+		runtime.GOOS,
+		runtime.GOARCH,
+	)
+	log.Println(Intro)
+}
 
 type ApiResponse struct {
 	Success bool             `json:"success"`
@@ -162,8 +186,10 @@ func rootRequestHandler(responseWriter http.ResponseWriter, request *http.Reques
 }
 
 func main() {
+	PrintBanner()
+
 	http.HandleFunc("/", rootRequestHandler)
 
-	log.Println("Geolocation backend server is running on :8080")
+	// Start HTTP server
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
