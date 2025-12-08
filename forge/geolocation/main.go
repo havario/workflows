@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: Apache-2.0
+// Copyright (c) 2025 honeok <i@honeok.com>
+
 package main
 
 import (
@@ -40,6 +43,7 @@ type IpSbGeoData struct {
 	Longitude       float64 `json:"longitude"`
 }
 
+// FetchJsonFromApi fetches JSON from API and unmarshals it
 func fetchJsonFromApi(apiUrl string, target interface{}) error {
 	httpResponse, err := http.Get(apiUrl)
 	if err != nil {
@@ -56,6 +60,7 @@ func fetchJsonFromApi(apiUrl string, target interface{}) error {
 }
 
 func rootRequestHandler(responseWriter http.ResponseWriter, request *http.Request) {
+	// Serve frontend page on GET
 	if request.Method != "POST" {
 		http.ServeFile(responseWriter, request, "index.html")
 		return
@@ -63,12 +68,12 @@ func rootRequestHandler(responseWriter http.ResponseWriter, request *http.Reques
 
 	request.ParseForm()
 	queriedIP := request.FormValue("ip")
-
 	if queriedIP == "" {
 		json.NewEncoder(responseWriter).Encode(ApiResponse{Success: false})
 		return
 	}
 
+	// Meituan IP location API
 	meituanApiUrl := "https://apimobile.meituan.com/locate/v2/ip/loc?rgeo=true&ip=" + url.QueryEscape(queriedIP)
 
 	var meituanRawResponse map[string]interface{}
@@ -79,10 +84,10 @@ func rootRequestHandler(responseWriter http.ResponseWriter, request *http.Reques
 
 	meituanData := meituanRawResponse["data"].(map[string]interface{})
 	meituanReverseGeo := meituanData["rgeo"].(map[string]interface{})
-
 	latitude := meituanData["lat"].(float64)
 	longitude := meituanData["lng"].(float64)
 
+	// Meituan city detail API
 	meituanCityApiUrl := fmt.Sprintf(
 		"https://apimobile.meituan.com/group/v1/city/latlng/%f,%f?tag=0",
 		latitude, longitude,
@@ -110,30 +115,46 @@ func rootRequestHandler(responseWriter http.ResponseWriter, request *http.Reques
 		Detail:   cityDetail,
 	}
 
+	// IP.SB GeoIP API
 	ipSbApiUrl := "https://api.ip.sb/geoip/" + url.QueryEscape(queriedIP)
 
 	var ipSbRawResponse map[string]interface{}
-	ipSbData := &IpSbGeoData{}
+	ipSbGeoData := &IpSbGeoData{}
 
 	if fetchJsonFromApi(ipSbApiUrl, &ipSbRawResponse) == nil {
-		ipSbData.ISP, _ = ipSbRawResponse["isp"].(string)
-		ipSbData.Organization, _ = ipSbRawResponse["organization"].(string)
-		ipSbData.ASN, _ = ipSbRawResponse["asn"].(string)
-		ipSbData.ASNOrganization, _ = ipSbRawResponse["asn_organization"].(string)
-		ipSbData.Country, _ = ipSbRawResponse["country"].(string)
-		ipSbData.CountryCode, _ = ipSbRawResponse["country_code"].(string)
-		ipSbData.Region, _ = ipSbRawResponse["region"].(string)
-		ipSbData.RegionCode, _ = ipSbRawResponse["region_code"].(string)
-		ipSbData.City, _ = ipSbRawResponse["city"].(string)
-		ipSbData.Latitude, _ = ipSbRawResponse["latitude"].(float64)
-		ipSbData.Longitude, _ = ipSbRawResponse["longitude"].(float64)
+		ipSbGeoData.ISP, _ = ipSbRawResponse["isp"].(string)
+		ipSbGeoData.Organization, _ = ipSbRawResponse["organization"].(string)
+
+		// ASN may be string or number
+		rawASN := ipSbRawResponse["asn"]
+		switch value := rawASN.(type) {
+		case string:
+			ipSbGeoData.ASN = value
+		case float64:
+			ipSbGeoData.ASN = fmt.Sprintf("%.0f", value)
+		}
+
+		ipSbGeoData.ASNOrganization, _ = ipSbRawResponse["asn_organization"].(string)
+		ipSbGeoData.Country, _ = ipSbRawResponse["country"].(string)
+		ipSbGeoData.CountryCode, _ = ipSbRawResponse["country_code"].(string)
+		ipSbGeoData.Region, _ = ipSbRawResponse["region"].(string)
+		ipSbGeoData.RegionCode, _ = ipSbRawResponse["region_code"].(string)
+		ipSbGeoData.City, _ = ipSbRawResponse["city"].(string)
+
+		if lat, ok := ipSbRawResponse["latitude"].(float64); ok {
+			ipSbGeoData.Latitude = lat
+		}
+		if lng, ok := ipSbRawResponse["longitude"].(float64); ok {
+			ipSbGeoData.Longitude = lng
+		}
 	}
 
+	// Final JSON output
 	finalResponse := ApiResponse{
 		Success: true,
 		IP:      queriedIP,
 		MtGeo:   meituanGeoData,
-		IPSB:    ipSbData,
+		IPSB:    ipSbGeoData,
 	}
 
 	responseWriter.Header().Set("Content-Type", "application/json")
@@ -143,6 +164,6 @@ func rootRequestHandler(responseWriter http.ResponseWriter, request *http.Reques
 func main() {
 	http.HandleFunc("/", rootRequestHandler)
 
-	log.Println("Go backend server is running on :8080")
+	log.Println("Geolocation backend server is running on :8080")
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
