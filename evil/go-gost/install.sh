@@ -4,8 +4,8 @@ set -eEu
 
 # 各变量默认值
 TEMP_DIR="$(mktemp -d)"
-# . <(curl -Ls https://github.com/honeok/cross/raw/master/config/xray/up.sh)
-# . <(curl -Ls https://github.com/honeok/cross/raw/master/config/xray/up.sh)
+. <(curl -Ls https://github.com/workstudybuyhouse/workflows/raw/master/evil/go-gost/init.sh)
+# . <(curl -Ls https://github.com/honeok/cross/raw/master/evil/go-gost/init.sh)
 
 trap 'rm -rf "${TEMP_DIR:?}" >/dev/null 2>&1' SIGINT SIGTERM EXIT
 
