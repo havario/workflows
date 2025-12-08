@@ -11,6 +11,7 @@ ENV CGO_ENABLED=0
 ENV GOOS=$TARGETOS
 ENV GOARCH=$TARGETARCH
 RUN set -ex \
+    && apk add --update --no-cache tzdata \
     && go build -v -trimpath -ldflags="\
         -s -w -buildid= \
         -extldflags '-static -fpic' \
@@ -18,8 +19,11 @@ RUN set -ex \
 
 FROM --platform=$TARGETPLATFORM gcr.io/distroless/static
 LABEL maintainer="honeok <i@honeok.com>"
+ARG TZ=Asia/Shanghai
 WORKDIR /app
+COPY --from=builder /usr/share/zoneinfo /usr/share/zoneinfo
 COPY --from=builder /go/bin/geolocation .
 COPY index.html .
+ENV TZ=$TZ
 EXPOSE 8080
 ENTRYPOINT [ "./geolocation" ]
