@@ -7,6 +7,7 @@
 # https://github.com/Kook-9527/Plugin-backup/blob/main/ClashMeta.yaml
 # https://github.com/qichiyuhub/rule/blob/main/config/mihomo/config.yaml
 # https://github.com/yyhhyyyyyy/selfproxy/blob/main/Mihomo/mihomo_multi.yaml
+# https://www.nodeseek.com/post-290031-1
 
 ## 全局配置
 port: 7890 # HTTP(S)代理服务器端口
