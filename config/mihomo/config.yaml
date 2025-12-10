@@ -214,7 +214,9 @@ rules:
   - RULE-SET,banad_list,REJECT
   - RULE-SET,banprogramad_list,REJECT
   - RULE-SET,baneasylistchina_list,REJECT
-  - RULE-SET,meituan_list,DIRECT
+  - RULE-SET,reject_domain,REJECT
+
+  - RULE-SET,direct_domain,DIRECT
 
   # 应用分流
   - RULE-SET,apple_domain,🍎 Apple
@@ -260,12 +262,12 @@ rule-providers:
   fakeipfilter_domain: { <<: *domain, url: "https://raw.githubusercontent.com/wwqgtxx/clash-rules/release/fakeip-filter.mrs" }
   private_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/private.mrs" }
 
-  # 去广告
   banad_list: { <<: *class, url: "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/BanAD.list" }
   banprogramad_list: { <<: *class, url: "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/BanProgramAD.list" }
   baneasylistchina_list: { <<: *class, url: "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/BanEasyListChina.list" }
 
-  meituan_list: { <<: *class, url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Shadowrocket/MeiTuan/MeiTuan.list" }
+  reject_domain: { <<: *domain, url: "https://raw.githubusercontent.com/wwqgtxx/clash-rules/release/reject.mrs" }
+  direct_domain: { <<: *domain, url: "https://raw.githubusercontent.com/wwqgtxx/clash-rules/release/direct.mrs" }
 
   gfw_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/gfw.mrs" }
   ai_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-ai-!cn.mrs" }
