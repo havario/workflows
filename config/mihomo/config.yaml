@@ -248,11 +248,11 @@ rules:
   - RULE-SET,google_ip,🍀 Google
   - RULE-SET,netflix_ip,🎥 NETFLIX
   - RULE-SET,telegram_ip,📲 Telegram
-  - RULE-SET,geolocation-!cn,🚀 默认代理
 
   - RULE-SET,cn_domain,🎯 全球直连
   - RULE-SET,cn_ip,🎯 全球直连
   - RULE-SET,direct_domain,DIRECT
+  - RULE-SET,geolocation-!cn,🚀 默认代理
 
   # 兜底规则
   - MATCH,🐟 漏网之鱼
