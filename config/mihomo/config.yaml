@@ -181,21 +181,20 @@ proxy-groups:
   - { name: 🔮 负载均衡, type: load-balance, include-all-providers: true, url: "http://connectivitycheck.gstatic.com/generate_204", interval: 300, strategy: round-robin }
 
   #------------------------场景分组------------------------#
-  - { name: 📹 YouTube, <<: *main }
-  - { name: 🍀 Google, <<: *main }
   - { name: 🤖 AI, <<: *specific }
-  - { name: 📺 BiliBili, <<: *island }
+  - { name: 🍀 Google, <<: *main }
   - { name: 👨‍💻 GitHub, <<: *main }
   - { name: 🦊 GitLab, <<: *main }
   - { name: 🐳 Docker, <<: *main }
-  - { name: 🐬 OneDrive, <<: *main }
   - { name: 🪟 Microsoft, <<: *main }
+  - { name: 🐬 OneDrive, <<: *main }
+  - { name: 📲 Telegram, <<: *main }
+  - { name: 📺 BiliBili, <<: *island }
+  - { name: 🎥 NETFLIX, <<: *specific }
   - { name: 🎧 Spotify, <<: *island }
   - { name: 🎵 TikTok, <<: *specific }
-  - { name: 📲 Telegram, <<: *main }
-  - { name: 🎥 NETFLIX, <<: *specific }
-  - { name: ✈️ Speedtest, <<: *main }
   - { name: 💶 PayPal, <<: *main }
+  - { name: ✈️ Speedtest, <<: *main }
   - { name: 🍎 Apple, <<: *main }
 
   #------------------------地区分组------------------------#
