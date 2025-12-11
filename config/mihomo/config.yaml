@@ -114,7 +114,7 @@ dns:
 
   # 配置查询域名使用的DNS服务器
   nameserver-policy:
-    "rule-set:private_ip,private_domain,reject_domain,cn_domain,cn_ip,direct_domain":
+    "rule-set:private_domain,cn_domain,direct_domain":
       - https://doh.pub/dns-query
       - https://dns.alidns.com/dns-query
     "geosite:category-ads-all": rcode://success # 广告域名在DNS层直接返回"成功但无记录"
