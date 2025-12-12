@@ -18,7 +18,7 @@ import (
 	"github.com/jinzhu/now"
 )
 
-//go:embed index.html favicon.ico
+//go:embed static
 var staticFiles embed.FS
 
 var (
@@ -115,7 +115,7 @@ func healthHandler(responseWriter http.ResponseWriter, request *http.Request) {
 
 func rootRequestHandler(responseWriter http.ResponseWriter, request *http.Request) {
 	if request.URL.Path == "/favicon.ico" {
-		content, err := staticFiles.ReadFile("favicon.ico")
+		content, err := staticFiles.ReadFile("static/favicon.ico")
 		if err != nil {
 			http.NotFound(responseWriter, request)
 			return
@@ -127,7 +127,7 @@ func rootRequestHandler(responseWriter http.ResponseWriter, request *http.Reques
 	}
 
 	if request.Method != "POST" {
-		content, err := staticFiles.ReadFile("index.html")
+		content, err := staticFiles.ReadFile("static/index.html")
 		if err != nil {
 			log.Printf("[%s] Error reading embedded file: %v",
 				now.New(time.Now()).Format("2006-01-02 15:04:05"),
