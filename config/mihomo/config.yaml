@@ -45,7 +45,7 @@ geox-url:
 geo-auto-update: true # 是否自动更新geodata
 geo-update-interval: 24 # 更新间隔 单位: 小时
 
-log-level: info # 日志等级silent/error/warning/info/debug
+log-level: warning # 日志等级silent/error/warning/info/debug
 
 ipv6: false # IPv6总开关, 关闭阻断所有IPv6链接和屏蔽DNS请求AAAA记录
 
@@ -106,8 +106,8 @@ dns:
   # 支持UDP TCP DoT DoH DoQ
   # 这部分为主要DNS配置, 影响所有直连, 确保使用对大陆解析精准的DNS
   nameserver:
-    - https://8.8.8.8/dns-query
     - https://1.1.1.1/dns-query
+    - https://8.8.8.8/dns-query
 
   # 专用于节点域名解析的DNS服务器, 非必要配置项, 如果不填则遵循nameserver-policy nameserver和fallback的配置
   proxy-server-nameserver:
@@ -154,6 +154,7 @@ proxies:
 proxy-providers:
   Airport1:
     type: http
+    udp: false
     url: "url"
     interval: 3600 # 自动更新时间(秒)
     proxy: DIRECT # 通过直连拉取机场订阅, 该名字是指策略组或某个代理节点的名字
@@ -162,69 +163,42 @@ proxy-providers:
       interval: 300
       url: "http://connectivitycheck.gstatic.com/generate_204"
       # expected-status: 204 # 当健康检查返回状态码与期望值不符时认为节点不可用
-    override: # 覆写节点加载时的一些配置项
-      udp: true
-
-## 锚点
-main: &main { type: select, proxies: [🚀 默认代理, ♻️ 自动选择, 🔯 故障转移, 🔮 负载均衡, 🇭🇰 香港链式, 🇸🇬 狮城链式, 🇭🇰 香港节点, 🇲🇴 澳门节点, 🇹🇼 台湾节点, 🇸🇬 狮城节点, 🇯🇵 日本节点, 🇰🇷 韩国节点, 🇲🇾 马来节点, 🇺🇲 美国节点, 🇬🇧 英国节点, 🇳🇱 荷兰节点, 🇩🇪 德国节点, DIRECT] }
-specific: &specific { type: select, proxies: [🇸🇬 狮城链式, 🇹🇼 台湾节点, 🇸🇬 狮城节点, 🇯🇵 日本节点, 🇰🇷 韩国节点, 🇲🇾 马来节点, 🇺🇲 美国节点, 🇬🇧 英国节点, 🇳🇱 荷兰节点, 🇩🇪 德国节点] }
-island: &island { type: select, proxies: [🚀 默认代理, 🇭🇰 香港链式, 🇭🇰 香港节点, 🇲🇴 澳门节点, 🇹🇼 台湾节点, DIRECT] }
 
 ## 代理分组
-# include-all-providers: true 自动引入proxy-providers所有代理集合, 顺序将按照名称排序
 proxy-groups:
   #------------------------基础分组------------------------#
-  - { name: 🚀 默认代理, type: select, proxies: [♻️ 自动选择, 🔯 故障转移, 🔮 负载均衡, 🇭🇰 香港链式, 🇸🇬 狮城链式, 🇭🇰 香港节点, 🇲🇴 澳门节点, 🇹🇼 台湾节点, 🇸🇬 狮城节点, 🇯🇵 日本节点, 🇰🇷 韩国节点, 🇲🇾 马来节点, 🇺🇲 美国节点, 🇬🇧 英国节点, 🇳🇱 荷兰节点, 🇩🇪 德国节点, DIRECT] }
-  # url-test将按照url测试结果使用延迟最低节点
-  - { name: ♻️ 自动选择, type: url-test, include-all-providers: true, tolerance: 100, url: "http://connectivitycheck.gstatic.com/generate_204", interval: 300 }
-  # fallback将按照url测试结果按照节点顺序选择
-  - { name: 🔯 故障转移, type: fallback, include-all-providers: true, url: "http://connectivitycheck.gstatic.com/generate_204", interval: 300 }
-  # load-balance将按照算法随机选择节点  strategy可选: round-robin/consistent-hashing/sticky-sessions
-  - { name: 🔮 负载均衡, type: load-balance, include-all-providers: true, url: "http://connectivitycheck.gstatic.com/generate_204", interval: 300, strategy: round-robin }
+  - { name: 🚀 默认代理, type: select, include-all: true, proxies: [♻️ 自动选择, DIRECT] }
+  - { name: ♻️ 自动选择, type: url-test, include-all: true, tolerance: 100, url: "http://connectivitycheck.gstatic.com/generate_204", interval: 300 }
 
   #------------------------场景分组------------------------#
-  - { name: 🤖 AI, <<: *specific }
-  - { name: 🍀 Google, <<: *main }
-  - { name: 👨‍💻 GitHub, <<: *main }
-  - { name: 🦊 GitLab, <<: *main }
-  - { name: 🐳 Docker, <<: *main }
-  - { name: 🪟 Microsoft, <<: *main }
-  - { name: 📲 Telegram, <<: *main }
-  - { name: 📺 BiliBili, <<: *island }
-  - { name: 🎥 NETFLIX, <<: *specific }
-  - { name: 🎧 Spotify, <<: *island }
-  - { name: 🎵 TikTok, <<: *specific }
-  - { name: 💶 PayPal, <<: *main }
-  - { name: ✈️ Speedtest, <<: *main }
-  - { name: 🍎 Apple, <<: *main }
-
-  #------------------------地区分组------------------------#
-  ## 测速地址: https://ybfl.net/sites/58.html
-  - { name: 🇭🇰 香港节点, type: url-test, include-all-providers: true, tolerance: 100, filter: "(?i)港|hk|hongkong|hong kong", url: "http://connectivitycheck.gstatic.com/generate_204", interval: 300 }
-  - { name: 🇲🇴 澳门节点, type: url-test, include-all-providers: true, tolerance: 100, filter: "(?i)澳|澳门|mo|macau|macao", url: "http://connectivitycheck.gstatic.com/generate_204", interval: 300 }
-  - { name: 🇹🇼 台湾节点, type: url-test, include-all-providers: true, tolerance: 100, filter: "(?i)台|tw|taiwan|taipei", url: "http://connectivitycheck.gstatic.com/generate_204", interval: 300 }
-  - { name: 🇸🇬 狮城节点, type: url-test, include-all-providers: true, tolerance: 100, filter: "(?i)新加坡|坡|狮城|SG|Singapore", url: "http://connectivitycheck.gstatic.com/generate_204", interval: 300 }
-  - { name: 🇯🇵 日本节点, type: url-test, include-all-providers: true, tolerance: 100, filter: "(?i)日本|jp|japan|tokyo|osaka", url: "http://connectivitycheck.gstatic.com/generate_204", interval: 300 }
-  - { name: 🇰🇷 韩国节点, type: url-test, include-all-providers: true, tolerance: 100, filter: "(?i)韩|kr|korea|seoul", url: "http://connectivitycheck.gstatic.com/generate_204", interval: 300 }
-  - { name: 🇲🇾 马来节点, type: url-test, include-all-providers: true, tolerance: 100, filter: "(?i)马来|马来西亚|my|mys|malay|malaysia", url: "http://connectivitycheck.gstatic.com/generate_204", interval: 300 }
-  - { name: 🇺🇲 美国节点, type: url-test, include-all-providers: true, tolerance: 100, filter: "(?i)美|us|united states|america|los angeles|san jose|silicon valley", url: "http://connectivitycheck.gstatic.com/generate_204", interval: 300 }
-  - { name: 🇬🇧 英国节点, type: url-test, include-all-providers: true, tolerance: 100, filter: "(?i)英|uk|united kingdom|london", url: "http://connectivitycheck.gstatic.com/generate_204", interval: 300 }
-  - { name: 🇳🇱 荷兰节点, type: url-test, include-all-providers: true, tolerance: 100, filter: "(?i)荷兰|nl|netherlands", url: "http://connectivitycheck.gstatic.com/generate_204", interval: 300 }
-  - { name: 🇩🇪 德国节点, type: url-test, include-all-providers: true, tolerance: 100, filter: "(?i)德|de|germany|frankfurt", url: "http://connectivitycheck.gstatic.com/generate_204", interval: 300 }
+  - { name: 🤖 AI, type: select, include-all: true, proxies: [DIRECT] }
+  - { name: 🍀 Google, type: select, include-all: true, proxies: [DIRECT] }
+  - { name: 👨‍💻 GitHub, type: select, include-all: true, proxies: [DIRECT] }
+  - { name: 🦊 GitLab, type: select, include-all: true, proxies: [DIRECT] }
+  - { name: 🐳 Docker, type: select, include-all: true, proxies: [DIRECT] }
+  - { name: 🪟 Microsoft, type: select, include-all: true, proxies: [DIRECT] }
+  - { name: 🐬 OneDrive, type: select, include-all: true, proxies: [DIRECT] }
+  - { name: 📲 Telegram, type: select, include-all: true, proxies: [DIRECT] }
+  - { name: 📺 BiliBili, type: select, include-all: true, proxies: [DIRECT] }
+  - { name: 🎥 NETFLIX, type: select, include-all: true, proxies: [DIRECT] }
+  - { name: 🎧 Spotify, type: select, include-all: true, proxies: [DIRECT] }
+  - { name: 🎵 TikTok, type: select, include-all: true, proxies: [DIRECT] }
+  - { name: 💶 PayPal, type: select, include-all: true, proxies: [DIRECT] }
+  - { name: ✈️ Speedtest, type: select, include-all: true, proxies: [DIRECT] }
+  - { name: 🍎 Apple, type: select, include-all: true, proxies: [DIRECT] }
 
   #------------------------特殊分组------------------------#
-  - { name: 🎯 全球直连, type: select, proxies: [DIRECT, 🚀 默认代理] }
-  - { name: 🐟 漏网之鱼, <<: *main }
+  - { name: 🎯 全球直连, type: select, include-all: true, proxies: [DIRECT] }
+  - { name: 🐟 漏网之鱼, type: select, include-all: true, proxies: [DIRECT] }
 
 ## 规则匹配
 rules:
   # 本地局域网
-  - DOMAIN-SUFFIX,local,DIRECT
-  - DOMAIN-SUFFIX,localhost,DIRECT
   - RULE-SET,private_ip,DIRECT,no-resolve
   - RULE-SET,private_domain,DIRECT
 
   # 应用分流
+  - RULE-SET,apple_cn_domain,DIRECT
   - RULE-SET,apple_domain,🍎 Apple
   - RULE-SET,ai_domain,🤖 AI
   - RULE-SET,google_domain,🍀 Google
@@ -264,6 +238,7 @@ rule-anchor:
 rule-providers:
   ai_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-ai-!cn.mrs" }
   apple_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/apple.mrs" }
+  apple_cn_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/apple-cn.mrs" }
   bilibili_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/bilibili.mrs" }
   cn_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/cn.mrs" }
   direct_domain: { <<: *domain, url: "https://raw.githubusercontent.com/wwqgtxx/clash-rules/release/direct.mrs" }
@@ -275,6 +250,7 @@ rule-providers:
   google_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/google.mrs" }
   microsoft_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/microsoft.mrs" }
   netflix_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/netflix.mrs" }
+  onedrive_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/onedrive.mrs" }
   paypal_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/paypal.mrs" }
   private_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/private.mrs" }
   speedtest_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/speedtest.mrs" }
