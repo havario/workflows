@@ -13,6 +13,17 @@
     "editor.defaultFormatter": "vscode.json-language-features"
   },
 
+  // Go
+  "[go]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "golang.go"
+  },
+
+  "go.formatTool": "goimports",
+  "gopls": {
+    "formatting.gofumpt": false
+  },
+
   // git setting
   "git.enableSmartCommit": true,
   "git.alwaysSignOff": true,
