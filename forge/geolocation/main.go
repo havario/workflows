@@ -4,15 +4,22 @@
 package main
 
 import (
+	"embed"
 	"encoding/json"
 	"fmt"
 	"io"
 	"log"
+	"net"
 	"net/http"
 	"net/url"
 	"runtime"
 	"time"
+
+	"github.com/jinzhu/now"
 )
+
+//go:embed index.html favicon.ico
+var staticFiles embed.FS
 
 var (
 	VersionX byte = 1
@@ -89,7 +96,7 @@ func fetchJsonFromApi(apiUrl string, target interface{}) error {
 	defer httpResponse.Body.Close()
 
 	if httpResponse.StatusCode != 200 {
-		return fmt.Errorf("Error: API returned non 200 status: %d", httpResponse.StatusCode)
+		return fmt.Errorf("API returned non 200 status: %d", httpResponse.StatusCode)
 	}
 
 	bodyBytes, err := io.ReadAll(httpResponse.Body)
@@ -107,15 +114,35 @@ func healthHandler(responseWriter http.ResponseWriter, request *http.Request) {
 }
 
 func rootRequestHandler(responseWriter http.ResponseWriter, request *http.Request) {
-	// Serve frontend page on GET
+	if request.URL.Path == "/favicon.ico" {
+		content, err := staticFiles.ReadFile("favicon.ico")
+		if err != nil {
+			http.NotFound(responseWriter, request)
+			return
+		}
+		responseWriter.Header().Set("Content-Type", "image/x-icon")
+		responseWriter.Header().Set("Cache-Control", "public, max-age=86400")
+		responseWriter.Write(content)
+		return
+	}
+
 	if request.Method != "POST" {
-		http.ServeFile(responseWriter, request, "index.html")
+		content, err := staticFiles.ReadFile("index.html")
+		if err != nil {
+			log.Printf("Error reading embedded file: %v", err)
+			http.Error(responseWriter, "Internal Server Error", 500)
+			return
+		}
+		responseWriter.Header().Set("Content-Type", "text/html")
+		responseWriter.Write(content)
 		return
 	}
 
 	request.ParseForm()
 	queriedIP := request.FormValue("ip")
-	if queriedIP == "" {
+
+	// IP format validation
+	if queriedIP == "" || net.ParseIP(queriedIP) == nil {
 		json.NewEncoder(responseWriter).Encode(ApiResponse{Success: false})
 		return
 	}
@@ -224,7 +251,7 @@ func rootRequestHandler(responseWriter http.ResponseWriter, request *http.Reques
 				ipSbGeoData.Longitude = lng
 			}
 		} else {
-			// Optional: Log error if needed
+			// Log error if needed
 			log.Printf("Error: fetching IP.SB data for %s: %v", queriedIP, err)
 		}
 
@@ -247,6 +274,7 @@ func rootRequestHandler(responseWriter http.ResponseWriter, request *http.Reques
 
 func main() {
 	PrintBanner()
+	log.Printf("Geolocation starting up: %s", now.New(time.Now()).Format("2006-01-02 15:04:05"))
 
 	http.HandleFunc("/health", healthHandler)
 	http.HandleFunc("/", rootRequestHandler)
