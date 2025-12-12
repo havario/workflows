@@ -281,7 +281,6 @@ func rootRequestHandler(responseWriter http.ResponseWriter, request *http.Reques
 
 func main() {
 	PrintBanner()
-	log.Printf("Geolocation starting up: %s", now.New(time.Now()).Format("2006-01-02 15:04:05"))
 
 	http.HandleFunc("/health", healthHandler)
 	http.HandleFunc("/", rootRequestHandler)
