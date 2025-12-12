@@ -3,7 +3,7 @@
   "workbench.colorTheme": "Default Dark Modern",
 
   // editor setting
-  "editor.fontSize": 15,
+  "editor.fontSize": 16,
   "editor.formatOnSave": true,
   "editor.formatOnPaste": true,
   "editor.useEditorConfig": true,
