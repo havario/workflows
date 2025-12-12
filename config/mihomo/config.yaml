@@ -45,12 +45,11 @@ geox-url:
 geo-auto-update: true # 是否自动更新geodata
 geo-update-interval: 24 # 更新间隔 单位: 小时
 
-# geosite使用的匹配器实现
-geosite-matcher: succinct # 默认值 与规则集相同
-
-log-level: warning # 日志等级silent/error/warning/info/debug
+log-level: info # 日志等级silent/error/warning/info/debug
 
 ipv6: false # IPv6总开关, 关闭阻断所有IPv6链接和屏蔽DNS请求AAAA记录
+
+unified-delay: true # 统一延迟时会计算RTT以消除连接握手等带来的不同类型节点的延迟差异
 
 tcp-concurrent: true # TCP并发连接所有IP, 将使用最快握手的TCP
 
@@ -64,7 +63,10 @@ global-client-fingerprint: firefox
 # TCP保持活动间隔
 disable-keep-alive: false # 目前在android端强制为true
 keep-alive-idle: 600 # 设置TCP连接的空闲超时时间为600秒
-keep-alive-interval: 15 # 设置TCP保活探测的间隔时间为15秒
+
+# 缓解移动设备耗电问题
+# https://github.com/vernesong/OpenClash/issues/2614
+keep-alive-interval: 1800 # 设置TCP保活探测的间隔时间
 
 profile:
   store-selected: true # 存储select选择记录
@@ -75,7 +77,7 @@ dns:
   cache-algorithm: arc
   enable: true # 关闭将使用系统DNS
   prefer-h3: false # 是否开启DoH支持HTTP/3, 将并发尝试
-  listen: 0.0.0.0:1053 # 开启DNS服务器监听
+  listen: :1053 # 开启DNS服务器监听
   ipv6: false # false将返回AAAA的空结果
   # ipv6-timeout: 300 # 单位：ms 内部双栈并发时, 向上游查询AAAA时, 等待AAAA的时间, 默认100ms
   default-nameserver: # 指定初始DNS解析服务器, 用于解析mihomo自身需要的域名 (如订阅地址、规则集地址) 只能使用纯IP地址
@@ -187,7 +189,6 @@ proxy-groups:
   - { name: 🦊 GitLab, <<: *main }
   - { name: 🐳 Docker, <<: *main }
   - { name: 🪟 Microsoft, <<: *main }
-  - { name: 🐬 OneDrive, <<: *main }
   - { name: 📲 Telegram, <<: *main }
   - { name: 📺 BiliBili, <<: *island }
   - { name: 🎥 NETFLIX, <<: *specific }
@@ -218,6 +219,8 @@ proxy-groups:
 ## 规则匹配
 rules:
   # 本地局域网
+  - DOMAIN-SUFFIX,local,DIRECT
+  - DOMAIN-SUFFIX,localhost,DIRECT
   - RULE-SET,private_ip,DIRECT,no-resolve
   - RULE-SET,private_domain,DIRECT
 
@@ -272,7 +275,6 @@ rule-providers:
   google_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/google.mrs" }
   microsoft_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/microsoft.mrs" }
   netflix_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/netflix.mrs" }
-  onedrive_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/onedrive.mrs" }
   paypal_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/paypal.mrs" }
   private_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/private.mrs" }
   speedtest_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/speedtest.mrs" }
