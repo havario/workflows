@@ -23,7 +23,7 @@ var staticFiles embed.FS
 
 var (
 	VersionX byte = 1
-	VersionY byte = 2
+	VersionY byte = 3
 	VersionZ byte = 0
 	Codename      = "Geolocation, Fast and Lightweight."
 	Intro         = "A lightweight API IP lookup service."
@@ -129,7 +129,10 @@ func rootRequestHandler(responseWriter http.ResponseWriter, request *http.Reques
 	if request.Method != "POST" {
 		content, err := staticFiles.ReadFile("index.html")
 		if err != nil {
-			log.Printf("Error reading embedded file: %v", err)
+			log.Printf("[%s] Error reading embedded file: %v",
+				now.New(time.Now()).Format("2006-01-02 15:04:05"),
+				err,
+			)
 			http.Error(responseWriter, "Internal Server Error", 500)
 			return
 		}
@@ -252,7 +255,11 @@ func rootRequestHandler(responseWriter http.ResponseWriter, request *http.Reques
 			}
 		} else {
 			// Log error if needed
-			log.Printf("Error: fetching IP.SB data for %s: %v", queriedIP, err)
+			log.Printf("[%s] Error: fetching IP.SB data for %s: %v",
+				now.New(time.Now()).Format("2006-01-02 15:04:05"),
+				queriedIP,
+				err,
+			)
 		}
 
 		ipsbChan <- ipSbGeoData
