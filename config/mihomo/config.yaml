@@ -166,6 +166,7 @@ airport_conf: &airport_conf
 Airports: &airports
   use:
     - Airport1
+    - Airport2
 
 # 机场订阅合集
 proxy-providers:
