@@ -197,11 +197,14 @@ rules:
   - RULE-SET,private_ip,DIRECT,no-resolve
   - RULE-SET,private_domain,DIRECT
 
+  # 广告拦截
+  - RULE-SET,ads_domain,REJECT
+
   # 应用分流
   - RULE-SET,apple_cn_domain,DIRECT
   - RULE-SET,apple_domain,🍎 Apple
-  - RULE-SET,ai_domain,🤖 AI
   - RULE-SET,google_domain,🍀 Google
+  - RULE-SET,ai_domain,🤖 AI
   - RULE-SET,github_domain,👨‍💻 GitHub
   - RULE-SET,gitlab_domain,🦊 GitLab
   - RULE-SET,docker_domain, 🐳 Docker
