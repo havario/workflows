@@ -9,6 +9,9 @@
   "editor.useEditorConfig": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
 
+  "files.insertFinalNewline": true,
+  "files.trimTrailingWhitespace": true,
+
   "[json]": {
     "editor.defaultFormatter": "vscode.json-language-features"
   },
