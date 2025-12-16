@@ -12,13 +12,8 @@
   "files.insertFinalNewline": true,
   "files.trimTrailingWhitespace": true,
 
-  "[json]": {
-    "editor.defaultFormatter": "vscode.json-language-features"
-  },
-
   // go
   "[go]": {
-    "editor.formatOnSave": true,
     "editor.defaultFormatter": "golang.go"
   },
 
