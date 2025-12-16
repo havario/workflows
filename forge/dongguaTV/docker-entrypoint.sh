@@ -26,4 +26,4 @@ else
 fi
 
 _info_msg "dongguaTV service started, listening on port 3000."
-exec "$@" >/dev/null 2>&1
+exec "$@" >/dev/null
