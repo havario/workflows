@@ -1,6 +1,6 @@
 # dongguaTV
 
-```yaml
+```shell
 tee docker-compose.yaml >/dev/null <<'EOF'
 ---
 services:
