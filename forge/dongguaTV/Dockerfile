@@ -15,5 +15,5 @@ RUN set -ex \
     && chmod +x docker-entrypoint.sh
 ENV TZ=Asia/Shanghai
 EXPOSE 3000
-ENTRYPOINT ["./docker-entrypoint.sh"]
+ENTRYPOINT ["docker-entrypoint.sh"]
 CMD ["node", "server.js"]

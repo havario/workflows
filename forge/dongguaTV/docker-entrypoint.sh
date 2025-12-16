@@ -25,4 +25,5 @@ else
     _info_msg "$0: admin password not set, using default password 'admin'."
 fi
 
-exec "$@"
+_info_msg "dongguaTV service started, listening on port 3000."
+exec "$@" >/dev/null 2>&1
