@@ -1,5 +1,6 @@
 # SPDX-License-Identifier: GPL-2.0
 # Copyright (c) 2025 honeok <i@honeok.com>
+# Copyright (c) 2025 zzwsec <zzwsec@163.com>
 
 # References:
 # https://linux.do/t/topic/243618
@@ -178,16 +179,16 @@ proxy-providers:
     url: "url2"
 
 ## 代理分组锚点
-main: &main { type: select, include-all: true, proxies: [🚀 默认代理, ♻️ 自动选择, 🇭🇰 香港自动, 🇸🇬 狮城自动, 🇺🇸 美国自动, DIRECT] }
-proxy: &proxy { type: select, include-all: true, proxies: [🚀 默认代理, ♻️ 自动选择, 🇭🇰 香港自动, 🇸🇬 狮城自动, 🇺🇸 美国自动] }
+main: &main { type: select, include-all: true, proxies: [🚀 默认代理, ♻️ 自动选择, 🇭🇰 香港自动, 🇹🇼 台湾自动, 🇸🇬 狮城自动, 🇯🇵 日本自动, 🇺🇸 美国自动, 🇳🇱 荷兰自动, 🇩🇪 德国自动, DIRECT] }
+proxy: &proxy { type: select, include-all: true, proxies: [🚀 默认代理, ♻️ 自动选择, 🇭🇰 香港自动, 🇹🇼 台湾自动, 🇸🇬 狮城自动, 🇯🇵 日本自动, 🇺🇸 美国自动, 🇳🇱 荷兰自动, 🇩🇪 德国自动] }
 specific: &specific { type: select, include-all: true, <<: *airports, filter: "^((?!(?i)(🇭🇰|🇲🇴|🇷🇺|香港|澳门|俄罗斯|HK|RU|Hong\\s?Kong|Macau|Macao|Russia)).)*$" }
 island: &island { type: select, proxies: [DIRECT], <<: *airports, filter: "(?i)(🇭🇰|香港|hk|hong\\s?kong|🇲🇴|澳门|澳門|macau|macao|🇹🇼|台湾|台灣|taiwan|tw)" }
 
 ## 代理分组
 proxy-groups:
   #------------------------基础分组------------------------#
-  - { name: 🚀 默认代理, type: select, include-all: true, proxies: [♻️ 自动选择, 🇭🇰 香港自动, 🇸🇬 狮城自动, 🇺🇸 美国自动] }
-  - { name: ♻️ 自动选择, type: url-test, include-all: true, tolerance: 100, lazy: false, url: "http://connectivitycheck.gstatic.com/generate_204", interval: 300 }
+  - { name: 🚀 默认代理, type: select, include-all: true, proxies: [♻️ 自动选择, 🇭🇰 香港自动, 🇹🇼 台湾自动, 🇸🇬 狮城自动, 🇯🇵 日本自动, 🇺🇸 美国自动, 🇳🇱 荷兰自动, 🇩🇪 德国自动] }
+  - { name: ♻️ 自动选择, type: url-test, include-all: true, tolerance: 100, url: "http://connectivitycheck.gstatic.com/generate_204", interval: 300 }
 
   #------------------------场景分组------------------------#
   - { name: 🤖 AI, <<: *specific }
@@ -206,10 +207,14 @@ proxy-groups:
   - { name: ✈️ Speedtest, <<: *main }
   - { name: 🍎 Apple, <<: *main }
 
-    #------------------------地区分组------------------------#
-  - { name: 🇭🇰 香港自动, type: url-test, <<: *airports, include-all: true, tolerance: 100, lazy: false, filter: "(?i)(🇭🇰|香港|hk|hong\\s?kong)", url: "http://connectivitycheck.gstatic.com/generate_204", interval: 300 }
-  - { name: 🇸🇬 狮城自动, type: url-test, <<: *airports, include-all: true, tolerance: 100, lazy: false, filter: "(?i)(🇸🇬|新加坡|坡|狮城|SG|Singapore)", url: "http://connectivitycheck.gstatic.com/generate_204", interval: 300 }
-  - { name: 🇺🇸 美国自动, type: url-test, <<: *airports, include-all: true, tolerance: 100, lazy: false, filter: "(?i)(🇺🇸|美|us|united states|america|los angeles|san jose|silicon valley)", url: "http://connectivitycheck.gstatic.com/generate_204", interval: 300 }
+  #------------------------地区分组------------------------#
+  - { name: 🇭🇰 香港自动, type: url-test, <<: *airports, include-all: true, tolerance: 100, filter: "(?i)(🇭🇰|香港|hk|hong\\s?kong)", url: "http://connectivitycheck.gstatic.com/generate_204", interval: 300 }
+  - { name: 🇹🇼 台湾自动, type: url-test, <<: *airports, include-all: true, tolerance: 100, filter: "(?i)(🇹🇼|台湾|tw|taiwan|taipei)", url: "http://connectivitycheck.gstatic.com/generate_204", interval: 300 }
+  - { name: 🇸🇬 狮城自动, type: url-test, <<: *airports, include-all: true, tolerance: 100, filter: "(?i)(🇸🇬|新加坡|sg|singapore|lion\\s?city)", url: "http://connectivitycheck.gstatic.com/generate_204", interval: 300 }
+  - { name: 🇯🇵 日本自动, type: url-test, <<: *airports, include-all: true, tolerance: 100, filter: "(?i)(🇯🇵|日本|jp|japan|tokyo|osaka)", url: "http://connectivitycheck.gstatic.com/generate_204", interval: 300 }
+  - { name: 🇺🇸 美国自动, type: url-test, <<: *airports, include-all: true, tolerance: 100, filter: "(?i)(🇺🇸|美国|us|united\\s?states|america)", url: "http://connectivitycheck.gstatic.com/generate_204", interval: 300 }
+  - { name: 🇳🇱 荷兰自动, type: url-test, <<: *airports, include-all: true, tolerance: 100, filter: "(?i)(🇳🇱|荷兰|nl|netherlands|amsterdam)", url: "http://connectivitycheck.gstatic.com/generate_204", interval: 300 }
+  - { name: 🇩🇪 德国自动, type: url-test, <<: *airports, include-all: true, tolerance: 100, filter: "(?i)(🇩🇪|德国|de|germany|frankfurt)", url: "http://connectivitycheck.gstatic.com/generate_204", interval: 300 }
 
   #------------------------特殊分组------------------------#
   - { name: 🎯 全球直连, type: select, proxies: [DIRECT, 🚀 默认代理] }
@@ -264,7 +269,7 @@ rule-anchor:
 ## 订阅规则
 rule-providers:
   ai_domain: { <<: *domain, url: "https://v6.gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-ai-!cn.mrs" }
-  ads_domain: { <<: *domain, url: "https://v6.gh-proxy.com/https://github.com/TG-Twilight/AWAvenue-Ads-Rule/raw/main/Filters/AWAvenue-Ads-Rule-Clash.mrs" }
+  ads_domain: { <<: *domain, url: "https://v6.gh-proxy.com/https://raw.githubusercontent.com/TG-Twilight/AWAvenue-Ads-Rule/main/Filters/AWAvenue-Ads-Rule-Clash.mrs" }
   apple_domain: { <<: *domain, url: "https://v6.gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/apple.mrs" }
   apple_cn_domain: { <<: *domain, url: "https://v6.gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/apple-cn.mrs" }
   bilibili_domain: { <<: *domain, url: "https://v6.gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/bilibili.mrs" }
