@@ -1,6 +1,7 @@
 {
   "inbounds": [
     {
+      "listen": "0.0.0.0",
       "port": 38438,
       "protocol": "vless",
       "settings": {
