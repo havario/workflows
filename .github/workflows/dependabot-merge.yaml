@@ -16,7 +16,13 @@ jobs:
 
     steps:
       - name: "Auto merge for Dependabot PR"
-        run: gh pr merge --auto --merge "$PR_URL"
         env:
           PR_URL: ${{ github.event.pull_request.html_url }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          PR_LIST="$(gh pr list --state open --app dependabot --json url --jq '.[].url')"
+          [ -z "$PR_LIST" ] && exit 0
+
+          for PR_URL in $PR_LIST; do
+            gh pr merge --auto --merge "$PR_URL"
+          done
