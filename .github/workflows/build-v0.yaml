@@ -15,7 +15,25 @@ env:
   REGISTRY_IMAGE: ${{ secrets.DOCKER_USERNAME }}/nezha-dashboard
 
 jobs:
+  check:
+    name: "Build pre check"
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: "Fetch Versions and Determine Build"
+        id: bump_version
+        run: |
+          LATEST_VER="$(wget -qO- --tries=50 --header="Authorization: token ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/repos/nezhahq/nezha/releases/latest | grep '"tag_name":' | sed -n 's/.*"tag_name": "\(v[0-9.]*\)".*/\1/p')"
+          CURRENT_VER="$(wget -qO- --tries=50 https://hub.docker.com/v2/repositories/honeok/nezha-dashboard/tags 2>/dev/null | grep -o '"name":"[^"]*"' | awk -F'"' '$4!="latest"{print $4}' | sort -rV | head -n1 || true)"
+          CURRENT_DAY="$(date -u '+%d' -d '+8 hours')"
+          echo "nezha_version=${LATEST_VER}" >> "$GITHUB_OUTPUT"
+          if [[ "$(printf '%s\n%s\n' "$LATEST_VER" "$CURRENT_VER" | sort -V | head -n1)" != "$LATEST_VER" || -z "$CURRENT_VER" && -n "$LATEST_VER" || "$CURRENT_DAY" == "01" ]]; then
+            echo "build_image=1" >> "$GITHUB_OUTPUT"
+          fi
+
   build:
+    needs:
+      - check
     strategy:
       fail-fast: true
       matrix:
