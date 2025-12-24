@@ -1,7 +1,2 @@
 .idea/
 kubernetes/*
-go/*
-
-config/mihomo/*
-!config/mihomo/config.yaml
-!config/mihomo/mihomo.yaml
