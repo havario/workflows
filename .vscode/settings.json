@@ -26,9 +26,9 @@
     "formatting.gofumpt": true
   },
 
-  // https://github.com/mvdan/sh
+  // shell
   "[shellscript]": {
-    "editor.defaultFormatter": "mkhl.shfmt"
+    "editor.defaultFormatter": "mkhl.shfmt" // https://github.com/mvdan/sh
   },
 
   // yaml
