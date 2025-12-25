@@ -36,12 +36,13 @@ jobs:
 
       - name: "Fetch Versions and Decide"
         id: bump_version
+        working-directory: .github/
         run: |
-          set -eEuxo pipefail
-          chmod +x .github/curl.sh
+          set -eEux
+          chmod +x curl.sh
           TRIGGER="false"
-          LATEST_VER="$(.github/curl.sh https://api.github.com/repos/nezhahq/nezha/releases/latest | grep '"tag_name":' | sed -n 's/.*"tag_name": "\(v[0-9.]*\)".*/\1/p')"
-          CURRENT_VER="$(.github/curl.sh https://hub.docker.com/v2/repositories/honeok/nezha-dashboard/tags 2>/dev/null | grep -o '"name":"[^"]*"' | awk -F'"' '$4!="latest"{print $4}' | sort -rV | head -n1 || true)"
+          LATEST_VER="$(./curl.sh https://api.github.com/repos/nezhahq/nezha/releases/latest | grep '"tag_name":' | sed -n 's/.*"tag_name": "\(v[0-9.]*\)".*/\1/p')"
+          CURRENT_VER="$(./curl.sh https://hub.docker.com/v2/repositories/honeok/nezha-dashboard/tags 2>/dev/null | grep -o '"name":"[^"]*"' | awk -F'"' '$4!="latest"{print $4}' | sort -rV | head -n1 || true)"
           CURRENT_DAY="$(date -u '+%d' -d '+8 hours')"
 
           echo "nezha_version=${LATEST_VER}" >> "$GITHUB_OUTPUT"
