@@ -12,7 +12,7 @@ curl() {
     # --connect-timeout  连接超时保护
     # CentOS7 无法使用 --retry-connrefused 和 --retry-all-errors 因此手动 retry
 
-    for ((i=1; i<=5; i++)); do
+    for ((i=1; i<=50; i++)); do
         if ! command curl --connect-timeout 10 --fail --insecure -Ls "$@"; then
             EXIT_CODE=$?
             # 403 404 错误或达到重试次数
