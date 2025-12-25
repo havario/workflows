@@ -1,9 +1,13 @@
 {
   // workbench
   "workbench.colorTheme": "Default Dark Modern",
-
-  // editor setting
   "editor.fontSize": 16,
+  "editor.renderWhitespace": "selection",
+  "editor.rulers": [80, 120],
+  "editor.bracketPairColorization.enabled": true,
+  "editor.guides.bracketPairs": true,
+
+  // editor format
   "editor.formatOnSave": true,
   "editor.formatOnPaste": true,
   "editor.useEditorConfig": true,
@@ -12,11 +16,10 @@
   "files.insertFinalNewline": true,
   "files.trimTrailingWhitespace": true,
 
-  // yaml
-  "[yaml]": {
-    "editor.defaultFormatter": "redhat.vscode-yaml"
+  // shell
+  "[shellscript]": {
+    "editor.defaultFormatter": "foxundermoon.shell-format"
   },
-  "yaml.format.printWidth": 1000,
 
   // go
   "[go]": {
@@ -26,6 +29,12 @@
   "gopls": {
     "formatting.gofumpt": true
   },
+
+  // yaml
+  "[yaml]": {
+    "editor.defaultFormatter": "redhat.vscode-yaml"
+  },
+  "yaml.format.printWidth": 1000,
 
   // git setting
   "git.enableSmartCommit": true,
