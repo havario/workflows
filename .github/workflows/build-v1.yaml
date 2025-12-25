@@ -36,16 +36,23 @@ jobs:
 
       - name: "Fetch Versions and Decide"
         id: bump_version
-        working-directory: .github/
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          set -eEux
-          chmod +x curl.sh
+          set -eEuxo pipefail
           TRIGGER="false"
-          LATEST_VER="$(./curl.sh https://api.github.com/repos/nezhahq/nezha/releases/latest | grep '"tag_name":' | sed -n 's/.*"tag_name": "\(v[0-9.]*\)".*/\1/p')"
-          CURRENT_VER="$(./curl.sh https://hub.docker.com/v2/repositories/$DOCKERHUB_REPO/tags 2>/dev/null | grep -o '"name":"[^"]*"' | awk -F'"' '$4!="latest"{print $4}' | sort -rV | head -n1 || true)"
+          LATEST_VER="$(wget -qO- --tries=5 --header="Authorization: token $GITHUB_TOKEN" \
+            https://api.github.com/repos/nezhahq/nezha/releases/latest | grep '"tag_name":' | sed -n 's/.*"tag_name": "\(v[0-9.]*\)".*/\1/p')"
+          CURRENT_VER="$(wget -qO- --tries=5 https://hub.docker.com/v2/repositories/$DOCKERHUB_REPO/tags 2>/dev/null | \
+            grep -o '"name":"[^"]*"' | awk -F'"' '$4!="latest"{print $4}' | sort -rV | head -n1 || true)"
           CURRENT_DAY="$(date -u '+%d' -d '+8 hours')"
 
           echo "nezha_version=${LATEST_VER}" >> "$GITHUB_OUTPUT"
+
+          # logic judge: 1. Manual
+          #              2. The version has been updated.
+          #              3. The dockerhub repo is empty.
+          #              4. Scheduled build on the 1st of every month.
           if [[ "${{ github.event_name }}" == "workflow_dispatch" ]] || \
             [[ "$(printf '%s\n%s\n' "$LATEST_VER" "$CURRENT_VER" | sort -V | head -n1)" != "$LATEST_VER" ]] || \
             [[ -z "$CURRENT_VER" && -n "$LATEST_VER" ]] || [[ "$CURRENT_DAY" == "01" ]]; then
@@ -84,7 +91,7 @@ jobs:
         working-directory: v1
         run: |
           set -eEuxo pipefail
-          wget --tries=50 --no-check-certificate -qO geoip.db https://ipinfo.io/data/free/country.mmdb?token=${IPINFO_TOKEN}
+          wget --tries=5 --no-check-certificate -qO geoip.db https://ipinfo.io/data/free/country.mmdb?token=${IPINFO_TOKEN}
 
       - name: "Setup Docker Buildx"
         uses: docker/setup-buildx-action@v3
