@@ -18,7 +18,7 @@ concurrency:
 
 env:
   IPINFO_TOKEN: ${{ secrets.IPINFO_TOKEN }}
-  REGISTRY_IMAGE: ${{ secrets.DOCKER_USERNAME }}/nezha-dashboard
+  DOCKERHUB_REPO: ${{ secrets.DOCKER_USERNAME }}/nezha-dashboard
 
 jobs:
   check:
@@ -93,7 +93,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ env.REGISTRY_IMAGE }}
+          images: ${{ env.DOCKERHUB_REPO }}
           tags: |
             type=raw,value=${{ needs.check.outputs.nezha_version }}
             type=raw,value=latest
@@ -111,7 +111,7 @@ jobs:
           platforms: ${{ matrix.platform }}
           build-args: NEZHA_VERSION=${{ needs.check.outputs.nezha_version }}
           labels: ${{ steps.meta.outputs.labels }}
-          outputs: type=image,name=${{ env.REGISTRY_IMAGE }},push-by-digest=true,name-canonical=true,push=true
+          outputs: type=image,name=${{ env.DOCKERHUB_REPO }},push-by-digest=true,name-canonical=true,push=true
 
       - name: "Export digest"
         run: |
@@ -156,7 +156,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ env.REGISTRY_IMAGE }}
+          images: ${{ env.DOCKERHUB_REPO }}
           tags: |
             type=raw,value=${{ needs.check.outputs.nezha_version }}
             type=raw,value=latest
@@ -170,8 +170,8 @@ jobs:
         working-directory: /tmp/digests
         run: |
           docker buildx imagetools create $(jq -cr '.tags | map("-t " + .) | join(" ")' <<< "$DOCKER_METADATA_OUTPUT_JSON") \
-            $(printf '${{ env.REGISTRY_IMAGE }}@sha256:%s ' *)
+            $(printf '${{ env.DOCKERHUB_REPO }}@sha256:%s ' *)
 
       - name: "Inspect image"
         run: |
-          docker buildx imagetools inspect ${{ env.REGISTRY_IMAGE }}:${{ needs.check.outputs.nezha_version }}
+          docker buildx imagetools inspect ${{ env.DOCKERHUB_REPO }}:${{ needs.check.outputs.nezha_version }}
