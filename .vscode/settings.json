@@ -17,6 +17,13 @@
   "files.insertFinalNewline": true,
   "files.trimTrailingWhitespace": true,
 
+  // git setting
+  "git.enableSmartCommit": true,
+  "git.alwaysSignOff": true,
+  "git.confirmSync": false,
+  "git.fetchOnPull": true,
+  "git.pruneOnFetch": true,
+
   // go
   "[go]": {
     "editor.defaultFormatter": "golang.go"
@@ -40,12 +47,5 @@
   "[yaml]": {
     "editor.defaultFormatter": "redhat.vscode-yaml"
   },
-  "yaml.format.printWidth": 1000,
-
-  // git setting
-  "git.enableSmartCommit": true,
-  "git.alwaysSignOff": true,
-  "git.confirmSync": false,
-  "git.fetchOnPull": true,
-  "git.pruneOnFetch": true
+  "yaml.format.printWidth": 1000
 }
