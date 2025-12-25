@@ -75,7 +75,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: "Fetch ipinfo geoip database"
+      - name: "Fetch ipinfo geoip db"
         working-directory: v1
         run: wget --tries=50 --no-check-certificate -qO geoip.db https://ipinfo.io/data/free/country.mmdb?token=${IPINFO_TOKEN}
 
