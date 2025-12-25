@@ -61,7 +61,7 @@ jobs:
           - { os: ubuntu-latest, platform: linux/amd64 }
           - { os: ubuntu-24.04-arm, platform: linux/arm64 }
     runs-on: ${{ matrix.os }}
-    name: "Build ${{ matrix.platform }} for DockerHub"
+    name: "Build ${{ matrix.platform }}"
 
     steps:
       - name: "Prepare"
