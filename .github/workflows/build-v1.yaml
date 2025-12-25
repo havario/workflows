@@ -29,6 +29,11 @@ jobs:
       nezha_version: ${{ steps.bump_version.outputs.nezha_version }}
 
     steps:
+      - name: "Checkout repository"
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
       - name: "Fetch Versions and Decide"
         id: bump_version
         run: |
