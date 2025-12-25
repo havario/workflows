@@ -5,5 +5,3 @@
 # Copyright (c) 2025 honeok <i@honeok.com>
 
 set -eE
-
-  echo ""
