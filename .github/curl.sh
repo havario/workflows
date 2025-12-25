@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: Apache-2.0
 # Copyright (c) 2025 honeok <i@honeok.com>
 
-set -eExo pipefail
+set -eEuo pipefail
 
 curl() {
     local EXIT_CODE
