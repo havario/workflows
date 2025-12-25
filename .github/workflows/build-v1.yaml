@@ -84,7 +84,8 @@ jobs:
         working-directory: v1
         run: |
           set -eEuxo pipefail
-          wget --tries=50 --no-check-certificate -qO geoip.db https://ipinfo.io/data/free/country.mmdb?token=${IPINFO_TOKEN}
+          chmod +x ../.github/curl.sh
+          ../.github/curl.sh -o geoip.db https://ipinfo.io/data/free/country.mmdb?token=${IPINFO_TOKEN}
 
       - name: "Setup Docker Buildx"
         uses: docker/setup-buildx-action@v3
