@@ -32,12 +32,12 @@ jobs:
       - name: "Fetch Versions and Decide"
         id: bump_version
         run: |
+          chmod +x ../curl.sh
           TRIGGER="false"
-          LATEST_VER="$(wget -qO- --tries=50 --header="Authorization: token ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/repos/nezhahq/nezha/releases/latest | grep '"tag_name":' | sed -n 's/.*"tag_name": "\(v[0-9.]*\)".*/\1/p')"
-          CURRENT_VER="$(wget -qO- --tries=50 https://hub.docker.com/v2/repositories/honeok/nezha-dashboard/tags 2>/dev/null | grep -o '"name":"[^"]*"' | awk -F'"' '$4!="latest"{print $4}' | sort -rV | head -n1 || true)"
+          LATEST_VER="$(../curl.sh https://api.github.com/repos/nezhahq/nezha/releases/latest | grep '"tag_name":' | sed -n 's/.*"tag_name": "\(v[0-9.]*\)".*/\1/p')"
+          CURRENT_VER="$(../curl.sh https://hub.docker.com/v2/repositories/honeok/nezha-dashboard/tags 2>/dev/null | grep -o '"name":"[^"]*"' | awk -F'"' '$4!="latest"{print $4}' | sort -rV | head -n1 || true)"
           CURRENT_DAY="$(date -u '+%d' -d '+8 hours')"
 
-          # Always output the latest version number.
           echo "nezha_version=${LATEST_VER}" >> "$GITHUB_OUTPUT"
           if [[ "${{ github.event_name }}" == "workflow_dispatch" ]] || \
             [[ "$(printf '%s\n%s\n' "$LATEST_VER" "$CURRENT_VER" | sort -V | head -n1)" != "$LATEST_VER" ]] || \
@@ -47,7 +47,6 @@ jobs:
           else
             echo "No build required."
           fi
-
           echo "trigger=${TRIGGER}" >> "$GITHUB_OUTPUT"
 
   build:
