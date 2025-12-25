@@ -26,6 +26,11 @@
     "formatting.gofumpt": true
   },
 
+  // https://github.com/mvdan/sh
+  "[shellscript]": {
+    "editor.defaultFormatter": "mkhl.shfmt"
+  },
+
   // yaml
   "[yaml]": {
     "editor.defaultFormatter": "redhat.vscode-yaml"
