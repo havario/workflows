@@ -1,25 +1,21 @@
 {
   // workbench
   "workbench.colorTheme": "Default Dark Modern",
+
+  // editor setting
   "editor.fontSize": 16,
   "editor.renderWhitespace": "selection",
   "editor.rulers": [80, 120],
   "editor.bracketPairColorization.enabled": true,
   "editor.guides.bracketPairs": true,
-
-  // editor format
+  "editor.useEditorConfig": true,
+  "editor.detectIndentation": false,
   "editor.formatOnSave": true,
   "editor.formatOnPaste": true,
-  "editor.useEditorConfig": true,
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  // "editor.defaultFormatter": "esbenp.prettier-vscode"
 
   "files.insertFinalNewline": true,
   "files.trimTrailingWhitespace": true,
-
-  // shell
-  "[shellscript]": {
-    "editor.defaultFormatter": "foxundermoon.shell-format"
-  },
 
   // go
   "[go]": {
