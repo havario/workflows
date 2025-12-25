@@ -8,8 +8,8 @@ on:
     paths:
       - "v1/**"
       - "!v1/**.md"
-  # schedule:
-  #   - cron: "0 16 * * *"
+  schedule:
+    - cron: "0 16 * * *"
   workflow_dispatch:
 
 concurrency:
