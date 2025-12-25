@@ -12,11 +12,16 @@
   "files.insertFinalNewline": true,
   "files.trimTrailingWhitespace": true,
 
+  // yaml
+  "[yaml]": {
+    "editor.defaultFormatter": "redhat.vscode-yaml"
+  },
+  "yaml.format.printWidth": 1000,
+
   // go
   "[go]": {
     "editor.defaultFormatter": "golang.go"
   },
-
   "go.formatTool": "goimports",
   "gopls": {
     "formatting.gofumpt": true
