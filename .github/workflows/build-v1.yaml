@@ -1,0 +1,171 @@
+---
+name: "Build v1"
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - "v1/**"
+      - "!v1/**.md"
+  # schedule:
+  #   - cron: "0 16 * * *"
+  workflow_dispatch:
+
+concurrency:
+  group: "${{ github.workflow }}-${{ github.ref }}"
+  cancel-in-progress: true
+
+env:
+  IPINFO_TOKEN: ${{ secrets.IPINFO_TOKEN }}
+  REGISTRY_IMAGE: ${{ secrets.DOCKER_USERNAME }}/nezha-dashboard
+
+jobs:
+  check:
+    name: "Pre check"
+    runs-on: ubuntu-latest
+    outputs:
+      trigger: ${{ steps.bump_version.outputs.trigger }}
+      nezha_version: ${{ steps.bump_version.outputs.nezha_version }}
+
+    steps:
+      - name: "Fetch Versions and Decide"
+        id: bump_version
+        run: |
+          TRIGGER="false"
+          LATEST_VER="$(wget -qO- --tries=50 --header="Authorization: token ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/repos/nezhahq/nezha/releases/latest | grep '"tag_name":' | sed -n 's/.*"tag_name": "\(v[0-9.]*\)".*/\1/p')"
+          CURRENT_VER="$(wget -qO- --tries=50 https://hub.docker.com/v2/repositories/honeok/nezha-dashboard/tags 2>/dev/null | grep -o '"name":"[^"]*"' | awk -F'"' '$4!="latest"{print $4}' | sort -rV | head -n1 || true)"
+          CURRENT_DAY="$(date -u '+%d' -d '+8 hours')"
+
+          # Always output the latest version number.
+          echo "nezha_version=${LATEST_VER}" >> "$GITHUB_OUTPUT"
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]] || \
+            [[ "$(printf '%s\n%s\n' "$LATEST_VER" "$CURRENT_VER" | sort -V | head -n1)" != "$LATEST_VER" ]] || \
+            [[ -z "$CURRENT_VER" && -n "$LATEST_VER" ]] || [[ "$CURRENT_DAY" == "01" ]]; then
+            echo "Build required."
+            TRIGGER="true"
+          else
+            echo "No build required."
+          fi
+
+          echo "trigger=${TRIGGER}" >> "$GITHUB_OUTPUT"
+
+  build:
+    needs:
+      - check
+    if: needs.check.outputs.trigger == 'true'
+    strategy:
+      fail-fast: true
+      matrix:
+        include:
+          - { os: ubuntu-latest, platform: linux/amd64 }
+          - { os: ubuntu-24.04-arm, platform: linux/arm64 }
+          - { os: ubuntu-latest, platform: linux/s390x }
+    runs-on: ${{ matrix.os }}
+    name: "Build ${{ matrix.platform }} for DockerHub"
+
+    steps:
+      - name: "Prepare"
+        run: |
+          PLATFORM=${{ matrix.platform }}
+          echo "PLATFORM_PAIR=${PLATFORM//\//-}" >> "$GITHUB_ENV"
+
+      - name: "Checkout repository"
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: "Setup Docker Buildx"
+        uses: docker/setup-buildx-action@v3
+
+      - name: "Login to DockerHub"
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: "Docker metadata"
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY_IMAGE }}
+          tags: |
+            type=raw,value=${{ needs.check.outputs.nezha_version }}
+            type=raw,value=latest
+          labels: |
+            org.opencontainers.image.description=Nezha monitoring is self-hosted, lightweight server and website monitoring and O&M tool
+            org.opencontainers.image.source=https://github.com/nezhahq/nezha
+            org.opencontainers.image.title=Nezha
+            org.opencontainers.image.url=https://nezha.wiki
+
+      - name: "Build and export"
+        id: build
+        uses: docker/build-push-action@v5
+        with:
+          context: v1/
+          platforms: ${{ matrix.platform }}
+          build-args: NEZHA_VERSION=${{ needs.check.outputs.nezha_version }}
+          labels: ${{ steps.meta.outputs.labels }}
+          outputs: type=image,name=${{ env.REGISTRY_IMAGE }},push-by-digest=true,name-canonical=true,push=true
+
+      - name: "Export digest"
+        run: |
+          rm -rf /tmp/digests
+          mkdir -p /tmp/digests
+          digest="${{ steps.build.outputs.digest }}"
+          touch "/tmp/digests/${digest#sha256:}"
+
+      - name: "Upload artifact"
+        uses: actions/upload-artifact@v4
+        with:
+          name: digest-${{ env.PLATFORM_PAIR }}
+          path: /tmp/digests/*
+          if-no-files-found: error
+          retention-days: 1
+
+  merge:
+    needs:
+      - build
+    runs-on: ubuntu-latest
+    name: "Merge DockerHub manifest"
+
+    steps:
+      - name: "Download digests"
+        uses: actions/download-artifact@v4
+        with:
+          path: /tmp/digests
+          pattern: digest-*
+          merge-multiple: true
+
+      - name: "Setup Docker Buildx"
+        uses: docker/setup-buildx-action@v3
+
+      - name: "Login to DockerHub"
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: "Docker metadata"
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY_IMAGE }}
+          tags: |
+            type=raw,value=${{ needs.check.outputs.nezha_version }}
+            type=raw,value=latest
+          labels: |
+            org.opencontainers.image.description=Nezha monitoring is self-hosted, lightweight server and website monitoring and O&M tool
+            org.opencontainers.image.source=https://github.com/nezhahq/nezha
+            org.opencontainers.image.title=Nezha
+            org.opencontainers.image.url=https://nezha.wiki
+
+      - name: "Create manifest list and push"
+        working-directory: /tmp/digests
+        run: |
+          docker buildx imagetools create $(jq -cr '.tags | map("-t " + .) | join(" ")' <<< "$DOCKER_METADATA_OUTPUT_JSON") \
+            $(printf '${{ env.REGISTRY_IMAGE }}@sha256:%s ' *)
+
+      - name: "Inspect image"
+        run: |
+          docker buildx imagetools inspect ${{ env.REGISTRY_IMAGE }}:${{ needs.check.outputs.nezha_version }}
