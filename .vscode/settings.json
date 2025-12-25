@@ -8,11 +8,11 @@
   "editor.rulers": [80, 120],
   "editor.bracketPairColorization.enabled": true,
   "editor.guides.bracketPairs": true,
-  "editor.useEditorConfig": true,
   "editor.detectIndentation": false,
+  "editor.useEditorConfig": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,
   "editor.formatOnPaste": true,
-  // "editor.defaultFormatter": "esbenp.prettier-vscode"
 
   "files.insertFinalNewline": true,
   "files.trimTrailingWhitespace": true,
