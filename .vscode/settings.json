@@ -24,18 +24,20 @@
   "git.fetchOnPull": true,
   "git.pruneOnFetch": true,
 
+  // prettier
+  "prettier.useEditorConfig": true,
+
   // go
   "[go]": {
-    "editor.defaultFormatter": "golang.go"
+    "editor.defaultFormatter": "golang.go",
+    "editor.formatOnSave": true
   },
-  "go.formatTool": "goimports",
-  "gopls": {
-    "formatting.gofumpt": true
-  },
+  "go.formatTool": "gofumpt",
+  "go.lintTool": "golangci-lint",
 
   // json
   "[json]": {
-    "editor.defaultFormatter": "vscode.json-language-features"
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
 
   // shell
