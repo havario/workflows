@@ -1,6 +1,7 @@
 {
   // workbench
   "workbench.colorTheme": "Default Dark Modern",
+  "workbench.iconTheme": "vscode-icons",
 
   // editor setting
   "editor.fontSize": 16,
@@ -23,6 +24,10 @@
   "git.confirmSync": false,
   "git.fetchOnPull": true,
   "git.pruneOnFetch": true,
+
+  // error Lens
+  "errorLens.fontStyleItalic": true,
+  "errorLens.messageBackgroundMode": "message",
 
   // prettier
   "prettier.useEditorConfig": true,
@@ -63,5 +68,5 @@
   "[yaml]": {
     "editor.defaultFormatter": "redhat.vscode-yaml"
   },
-  "yaml.format.printWidth": 1000
+  "yaml.format.printWidth": 500
 }
