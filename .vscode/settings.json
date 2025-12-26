@@ -35,11 +35,6 @@
   "go.formatTool": "gofumpt",
   "go.lintTool": "golangci-lint",
 
-  // json
-  "[json]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-
   // shell
   "[shellscript]": {
     "editor.defaultFormatter": "mkhl.shfmt" // https://github.com/mvdan/sh
