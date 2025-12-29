@@ -12,6 +12,9 @@ on:
     - cron: "0 16 * * *"
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 concurrency:
   group: "${{ github.workflow }}-${{ github.ref }}"
   cancel-in-progress: true
@@ -60,6 +63,12 @@ jobs:
         uses: actions/checkout@v6
         with:
           fetch-depth: 0
+
+      - name: "Remove existing tag"
+        run: |
+          if git tag --list | grep -q "^${{ matrix.nezha_version }}$"; then
+            git push origin --delete ${{ matrix.nezha_version }}
+          fi
 
       - name: "Clone source code"
         working-directory: v0
