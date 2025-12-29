@@ -20,7 +20,32 @@ env:
   IPINFO_TOKEN: ${{ secrets.IPINFO_TOKEN }}
 
 jobs:
+  check:
+    name: "Pre check"
+    runs-on: ubuntu-latest
+    outputs:
+      trigger: ${{ steps.bump_version.outputs.trigger }}
+
+    steps:
+      - name: "Fetch Versions and Decide"
+        id: bump_version
+        run: |
+          set -eEuxo pipefail
+          TRIGGER="false"
+          CURRENT_DAY="$(date -u '+%d' -d '+8 hours')"
+          echo "nezha_version=${LATEST_VER}" >> "$GITHUB_OUTPUT"
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]] || [[ "$CURRENT_DAY" == "01" ]]; then
+            echo "Build required."
+            TRIGGER="true"
+          else
+            echo "No build required."
+          fi
+          echo "trigger=${TRIGGER}" >> "$GITHUB_OUTPUT"
+
   release:
+    needs:
+      - check
+    if: needs.check.outputs.trigger == 'true'
     strategy:
       fail-fast: true
       matrix:
