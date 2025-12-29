@@ -123,12 +123,12 @@ jobs:
               PLATFORM=${FILE#dashboard-}
               PACKAGE_NAME="dashboard-${{ steps.bump_version.outputs.nezha_version }}-${PLATFORM}"
               mkdir "$PACKAGE_NAME"
-              cp "$FILE" "${PACKAGE_NAME}/dashboard"
-              sha256sum "${PACKAGE_NAME}/dashboard" | sed 's| .*| dashboard|' > ./${PACKAGE_NAME}/checksum.txt"
-              cp $GITHUB_WORKSPACE/LICENSE ./${PACKAGE_NAME}
-              cp $GITHUB_WORKSPACE/README.md ./${PACKAGE_NAME}
-              tar cfz "${PACKAGE_NAME}.tar.gz" ./${PACKAGE_NAME}
-              rm -rf ./${PACKAGE_NAME}
+              cp "$FILE" "$PACKAGE_NAME/dashboard"
+              sha256sum "${PACKAGE_NAME}/dashboard" | sed 's| .*| dashboard|' > "$PACKAGE_NAME}/checksum.txt"
+              cp $GITHUB_WORKSPACE/LICENSE "$PACKAGE_NAME"
+              cp $GITHUB_WORKSPACE/README.md "$PACKAGE_NAME"
+              tar cfz "${PACKAGE_NAME}.tar.gz" "$PACKAGE_NAME"
+              rm -rf "$PACKAGE_NAME"
             fi
           done
           cd ..
