@@ -224,7 +224,7 @@ jobs:
       - name: "Upload artifact"
         uses: actions/upload-artifact@v6
         with:
-          name: digest-${{ env.PLATFORM_PAIR }}
+          name: digest-${{ matrix.version }}-${{ env.PLATFORM_PAIR }}
           path: /tmp/digests/*
           if-no-files-found: error
           retention-days: 1
@@ -241,7 +241,7 @@ jobs:
         uses: actions/download-artifact@v7
         with:
           path: /tmp/digests
-          pattern: digest-*
+          pattern: digest-${{ matrix.version }}-*
           merge-multiple: true
 
       - name: "Setup Docker Buildx"
