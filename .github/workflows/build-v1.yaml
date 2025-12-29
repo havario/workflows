@@ -190,3 +190,10 @@ jobs:
       - name: "Inspect image"
         run: |
           docker buildx imagetools inspect ${{ env.DOCKERHUB_REPO }}:${{ needs.check.outputs.nezha_version }}
+
+  sync:
+    needs:
+      - merge
+    name: "Sync to Dockerhub"
+    uses: ./.github/workflows/sync-readme.yaml
+    secrets: inherit
