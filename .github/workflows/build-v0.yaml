@@ -152,6 +152,7 @@ jobs:
           name: ${{ matrix.nezha_version }}
           tag_name: ${{ matrix.nezha_version }}
           fail_on_unmatched_files: true
+          make_latest: ${{ matrix.nezha_version == 'v0.20.13' }}
 
   build:
     needs:
