@@ -233,6 +233,12 @@ jobs:
     needs:
       - check
       - build
+    strategy:
+      fail-fast: true
+      matrix:
+        nezha_version:
+          - v0.18.6
+          - v0.20.13
     runs-on: ubuntu-latest
     name: "Merge manifest"
 
