@@ -282,3 +282,10 @@ jobs:
       - name: "Inspect image"
         run: |
           docker buildx imagetools inspect ${{ env.DOCKERHUB_REPO }}:${{ matrix.nezha_version }}
+
+  sync:
+    name: "Sync readme to dockerhub"
+    needs:
+      - merge
+    uses: ./.github/workflows/sync-readme.yaml
+    secrets: inherit
