@@ -65,6 +65,7 @@ jobs:
 
       - name: "Remove existing tag"
         run: |
+          set -eEuxo pipefail
           if git tag --list | grep -q "^${{ matrix.nezha_version }}$"; then
             git push origin --delete ${{ matrix.nezha_version }}
           fi
