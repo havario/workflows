@@ -52,9 +52,9 @@ jobs:
           CURRENT_DAY="$(date -u '+%d' -d '+8 hours')"
 
           echo "nezha_version=${LATEST_VER}" >> "$GITHUB_OUTPUT"
-          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]] || \
-            [[ "$(printf '%s\n%s\n' "$LATEST_VER" "$CURRENT_VER" | sort -V | head -n1)" != "$LATEST_VER" ]] || \
-            [[ -z "$CURRENT_VER" && -n "$LATEST_VER" ]] || [[ "$CURRENT_DAY" == "01" ]]; then
+          if [[ "$(printf '%s\n%s\n' "$LATEST_VER" "$CURRENT_VER" | sort -V | head -n1)" != "$LATEST_VER" ]] || \
+            [[ -z "$CURRENT_VER" && -n "$LATEST_VER" ]] || [[ "$CURRENT_DAY" == "01" ]] \
+            [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
             echo "Build required."
             TRIGGER="true"
           else

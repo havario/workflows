@@ -34,7 +34,7 @@ jobs:
           TRIGGER="false"
           CURRENT_DAY="$(date -u '+%d' -d '+8 hours')"
           echo "nezha_version=${LATEST_VER}" >> "$GITHUB_OUTPUT"
-          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]] || [[ "$CURRENT_DAY" == "01" ]]; then
+          if [[ "$CURRENT_DAY" == "01" ]] || [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
             echo "Build required."
             TRIGGER="true"
           else
