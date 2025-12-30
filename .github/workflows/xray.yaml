@@ -171,7 +171,7 @@ jobs:
           name: binary-${{ env.PLATFORM_PAIR }}
           path: core/xray
 
-      - name: "Download Geodat"
+      - name: "Download geodat"
         working-directory: core/xray
         run: |
           set -eEuxo pipefail
