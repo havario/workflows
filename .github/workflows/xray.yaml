@@ -8,8 +8,8 @@ on:
     paths:
       - "core/xray/**"
       - "!core/xray/**.md"
-  # schedule:
-  #   - cron: "0 16 * * *"
+  schedule:
+    - cron: "0 16 * * *"
   workflow_dispatch:
 
 concurrency:
