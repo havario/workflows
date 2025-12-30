@@ -47,7 +47,7 @@ jobs:
       - name: "Setup Go"
         uses: actions/setup-go@v6
         with:
-          go-version-file: ${{ github.workspace }}/core/xray/src/go.mod
+          go-version-file: core/xray/src/go.mod
           check-latest: true
 
       - name: "Build binary"
@@ -59,10 +59,10 @@ jobs:
           CGO_ENABLED: 0
         run: |
           set -eEuxo pipefail
-          COMMID="$(git describe --always --dirty)"
+          COMMID="$(wget -qO- --tries=5 https://api.github.com/repos/XTLS/Xray-core/releases | sed -n 's/.*"tag_name": *"v\([^"]*\)".*/\1/p' | sort -Vr | head -n1)"
           go build -v -trimpath -o xray -buildvcs=false -gcflags="all=-l=4" \
-            -ldflags="-X github.com/xtls/xray-core/core.build=${COMMID} -s -w -buildid=" \
-            ./main
+          -ldflags="-X github.com/xtls/xray-core/core.build=${COMMID} -s -w -buildid=" \
+          ./main
 
       - name: "Prepare assets"
         working-directory: core/xray/src
