@@ -225,6 +225,7 @@ jobs:
 
   merge:
     needs:
+      - check
       - build
     runs-on: ubuntu-latest
     name: "Merge manifest"
