@@ -1,0 +1,12 @@
+name: "Dev"
+
+on:
+  workflow_dispatch:
+
+jobs:
+  dev:
+    name: "Dev"
+    runs-on: ubuntu-latest
+
+    steps:
+      - run: echo "$HOME"
