@@ -1,0 +1,84 @@
+---
+name: "Build Xray"
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - "core/xray/**"
+      - "!core/xray/**.md"
+  # schedule:
+  #   - cron: "0 16 * * *"
+  workflow_dispatch:
+
+concurrency:
+  group: "${{ github.workflow }}-${{ github.ref }}"
+  cancel-in-progress: true
+
+jobs:
+  release:
+    strategy:
+      fail-fast: true
+      matrix:
+        include:
+          - { goos: linux, goarch: "386", platform: "linux/386" }
+          - { goos: linux, goarch: amd64, platform: "linux/amd64" }
+          - { goos: linux, goarch: arm, goarm: 6, platform: "linux/arm/v6" }
+          - { goos: linux, goarch: arm, goarm: 7, platform: "linux/arm/v7" }
+          - { goos: linux, goarch: arm64, platform: "linux/arm64" }
+          - { goos: linux, goarch: ppc64le, platform: "linux/ppc64le" }
+          - { goos: linux, goarch: s390x, platform: "linux/s390x" }
+    runs-on: ubuntu-latest
+    name: "Build binary"
+
+    steps:
+      - name: "Checkout repository"
+        uses: actions/checkout@v6
+
+      - name: "Clone source code"
+        working-directory: core/xray
+        run: |
+          set -eEuxo pipefail
+          mkdir src
+          git clone https://github.com/XTLS/Xray-core.git src
+
+      - name: "Setup Go"
+        uses: actions/setup-go@v6
+        with:
+          go-version-file: ${{ github.workspace }}/core/xray/src/go.mod
+          check-latest: true
+
+      - name: "Build binary"
+        working-directory: core/xray/src
+        env:
+          GOOS: ${{ matrix.goos }}
+          GOARCH: ${{ matrix.goarch }}
+          GOARM: ${{ matrix.goarm }}
+          CGO_ENABLED: 0
+        run: |
+          set -eEuxo pipefail
+          COMMID="$(git describe --always --dirty)"
+          go build -v -trimpath -o xray -buildvcs=false -gcflags="all=-l=4" \
+            -ldflags="-X github.com/xtls/xray-core/core.build=${COMMID} -s -w -buildid=" \
+            ./main
+
+      - name: "Prepare assets"
+        working-directory: core/xray/src
+        run: |
+          PLATFORM=${{ matrix.platform }}
+          echo "PLATFORM_PAIR=${PLATFORM//\//-}" >> "$GITHUB_ENV"
+          BINARY_NAME="xray-${{ matrix.goarch }}"
+          if [[ -n "${{ matrix.goarm }}" ]]; then
+            BINARY_NAME="${BINARY_NAME}v${{ matrix.goarm }}"
+          fi
+          mv xray "$BINARY_NAME"
+          echo "BINARY_NAME=${BINARY_NAME}" >> "$GITHUB_ENV"
+
+      - name: "Upload artifact"
+        uses: actions/upload-artifact@v6
+        with:
+          name: binary-${{ env.PLATFORM_PAIR }}
+          path: core/xray/src/${{ env.BINARY_NAME }}
+          if-no-files-found: error
+          retention-days: 1
