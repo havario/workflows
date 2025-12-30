@@ -9,4 +9,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - run: echo "$HOME"
+      - run: |
+          set -x
+          echo "$HOME"
