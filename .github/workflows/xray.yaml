@@ -68,8 +68,8 @@ jobs:
         include:
           - { goos: linux, goarch: "386", platform: "linux/386" }
           - { goos: linux, goarch: amd64, platform: "linux/amd64" }
-          - { goos: linux, goarch: arm, goarm: 6, platform: "linux/arm/v6" }
-          - { goos: linux, goarch: arm, goarm: 7, platform: "linux/arm/v7" }
+          - { goos: linux, goarch: arm, goarm: "6", platform: "linux/arm/v6" }
+          - { goos: linux, goarch: arm, goarm: "7", platform: "linux/arm/v7" }
           - { goos: linux, goarch: arm64, platform: "linux/arm64" }
           - { goos: linux, goarch: ppc64le, platform: "linux/ppc64le" }
           - { goos: linux, goarch: riscv64, platform: "linux/riscv64" }
