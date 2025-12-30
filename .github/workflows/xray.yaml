@@ -289,7 +289,7 @@ jobs:
     needs:
       - merge
     runs-on: ubuntu-latest
-    name: "Sync readme to dockerhub"
+    name: "Sync readme"
 
     steps:
       - name: "Checkout repository"
