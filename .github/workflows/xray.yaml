@@ -163,10 +163,11 @@ jobs:
         uses: actions/download-artifact@v7
         with:
           name: binary-${{ env.PLATFORM_PAIR }}
-          path: .
+          path: core/xray
 
       # Find and make the binary executable
       - name: "Prepare binary"
+        working-directory: core/xray
         run: |
           chmod +x xray-*
           ls -la xray-*
