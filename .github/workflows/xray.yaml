@@ -140,7 +140,6 @@ jobs:
     needs:
       - check
       - release
-    if: needs.check.outputs.trigger == 'true'
     strategy:
       fail-fast: true
       matrix:
@@ -241,7 +240,6 @@ jobs:
     needs:
       - check
       - build
-    if: needs.check.outputs.trigger == 'true'
     runs-on: ubuntu-latest
     name: "Merge manifest"
 
@@ -290,9 +288,7 @@ jobs:
 
   sync:
     needs:
-      - check
       - merge
-    if: needs.check.outputs.trigger == 'true'
     runs-on: ubuntu-latest
     name: "Sync readme"
 
