@@ -41,7 +41,7 @@ jobs:
         run: |
           set -eEuxo pipefail
           mkdir src
-          git clone https://github.com/XTLS/Xray-core.git src
+          git clone --depth=1 --branch 25.12.8 https://github.com/XTLS/Xray-core.git src
 
       - name: "Setup Go"
         uses: actions/setup-go@v6
@@ -66,6 +66,7 @@ jobs:
       - name: "Prepare assets"
         working-directory: core/xray/src
         run: |
+          set -eEuxo pipefail
           PLATFORM=${{ matrix.platform }}
           echo "PLATFORM_PAIR=${PLATFORM//\//-}" >> "$GITHUB_ENV"
           BINARY_NAME="xray-${{ matrix.goarch }}"
