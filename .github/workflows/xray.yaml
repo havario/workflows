@@ -94,7 +94,7 @@ jobs:
           go-version-file: core/xray/src/go.mod
           check-latest: true
 
-      - name: "Get project dependencies"
+      - name: "Download dependencies"
         working-directory: core/xray/src
         run: |
           set -eEuxo pipefail
