@@ -171,6 +171,13 @@ jobs:
           name: binary-${{ env.PLATFORM_PAIR }}
           path: core/xray
 
+      - name: "Download Geodat"
+        working-directory: core/xray
+        run: |
+          set -eEuxo pipefail
+          curl -L -O https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geosite.dat
+          curl -L -O https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geoip.dat
+
       - name: "Prepare binary"
         working-directory: core/xray
         run: |
