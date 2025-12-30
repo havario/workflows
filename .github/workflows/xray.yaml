@@ -93,6 +93,7 @@ jobs:
         with:
           go-version-file: core/xray/src/go.mod
           check-latest: true
+          cache-dependency-path: core/xray/src/go.sum
 
       - name: "Build binary"
         working-directory: core/xray/src
