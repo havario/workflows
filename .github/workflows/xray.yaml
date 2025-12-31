@@ -9,6 +9,15 @@ on:
       - "core/xray/**"
       - "!core/xray/**/*.md"
       - ".github/workflows/xray.yaml"
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
+    paths:
+      - "core/xray/**"
+      - "!core/xray/**/*.md"
+      - ".github/workflows/xray.yaml"
   schedule:
     - cron: "0 16 * * *"
   workflow_dispatch:
@@ -38,7 +47,7 @@ jobs:
       - name: "Fetch Versions and Decide"
         id: bump_version
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ github.token }}
         run: |
           set -eEuxo pipefail
           TRIGGER="false"
