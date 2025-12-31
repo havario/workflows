@@ -34,13 +34,13 @@ jobs:
     name: "Pre check"
     runs-on: ubuntu-latest
     outputs:
-      trigger: ${{ steps.bump_version.outputs.trigger }}
-      xray_tag: ${{ steps.bump_version.outputs.xray_tag }}
-      xray_version: ${{ steps.bump_version.outputs.xray_version }}
+      trigger: ${{ steps.ver.outputs.trigger }}
+      xray_tag: ${{ steps.ver.outputs.xray_tag }}
+      xray_version: ${{ steps.ver.outputs.xray_version }}
 
     steps:
       - name: "Fetch Versions and Decide"
-        id: bump_version
+        id: ver
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
