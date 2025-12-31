@@ -120,6 +120,8 @@ jobs:
         run: |
           set -eEuxo pipefail
           COMMID="$(git rev-parse --short HEAD)"
+
+          echo "GOOS: $GOOS, GOARCH: $GOARCH, GOARM: $GOARM"
           go build -v -trimpath -o xray -buildvcs=false -gcflags="all=-l=4" \
           -ldflags="-X github.com/xtls/xray-core/core.build=${COMMID} -s -w -buildid=" \
           ./main
