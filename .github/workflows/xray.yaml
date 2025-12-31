@@ -187,8 +187,12 @@ jobs:
         working-directory: core/xray
         run: |
           set -eEuxo pipefail
-          curl -L -O https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geosite.dat
-          curl -L -O https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geoip.dat
+          GEO_FILES=("geoip" "geosite")
+          for GEO_FILE in "${GEO_FILES[@]}"; do
+            curl -L -O "https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/$GEO_FILE.dat"
+            curl -L -O "https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/$GEO_FILE.dat.sha256sum"
+            sha256sum -c "$GEO_FILE.dat.sha256sum"
+          done
 
       - name: "Prepare binary"
         working-directory: core/xray
