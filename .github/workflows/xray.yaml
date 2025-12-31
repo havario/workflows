@@ -4,10 +4,11 @@ name: "Build Xray"
 on:
   push:
     branches:
-      - master
+      - "**"
     paths:
       - "core/xray/**"
-      - "!core/xray/**.md"
+      - "!core/xray/**/*.md"
+      - ".github/workflows/xray.yaml"
   schedule:
     - cron: "0 16 * * *"
   workflow_dispatch:
