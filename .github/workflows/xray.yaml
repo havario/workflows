@@ -39,9 +39,6 @@ jobs:
       xray_version: ${{ steps.bump_version.outputs.xray_version }}
 
     steps:
-      - name: "Checkout repository"
-        uses: actions/checkout@v6
-
       - name: "Fetch Versions and Decide"
         id: bump_version
         env:
