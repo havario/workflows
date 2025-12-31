@@ -35,6 +35,8 @@ jobs:
     steps:
       - name: "Get Version and Decide"
         id: ver
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           set -eEuxo pipefail
           TRIGGER="false"
