@@ -306,8 +306,6 @@ jobs:
     steps:
       - name: "Checkout repository"
         uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
 
       - name: "Sync readme to dockerhub"
         uses: peter-evans/dockerhub-description@v5
