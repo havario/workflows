@@ -14,3 +14,13 @@ jobs:
           echo "HOME=$HOME"
           echo "github.ref=${{ github.ref }}"
           echo "default_branch=${{ github.event.repository.default_branch }}"
+
+      - name: "Send telegram message"
+        uses: appleboy/telegram-action@v1
+        with:
+          to: ${{ secrets.TELEGRAM_TO }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          location: "24.9163213 121.1424972"
+          venue: "35.661777 139.704051 竹北體育館 新竹縣竹北市"
+          message: |
+            Send message from Github Action.
