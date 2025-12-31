@@ -36,13 +36,10 @@ jobs:
 
       - name: "Fetch Versions and Decide"
         id: bump_version
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -eEuxo pipefail
           TRIGGER="false"
-          LATEST_TAG="$(wget -qO- --tries=5 --header="Authorization: token $GITHUB_TOKEN" \
-            https://api.github.com/repos/XTLS/Xray-core/releases | sed -n 's/.*"tag_name": *"\(v[^"]*\)".*/\1/p' | sort -rV | head -n1)"
+          LATEST_TAG="$(gh release view -R XTLS/Xray-core --json tagName -q .tagName)"
           LATEST_VER=${LATEST_TAG#v}
           CURRENT_VER="$(wget -qO- --tries=5 https://hub.docker.com/v2/repositories/$DOCKERHUB_REPO/tags 2>/dev/null | \
             grep -o '"name":"[^"]*"' | awk -F'"' '$4!="latest"{print $4}' | sort -rV | head -n1 || true)"
