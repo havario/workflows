@@ -189,8 +189,8 @@ jobs:
           set -eEuxo pipefail
           declare -a GEO_FILES=("geoip" "geosite")
           for GEO_FILE in "${GEO_FILES[@]}"; do
-            curl -Ls -O "https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/$GEO_FILE.dat"
-            curl -Ls -O "https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/$GEO_FILE.dat.sha256sum"
+            curl -L -O "https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/$GEO_FILE.dat"
+            curl -L -O "https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/$GEO_FILE.dat.sha256sum"
             sha256sum -c "$GEO_FILE.dat.sha256sum"
           done
 
