@@ -37,6 +37,8 @@ jobs:
 
       - name: "Fetch Versions and Decide"
         id: bump_version
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -eEuxo pipefail
           TRIGGER="false"
