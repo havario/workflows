@@ -60,6 +60,7 @@ jobs:
           echo "trigger=${TRIGGER}" >> "$GITHUB_OUTPUT"
 
   build:
+    name: "Build image"
     needs:
       - check
     if: needs.check.outputs.trigger == 'true'
@@ -70,7 +71,6 @@ jobs:
           - { os: ubuntu-24.04, platform: linux/amd64 }
           - { os: ubuntu-24.04-arm, platform: linux/arm64 }
     runs-on: ${{ matrix.os }}
-    name: "Build image"
 
     steps:
       - name: "Prepare"
@@ -119,9 +119,10 @@ jobs:
             ZSTD_VERSION=${{ needs.check.outputs.zstd_version }}
             HEADERS_MORE_TAG=${{ needs.check.outputs.headers_more_tag }}
           labels: ${{ steps.meta.outputs.labels }}
-          outputs: type=image,name=${{ env.DOCKERHUB_REPO }},push-by-digest=true,name-canonical=true,push=true
+          outputs: type=image,name=${{ env.DOCKERHUB_REPO }},push-by-digest=true,name-canonical=true,push=${{ github.ref == format('refs/heads/{0}', github.event.repository.default_branch) }}
 
       - name: "Export digest"
+        if: github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
         run: |
           rm -rf /tmp/digests
           mkdir -p /tmp/digests
@@ -129,6 +130,7 @@ jobs:
           touch "/tmp/digests/${digest#sha256:}"
 
       - name: "Upload artifact"
+        if: github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
         uses: actions/upload-artifact@v6
         with:
           name: digest-${{ env.PLATFORM_PAIR }}
@@ -137,11 +139,12 @@ jobs:
           retention-days: 1
 
   merge:
+    name: "Merge manifest"
     needs:
       - check
       - build
+    if: github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
     runs-on: ubuntu-latest
-    name: "Merge manifest"
 
     steps:
       - name: "Download digests"
