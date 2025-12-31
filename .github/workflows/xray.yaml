@@ -142,7 +142,7 @@ jobs:
       - name: "Upload artifact"
         uses: actions/upload-artifact@v6
         with:
-          name: binary-${{ env.PLATFORM_PAIR }}
+          name: xray-${{ env.PLATFORM_PAIR }}
           path: core/xray/src/${{ env.BINARY_NAME }}
           if-no-files-found: error
           retention-days: 1
@@ -180,7 +180,7 @@ jobs:
       - name: "Download binary"
         uses: actions/download-artifact@v7
         with:
-          name: binary-${{ env.PLATFORM_PAIR }}
+          name: xray-${{ env.PLATFORM_PAIR }}
           path: core/xray
 
       - name: "Download geodat"
