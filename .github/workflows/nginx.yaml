@@ -184,4 +184,4 @@ jobs:
 
       - name: "Inspect image"
         run: |
-          docker buildx imagetools inspect ${{ env.DOCKERHUB_REPO }}:${{ needs.check.outputs.ngx_version }}
+          docker buildx imagetools inspect ${{ env.DOCKERHUB_REPO }}:${{ needs.check.outputs.ngx_version }}-alpine
