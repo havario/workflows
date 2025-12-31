@@ -97,11 +97,9 @@ jobs:
           check-latest: true
           cache-dependency-path: core/xray/src/go.sum
 
-      - name: "Download dependencies"
+      - name: "Download gomod"
         working-directory: core/xray/src
-        run: |
-          set -eEuxo pipefail
-          go mod download
+        run: go mod download
 
       - name: "Build binary"
         working-directory: core/xray/src
