@@ -95,6 +95,6 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         with:
-          files: ./src/**/*
+          files: ./src/**/RealiTLScanner_*
           tag_name: ${{ env.TAG_NAME }}
           generate_release_notes: true
