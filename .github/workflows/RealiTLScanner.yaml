@@ -97,4 +97,4 @@ jobs:
         with:
           files: ./src/**/RealiTLScanner_*
           tag_name: ${{ env.TAG_NAME }}
-          generate_release_notes: true
+          generate_release_notes: ${{ matrix.goos == 'linux' && matrix.goarch == 'amd64' }}
