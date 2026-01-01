@@ -42,8 +42,13 @@ jobs:
           - { goos: windows, goarch: arm64 }
 
           # BSD
+          - { goos: freebsd, goarch: "386" }
           - { goos: freebsd, goarch: amd64 }
           - { goos: freebsd, goarch: arm64 }
+
+          - { goos: openbsd, goarch: "386" }
+          - { goos: openbsd, goarch: amd64 }
+          - { goos: openbsd, goarch: arm64 }
     name: "Build binary"
     runs-on: ubuntu-latest
 
