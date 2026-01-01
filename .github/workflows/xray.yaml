@@ -81,7 +81,7 @@ jobs:
 
     steps:
       - name: "Checkout repository"
-        uses: actions/checkout@v6
+        uses: actions/checkout@v2
 
       - name: "Clone source code"
         working-directory: core/xray
