@@ -6,7 +6,7 @@
 
 ARG NGX_VERSION=""
 
-FROM alpine:latest AS builder
+FROM public.ecr.aws/docker/library/alpine AS builder
 
 LABEL maintainer="honeok <i@honeok.com>"
 
