@@ -122,8 +122,13 @@ jobs:
           pattern: RealiTLScanner_*
           merge-multiple: true
 
-      - name: "List files"
-        run: ls -R /tmp/assets
+      - name: "Generate checksums"
+        working-directory: /tmp/assets
+        run: |
+          set -eEuxo pipefail
+          ls -R
+          sha256sum RealiTLScanner_* > sha256sum.txt
+          cat sha256sum.txt
 
       - name: "Upload release"
         uses: softprops/action-gh-release@v2
