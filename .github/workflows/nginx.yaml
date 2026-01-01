@@ -18,7 +18,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  WORK_DIR: ${{ github.workspace }}/ldnmp/nginx
+  WORK_DIR: ldnmp/nginx
   DOCKERHUB_REPO: ${{ secrets.DOCKER_USERNAME }}/nginx
 
 jobs:
@@ -209,18 +209,3 @@ jobs:
           repository: ${{ env.DOCKERHUB_REPO }}
           readme-filepath: ${{ env.WORK_DIR }}/README.md
           enable-url-completion: false
-
-  notice:
-    name: "Send message"
-    needs:
-      - check
-      - sync
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: "Send message to telegram"
-        uses: appleboy/telegram-action@master
-        with:
-          to: ${{ secrets.TELEGRAM_TO }}
-          token: ${{ secrets.TELEGRAM_TOKEN }}
-          message: Build nginx version ${{ needs.check.outputs.ngx_version }} success.
