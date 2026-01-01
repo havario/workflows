@@ -1,0 +1,15 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:base", ":disableRateLimiting", ":timezone(Asia/Shanghai)"],
+  "baseBranches": ["master"],
+  "schedule": ["at 00:00"],
+  "commitMessagePrefix": "chore",
+  "commitMessageAction": "bump",
+  "packageRules": [
+    {
+      "matchManagers": ["github-actions"],
+      "groupName": "github-actions",
+      "automerge": true
+    }
+  ]
+}
