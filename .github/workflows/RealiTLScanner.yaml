@@ -1,0 +1,99 @@
+---
+name: "Build RealiTLScanner"
+
+on:
+  push:
+    branches:
+      - master
+    paths-ignore:
+      - "**/README.md"
+  schedule:
+    - cron: "0 22 * * *"
+  workflow_dispatch:
+
+concurrency:
+  group: "${{ github.workflow }}-${{ github.ref }}"
+  cancel-in-progress: true
+
+jobs:
+  build:
+    strategy:
+      fail-fast: true
+      matrix:
+        include:
+          - { goos: darwin, goarch: amd64 }
+          - { goos: darwin, goarch: arm64 }
+
+          - { goos: linux, goarch: "386" }
+          - { goos: linux, goarch: amd64 }
+          - { goos: linux, goarch: arm, goarm: "6" }
+          - { goos: linux, goarch: arm, goarm: "7" }
+          - { goos: linux, goarch: arm64 }
+          - { goos: linux, goarch: ppc64le }
+          - { goos: linux, goarch: riscv64 }
+          - { goos: linux, goarch: s390x }
+
+          - { goos: windows, goarch: "386" }
+          - { goos: windows, goarch: amd64 }
+          - { goos: windows, goarch: arm64 }
+    name: "Build binary"
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: "Set variables"
+        run: |
+          set -eEuxo pipefail
+          echo "TAG_NAME=$(awk -F. '{printf("v%d.%d.%d", substr($1,3), $2, $3)}' <<<"$(date -u '+%Y.%m.%d' -d '+8 hours')")" >> "$GITHUB_ENV"
+
+      - name: "Checkout repository"
+        uses: actions/checkout@v6
+        with:
+          repository: XTLS/RealiTLScanner
+          path: src
+
+      - name: "Setup Go"
+        uses: actions/setup-go@v6
+        with:
+          go-version-file: ./src/go.mod
+          cache-dependency-path: ./src/go.sum
+
+      - name: "Build binary"
+        working-directory: ./src
+        env:
+          GOOS: ${{ matrix.goos }}
+          GOARCH: ${{ matrix.goarch }}
+          GOARM: ${{ matrix.goarm }}
+          CGO_ENABLED: 0
+        run: |
+          set -eEuxo pipefail
+          echo "GOOS: $GOOS, GOARCH: $GOARCH, GOARM: $GOARM"
+          mkdir dist || exit 1
+          go build -v -trimpath -o dist/RealiTLScanner -gcflags="all=-l=4" -ldflags="-s -w -buildid="
+
+      - name: "Prepare unix assets"
+        if: ${{ matrix.goos != 'windows' }}
+        working-directory: ./src
+        run: |
+          set -eEuxo pipefail
+          BINARY_NAME="RealiTLScanner_${{ matrix.goos }}_${{ matrix.goarch }}"
+          if [[ -n "${{ matrix.goarm }}" ]]; then
+            BINARY_NAME="${BINARY_NAME}v${{ matrix.goarm }}"
+          fi
+          mv dist/RealiTLScanner "dist/$BINARY_NAME"
+
+      - name: "Prepare windows assets"
+        if: ${{ matrix.goos == 'windows' }}
+        working-directory: ./src
+        run: |
+          set -eEuxo pipefail
+          BINARY_NAME="RealiTLScanner_${{ matrix.goos }}_${{ matrix.goarch }}.exe"
+          mv dist/RealiTLScanner "dist/$BINARY_NAME"
+
+      - name: "Upload Release"
+        uses: softprops/action-gh-release@v2
+        env:
+          GH_TOKEN: ${{ github.token }}
+        with:
+          files: ./src/**/*
+          tag_name: ${{ env.TAG_NAME }}
+          generate_release_notes: true
