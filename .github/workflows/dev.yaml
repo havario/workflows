@@ -20,7 +20,4 @@ jobs:
         with:
           to: ${{ secrets.TELEGRAM_TO }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
-          location: "24.9163213 121.1424972"
-          venue: "35.661777 139.704051 竹北體育館 新竹縣竹北市"
-          message: |
-            Send message from Github Action.
+          message: Build nginx version 1.24.2 success.
