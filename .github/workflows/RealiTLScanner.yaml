@@ -36,6 +36,7 @@ jobs:
 
           - { goos: windows, goarch: "386" }
           - { goos: windows, goarch: amd64 }
+          - { goos: windows, goarch: arm64 }
     name: "Build binary"
     runs-on: ubuntu-latest
 
