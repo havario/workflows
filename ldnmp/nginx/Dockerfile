@@ -58,7 +58,7 @@ RUN set -ex \
     && apk del --no-network .build-deps \
     && rm -rf /var/cache/apk/*
 
-FROM nginx:${NGX_VERSION}-alpine AS dist
+FROM public.ecr.aws/docker/library/nginx:${NGX_VERSION}-alpine AS dist
 
 LABEL maintainer="honeok <i@honeok.com>"
 
