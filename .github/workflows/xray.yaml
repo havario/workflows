@@ -244,7 +244,7 @@ jobs:
     needs:
       - check
       - build
-    runs-on: ubuntu-latest
+    runs-on: debian-12
     name: "Merge manifest"
 
     steps:
@@ -293,7 +293,7 @@ jobs:
   sync:
     needs:
       - merge
-    runs-on: ubuntu-latest
+    runs-on: debian-12
     name: "Sync readme"
 
     steps:
