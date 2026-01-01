@@ -128,7 +128,6 @@ jobs:
           set -eEuxo pipefail
           ls -R
           sha256sum RealiTLScanner_* > sha256sum.txt
-          cat sha256sum.txt
 
       - name: "Upload release"
         uses: softprops/action-gh-release@v2
