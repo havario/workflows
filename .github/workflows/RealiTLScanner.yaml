@@ -75,7 +75,7 @@ jobs:
             BINARY_NAME="${BINARY_NAME}v${{ matrix.goarm }}"
           fi
           if [[ "${{ matrix.goos }}" == "windows" ]]; then
-            mv "dist/RealiTLScanner.exe" "dist/${BINARY_NAME}.exe"
+            mv "dist/RealiTLScanner" "dist/${BINARY_NAME}.exe"
             echo "BINARY_NAME=${BINARY_NAME}.exe" >> "$GITHUB_ENV"
           else
             mv "dist/RealiTLScanner" "dist/${BINARY_NAME}"
