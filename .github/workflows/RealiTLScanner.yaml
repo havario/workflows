@@ -21,9 +21,11 @@ jobs:
       fail-fast: true
       matrix:
         include:
+          # macOS
           - { goos: darwin, goarch: amd64 }
           - { goos: darwin, goarch: arm64 }
 
+          # Linux
           - { goos: linux, goarch: "386" }
           - { goos: linux, goarch: amd64 }
           - { goos: linux, goarch: arm, goarm: "5" }
@@ -34,9 +36,14 @@ jobs:
           - { goos: linux, goarch: riscv64 }
           - { goos: linux, goarch: s390x }
 
+          # Windows
           - { goos: windows, goarch: "386" }
           - { goos: windows, goarch: amd64 }
           - { goos: windows, goarch: arm64 }
+
+          # BSD
+          - { goos: freebsd, goarch: amd64 }
+          - { goos: freebsd, goarch: arm64 }
     name: "Build binary"
     runs-on: ubuntu-latest
 
