@@ -41,11 +41,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: "Set variables"
-        run: |
-          set -eEuxo pipefail
-          echo "TAG_NAME=$(awk -F. '{printf("v%d.%d.%d", substr($1,3), $2, $3)}' <<<"$(date -u '+%Y.%m.%d' -d '+8 hours')")" >> "$GITHUB_ENV"
-
       - name: "Checkout repository"
         uses: actions/checkout@v6
         with:
@@ -71,8 +66,7 @@ jobs:
           mkdir dist || exit 1
           go build -v -trimpath -o dist/RealiTLScanner -gcflags="all=-l=4" -ldflags="-s -w -buildid="
 
-      - name: "Prepare unix assets"
-        if: ${{ matrix.goos != 'windows' }}
+      - name: "Prepare assets"
         working-directory: ./src
         run: |
           set -eEuxo pipefail
@@ -80,21 +74,50 @@ jobs:
           if [[ -n "${{ matrix.goarm }}" ]]; then
             BINARY_NAME="${BINARY_NAME}v${{ matrix.goarm }}"
           fi
-          mv dist/RealiTLScanner "dist/$BINARY_NAME"
+          if [[ "${{ matrix.goos }}" == "windows" ]]; then
+            mv "dist/RealiTLScanner.exe" "dist/${BINARY_NAME}.exe"
+            echo "BINARY_NAME=${BINARY_NAME}.exe" >> "$GITHUB_ENV"
+          else
+            mv "dist/RealiTLScanner" "dist/${BINARY_NAME}"
+            echo "BINARY_NAME=${BINARY_NAME}" >> "$GITHUB_ENV"
+          fi
 
-      - name: "Prepare windows assets"
-        if: ${{ matrix.goos == 'windows' }}
-        working-directory: ./src
+      - name: "Upload artifact"
+        uses: actions/upload-artifact@v6
+        with:
+          name: ${{ env.BINARY_NAME }}
+          path: ./src/dist/${{ env.BINARY_NAME }}
+          if-no-files-found: error
+          retention-days: 1
+
+  release:
+    name: "Publish Release"
+    needs:
+      - build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: "Set Release Tag"
         run: |
-          set -eEuxo pipefail
-          BINARY_NAME="RealiTLScanner_${{ matrix.goos }}_${{ matrix.goarch }}.exe"
-          mv dist/RealiTLScanner "dist/$BINARY_NAME"
+          echo "TAG_NAME=$(awk -F. '{printf("v%d.%d.%d", substr($1,3), $2, $3)}' <<<"$(date -u '+%Y.%m.%d' -d '+8 hours')")" >> "$GITHUB_ENV"
+
+      - name: "Download digests"
+        uses: actions/download-artifact@v7
+        with:
+          path: /tmp/assets
+          pattern: RealiTLScanner_*
+          merge-multiple: true
+
+      - name: "List files"
+        run: ls -R /tmp/assets
 
       - name: "Upload Release"
         uses: softprops/action-gh-release@v2
         env:
           GH_TOKEN: ${{ github.token }}
         with:
-          files: ./src/**/RealiTLScanner_*
+          files: /tmp/assets/*
           tag_name: ${{ env.TAG_NAME }}
-          generate_release_notes: ${{ matrix.goos == 'linux' && matrix.goarch == 'amd64' }}
+          generate_release_notes: true
