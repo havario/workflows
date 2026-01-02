@@ -70,7 +70,6 @@ jobs:
         include:
           - { goos: linux, goarch: "386", platform: "linux/386" }
           - { goos: linux, goarch: amd64, platform: "linux/amd64" }
-          - { goos: linux, goarch: arm, goarm: "5", platform: "linux/arm/v5" }
           - { goos: linux, goarch: arm, goarm: "6", platform: "linux/arm/v6" }
           - { goos: linux, goarch: arm, goarm: "7", platform: "linux/arm/v7" }
           - { goos: linux, goarch: arm64, platform: "linux/arm64" }
@@ -149,7 +148,6 @@ jobs:
         platform:
           - linux/386
           - linux/amd64
-          - linux/arm/v5
           - linux/arm/v6
           - linux/arm/v7
           - linux/arm64
