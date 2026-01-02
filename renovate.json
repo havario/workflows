@@ -1,6 +1,5 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "configValidation": "warning",
   "extends": ["config:base", ":disableRateLimiting", ":timezone(Asia/Shanghai)"],
   "baseBranches": ["master"],
   "schedule": ["0 0 * * *"],
