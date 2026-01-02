@@ -8,8 +8,7 @@
   "packageRules": [
     {
       "matchManagers": ["github-actions"],
-      "groupName": "github-actions",
-      "automerge": true
+      "groupName": "github-actions"
     }
   ]
 }
