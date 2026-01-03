@@ -16,13 +16,17 @@ jobs:
       fail-fast: true
       matrix:
         os:
+          # debian
           - debian:bookworm # 12
           - debian:trixie # 13
           - debian:sid
+          # ubuntu
           - ubuntu:jammy # 22.04
           - ubuntu:noble # 24.04
           - ubuntu:plucky # 25.04
           - ubuntu:rolling
+          # kali
+          - kalilinux/kali-rolling
     runs-on: ubuntu-latest
     container:
       image: ${{ matrix.os }}
