@@ -12,7 +12,7 @@ on:
 
 jobs:
   run:
-    name: "Run xanmod install"
+    name: "XanMod install"
     strategy:
       fail-fast: true
       matrix:
@@ -34,7 +34,7 @@ jobs:
       - name: "Checkout repository"
         uses: actions/checkout@v6
 
-      - name: "Run xanmod install"
+      - name: "Run XanMod install"
         working-directory: infra
         run: |
           bash ci-deps.sh
