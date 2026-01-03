@@ -21,7 +21,6 @@ jobs:
           - debian:trixie # 13
           - debian:sid
           # ubuntu
-          - ubuntu:bionic # 18.04
           - ubuntu:focal # 20.04
           - ubuntu:jammy # 22.04
           - ubuntu:noble # 24.04
