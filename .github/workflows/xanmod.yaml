@@ -11,7 +11,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  setup:
     strategy:
       fail-fast: true
       matrix:
