@@ -26,4 +26,4 @@ jobs:
       - name: "Run shellcheck"
         uses: luizm/action-sh-checker@master
         env:
-          SHFMT_OPTS: -i 4 -ci -sr
+          SHFMT_OPTS: -i 4 -sr
