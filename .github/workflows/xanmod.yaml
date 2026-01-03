@@ -8,6 +8,14 @@ on:
     paths:
       - "infra/xanmod.sh"
       - ".github/workflows/xanmod.yaml"
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
+    paths:
+      - "infra/xanmod.sh"
+      - ".github/workflows/xanmod.yaml"
   workflow_dispatch:
 
 jobs:
