@@ -32,5 +32,5 @@ jobs:
         uses: actions/checkout@v6
 
       - name: "Run xanmod installation"
-        working-directory: infra
+        working-directory: ${{ github.workspace }}/infra
         run: bash kernel.sh --debug
