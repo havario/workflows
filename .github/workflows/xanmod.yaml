@@ -25,8 +25,6 @@ jobs:
           - ubuntu:noble # 24.04
           - ubuntu:plucky # 25.04
           - ubuntu:rolling
-          # kali
-          - kalilinux/kali-rolling
     runs-on: ubuntu-latest
     container:
       image: ${{ matrix.os }}
