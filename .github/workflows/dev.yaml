@@ -14,10 +14,4 @@ jobs:
           echo "HOME=$HOME"
           echo "github.ref=${{ github.ref }}"
           echo "default_branch=${{ github.event.repository.default_branch }}"
-
-      - name: "Send telegram message"
-        uses: appleboy/telegram-action@master
-        with:
-          to: ${{ secrets.TELEGRAM_TO }}
-          token: ${{ secrets.TELEGRAM_TOKEN }}
-          message: Build nginx version 1.24.2 success.
+          echo $GITHUB_ACTIONS
