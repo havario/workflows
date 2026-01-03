@@ -176,7 +176,7 @@ curl() {
 # debian/ubuntu
 # https://xanmod.org
 xanmod_install() {
-    local XANMOD_URL XANMOD_CHECK_SCRIPT XANMOD_KEY XANMOD_VERSION XANMOD_KEYRING XANMOD_APTLIST
+    local XANMOD_URL XANMOD_CHECK_SCRIPT XANMOD_KEY XANMOD_VERSION KEYRING_DIR XANMOD_KEYRING XANMOD_APTLIST
 
     if [ "$GITHUB_CI" = 1 ]; then
         XANMOD_CHECK_SCRIPT="https://github.com/yumaoss/My_tools/raw/main/check_x86-64_psabi.sh"
@@ -189,10 +189,12 @@ xanmod_install() {
 
     # https://gitlab.com/xanmod/linux
     XANMOD_VERSION="$(curl -L "$XANMOD_CHECK_SCRIPT" | awk -f - 2>/dev/null | awk -F 'x86-64-v' '{v=$2+0; if(v==4)v=3; print v}')"
-    XANMOD_KEYRING="/etc/apt/keyrings/xanmod-archive-keyring.gpg"
+    KEYRING_DIR="/etc/apt/keyrings"
+    XANMOD_KEYRING="$KEYRING_DIR/xanmod-archive-keyring.gpg"
     XANMOD_APTLIST="/etc/apt/sources.list.d/xanmod-release.list"
 
     dpkg -s gnupg >/dev/null 2>&1 || install_pkg gnupg
+    [ -d "$KEYRING_DIR" ] || install -d -m 0755 "$KEYRING_DIR"
     curl -L "$XANMOD_KEY" | gpg --dearmor -vo "$XANMOD_KEYRING"
     echo "deb [signed-by=$XANMOD_KEYRING] http://deb.xanmod.org $VERSION_CODENAME main" | tee "$XANMOD_APTLIST"
     if [[ -n "$XANMOD_VERSION" && "$XANMOD_VERSION" =~ ^[0-9]$ ]]; then
