@@ -12,6 +12,7 @@ on:
 
 jobs:
   run:
+    name: "Execute install"
     strategy:
       fail-fast: true
       matrix:
