@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # SPDX-License-Identifier: Apache-2.0
 
-# Description:
+# Description: The script installs the high performance xanmod kernel on debian based systems.
 # Copyright (c) 2025-2026 honeok <i@honeok.com>
 #                                <honeok7@gmail.com>
 
