@@ -63,6 +63,7 @@
   "[shellscript]": {
     "editor.defaultFormatter": "mkhl.shfmt" // https://github.com/mvdan/sh
   },
+  "shfmt.executableArgs": ["-ci", "-sr"],
 
   // yaml
   "[yaml]": {
