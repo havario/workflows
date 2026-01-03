@@ -197,6 +197,8 @@ xanmod_install() {
     echo "deb [signed-by=$XANMOD_KEYRING] http://deb.xanmod.org $VERSION_CODENAME main" | tee "$XANMOD_APTLIST"
     if [[ -n "$XANMOD_VERSION" && "$XANMOD_VERSION" =~ ^[0-9]$ ]]; then
         install_pkg "linux-xanmod-x64v$XANMOD_VERSION"
+    else
+        die "Failed to get XanMod version."
     fi
     rm -f "$XANMOD_APTLIST" || true
     [ "$GITHUB_CI" = 1 ] || update-grub
