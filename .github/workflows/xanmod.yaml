@@ -11,7 +11,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  run:
+  install:
     strategy:
       fail-fast: true
       matrix:
@@ -33,4 +33,5 @@ jobs:
 
       - name: "Run xanmod installation"
         working-directory: infra
-        run: bash xanmod.sh --debug --ci
+        shell: bash
+        run: ./xanmod.sh --debug --ci
