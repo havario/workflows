@@ -34,6 +34,5 @@ jobs:
       - name: "Run xanmod installation"
         working-directory: infra
         run: |
-          apt-get update
-          apt-get install -y -q bash curl
+          bash ci-deps.sh
           bash xanmod.sh --debug --ci
