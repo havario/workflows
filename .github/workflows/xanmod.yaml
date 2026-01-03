@@ -28,11 +28,14 @@ jobs:
           # debian
           - debian:bookworm # 12
           - debian:trixie # 13
+          - debian:forky # 14
+          - debian:experimental
           - debian:sid
           # ubuntu
           - ubuntu:jammy # 22.04
           - ubuntu:noble # 24.04
           - ubuntu:plucky # 25.04
+          - ubuntu:devel # 26.04
           - ubuntu:rolling
     runs-on: ubuntu-latest
     container:
