@@ -33,4 +33,4 @@ jobs:
 
       - name: "Run xanmod installation"
         working-directory: infra
-        run: bash xanmod.sh --debug
+        run: bash xanmod.sh --debug --ci
