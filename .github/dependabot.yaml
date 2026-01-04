@@ -8,5 +8,12 @@ updates:
       time: "00:00"
       timezone: "Asia/Shanghai"
     open-pull-requests-limit: 10
+    labels:
+      - "dependencies"
     commit-message:
       prefix: "chore"
+      include: "scope"
+    groups:
+      actions:
+        patterns:
+          - "*"
