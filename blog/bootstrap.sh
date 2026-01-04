@@ -2,6 +2,8 @@
 # SPDX-License-Identifier: Apache-2.0
 # Copyright (c) 2025 honeok <i@honeok.com>
 
+# shellcheck disable=all
+
 set -eE
 
 command clear
@@ -19,9 +21,9 @@ docker exec php sh -c "sed -i '/^listen =/d' /usr/local/etc/php-fpm.d/www.conf"
 docker exec php sh -c "echo -e '\nlisten = /run/php/php-fpm.sock\nlisten.owner = www-data\nlisten.group = www-data\nlisten.mode = 0777' >> /usr/local/etc/php-fpm.d/www.conf"
 docker exec php sh -c "rm -f /usr/local/etc/php-fpm.d/zz-docker.conf"
 
-docker exec redis redis-cli FLUSHALL >/dev/null 2>&1
-docker exec openresty chown -R nginx:nginx /usr/local/openresty/nginx/html >/dev/null 2>&1
-docker exec php chown -R www-data:www-data /var/www/html >/dev/null 2>&1
+docker exec redis redis-cli FLUSHALL > /dev/null 2>&1
+docker exec openresty chown -R nginx:nginx /usr/local/openresty/nginx/html > /dev/null 2>&1
+docker exec php chown -R www-data:www-data /var/www/html > /dev/null 2>&1
 docker compose restart openresty php
 
 sleep 2

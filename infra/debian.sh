@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# shellcheck source=/dev/null
 . /etc/os-release
 
 echo "deb http://deb.debian.org/debian $VERSION_CODENAME-backports main" | tee /etc/apt/sources.list.d/backports.list

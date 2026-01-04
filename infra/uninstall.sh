@@ -4,6 +4,8 @@
 
 # set -eEuxo pipefail
 
+# shellcheck disable=all
+
 systemctl stop docker.socket
 systemctl stop docker.service
 systemctl stop containerd.service
@@ -20,17 +22,17 @@ rm -rf /run/docker
 rm -rf /run/containerd
 rm -rf /var/run/docker*
 
-ip link show docker0 >/dev/null 2>&1 && ip link delete docker0
+ip link show docker0 > /dev/null 2>&1 && ip link delete docker0
 
-which iptables >/dev/null 2>&1 && {
+which iptables > /dev/null 2>&1 && {
     iptables -F
     iptables -t nat -F
-    iptables -X DOCKER 2>/dev/null
-    iptables -X DOCKER-BRIDGE 2>/dev/null
-    iptables -X DOCKER-CT 2>/dev/null
-    iptables -X DOCKER-FORWARD 2>/dev/null
-    iptables -X DOCKER-INTERNAL 2>/dev/null
-    iptables -X DOCKER-USER 2>/dev/null
-    iptables -t nat -X DOCKER 2>/dev/null
-    iptables -t nat -D POSTROUTING -s 172.17.0.0/16 -j MASQUERADE 2>/dev/null
+    iptables -X DOCKER 2> /dev/null
+    iptables -X DOCKER-BRIDGE 2> /dev/null
+    iptables -X DOCKER-CT 2> /dev/null
+    iptables -X DOCKER-FORWARD 2> /dev/null
+    iptables -X DOCKER-INTERNAL 2> /dev/null
+    iptables -X DOCKER-USER 2> /dev/null
+    iptables -t nat -X DOCKER 2> /dev/null
+    iptables -t nat -D POSTROUTING -s 172.17.0.0/16 -j MASQUERADE 2> /dev/null
 }
