@@ -223,9 +223,15 @@ jobs:
           context: core/xray/
           platforms: ${{ matrix.platform }}
           labels: ${{ steps.meta.outputs.labels }}
-          outputs: type=image,name=${{ env.DOCKERHUB_REPO }},push-by-digest=true,name-canonical=true,push=true
+          outputs: >
+            type=image,
+            name=${{ env.DOCKERHUB_REPO }},
+            push-by-digest=${{ github.ref == format('refs/heads/{0}', github.event.repository.default_branch) }},
+            name-canonical=${{ github.ref == format('refs/heads/{0}', github.event.repository.default_branch) }},
+            push=${{ github.ref == format('refs/heads/{0}', github.event.repository.default_branch) }}
 
       - name: "Export digest"
+        if: github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
         run: |
           rm -rf /tmp/digests
           mkdir -p /tmp/digests
@@ -233,6 +239,7 @@ jobs:
           touch "/tmp/digests/${digest#sha256:}"
 
       - name: "Upload artifact"
+        if: github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
           name: digest-${{ env.PLATFORM_PAIR }}
@@ -244,6 +251,7 @@ jobs:
     needs:
       - check
       - build
+    if: github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
     runs-on: ubuntu-latest
     name: "Merge manifest"
 
