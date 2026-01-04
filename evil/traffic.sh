@@ -5,6 +5,8 @@
 # follow bash bible: https://github.com/dylanaraps/pure-bash-bible
 # Copyright (c) 2025 honeok <i@honeok.com>
 
+# shellcheck disable=all
+
 set -eE
 
 get_ifaces() {
@@ -16,7 +18,7 @@ get_ifaces() {
                 echo "$iface"
             fi
         fi
-    done </proc/net/dev
+    done < /proc/net/dev
 }
 
 get_bytes() {
@@ -25,11 +27,11 @@ get_bytes() {
         line="${line## }"
         if [[ "$line" == "$iface":* ]]; then
             line="${line//:/ }"
-            read -ar cols <<<"$line"
+            read -ar cols <<< "$line"
             # cols[1]: 入口流量
             # cols[9]: 出口流量
             echo "${cols[1]} ${cols[9]}"
             return
         fi
-    done </proc/net/dev
+    done < /proc/net/dev
 }
