@@ -2,12 +2,6 @@
 name: "Build OpenResty"
 
 on:
-  pull_request:
-    types: [opened, reopened, synchronize]
-    paths:
-      - "ldnmp/openresty/**"
-      - "!ldnmp/openresty/**/*.md"
-      - ".github/workflows/openresty.yaml"
   workflow_dispatch:
 
 concurrency:
@@ -23,9 +17,9 @@ jobs:
     name: "Stable pre check"
     runs-on: ubuntu-latest
     outputs:
+      renew: ${{ steps.ver.outputs.renew }}
       resty_version: ${{ steps.ver.outputs.resty_version }}
       zstd_version: ${{ steps.ver.outputs.zstd_version }}
-      trigger: ${{ steps.ver.outputs.trigger }}
 
     steps:
       - name: "Get Version and Decide"
@@ -34,7 +28,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -eEuxo pipefail
-          TRIGGER="false"
+          RENEW="false"
           LATEST_VER="$(gh release view -R openresty/openresty --json tagName -q .tagName | sed 's#v##')"
           CURRENT_VER="$(skopeo list-tags "docker://docker.io/$DOCKERHUB_REPO" 2>/dev/null | jq -r '.Tags[]' | grep -Ev '^alpine$|edge|fat' | sed 's#-alpine##' || true)"
           ZSTD_VER="$(gh release view -R facebook/zstd --json tagName -q .tagName | sed 's#v##')"
@@ -42,15 +36,15 @@ jobs:
           echo "zstd_version=${ZSTD_VER}" >> "$GITHUB_OUTPUT"
           if [[ "$(printf '%s\n%s\n' "$LATEST_VER" "$CURRENT_VER" | sort -V | head -n1)" != "$LATEST_VER" ]] || [[ -z "$CURRENT_VER" && -n "$LATEST_VER" ]]; then
             echo "Build required."
-            TRIGGER="true"
+            RENEW="true"
           fi
-          echo "trigger=${TRIGGER}" >> "$GITHUB_OUTPUT"
+          echo "renew=${RENEW}" >> "$GITHUB_OUTPUT"
 
   build-stable:
     name: "Build stable image"
     needs:
       - check-stable
-    if: needs.check-stable.outputs.trigger == 'true' || github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'
+    if: needs.check-stable.outputs.renew == 'true' || github.event_name == 'workflow_dispatch'
     strategy:
       fail-fast: true
       matrix:
@@ -114,14 +108,9 @@ jobs:
             RESTY_STRIP_BINARIES=1
           labels: ${{ steps.meta.outputs.labels }}
           outputs: >
-            type=image,
-            name=${{ secrets.DOCKER_USERNAME != '' && env.DOCKERHUB_REPO || 'openresty' }},
-            push-by-digest=${{ github.ref == format('refs/heads/{0}', github.event.repository.default_branch) }},
-            name-canonical=${{ github.ref == format('refs/heads/{0}', github.event.repository.default_branch) }},
-            push=${{ github.ref == format('refs/heads/{0}', github.event.repository.default_branch) }}
+            type=image,name=${{ env.DOCKERHUB_REPO }},push-by-digest=true,name-canonical=true,push=true
 
       - name: "Export digest"
-        if: github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
         run: |
           rm -rf /tmp/digests
           mkdir -p /tmp/digests
@@ -129,7 +118,6 @@ jobs:
           touch "/tmp/digests/${digest#sha256:}"
 
       - name: "Upload artifact"
-        if: github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
         uses: actions/upload-artifact@v1
         with:
           name: digest-${{ env.PLATFORM_PAIR }}
@@ -142,7 +130,6 @@ jobs:
     needs:
       - check-stable
       - build-stable
-    if: github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
     runs-on: ubuntu-latest
 
     steps:
