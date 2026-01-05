@@ -18,3 +18,23 @@ updates:
         patterns:
           - "*"
 #
+
+  - package-ecosystem: docker
+    directory: /core/xray
+    schedule:
+      interval: daily
+
+  - package-ecosystem: docker
+    directory: /ldnmp/openresty/edge
+    schedule:
+      interval: daily
+
+  - package-ecosystem: docker
+    directory: /ldnmp/openresty/luarocks
+    schedule:
+      interval: daily
+
+  - package-ecosystem: docker
+    directory: /ldnmp/openresty/stable
+    schedule:
+      interval: daily
