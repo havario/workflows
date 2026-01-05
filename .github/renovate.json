@@ -1,0 +1,16 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:base", ":disableRateLimiting", ":semanticCommits", ":timezone(Asia/Shanghai)"],
+  "baseBranches": ["master"],
+  "pinDigests": true,
+  "packageRules": [
+    {
+      "matchManagers": ["github-actions"],
+      "groupName": "actions"
+    },
+    {
+      "matchManagers": ["dockerfile", "docker-compose"],
+      "groupName": "docker"
+    }
+  ]
+}
