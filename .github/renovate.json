@@ -1,7 +1,7 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["config:base", ":disableRateLimiting", ":semanticCommits"],
-  "baseBranches": ["release"],
+  "baseBranches": ["master"],
   "packageRules": [
     {
       "matchManagers": ["dockerfile", "docker-compose"],
