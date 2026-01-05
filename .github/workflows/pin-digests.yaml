@@ -24,7 +24,7 @@ concurrency:
 
 jobs:
   digests:
-    name: "Pin GitHub Actions digests"
+    name: "Pin Digests"
     runs-on: ubuntu-latest
 
     steps:
@@ -35,11 +35,13 @@ jobs:
           fetch-depth: 0
 
       - name: "Install extension"
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           set -eEuxo pipefail
           gh extension install amenocal/gh-pin-actions
 
-      - name: "Pin Workflow Actions"
+      - name: "Pin Actions Digests"
         run: |
           cd $GITHUB_WORKSPACE || exit 1
           gh pin-actions workflows --overwrite
