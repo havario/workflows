@@ -218,11 +218,7 @@ jobs:
 
       - name: "Build and export"
         id: build
-<<<<<<< HEAD
         uses: docker/build-push-action@v1
-=======
-        uses: docker/build-push-action@9e436ba9f2d7bcd1d038c8e55d039d37896ddc5d # v6.18.0
->>>>>>> 0198a3aecb1f72fa69ef5c245e94d65ec46cfc53
         with:
           context: core/xray/
           platforms: ${{ matrix.platform }}
