@@ -24,6 +24,6 @@ jobs:
         uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
 
       - name: "Run shellcheck"
-        uses: luizm/action-sh-checker@a3627bbade03e7684152ea3f66d1d350d6cfac14 # master
+        uses: luizm/action-sh-checker@883217215b11c1fabbf00eb1a9a041f62d74c744 # master
         env:
           SHFMT_OPTS: -i 4 -sr
