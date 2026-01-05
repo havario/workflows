@@ -3,6 +3,16 @@ name: "Build OpenResty"
 
 on:
   workflow_dispatch:
+    inputs:
+      build:
+        description: "Build stage"
+        required: true
+        type: choice
+        default: "all"
+        options:
+          - all
+          - stable
+          - edge
 
 concurrency:
   group: "${{ github.workflow }}-${{ github.ref }}"
@@ -16,6 +26,7 @@ jobs:
   check-stable:
     name: "Stable pre check"
     runs-on: ubuntu-latest
+    if: github.event.inputs.build == 'stable' || github.event.inputs.build == 'all'
     outputs:
       renew: ${{ steps.vers.outputs.renew }}
       resty_version: ${{ steps.vers.outputs.resty_version }}
@@ -44,7 +55,8 @@ jobs:
     name: "Build stable image"
     needs:
       - check-stable
-    if: needs.check-stable.outputs.renew == 'true' || github.event_name == 'workflow_dispatch'
+    if: |
+      needs.check-stable.result == 'success' && (needs.check-stable.outputs.renew == 'true' || github.event_name == 'workflow_dispatch')
     strategy:
       fail-fast: true
       matrix:
@@ -178,6 +190,7 @@ jobs:
   check-edge:
     name: "Edge pre check"
     runs-on: ubuntu-latest
+    if: github.event.inputs.build == 'edge' || github.event.inputs.build == 'all'
     outputs:
       renew: ${{ steps.vers.outputs.renew }}
       resty_version: ${{ steps.vers.outputs.resty_version }}
@@ -206,7 +219,8 @@ jobs:
     name: "Build edge image"
     needs:
       - check-edge
-    if: needs.check-edge.outputs.renew == 'true' || github.event_name == 'workflow_dispatch'
+    if: |
+      needs.check-edge.result == 'success' && (needs.check-edge.outputs.renew == 'true' || github.event_name == 'workflow_dispatch')
     strategy:
       fail-fast: true
       matrix:
