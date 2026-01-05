@@ -1,16 +1,20 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:base", ":disableRateLimiting", ":semanticCommits", ":timezone(Asia/Shanghai)"],
-  "baseBranches": ["master"],
-  "pinDigests": true,
+  "extends": ["config:base", ":disableRateLimiting", ":semanticCommits"],
+  "baseBranches": ["release"],
   "packageRules": [
-    {
-      "matchManagers": ["github-actions"],
-      "groupName": "actions"
-    },
     {
       "matchManagers": ["dockerfile", "docker-compose"],
       "groupName": "docker"
+    },
+    {
+      "matchManagers": ["github-actions"],
+      "groupName": "actions",
+      "pinDigests": true
+    },
+    {
+      "matchManagers": ["gomod"],
+      "groupName": "go"
     }
   ]
 }
