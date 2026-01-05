@@ -1,7 +1,7 @@
 ---
 services:
   openresty:
-    image: honeok/openresty:1.27.1.2-alpine
+    image: honeok/openresty:1.27.1.2-alpine@sha256:7ca20c7d1f097339411aab9e0f51e8d0ca7301860689d31fe9a13a5b270f8ead
     container_name: openresty
     restart: unless-stopped
     environment:
@@ -19,7 +19,7 @@ services:
     network_mode: host
 
   mysql:
-    image: percona/percona-server:8.4.6-6.1
+    image: percona/percona-server:8.4.6-6.1@sha256:064cbe816472f5a8071c716d29fe6d5d40f8a31e2acbf4c0ac539b9360323477
     container_name: mysql
     restart: unless-stopped
     environment:
@@ -43,7 +43,7 @@ services:
       - web
 
   php:
-    image: honeok/php:8.5.1-fpm-alpine
+    image: honeok/php:8.5.1-fpm-alpine@sha256:eabdaa813e2960680a67dd9b4a95a58d86d24f8d151602656c51aea8bbd32093
     container_name: php
     restart: unless-stopped
     environment:
@@ -58,7 +58,7 @@ services:
         condition: service_healthy
 
   redis:
-    image: redis:8.4.0-alpine
+    image: redis:8.4.0-alpine@sha256:6cbef353e480a8a6e7f10ec545f13d7d3fa85a212cdcc5ffaf5a1c818b9d3798
     container_name: redis
     restart: unless-stopped
     environment:
