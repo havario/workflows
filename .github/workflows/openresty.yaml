@@ -261,7 +261,7 @@ jobs:
         id: build
         uses: docker/build-push-action@v1
         with:
-          context: ${{ env.WORK_DIR }}/stable
+          context: ${{ env.WORK_DIR }}/edge
           platforms: ${{ matrix.platform }}
           build-args: |
             RESTY_VERSION=${{ needs.check-edge.outputs.resty_version }}
