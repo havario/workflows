@@ -81,7 +81,7 @@ jobs:
 
     steps:
       - name: "Checkout repository"
-        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+        uses: actions/checkout@v1
 
       - name: "Clone source code"
         working-directory: core/xray
@@ -91,7 +91,7 @@ jobs:
           git clone --depth=1 --branch ${{ needs.check.outputs.xray_tag }} https://github.com/XTLS/Xray-core.git src
 
       - name: "Setup Go"
-        uses: actions/setup-go@4dc6199c7b1a012772edbd06daecab0f50c9053c # v6.1.0
+        uses: actions/setup-go@v1
         with:
           go-version-file: core/xray/src/go.mod
           check-latest: true
@@ -131,7 +131,7 @@ jobs:
           echo "BINARY_NAME=${BINARY_NAME}" >> "$GITHUB_ENV"
 
       - name: "Upload artifact"
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        uses: actions/upload-artifact@v1
         with:
           name: xray-${{ env.PLATFORM_PAIR }}
           path: core/xray/src/${{ env.BINARY_NAME }}
@@ -164,10 +164,10 @@ jobs:
           echo "PLATFORM_PAIR=${PLATFORM//\//-}" >> "$GITHUB_ENV"
 
       - name: "Checkout repository"
-        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+        uses: actions/checkout@v1
 
       - name: "Download binary"
-        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
+        uses: actions/download-artifact@v1
         with:
           name: xray-${{ env.PLATFORM_PAIR }}
           path: core/xray
@@ -190,13 +190,13 @@ jobs:
           ls -la xray-*
 
       - name: "Setup Docker QEMU"
-        uses: docker/setup-qemu-action@c7c53464625b32c7a7e944ae62b3e17d2b600130 # v3.7.0
+        uses: docker/setup-qemu-action@v1
 
       - name: "Setup Docker Buildx"
-        uses: docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f # v3.12.0
+        uses: docker/setup-buildx-action@v1
 
       - name: "Login to DockerHub"
-        uses: docker/login-action@5e57cd118135c172c3672efd75eb46360885c0ef # v3.6.0
+        uses: docker/login-action@v1
         with:
           registry: docker.io
           username: ${{ secrets.DOCKER_USERNAME }}
@@ -204,7 +204,7 @@ jobs:
 
       - name: "Extract Docker metadata"
         id: meta
-        uses: docker/metadata-action@c299e40c65443455700f0fdfc63efafe5b349051 # v5.10.0
+        uses: docker/metadata-action@v1
         with:
           images: ${{ env.DOCKERHUB_REPO }}
           tags: |
@@ -218,7 +218,7 @@ jobs:
 
       - name: "Build and export"
         id: build
-        uses: docker/build-push-action@263435318d21b8e681c14492fe198d362a7d2c83 # v6.18.0
+        uses: docker/build-push-action@v1
         with:
           context: core/xray/
           platforms: ${{ matrix.platform }}
@@ -240,7 +240,7 @@ jobs:
 
       - name: "Upload artifact"
         if: github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        uses: actions/upload-artifact@v1
         with:
           name: digest-${{ env.PLATFORM_PAIR }}
           path: /tmp/digests/*
@@ -257,17 +257,17 @@ jobs:
 
     steps:
       - name: "Download digests"
-        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
+        uses: actions/download-artifact@v1
         with:
           path: /tmp/digests
           pattern: digest-*
           merge-multiple: true
 
       - name: "Setup Docker Buildx"
-        uses: docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f # v3.12.0
+        uses: docker/setup-buildx-action@v1
 
       - name: "Login to DockerHub"
-        uses: docker/login-action@5e57cd118135c172c3672efd75eb46360885c0ef # v3.6.0
+        uses: docker/login-action@v1
         with:
           registry: docker.io
           username: ${{ secrets.DOCKER_USERNAME }}
@@ -275,7 +275,7 @@ jobs:
 
       - name: "Extract Docker metadata"
         id: meta
-        uses: docker/metadata-action@c299e40c65443455700f0fdfc63efafe5b349051 # v5.10.0
+        uses: docker/metadata-action@v1
         with:
           images: ${{ env.DOCKERHUB_REPO }}
           tags: |
@@ -306,10 +306,10 @@ jobs:
 
     steps:
       - name: "Checkout repository"
-        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+        uses: actions/checkout@v1
 
       - name: "Sync readme to dockerhub"
-        uses: peter-evans/dockerhub-description@1b9a80c056b620d92cedb9d9b5a223409c68ddfa # v5.0.0
+        uses: peter-evans/dockerhub-description@v1
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
