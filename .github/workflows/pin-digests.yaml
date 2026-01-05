@@ -24,22 +24,30 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: "Generate App Token"
+        uses: actions/create-github-app-token@v1
+        id: app-token
+        with:
+          app-id: ${{ secrets.BOT_ID }}
+          private-key: ${{ secrets.BOT_PRIVATE_KEY }}
+
       - name: "Checkout repository"
         uses: actions/checkout@v6
         with:
           ref: master
           fetch-depth: 0
+          token: ${{ steps.app-token.outputs.token }}
 
       - name: "Install extension"
         env:
-          GH_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
           set -eEuxo pipefail
           gh extension install amenocal/gh-pin-actions
 
       - name: "Pin Actions Digests"
         env:
-          GH_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
           set -eEuxo pipefail
           cd $GITHUB_WORKSPACE || exit 1
@@ -49,10 +57,12 @@ jobs:
           fi
 
       - name: "Upload commit to repository"
+        uses: stefanzweifel/git-auto-commit-action@v7
         if: ${{ env.IS_RENEW != '' }}
-        run: |
-          git config --local user.name "github-actions[bot]"
-          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add .
-          git commit -m "chore: pin GitHub Actions to specific SHAs" --signoff --no-verify
-          git push -f -u origin ${{ github.ref }}
+        with:
+          commit_message: "chore: pin GitHub Actions to specific SHAs"
+          branch: release
+          commit_options: "--signoff --no-verify"
+          commit_user_name: honego[bot]
+          commit_user_email: 2596419+honego[bot]@users.noreply.github.com
+          commit_author: honego[bot] <2596419+honego[bot]@users.noreply.github.com>
