@@ -9,7 +9,7 @@
       "groupName": "actions"
     },
     {
-      "matchManagers": ["dockerfile"],
+      "matchManagers": ["dockerfile", "docker-compose"],
       "groupName": "docker"
     }
   ]
