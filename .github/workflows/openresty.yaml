@@ -7,7 +7,7 @@ on:
     paths:
       - "ldnmp/openresty/**"
       - "!ldnmp/openresty/**/*.md"
-      - ".github/workflows/openresty.*"
+      - ".github/workflows/openresty.yaml"
   workflow_dispatch:
 
 concurrency:
