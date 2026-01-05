@@ -3,14 +3,11 @@ name: "Build OpenResty"
 
 on:
   pull_request:
-    types:
-      - opened
-      - reopened
-      - synchronize
+    types: [opened, reopened, synchronize]
     paths:
       - "ldnmp/openresty/**"
       - "!ldnmp/openresty/**/*.md"
-      - ".github/workflows/openresty.yaml"
+      - ".github/workflows/openresty.*"
   workflow_dispatch:
 
 concurrency:
@@ -43,12 +40,9 @@ jobs:
           ZSTD_VER="$(gh release view -R facebook/zstd --json tagName -q .tagName | sed 's#v##')"
           echo "resty_version=${LATEST_VER}" >> "$GITHUB_OUTPUT"
           echo "zstd_version=${ZSTD_VER}" >> "$GITHUB_OUTPUT"
-          if [[ "$(printf '%s\n%s\n' "$LATEST_VER" "$CURRENT_VER" | sort -V | head -n1)" != "$LATEST_VER" ]] || \
-            [[ -z "$CURRENT_VER" && -n "$LATEST_VER" ]] || [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+          if [[ "$(printf '%s\n%s\n' "$LATEST_VER" "$CURRENT_VER" | sort -V | head -n1)" != "$LATEST_VER" ]] || [[ -z "$CURRENT_VER" && -n "$LATEST_VER" ]]; then
             echo "Build required."
             TRIGGER="true"
-          else
-            echo "No build required."
           fi
           echo "trigger=${TRIGGER}" >> "$GITHUB_OUTPUT"
 
@@ -56,7 +50,7 @@ jobs:
     name: "Build stable image"
     needs:
       - check-stable
-    if: needs.check-stable.outputs.trigger == 'true'
+    if: needs.check-stable.outputs.trigger == 'true' || github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'
     strategy:
       fail-fast: true
       matrix:
