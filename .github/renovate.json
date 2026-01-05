@@ -1,6 +1,6 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:base", ":disableRateLimiting", ":semanticCommits"],
+  "extends": ["config:base", ":semanticCommits"],
   "baseBranches": ["release"],
   "packageRules": [
     {
@@ -10,6 +10,9 @@
     {
       "matchManagers": ["github-actions"],
       "groupName": "actions",
+      "automerge": true,
+      "automergeType": "pr",
+      "automergeStrategy": "rebase",
       "pinDigests": true
     },
     {
