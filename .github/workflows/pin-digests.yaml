@@ -11,6 +11,9 @@ on:
     - cron: "0 16 * * *"
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 concurrency:
   group: "${{ github.workflow }}-${{ github.ref }}"
   cancel-in-progress: true
@@ -48,8 +51,8 @@ jobs:
       - name: "Upload commit to repository"
         if: ${{ env.IS_RENEW != '' }}
         run: |
-          git add .
           git config --local user.name "github-actions[bot]"
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .
           git commit -m "chore: pin GitHub Actions to specific SHAs" --signoff --no-verify
           git push -f -u origin ${{ github.ref }}
