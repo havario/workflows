@@ -17,22 +17,3 @@ updates:
       actions:
         patterns:
           - "*"
-
-  - package-ecosystem: "docker"
-    directories:
-      - "/ldnmp/openresty/stable"
-      - "/ldnmp/openresty/edge"
-    schedule:
-      interval: "daily"
-      time: "00:00"
-      timezone: "Asia/Shanghai"
-    open-pull-requests-limit: 10
-    labels:
-      - "dependencies"
-    commit-message:
-      prefix: "chore"
-      include: "scope"
-    groups:
-      docker:
-        patterns:
-          - "*"
