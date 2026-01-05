@@ -1,0 +1,56 @@
+---
+name: "Pin Digests"
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - ".github/workflows/pin-digests.yaml"
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
+    paths:
+      - ".github/workflows/pin-digests.yaml"
+  schedule:
+    - cron: "0 16 * * *"
+  workflow_dispatch:
+
+concurrency:
+  group: "${{ github.workflow }}-${{ github.ref }}"
+  cancel-in-progress: true
+
+jobs:
+  digests:
+    name: "Pin GitHub Actions digests"
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: "Checkout repository"
+        uses: actions/checkout@v6
+        with:
+          ref: master
+          fetch-depth: 0
+
+      - name: "Install extension"
+        run: |
+          set -eEuxo pipefail
+          gh extension install amenocal/gh-pin-actions
+
+      - name: "Pin Workflow Actions"
+        run: |
+          cd $GITHUB_WORKSPACE || exit 1
+          gh pin-actions workflows --overwrite
+          if ! git diff-index --quiet HEAD --; then
+            echo "IS_RENEW=1" >> "$GITHUB_ENV"
+          fi
+
+      - name: "Upload commit to repository"
+        uses: stefanzweifel/git-auto-commit-action@v7
+        if: ${{ env.IS_RENEW != '' }}
+        with:
+          commit_message: "chore: pin GitHub Actions to specific SHAs"
+          branch: master
+          commit_options: "--signoff --no-verify"
