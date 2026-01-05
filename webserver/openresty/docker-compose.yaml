@@ -1,7 +1,7 @@
 ---
 services:
   openresty:
-    image: honeok/openresty:alpine
+    image: honeok/openresty:alpine@sha256:7ca20c7d1f097339411aab9e0f51e8d0ca7301860689d31fe9a13a5b270f8ead
     container_name: openresty
     restart: unless-stopped
     environment:
