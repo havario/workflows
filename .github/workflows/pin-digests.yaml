@@ -61,7 +61,7 @@ jobs:
         if: ${{ env.IS_RENEW != '' }}
         with:
           commit_message: "chore: pin GitHub Actions to specific SHAs"
-          branch: release
+          branch: ${{ github.ref }}
           commit_options: "--signoff --no-verify"
           commit_user_name: honego[bot]
           commit_user_email: 2596419+honego[bot]@users.noreply.github.com
