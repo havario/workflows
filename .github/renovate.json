@@ -1,0 +1,23 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:base", ":semanticCommits"],
+  "baseBranches": ["release"],
+  "packageRules": [
+    {
+      "matchManagers": ["dockerfile", "docker-compose"],
+      "groupName": "docker"
+    },
+    {
+      "matchManagers": ["github-actions"],
+      "groupName": "actions",
+      "automerge": true,
+      "automergeType": "pr",
+      "automergeStrategy": "rebase",
+      "pinDigests": true
+    },
+    {
+      "matchManagers": ["gomod"],
+      "groupName": "go"
+    }
+  ]
+}
