@@ -17,13 +17,13 @@ jobs:
     name: "Stable pre check"
     runs-on: ubuntu-latest
     outputs:
-      renew: ${{ steps.ver.outputs.renew }}
-      resty_version: ${{ steps.ver.outputs.resty_version }}
-      zstd_version: ${{ steps.ver.outputs.zstd_version }}
+      renew: ${{ steps.vers.outputs.renew }}
+      resty_version: ${{ steps.vers.outputs.resty_version }}
+      zstd_version: ${{ steps.vers.outputs.zstd_version }}
 
     steps:
       - name: "Get Version and Decide"
-        id: ver
+        id: vers
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
