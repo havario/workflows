@@ -55,7 +55,7 @@ jobs:
 
     steps:
       - name: "Checkout repository"
-        uses: actions/checkout@v1
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
@@ -71,10 +71,10 @@ jobs:
           find . -type f -name "*.sh" -exec chmod +x {} +
 
       - name: "Setup Docker Buildx"
-        uses: docker/setup-buildx-action@v1
+        uses: docker/setup-buildx-action@v3
 
       - name: "Login to DockerHub"
-        uses: docker/login-action@v1
+        uses: docker/login-action@v3
         with:
           registry: docker.io
           username: ${{ secrets.DOCKER_USERNAME }}
@@ -82,7 +82,7 @@ jobs:
 
       - name: "Docker metadata"
         id: meta
-        uses: docker/metadata-action@v1
+        uses: docker/metadata-action@v5
         with:
           images: ${{ env.DOCKERHUB_REPO }}
           tags: |
@@ -97,7 +97,7 @@ jobs:
 
       - name: "Build and export"
         id: build
-        uses: docker/build-push-action@v1
+        uses: docker/build-push-action@v6
         with:
           context: ${{ env.WORK_DIR }}/stable
           platforms: ${{ matrix.platform }}
@@ -117,7 +117,7 @@ jobs:
           touch "/tmp/digests/${digest#sha256:}"
 
       - name: "Upload artifact"
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v6
         with:
           name: digest-${{ env.PLATFORM_PAIR }}
           path: /tmp/digests/*
@@ -133,17 +133,17 @@ jobs:
 
     steps:
       - name: "Download digests"
-        uses: actions/download-artifact@v1
+        uses: actions/download-artifact@v7
         with:
           path: /tmp/digests
           pattern: digest-*
           merge-multiple: true
 
       - name: "Setup Docker Buildx"
-        uses: docker/setup-buildx-action@v1
+        uses: docker/setup-buildx-action@v3
 
       - name: "Login to DockerHub"
-        uses: docker/login-action@v1
+        uses: docker/login-action@v3
         with:
           registry: docker.io
           username: ${{ secrets.DOCKER_USERNAME }}
@@ -151,7 +151,7 @@ jobs:
 
       - name: "Docker metadata"
         id: meta
-        uses: docker/metadata-action@v1
+        uses: docker/metadata-action@v5
         with:
           images: ${{ env.DOCKERHUB_REPO }}
           tags: |
@@ -217,7 +217,7 @@ jobs:
 
     steps:
       - name: "Checkout repository"
-        uses: actions/checkout@v1
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
@@ -233,10 +233,10 @@ jobs:
           find . -type f -name "*.sh" -exec chmod +x {} +
 
       - name: "Setup Docker Buildx"
-        uses: docker/setup-buildx-action@v1
+        uses: docker/setup-buildx-action@v3
 
       - name: "Login to DockerHub"
-        uses: docker/login-action@v1
+        uses: docker/login-action@v3
         with:
           registry: docker.io
           username: ${{ secrets.DOCKER_USERNAME }}
@@ -244,7 +244,7 @@ jobs:
 
       - name: "Docker metadata"
         id: meta
-        uses: docker/metadata-action@v1
+        uses: docker/metadata-action@v5
         with:
           images: ${{ env.DOCKERHUB_REPO }}
           tags: |
@@ -259,7 +259,7 @@ jobs:
 
       - name: "Build and export"
         id: build
-        uses: docker/build-push-action@v1
+        uses: docker/build-push-action@v6
         with:
           context: ${{ env.WORK_DIR }}/edge
           platforms: ${{ matrix.platform }}
@@ -279,7 +279,7 @@ jobs:
           touch "/tmp/digests/${digest#sha256:}"
 
       - name: "Upload artifact"
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v6
         with:
           name: digest-${{ env.PLATFORM_PAIR }}
           path: /tmp/digests/*
@@ -295,17 +295,17 @@ jobs:
 
     steps:
       - name: "Download digests"
-        uses: actions/download-artifact@v1
+        uses: actions/download-artifact@v7
         with:
           path: /tmp/digests
           pattern: digest-*
           merge-multiple: true
 
       - name: "Setup Docker Buildx"
-        uses: docker/setup-buildx-action@v1
+        uses: docker/setup-buildx-action@v3
 
       - name: "Login to DockerHub"
-        uses: docker/login-action@v1
+        uses: docker/login-action@v3
         with:
           registry: docker.io
           username: ${{ secrets.DOCKER_USERNAME }}
@@ -313,7 +313,7 @@ jobs:
 
       - name: "Docker metadata"
         id: meta
-        uses: docker/metadata-action@v1
+        uses: docker/metadata-action@v5
         with:
           images: ${{ env.DOCKERHUB_REPO }}
           tags: |
