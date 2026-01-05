@@ -1,7 +1,7 @@
 ---
 services:
   nginx:
-    image: honeok/nginx:alpine
+    image: honeok/nginx:alpine@sha256:6755d8f3cdf7b93545ae10a6221bec82e2799388e97be16ce10442c85dcf3a5d
     container_name: nginx
     restart: unless-stopped
     environment:
