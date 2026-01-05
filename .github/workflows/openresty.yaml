@@ -22,7 +22,7 @@ jobs:
       zstd_version: ${{ steps.vers.outputs.zstd_version }}
 
     steps:
-      - name: "Get Version and Decide"
+      - name: "Get version and decide"
         id: vers
         env:
           GH_TOKEN: ${{ github.token }}
