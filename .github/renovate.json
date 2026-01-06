@@ -3,7 +3,7 @@
   "extends": ["config:base", ":disableRateLimiting", ":semanticCommits"],
   "baseBranches": ["master"],
   "dependencyDashboard": false,
-  "pinDigests": true,
+  "pinDigests": false,
   "packageRules": [
     {
       "matchManagers": ["github-actions"],
