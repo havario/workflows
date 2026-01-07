@@ -9,12 +9,12 @@ my $registry_proxy = "docker.gh-proxy.org";
 
 my @registry_repo = (
     "docker.io",
-    "registry.k8s.io",
-    "k8s.gcr.io",
-    "quay.io",
     "gcr.io",
     "ghcr.io",
-    "mcr.microsoft.com"
+    "k8s.gcr.io",
+    "mcr.microsoft.com",
+    "quay.io",
+    "registry.k8s.io"
 );
 
 unless (@ARGV) {
