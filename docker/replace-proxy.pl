@@ -3,9 +3,9 @@
 use strict;
 use warnings;
 
-my $proxy_domain = "docker.gh-proxy.org";
+my $registry_proxy = "docker.gh-proxy.org";
 
-my @registers = (
+my @registry_repo = (
     "docker.io",
     "registry.k8s.io",
     "k8s.gcr.io",
@@ -22,9 +22,9 @@ unless (@ARGV) {
 
 $^I = "";
 
-my $registry_pattern = join("|", map { quotemeta($_) } @registers);
+my $registry_regex = join("|", map { quotemeta($_) } @registry_repo);
 
 while (<>) {
-    s#(?<!\Q$proxy_domain\E/)($registry_pattern)#$proxy_domain/$1#g;
+    s#(?<!\Q$registry_proxy\E/)($registry_regex)#$registry_proxy/$1#g;
     print;
 }
