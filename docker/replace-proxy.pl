@@ -1,4 +1,6 @@
 #!/usr/bin/env perl
+# SPDX-License-Identifier: Apache-2.0
+# Copyright (c) 2026 honeok <i@honeok.com>
 
 use strict;
 use warnings;
