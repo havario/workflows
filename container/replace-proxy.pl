@@ -18,15 +18,77 @@ my @registry_repo = (
 );
 
 unless (@ARGV) {
-    print "Usage: $0 <File List>\n";
+    print "Usage: $0 <file_or_directory> [file_or_directory ...]\n";
+    print "Example: $0 .\n";
     exit 1;
 }
 
+my @files;
+
+sub scan_path {
+    my ($cur_path) = @_;
+
+    # 处理常规文件
+    if (-f $cur_path) {
+        my $fname = $cur_path;
+        $fname =~ s|.*/||;
+
+        # 忽略隐藏文件
+        return if $fname =~ /^\./;
+
+        if ($cur_path =~ /\.ya?ml$/i || $fname =~ /^Dockerfile/i) {
+            push @files, $cur_path;
+        }
+        return;
+    }
+
+    # 递归处理目录
+    if (-d $cur_path) {
+        my $dname = $cur_path;
+        $dname =~ s|.*/||;
+
+        # 忽略隐藏目录
+        if ($dname =~ /^\./ && $cur_path ne '.' && $cur_path ne '..') {
+            return;
+        }
+
+        opendir(my $dh, $cur_path) or do {
+            warn "\033[91mWarning: Cannot open directory '$cur_path': $!\033[0m\n";
+            return;
+        };
+
+        while (my $ent = readdir $dh) {
+            next if $ent eq '.' || $ent eq '..';
+
+            # 路径拼接
+            my $ent_path;
+            if ($cur_path eq '/') {
+                $ent_path = "/$ent";
+            } else {
+                $ent_path = "$cur_path/$ent";
+            }
+
+            scan_path($ent_path);
+        }
+        closedir $dh;
+    }
+}
+
+foreach my $arg (@ARGV) {
+    $arg =~ s|/$|| unless $arg eq '/';
+    scan_path($arg);
+}
+
+unless (@files) {
+    print "\033[91mNo valid YAML or Dockerfiles found.\033[0m\n";
+    exit 0;
+}
+
+@ARGV = @files;
 $^I = "";
 
 my $registry_regex = join("|", map { quotemeta($_) } @registry_repo);
 
-# 上下文捕获
 while (<>) {
     s{
         (^\s*image:\s*|^\s*FROM\s+(?:--platform=\S+\s+)?|--from=)
@@ -34,43 +96,43 @@ while (<>) {
         ([^\s"']+)
         (["']?)
     }{
-        $1 . $2 . process_image($3) . $4
+        $1 . $2 . rewrite_image($3) . $4
     }gxe;
 
     print;
 }
 
-sub process_image {
+sub rewrite_image {
     my ($img) = @_;
-    my $target;
+    my $out;
 
-    # 如果已经是代理地址 静默跳过
+    # 镜像幂等性
     return $img if $img =~ /^\Q$registry_proxy\E/;
 
-    # 显式域名检查
+    # 域名处理
     if ($img =~ m{^([^/]+)/}) {
         my $domain = $1;
         if ($domain =~ /\.|localhost/) {
             if ($domain =~ /^($registry_regex)$/) {
-                $target = "$registry_proxy/$img";
+                $out = "$registry_proxy/$img";
             } else {
                 return $img;
             }
         }
     }
 
-    # 处理隐式 DockerHub
-    unless ($target) {
-        my $canonical = $img;
-        $canonical = "library/$img" unless $img =~ m{/};
-        $target = "$registry_proxy/docker.io/$canonical";
+    # DockerHub处理
+    unless ($out) {
+        my $canon = $img;
+        $canon = "library/$img" unless $img =~ m{/};
+        $out = "$registry_proxy/docker.io/$canon";
     }
 
-    # 熔断机制
-    if (!defined $target || $target eq $img) {
-        die "Error: Failed to proxy image '$img'.\nReason: Logic matched modification criteria but result was identical or empty.\n";
+    # 变更一致性熔断
+    if (!defined $out || $out eq $img) {
+        die "\033[91mError: Logic matched but result identical for '$img' in file '$ARGV'. Aborting.\033[0m\n";
     }
 
-    print STDERR "\xe2\x9c\x93 $img => $target\n";
-    return $target;
+    print STDERR "[$ARGV] \033[92m\xe2\x9c\x93\033[0m $img => $out\n";
+    return $out;
 }
