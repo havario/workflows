@@ -70,8 +70,9 @@ elif [ -n "$(eval "$DETECT_JAVA")" ]; then
     POM="$(echo "$(eval "$DETECT_JAVA")" | head -n 1)"
     SRC_TOP="$(echo "$(realpath "$(dirname "$POM")")" | sort | head -n 1)"
     SRC_TYPE="java"
-    mvn --file "$SRC_TOP" -N -Dexec.executable='echo' -Dexec.args='${project.version}' org.codehaus.mojo:exec-maven-plugin:1.3.1:exec
-    SRC_VERSION="$(mvn --file "$SRC_TOP" -q -N -Dexec.executable='echo' -Dexec.args='${project.version}' org.codehaus.mojo:exec-maven-plugin:1.3.1:exec | tail -n 1)"
+    # curl -Ls https://repo1.maven.org/maven2/org/codehaus/mojo/exec-maven-plugin/maven-metadata.xml | grep latest | sed 's/.*<latest>\(.*\)<\/latest>.*/\1/'
+    mvn --file "$SRC_TOP" -N -Dexec.executable='echo' -Dexec.args='${project.version}' org.codehaus.mojo:exec-maven-plugin:3.6.3:exec
+    SRC_VERSION="$(mvn --file "$SRC_TOP" -q -N -Dexec.executable='echo' -Dexec.args='${project.version}' org.codehaus.mojo:exec-maven-plugin:3.6.3:exec | tail -n 1)"
     echo "Detect SRC_TOP from file $POM"
 elif [ -n "$(eval "$DETECT_NODEJS")" ]; then
     PACKAGE="$(echo "$(eval "$DETECT_NODEJS")" | head -n 1)"
