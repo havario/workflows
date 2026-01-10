@@ -91,7 +91,7 @@ my $registry_regex = join("|", map { quotemeta($_) } @registry_repo);
 
 while (<>) {
     s{
-        (^\s*image:\s*|^\s*FROM\s+(?:--platform=\S+\s+)?|--from=)
+        (^\s*(?:-\s+)?image:\s*|^\s*FROM\s+(?:--platform=\S+\s+)?|--from=)
         (["']?)
         ([^\s"']+)
         (["']?)
