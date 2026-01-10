@@ -127,6 +127,48 @@ else
     BUILD_COUNTER="-ct-$(date -u +%s)"
 fi
 
+echo "########################################"
+echo "SRC_TOP=$SRC_TOP"
+echo "SRC_TYPE=$SRC_TYPE"
+echo "SRC_VERSION=$SRC_VERSION"
+echo "SRC_GIT_COMMIT_ID=$SRC_GIT_COMMIT_ID"
+echo "DOCKER_IMAGE_NAME=$DOCKER_IMAGE_NAME"
+echo "BUILD_COUNTER=$BUILD_COUNTER"
+
+if [ -z "$NEXUS_REPO" ]; then
+    export NEXUS_REPO="${NEXUS_REPO:-'https://nexus.honeok.org/content/groups/maven'}"
+fi
+if [ -z "$NEXUS_SNAPSHOT" ]; then
+    export NEXUS_SNAPSHOT="${DOCKER_REPO:-'https://nexus.honeok.org/content/repositories/maven-snapshot'}"
+fi
+if [ -z "$NEXUS_RELEASE" ]; then
+    export NEXUS_RELEASE="${DOCKER_REPO:-'https://nexus.honeok.org/content/repositories/maven-release'}"
+fi
+if [ -z "$DOCKER_BUILD" ]; then
+    DOCKER_BUILD=1
+fi
+if [ -z "$DOCKER_REPO" ]; then
+    DOCKER_REPO="${DOCKER_REPO:-'harbor.honeok.org'}"
+fi
+if [ -z "$DOCKER_NS" ]; then
+    DOCKER_NS="honeok/dev"
+fi
+if [ -z "$K8S_AUTOCD" ]; then
+    K8S_AUTOCD=0
+fi
+if [ -z "$K8S_NS" ]; then
+    K8S_NS="prod"
+fi
+if [ -z "$K8S_SVCNAMES" ]; then
+    K8S_SVCNAMES="$DOCKER_IMAGE_NAME"
+fi
+if [ -z "$K8S_DOMAIN_INTERNAL" ]; then
+    K8S_DOMAIN_INTERNAL="internal.honeok.dev"
+fi
+if [ -z "$K8S_DOMAIN_PUBLIC" ]; then
+    K8S_DOMAIN_PUBLIC="honeok.org"
+fi
+
 build_go() {
     pushd "$SRC_TOP"
     go env -w GOPROXY=https://goproxy.cn,direct
