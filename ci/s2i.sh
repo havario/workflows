@@ -32,7 +32,7 @@ fi
 if [ "$#" -lt 1 ]; then
     tee >&2 <<- EOF
     Usage:
-    build runner for Java | Node.js | ... source
+    build runner for Go | Java | Node.js | ... source
 
     $(realpath $0) /path/to/src
 EOF
@@ -47,8 +47,8 @@ echo "Start build."
 
 GAVE_SRC_TOP="$(realpath $1)"
 
-# Try to guest Java or nodeJs
-echo "Auto try to detect Java or Node.js source and its topdir."
+# Try to guest Go Java or nodeJs
+echo "Auto try to detect source type and its topdir."
 DETECT_GO="find $GAVE_SRC_TOP -maxdepth 1 -iname go.mod"
 DETECT_JAVA="find $GAVE_SRC_TOP -maxdepth 1 -iname pom.xml"
 DETECT_NODEJS="find $GAVE_SRC_TOP -maxdepth 2 -iname package.json"
@@ -63,8 +63,8 @@ eval "$DETECT_NODEJS"
 if [ -n "$(eval "$DETECT_GO")" ]; then
     GOMOD="$(echo "$(eval "$DETECT_GO")" | head -n 1)"
     SRC_TOP="$(realpath "$(dirname "$GOMOD")")"
-    SRC_TYPE=go
-    SRC_VERSION=""
+    SRC_TYPE="go"
+    SRC_VERSION="$(date -u -d "+8 hours" +%Y%m%d)-$(git rev-parse --short HEAD)"
     echo "Detect SRC_TOP from file $GOMOD"
 elif [ -n "$(eval "$DETECT_JAVA")" ]; then
     POM="$(echo "$(eval "$DETECT_JAVA")" | head -n 1)"
@@ -85,6 +85,7 @@ fi
 if [ -z "$SRC_VERSION" ]; then
     SRC_VERSION="1.0.0"
 fi
+
 SRC_GIT_COMMIT_ID="-$(cd "$SRC_TOP" && git rev-parse --short HEAD)"
 
 if [ -n "$GITHUB_ACTIONS" ]; then
