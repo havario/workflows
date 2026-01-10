@@ -1,5 +1,7 @@
 #!/usr/bin/env perl
 # SPDX-License-Identifier: Apache-2.0
+#
+# Description: The script recursively rewrites Docker image references in text files to use a proxy registry.
 # Copyright (c) 2026 honeok <i@honeok.com>
 
 use strict;
@@ -36,7 +38,7 @@ sub scan_path {
         # 忽略隐藏文件
         return if $fname =~ /^\./;
 
-        if ($cur_path =~ /\.ya?ml$/i || $fname =~ /^Dockerfile/i) {
+        if (-T $cur_path) {
             push @files, $cur_path;
         }
         return;
@@ -80,7 +82,7 @@ foreach my $arg (@ARGV) {
 }
 
 unless (@files) {
-    print "\033[91mNo valid YAML or Dockerfiles found.\033[0m\n";
+    print "\033[91mNo valid text files found.\033[0m\n";
     exit 0;
 }
 
@@ -98,6 +100,7 @@ while (<>) {
     }{
         $1 . $2 . rewrite_image($3) . $4
     }gxe;
+
     print;
 }
 
@@ -105,7 +108,17 @@ sub rewrite_image {
     my ($img) = @_;
     my $out;
 
-    # 镜像幂等性
+    # 只允许Docker Distribution Spec标准字符: [a-zA-Z0-9._:/-@]
+    # 任何包含特殊符号 (如 {} [] () "" '' $ `) 的字符串均视为非法直接跳过
+    unless ($img =~ m|^[a-zA-Z0-9\.\_\-\/\:\@]+$|) {
+        return $img;
+    }
+
+    if ($img =~ /^\d+$/) {
+        return $img;
+    }
+
+    return $img if $img =~ /^[A-Z0-9_]+$/;
     return $img if $img =~ /^\Q$registry_proxy\E/;
 
     # 域名处理
@@ -129,7 +142,7 @@ sub rewrite_image {
 
     # 变更一致性熔断
     if (!defined $out || $out eq $img) {
-        die "\033[91mError: Logic matched but result identical for '$img' in file '$ARGV'. Aborting.\033[0m\n";
+        return $img;
     }
 
     print STDERR "[$ARGV] \033[92m\xe2\x9c\x93\033[0m $img => $out\n";
