@@ -105,7 +105,6 @@ if [ -z "$SRC_VERSION" ]; then
 fi
 
 SRC_GIT_COMMIT_ID="-$(cd "$SRC_TOP" && git rev-parse --short HEAD)"
-
 if [ -n "$GITHUB_ACTIONS" ]; then
     echo "GitHub CI"
     DOCKER_IMAGE_NAME="${GITHUB_REPOSITORY#*/}"
@@ -118,6 +117,14 @@ elif [ -n "$JENKINS_URL" ]; then
     echo "Jenkins CI"
     DOCKER_IMAGE_NAME="$JOB_NAME"
     BUILD_COUNTER="-jk-$BUILD_NUMBER"
+elif [ -n "$TEAMCITY_GIT_PATH" ]; then
+    echo "Teamcity CI"
+    DOCKER_IMAGE_NAME="$TEAMCITY_BUILDCONF_NAME"
+    BUILD_COUNTER="-tc-$BUILD_NUMBER"
+else
+    echo "Can't detect name"
+    DOCKER_IMAGE_NAME="$(basename "$(realpath "$SRC_TOP")")"
+    BUILD_COUNTER="-ct-$(date -u +%s)"
 fi
 
 build_go() {
