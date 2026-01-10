@@ -215,24 +215,12 @@ build_go() {
 build_java() {
     pushd "$SRC_TOP"
 
-    if [[ "$DOCKER_IMAGE_NAME" =~ "$NE_BOOT_MATCH" ]]; then
-        ARTIFACT_DEPLOY=1
-    fi
     if [ "$ENABLE_SONAR" -gt 0 ]; then
-        if [ "$ARTIFACT_DEPLOY" -gt 0 ]; then
-            mvn clean deploy sonar:sonar -Dsonar.projectKey=$(echo "$CI_PROJECT_PATH" | tr / .) -Dsonar.projectName=$(echo "$CI_PROJECT_PATH" | tr / .)
-            exit 0
-        else
-            mvn clean package sonar:sonar -Dsonar.projectKey=$(echo "$CI_PROJECT_PATH" | tr / .) -Dsonar.projectName=$(echo "$CI_PROJECT_PATH" | tr / .)
-        fi
+        mvn clean package sonar:sonar -Dsonar.projectKey=$(echo "$CI_PROJECT_PATH" | tr / .) -Dsonar.projectName=$(echo "$CI_PROJECT_PATH" | tr / .)
     else
-        if [ "$ARTIFACT_DEPLOY" -gt 0 ]; then
-            mvn clean deploy
-            exit 0
-        else
-            mvn clean package
-        fi
+        mvn clean package
     fi
+    popd
 }
 
 build_nodejs() {
