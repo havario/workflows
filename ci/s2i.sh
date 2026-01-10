@@ -99,3 +99,40 @@ elif [ -n "$JENKINS_URL" ]; then
     DOCKER_IMAGE_NAME="$JOB_NAME"
     BUILD_COUNTER="-jk-$BUILD_NUMBER"
 fi
+
+build_go() {
+    pushd "$SRC_TOP"
+    go build -v -trimpath -ldflags="-s -w -buildid="
+    popd
+}
+
+build_java() {
+    pushd "$SRC_TOP"
+
+    if [[ "$DOCKER_IMAGE_NAME" =~ "$NE_BOOT_MATCH" ]]; then
+        ARTIFACT_DEPLOY=1
+    fi
+    if [ "$ENABLE_SONAR" -gt 0 ]; then
+        if [ "$ARTIFACT_DEPLOY" -gt 0 ]; then
+            mvn clean deploy sonar:sonar -Dsonar.projectKey=$(echo "$CI_PROJECT_PATH" | tr / .) -Dsonar.projectName=$(echo "$CI_PROJECT_PATH" | tr / .)
+            exit 0
+        else
+            mvn clean package sonar:sonar -Dsonar.projectKey=$(echo "$CI_PROJECT_PATH" | tr / .) -Dsonar.projectName=$(echo "$CI_PROJECT_PATH" | tr / .)
+        fi
+    else
+        if [ "$ARTIFACT_DEPLOY" -gt 0 ]; then
+            mvn clean deploy
+            exit 0
+        else
+            mvn clean package
+        fi
+    fi
+}
+
+build_nodejs() {
+    pushd "$SRC_TOP"
+    npm config set registry https://registry.npmmirror.com
+    npm install --verbose
+    npm run build
+    popd
+}
