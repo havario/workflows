@@ -102,6 +102,8 @@ fi
 
 build_go() {
     pushd "$SRC_TOP"
+    go env -w GOPROXY=https://goproxy.cn,direct
+    go mod download
     go build -v -trimpath -ldflags="-s -w -buildid="
     popd
 }
