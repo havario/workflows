@@ -50,7 +50,6 @@
   },
   "gopls": {
     "ui.completion.usePlaceholders": true,
-    "vulncheck": "Imports",
     "analyses": {
       "shadow": true,
       "unusedparams": true,
