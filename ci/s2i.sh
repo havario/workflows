@@ -23,12 +23,16 @@ TRYTOP="$(
     done
     pwd
 )"
-
 WORKDIR="$(pwd)"
+
+die() {
+    echo >&2 "Error: $*"
+    exit 1
+}
+
 if [ -z "$TRYTOP" ]; then
     TRYTOP="$WORKDIR"
 fi
-
 if [ "$#" -lt 1 ]; then
     tee >&2 <<- EOF
     Usage:
@@ -45,10 +49,9 @@ env | grep -v LS_COLORS
 echo "########################################"
 echo "Start build."
 
-GAVE_SRC_TOP="$(realpath $1)"
-
 # Try to guest Go Java or nodeJs
 echo "Auto try to detect source type and its topdir."
+GAVE_SRC_TOP="$(realpath $1)"
 DETECT_GO="find $GAVE_SRC_TOP -maxdepth 1 -iname go.mod"
 DETECT_JAVA="find $GAVE_SRC_TOP -maxdepth 1 -iname pom.xml"
 DETECT_NODEJS="find $GAVE_SRC_TOP -maxdepth 2 -iname package.json"
@@ -70,7 +73,6 @@ elif [ -n "$(eval "$DETECT_JAVA")" ]; then
     POM="$(echo "$(eval "$DETECT_JAVA")" | head -n 1)"
     SRC_TOP="$(echo "$(realpath "$(dirname "$POM")")" | sort | head -n 1)"
     SRC_TYPE="java"
-    # curl -Ls https://repo1.maven.org/maven2/org/codehaus/mojo/exec-maven-plugin/maven-metadata.xml | grep latest | sed 's/.*<latest>\(.*\)<\/latest>.*/\1/'
     mvn --file "$SRC_TOP" -N -Dexec.executable='echo' -Dexec.args='${project.version}' org.codehaus.mojo:exec-maven-plugin:3.6.3:exec
     SRC_VERSION="$(mvn --file "$SRC_TOP" -q -N -Dexec.executable='echo' -Dexec.args='${project.version}' org.codehaus.mojo:exec-maven-plugin:3.6.3:exec | tail -n 1)"
     echo "Detect SRC_TOP from file $POM"
@@ -80,6 +82,22 @@ elif [ -n "$(eval "$DETECT_NODEJS")" ]; then
     SRC_TYPE="nodejs"
     SRC_VERSION="$(cd "$SRC_TOP" && npm run packageVersion | tail -n 1)"
     echo "Detect SRC_TOP from file $PACKAGE"
+elif [ -n "$(eval "$DETECT_DEFAULT_TOP")" ]; then
+    TOPFILE="$(echo "$(eval "$DETECT_DEFAULT_TOP")" | head -n 1 | awk '{print $1}')"
+    SRC_TOP="$(echo "$(realpath "$(dirname "$TOPFILE")")" | head -n 1)"
+    SRC_TYPE="none"
+    SRC_VERSION="v"
+    echo "detect SRC_TOP from file .TOP"
+elif [ -n "$(eval "$DETECT_DEFAULT_GIT")" ]; then
+    TOPFILE="$(echo "$(eval "$DETECT_DEFAULT_GIT")" | head -n 1 | awk '{print $1}')"
+    SRC_TOP="$(echo "$(realpath "$(dirname "$TOPFILE")")" | head -n 1)"
+    SRC_TYPE="none"
+    SRC_VERSION="$(date -u -d "+8 hours" +%Y%m%d)-$(git rev-parse --short HEAD)"
+    echo "Detect SRC_TOP from file .TOP"
+else
+    SRC_TYPE="none"
+    SRC_VERSION="Cant-detect-version"
+    die "Can't detect SRC_TOP."
 fi
 
 if [ -z "$SRC_VERSION" ]; then
