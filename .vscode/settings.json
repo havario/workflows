@@ -50,6 +50,7 @@
   },
   "gopls": {
     "ui.completion.usePlaceholders": true,
+    "vulncheck": "Imports",
     "analyses": {
       "shadow": true,
       "unusedparams": true,
@@ -61,12 +62,12 @@
   },
   "go.formatTool": "gofumpt",
   "go.lintTool": "golangci-lint",
-  "go.inlayHints.assignVariableTypes": true,
-  "go.inlayHints.compositeLiteralFields": true,
-  "go.inlayHints.constantValues": true,
-  "go.inlayHints.functionTypeParameters": true,
-  "go.inlayHints.parameterNames": true,
-  "go.inlayHints.rangeVariableTypes": true,
+  // "go.inlayHints.assignVariableTypes": true,
+  // "go.inlayHints.compositeLiteralFields": true,
+  // "go.inlayHints.constantValues": true,
+  // "go.inlayHints.functionTypeParameters": true,
+  // "go.inlayHints.parameterNames": true,
+  // "go.inlayHints.rangeVariableTypes": true,
 
   // shell
   "[shellscript]": {
