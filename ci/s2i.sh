@@ -3,6 +3,9 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 # Description:
+# Copyright (c) 2019 jimin.huang <jimin.huang@nx-engine.com>
+# Copyright (c) 2020 zhenqiang.zhang <zhenqiang.zhang@nx-engine.com>
+# Copyright (c) 2021 yihao.he <yihao.he@nx-engine.com>
 # Copyright (c) 2021-2025 honeok <i@honeok.com>
 
 # shellcheck disable=all
@@ -168,6 +171,38 @@ fi
 if [ -z "$K8S_DOMAIN_PUBLIC" ]; then
     K8S_DOMAIN_PUBLIC="honeok.org"
 fi
+
+# Gitlab CI
+case "$CI_COMMIT_REF_SLUG" in
+master | main)
+    echo "branch name $CI_COMMIT_REF_SLUG do CI, then CD"
+    ;;
+*)
+    echo "branch name $CI_COMMIT_REF_SLUG only do CI"
+    K8S_AUTOCD=0
+    ;;
+esac
+if [ "$DOCKER_BUILD" -eq 0 ]; then
+    echo "No CD when disable docker build"
+    K8S_AUTOCD=0
+fi
+
+echo "########################################"
+echo "NEXUS_REPO=$NEXUS_REPO"
+echo "NEXUS_RELEASE=$NEXUS_RELEASE"
+echo "ENABLE_SONAR=$ENABLE_SONAR"
+echo "DOCKER_BUILD=$DOCKER_BUILD"
+echo "DOCKER_REPO=$DOCKER_REPO"
+echo "DOCKER_NS=$DOCKER_NS"
+echo "K8S_AUTOCD=$K8S_AUTOCD"
+echo "K8S_NS=$DOCKER_NS"
+echo "K8S_SVCNAMES=$K8S_SVCNAMES"
+echo "K8S_DOMAIN_INTERNAL=$K8S_DOMAIN_INTERNAL"
+echo "K8S_DOMAIN_PUBLIC=$K8S_DOMAIN_PUBLIC"
+
+echo "########################################"
+ls -hl "$SRC_TOP"/*
+echo "########################################"
 
 build_go() {
     pushd "$SRC_TOP"
