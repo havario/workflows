@@ -98,7 +98,6 @@ while (<>) {
     }{
         $1 . $2 . rewrite_image($3) . $4
     }gxe;
-
     print;
 }
 
